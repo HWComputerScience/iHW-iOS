@@ -10,16 +10,15 @@ public class Curriculum {
 	}
 	
 	public void addCourse(Course c) {
-		//validate...
+		//check for conflicts...
 		courses.add(c);
 	}
 	
-	public ArrayList<Course> getCourses(int period) {
-		ArrayList<Course> ret = new ArrayList<Course>();
+	public Course getCourse(int period, int dayNum) {
 		for (Course c : courses) {
-			if (c.getPeriod() == period) ret.add(c);
+			if (c.getPeriod() == period && c.getMeetingOn(dayNum) >= 0) return c;
 		}
-		return ret;
+		return null;
 	}
 	
 	public void removeCourse(Course c) {
