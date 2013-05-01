@@ -14,6 +14,7 @@ public class NormalDay extends Day {
 		periods = new Period[periodsBeforeBreak+periodsAfterBreak+1];
 		for (int i=1; i<=periodsBeforeBreak; i++) {
 			//ArrayList<Course> courses = c.getCourses(i);
+			//initialize the periods in this day
 		}
 	}
 	

@@ -28,4 +28,7 @@ public class Period {
 		notes.remove(note);
 	}
 	
+	public static Period newFreePeriod(Time start, Time end) {
+		return new Period("Free", start, end);
+	}
 }
