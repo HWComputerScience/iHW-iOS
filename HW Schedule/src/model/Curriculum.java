@@ -14,6 +14,8 @@ public class Curriculum {
 	public static final int TERM_THIRD_TRIMESTER  = 5;
 	
 	private Set<Course> courses;
+	private List<Day> specialDays;
+	private Map<Date, List<Note>> notes;
 	private int year; //2012 for the 2012-2013 school year, for example
 	private Date[] semesterEndDates; //3 values: the first day of the first semester and the last days of both semesters
 	private Date[] trimesterEndDates; //4 values: the first day of the first trimester and the last days of all trimesters
@@ -21,6 +23,32 @@ public class Curriculum {
 	public Curriculum(int year) {
 		this.year = year;
 		courses = new HashSet<Course>();
+	}
+	
+	public Curriculum(String JSONString) {
+		//load from JSON string
+		//load year, semester/trimester end dates
+		//load courses into set
+		//load special days into list
+		//load notes into map
+	}
+	
+	/**
+	 * If day is special, return it from the list of special days. Otherwise generate the day and return it.
+	 */
+	public Day getDay(Date d) {
+		//fancy stuff
+		return new Holiday("Example");
+	}
+	
+	public Set<Course> getAllCourses() {
+		return courses;
+	}
+	
+	public String saveCurriculum() {
+		String json = "";
+		//convert curriculum to JSON
+		return json;
 	}
 
 	public int getYear() { return year; }
@@ -47,11 +75,5 @@ public class Curriculum {
 	
 	public void removeCourse(Course c) {
 		courses.remove(c);
-	}
-	
-	public static boolean dateInTerm(int term, Date date) {
-		if (term==0) return true;
-		//some fancy stuff
-		return false;
 	}
 }

@@ -1,5 +1,7 @@
 package model;
 
+import org.json.*;
+
 public class Course {
 	public static final int MEETING_X_DAY = 0;
 	public static final int MEETING_SINGLE_PERIOD = 1;
@@ -16,6 +18,10 @@ public class Course {
 		this.setPeriod(period);
 		this.setMeetings(meetings);
 		this.setTerm(term);
+	}
+	
+	public Course(JSONObject obj) {
+		//load course from JSON
 	}
 
 	public String getName() { return name; }
