@@ -2,6 +2,7 @@ package view;
 
 import java.util.*;
 import javax.swing.*;
+
 import model.Course;
 
 public class CoursesFrame extends JFrame {
@@ -10,5 +11,11 @@ public class CoursesFrame extends JFrame {
 
 	public CoursesFrame(Set<Course> courses) {
 		this.courses = courses;
+		
+		//stuff
+		
+		this.setVisible(true);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.validate();
 	}
 }

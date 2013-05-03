@@ -3,7 +3,7 @@ package model;
 import java.util.*;
 
 /**
- * The Curriculum class is the top-level class in the model. It represents a year of classes.
+ * The Curriculum class is the top-level class in the model. It represents one school year of classes.
  */
 public class Curriculum {
 	public static final int TERM_FULL_YEAR        = 0;

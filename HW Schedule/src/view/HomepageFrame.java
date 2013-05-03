@@ -1,12 +1,11 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 
-public class HomepageFrame extends JFrame implements ActionListener {
+public class HomepageFrame extends JFrame {
 	private static final long serialVersionUID = -7222309803012419702L;
 	
 	private ScheduleViewDelegate delegate;
@@ -24,7 +23,26 @@ public class HomepageFrame extends JFrame implements ActionListener {
 	//  }
 		contentPane.add(title, BorderLayout.NORTH);
 		JPanel buttonPanel = new JPanel(); // {
-			buttonPanel.setLayout(new GridLayout(2,1));
+			buttonPanel.setLayout(new GridLayout(6,1));
+			buttonPanel.setOpaque(false);
+			buttonPanel.add(new EmptyJPanel());
+			buttonPanel.add(new EmptyJPanel());
+			JButton editCoursesButton = new JButton("Edit Courses");
+			editCoursesButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (delegate != null) delegate.showCourseEditor();
+				}
+			});
+			buttonPanel.add(editCoursesButton);
+			JButton showScheduleButton = new JButton("Show Schedule");
+			showScheduleButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (delegate != null) delegate.showSchedule();
+				}
+			});
+			buttonPanel.add(showScheduleButton);
+			buttonPanel.add(new EmptyJPanel());
+			buttonPanel.add(new EmptyJPanel());
 	//  }
 		contentPane.add(buttonPanel, BorderLayout.CENTER);
 		this.setSize(new Dimension(250,400));
@@ -37,12 +55,8 @@ public class HomepageFrame extends JFrame implements ActionListener {
 	public ScheduleViewDelegate getDelegate() { return delegate; }
 	public void setDelegate(ScheduleViewDelegate delegate) { this.delegate = delegate; }
 	
-	public void actionPerformed(ActionEvent evt) {
-		if (delegate==null) return;
-		if (((JButton)evt.getSource()).getText().equals("Edit Courses")) {
-			delegate.showCourseEditor();
-		} else if (((JButton)evt.getSource()).getText().equals("Edit Courses")) {
-			delegate.showSchedule();
-		}
+	private class EmptyJPanel extends JPanel {
+		private static final long serialVersionUID = 6198562870330941872L;
+		public EmptyJPanel() { this.setOpaque(false); }
 	}
 }

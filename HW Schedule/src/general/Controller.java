@@ -1,9 +1,12 @@
 package general;
 
+import java.util.*;
+
 import model.Curriculum;
+import model.Day;
 import view.*;
 
-public class Controller implements ScheduleViewDelegate {
+public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource {
 	
 	private Curriculum currentCurriculum;
 	
@@ -17,7 +20,7 @@ public class Controller implements ScheduleViewDelegate {
 	}
 	
 	public void showHomepage() {
-		new HomepageFrame();
+		new HomepageFrame().setDelegate(this);
 	}
 
 	public void showCourseEditor() {
@@ -26,7 +29,13 @@ public class Controller implements ScheduleViewDelegate {
 	}
 
 	public void showSchedule() {
-		new ScheduleFrame();
+		ScheduleFrame frame = new ScheduleFrame();
+		frame.setDelegate(this);
+		frame.setDataSource(this);
 		//some other stuff
+	}
+
+	public Day getDay(Date d) {
+		return currentCurriculum.getDay(d);
 	}
 }
