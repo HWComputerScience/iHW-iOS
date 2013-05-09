@@ -6,11 +6,20 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import model.Course;
+
 public class CoursesFrame extends JFrame implements ListSelectionListener {
 	private static final long serialVersionUID = 6934883684026565042L;
 	private List<String> courseNames;
 	private String selectedCourse;
 	private DefaultListModel listItems;
+	private ScheduleViewDelegate delegate;
+	private ScheduleViewDataSource dataSource;
+	
+	public ScheduleViewDelegate getDelegate() { return delegate; }
+	public void setDelegate(ScheduleViewDelegate delegate) { this.delegate = delegate; }
+	public ScheduleViewDataSource getDataSource() { return dataSource; }
+	public void setDataSource(ScheduleViewDataSource dataSource) { this.dataSource = dataSource; }
 
 	public CoursesFrame(List<String> courses) {
 		this.courseNames = courses;
@@ -25,12 +34,8 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 	//  }
 		contentPane.add(title, BorderLayout.NORTH);
 		JList list = new JList(); // {
-			listItems = new DefaultListModel();
-			//TODO: Add course titles to the list, instead of sample data:
-			listItems.addElement("Course A");
-			listItems.addElement("Course B");
-			listItems.addElement("Course C");
-			list.setModel(listItems);
+			
+			list.setModel(regenerateListItems(courses));
 			list.setBackground(new Color(235, 229, 207));
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	//  }
@@ -42,20 +47,19 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			JButton editButton = new JButton("Edit");
 			addButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					new EditCourseFrame(null);
+				}
+			});
+			deleteButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
 					// TODO remove the currently selected course from course list
 					// inform the controller
 					// reload data
 				}
 			});
-			deleteButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					// TODO show the edit course frame
-				}
-			});
 			editButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					// TODO show the edit course frame 
-					//with currently course info preloaded
+					if (dataSource!=null) new EditCourseFrame(dataSource.getCourse(selectedCourse));
 				}
 			});
 			buttonPanel.add(addButton);
@@ -66,6 +70,15 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 		this.setSize(300, 400);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+	}
+	
+	private ListModel regenerateListItems(List<String> courses) {
+		listItems = new DefaultListModel();
+		//TODO: Add course titles to the list, instead of sample data:
+		listItems.addElement("Course A");
+		listItems.addElement("Course B");
+		listItems.addElement("Course C");
+		return listItems;
 	}
 
 	public void valueChanged(ListSelectionEvent evt) {

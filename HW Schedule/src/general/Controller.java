@@ -25,7 +25,9 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	}
 
 	public void showCourseEditor() {
-		new CoursesFrame(currentCurriculum.getAllCourseNames());
+		CoursesFrame cframe = new CoursesFrame(currentCurriculum.getAllCourseNames());
+		cframe.setDelegate(this);
+		cframe.setDataSource(this);
 		//some other stuff
 	}
 
