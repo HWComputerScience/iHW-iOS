@@ -12,6 +12,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 	private static final long serialVersionUID = 6934883684026565042L;
 	private Set<Course> courses;
 	private Course selectedCourse;
+	private DefaultListModel listItems;
 
 	public CoursesFrame(Set<Course> courses) {
 		this.courses = courses;
@@ -26,12 +27,16 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 	//  }
 		contentPane.add(title, BorderLayout.NORTH);
 		JList list = new JList(); // {
+			listItems = new DefaultListModel();
 			//TODO: Add course titles to the list
-			/*e.g.*/ list.setListData(new String[] {"Course A", "Course B", "Course C"});
+			listItems.addElement("Course A");
+			listItems.addElement("Course B");
+			listItems.addElement("Course C");
+			list.setModel(listItems);
 			list.setBackground(new Color(235, 229, 207));
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	//  }
-		contentPane.add(list, BorderLayout.CENTER);
+		contentPane.add(new JScrollPane(list), BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel(); // {
 			buttonPanel.setLayout(new GridLayout(1,3));
 			JButton addButton = new JButton("Add");
@@ -42,9 +47,9 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			buttonPanel.add(editButton);
 	//  }
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
+		this.setSize(300, 400);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setSize(300, 400);
 	}
 
 	public void valueChanged(ListSelectionEvent arg0) {
