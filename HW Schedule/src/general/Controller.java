@@ -15,7 +15,7 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	}
 	
 	public Controller() {
-		currentCurriculum = new Curriculum(2012); //should load from file instead
+		currentCurriculum = new Curriculum("",""); //should load from file instead
 		showHomepage();
 	}
 	

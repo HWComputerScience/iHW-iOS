@@ -21,7 +21,12 @@ public class Course {
 	}
 	
 	public Course(JSONObject obj) {
-		//load course from JSON
+		//TODO: load course from JSON object
+	}
+	
+	public JSONObject saveCourse() {
+		//TODO: create a JSON object with this course's info
+		return null;
 	}
 
 	public String getName() { return name; }

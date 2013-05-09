@@ -12,7 +12,12 @@ public class Note {
 	}
 	
 	public Note(JSONObject obj) {
-		//load from JSON object
+		//TODO: load from JSON object
+	}
+	
+	public JSONObject saveNote() {
+		//TODO: save to JSON object
+		return null;
 	}
 	
 	public boolean equals(Object other) {
@@ -20,6 +25,7 @@ public class Note {
 		return false;
 	}
 	
+	public void setText(String newText) { this.text = newText; }
 	public String getText() { return text; }
 	public boolean isToDo() { return isToDo; }	
 }
