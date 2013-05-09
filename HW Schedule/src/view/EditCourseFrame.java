@@ -1,7 +1,6 @@
 package view;
 
 import javax.swing.*;
-
 import model.Course;
 
 public class EditCourseFrame extends JFrame {

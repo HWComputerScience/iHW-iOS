@@ -2,6 +2,7 @@ package general;
 
 import java.util.*;
 
+import model.Course;
 import model.Curriculum;
 import model.Day;
 import view.*;
@@ -24,7 +25,7 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	}
 
 	public void showCourseEditor() {
-		new CoursesFrame(currentCurriculum.getAllCourses());
+		new CoursesFrame(currentCurriculum.getAllCourseNames());
 		//some other stuff
 	}
 
@@ -37,5 +38,25 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 
 	public Day getDay(Date d) {
 		return currentCurriculum.getDay(d);
+	}
+
+	public void deleteCourse(String name) {
+		currentCurriculum.removeCourse(currentCurriculum.getCourse(name));
+		currentCurriculum.rebuildSpecialDays("");
+	}
+
+	public void addCourse(Course c) {
+		currentCurriculum.addCourse(c);
+		currentCurriculum.rebuildSpecialDays("");
+	}
+
+	public void editCourse(String oldName, Course c) {
+		currentCurriculum.removeCourse(currentCurriculum.getCourse(oldName));
+		currentCurriculum.addCourse(c);
+		currentCurriculum.rebuildSpecialDays("");
+	}
+
+	public Course getCourse(String name) {
+		return currentCurriculum.getCourse(name);
 	}
 }

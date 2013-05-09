@@ -59,8 +59,9 @@ public class Curriculum {
 		return null;
 	}
 	
-	public Set<Course> getAllCourses() {
-		return courses;
+	public List<String> getAllCourseNames() {
+		//TODO: make this method return a list of course names
+		return new ArrayList<String>();
 	}
 	
 	public String saveCurriculum() {
@@ -91,6 +92,11 @@ public class Curriculum {
 		for (Course c : courses) {
 			if (c.getPeriod() == period && c.getMeetingOn(dayNum) >= 0) return c;
 		}
+		return null;
+	}
+	
+	public Course getCourse(String name) {
+		//TODO: get course by name
 		return null;
 	}
 	

@@ -1,21 +1,19 @@
 package view;
 
 import java.awt.*;
-import java.util.*;
+import java.awt.event.*;
+import java.util.List;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import model.Course;
+import javax.swing.event.*;
 
 public class CoursesFrame extends JFrame implements ListSelectionListener {
 	private static final long serialVersionUID = 6934883684026565042L;
-	private Set<Course> courses;
-	private Course selectedCourse;
+	private List<String> courseNames;
+	private String selectedCourse;
 	private DefaultListModel listItems;
 
-	public CoursesFrame(Set<Course> courses) {
-		this.courses = courses;
+	public CoursesFrame(List<String> courses) {
+		this.courseNames = courses;
 		JPanel contentPane = (JPanel)this.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		JLabel title = new JLabel("Edit Courses"); // {
@@ -28,7 +26,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 		contentPane.add(title, BorderLayout.NORTH);
 		JList list = new JList(); // {
 			listItems = new DefaultListModel();
-			//TODO: Add course titles to the list
+			//TODO: Add course titles to the list, instead of sample data:
 			listItems.addElement("Course A");
 			listItems.addElement("Course B");
 			listItems.addElement("Course C");
@@ -42,6 +40,24 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			JButton addButton = new JButton("Add");
 			JButton deleteButton = new JButton("Delete");
 			JButton editButton = new JButton("Edit");
+			addButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// TODO remove the currently selected course from course list
+					// inform the controller
+					// reload data
+				}
+			});
+			deleteButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// TODO show the edit course frame
+				}
+			});
+			editButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// TODO show the edit course frame 
+					//with currently course info preloaded
+				}
+			});
 			buttonPanel.add(addButton);
 			buttonPanel.add(deleteButton);
 			buttonPanel.add(editButton);
@@ -52,7 +68,8 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
-	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO set the selected course
+	public void valueChanged(ListSelectionEvent evt) {
+		int i = evt.getFirstIndex();
+		selectedCourse = courseNames.get(i);
 	}
 }
