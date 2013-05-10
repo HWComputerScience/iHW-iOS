@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.*;
-
 import javax.swing.*;
 
 import model.Course;
@@ -9,7 +8,7 @@ import model.Course;
 public class EditCourseFrame extends JFrame {
 	private static final long serialVersionUID = 412259773568289831L;
 	
-	public EditCourseFrame(Course course) {
+	public EditCourseFrame(Course course, int numDays) {
 		JPanel contentPane = (JPanel)this.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		JLabel title = new JLabel("Edit Course"); // {
@@ -50,9 +49,27 @@ public class EditCourseFrame extends JFrame {
 			meetingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 			mainPanel.add(meetingsLabel);
 			JPanel meetingsPanel = new JPanel(); // {
-				
+				meetingsPanel.setLayout(new GridLayout(4, numDays+1));
+				meetingsPanel.add(new JPanel());
+				for (int i=1; i<=numDays; i++) meetingsPanel.add(new JLabel("" + i, JLabel.CENTER));
+				for (int r=1; r<=3; r++) for (int c=0; c<=numDays; c++) {
+					if (c==0) {
+						JLabel heading = new JLabel("" + r, JLabel.CENTER);
+						heading.setPreferredSize(new Dimension(0,0));
+						meetingsPanel.add(heading);
+					} else {
+						JPanel panel = new JPanel();
+						panel.add(new Checkbox());
+						panel.setAlignmentX(CENTER_ALIGNMENT);
+						panel.setAlignmentY(CENTER_ALIGNMENT);
+						meetingsPanel.add(panel);
+					}
+				}
 		//  }
 			mainPanel.add(meetingsPanel);
+			JButton submit = new JButton("Save");
+			submit.setAlignmentX(CENTER_ALIGNMENT);
+			mainPanel.add(submit);
 			Dimension minSize = new Dimension(0,0);
 			Dimension prefSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
 			Dimension maxSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);

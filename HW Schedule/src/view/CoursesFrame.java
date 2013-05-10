@@ -21,7 +21,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 	public ScheduleViewDataSource getDataSource() { return dataSource; }
 	public void setDataSource(ScheduleViewDataSource dataSource) { this.dataSource = dataSource; }
 
-	public CoursesFrame(List<String> courses) {
+	public CoursesFrame(List<String> courses, final int numPeriods, final int numDays) {
 		this.courseNames = courses;
 		JPanel contentPane = (JPanel)this.getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -47,7 +47,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			JButton editButton = new JButton("Edit");
 			addButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new EditCourseFrame(null);
+					new EditCourseFrame(null, numDays);
 				}
 			});
 			deleteButton.addActionListener(new ActionListener() {
@@ -59,7 +59,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			});
 			editButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (dataSource!=null) new EditCourseFrame(dataSource.getCourse(selectedCourse));
+					if (dataSource!=null) new EditCourseFrame(dataSource.getCourse(selectedCourse), numDays);
 				}
 			});
 			buttonPanel.add(addButton);
