@@ -21,11 +21,12 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 	public ScheduleViewDataSource getDataSource() { return dataSource; }
 	public void setDataSource(ScheduleViewDataSource dataSource) { this.dataSource = dataSource; }
 
-	public CoursesFrame(List<String> courses, final int numPeriods, final int numDays) {
+	public CoursesFrame(List<String> courses, final int numDays, final int numPeriods) {
+		final CoursesFrame thisFrame = this;
 		this.courseNames = courses;
 		JPanel contentPane = (JPanel)this.getContentPane();
 		contentPane.setLayout(new BorderLayout());
-		JLabel title = new JLabel("Edit Courses"); // {
+		JLabel title = new JLabel("Manage Courses"); // {
 			title.setFont(new Font("Georgia", 0, 28));
 			title.setBackground(new Color(153,0,0));
 			title.setForeground(Color.WHITE);
@@ -35,7 +36,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 		contentPane.add(title, BorderLayout.NORTH);
 		JList list = new JList(); // {
 			
-			list.setModel(regenerateListItems(courses));
+			list.setModel(regenerateListItems());
 			list.setBackground(new Color(235, 229, 207));
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	//  }
@@ -47,7 +48,8 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			JButton editButton = new JButton("Edit");
 			addButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					new EditCourseFrame(null, numDays);
+					EditCourseFrame ecf = new EditCourseFrame(numDays, numPeriods);
+					ecf.setDelegate(thisFrame);
 				}
 			});
 			deleteButton.addActionListener(new ActionListener() {
@@ -59,7 +61,11 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			});
 			editButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (dataSource!=null) new EditCourseFrame(dataSource.getCourse(selectedCourse), numDays);
+					if (dataSource!=null) {
+						EditCourseFrame ecf = new EditCourseFrame(numDays, numPeriods);
+						ecf.setDelegate(thisFrame);
+						ecf.fillFieldsFromCourse(dataSource.getCourse(selectedCourse));
+					}
 				}
 			});
 			buttonPanel.add(addButton);
@@ -72,9 +78,9 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 	
-	private ListModel regenerateListItems(List<String> courses) {
+	private ListModel regenerateListItems() {
 		listItems = new DefaultListModel();
-		//TODO: Add course titles to the list, instead of sample data:
+		//TODO: Add course titles to the list from the courseNames instance variable, instead of sample data:
 		listItems.addElement("Course A");
 		listItems.addElement("Course B");
 		listItems.addElement("Course C");
@@ -84,5 +90,23 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 	public void valueChanged(ListSelectionEvent evt) {
 		int i = evt.getFirstIndex();
 		selectedCourse = courseNames.get(i);
+	}
+	
+	/**
+	 * The edit course frame calls this when the user is done editing.
+	 * Returns whether or not the course was valid and was added.
+	 */
+	public boolean editingNewCourseFinished(Course c) {
+		//TODO: update the courseNames instance variable
+		regenerateListItems();
+		if (delegate==null) return false;
+		return delegate.addCourse(c);
+	}
+	
+	public boolean editingExistingCourseFinished(String oldName, Course c) {
+		//TODO: update teh courseNames instance varilable
+		regenerateListItems();
+		if (delegate==null) return false;
+		return delegate.editCourse(oldName, c);
 	}
 }

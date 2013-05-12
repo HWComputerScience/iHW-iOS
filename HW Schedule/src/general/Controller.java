@@ -25,7 +25,7 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	}
 
 	public void showCourseEditor() {
-		CoursesFrame cframe = new CoursesFrame(currentCurriculum.getAllCourseNames(), 8,5);
+		CoursesFrame cframe = new CoursesFrame(currentCurriculum.getAllCourseNames(), 5,8);
 		cframe.setDelegate(this);
 		cframe.setDataSource(this);
 		//some other stuff
@@ -47,15 +47,24 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		currentCurriculum.rebuildSpecialDays("");
 	}
 
-	public void addCourse(Course c) {
-		currentCurriculum.addCourse(c);
-		currentCurriculum.rebuildSpecialDays("");
+	public boolean addCourse(Course c) {
+		if (currentCurriculum.addCourse(c)) {
+			currentCurriculum.rebuildSpecialDays("");
+			return true;
+		}
+		return false;
 	}
 
-	public void editCourse(String oldName, Course c) {
-		currentCurriculum.removeCourse(currentCurriculum.getCourse(oldName));
-		currentCurriculum.addCourse(c);
-		currentCurriculum.rebuildSpecialDays("");
+	public boolean editCourse(String oldName, Course c) {
+		Course oldCourse = currentCurriculum.getCourse(oldName);
+		currentCurriculum.removeCourse(oldCourse);
+		if (currentCurriculum.addCourse(c)) {
+			currentCurriculum.rebuildSpecialDays("");
+			return true;
+		} else {
+			currentCurriculum.addCourse(oldCourse);
+			return false;
+		}
 	}
 
 	public Course getCourse(String name) {

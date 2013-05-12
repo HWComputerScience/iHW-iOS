@@ -27,7 +27,7 @@ public class HomepageFrame extends JFrame {
 			buttonPanel.setOpaque(false);
 			buttonPanel.add(new EmptyJPanel());
 			buttonPanel.add(new EmptyJPanel());
-			JButton editCoursesButton = new JButton("Edit Courses");
+			JButton editCoursesButton = new JButton("Manage Courses");
 			editCoursesButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (delegate != null) delegate.showCourseEditor();

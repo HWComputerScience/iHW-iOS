@@ -8,6 +8,6 @@ public interface ScheduleViewDelegate {
 	void showCourseEditor();
 	void showSchedule();
 	void deleteCourse(String name);
-	void addCourse(Course c);
-	void editCourse(String oldName, Course c);
+	boolean addCourse(Course c);
+	boolean editCourse(String oldName, Course c);
 }
