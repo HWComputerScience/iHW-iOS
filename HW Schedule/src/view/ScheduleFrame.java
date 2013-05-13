@@ -21,11 +21,12 @@ public class ScheduleFrame extends JFrame {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 		mainPanel.add(new PeriodPanel(new Period("Test Period", new Time(8,0), new Time(8,45)), null));
 		Dimension minSize = new Dimension(0,0);
-		Dimension prefSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
+		Dimension prefSize = new Dimension(0,0);
 		Dimension maxSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
 		mainPanel.add(new Box.Filler(minSize, prefSize, maxSize));
 		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.setMinimumSize(new Dimension(200,200));
 		this.validate();
 	}
 

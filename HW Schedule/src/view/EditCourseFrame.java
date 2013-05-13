@@ -127,6 +127,7 @@ public class EditCourseFrame extends JFrame {
 				for (int c=0; c<meetingBoxes[r-period+1].length; c++) {
 					meetingBoxes[r-period+1][c].setState(false);
 					meetingBoxes[r-period+1][c].setEnabled(false);
+					meetingBoxes[r-period+1][c].setVisible(false);
 				}
 			} else {
 				String suffix;
@@ -137,6 +138,7 @@ public class EditCourseFrame extends JFrame {
 				periodHeadings[r-period+1].setText(""+r+suffix);
 				for (int c=0; c<meetingBoxes[r-period+1].length; c++) {
 					meetingBoxes[r-period+1][c].setEnabled(true);
+					meetingBoxes[r-period+1][c].setVisible(true);
 				}
 			}
 		}
