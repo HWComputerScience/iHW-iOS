@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Dimension;
+import java.util.LinkedList;
 
 import javax.swing.*;
 
@@ -19,7 +20,11 @@ public class ScheduleFrame extends JFrame {
 		this.getContentPane().setMaximumSize(new Dimension(100,100));
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-		mainPanel.add(new PeriodPanel(new Period("Test Period", new Time(8,0), new Time(8,45)), null));
+		LinkedList<String> lines = new LinkedList<String>();
+		lines.add("Hello, World");
+		lines.add("Here's another note");
+		lines.add("Here's a third");
+		mainPanel.add(new PeriodPanel(new Period("Test Period", new Time(8,0), new Time(8,45)), lines));
 		Dimension minSize = new Dimension(0,0);
 		Dimension prefSize = new Dimension(0,0);
 		Dimension maxSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
