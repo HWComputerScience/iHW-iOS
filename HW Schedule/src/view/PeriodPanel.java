@@ -9,13 +9,11 @@ import javax.swing.*;
 
 import model.Period;
 
-public class PeriodPanel extends JPanel {
+public class PeriodPanel extends JPanel implements MouseListener {
 	private static final long serialVersionUID = -3652755502045723337L;
-	private Period p;
 	private List<String> lines;
 	
 	public PeriodPanel(Period p, List<String> bodyLines) {
-		this.p=p;
 		this.lines = bodyLines;
 		int height = p.getStartTime().minutesUntil(p.getEndTime())*2;
 		this.setMinimumSize(new Dimension(200,height));
@@ -36,6 +34,33 @@ public class PeriodPanel extends JPanel {
 			bottomPanel.add(new JLabel("Add "), BorderLayout.EAST);
 			bottomPanel.setBackground(Color.LIGHT_GRAY);
 		this.add(bottomPanel, BorderLayout.SOUTH);
-		this.add(new JTextArea(), BorderLayout.CENTER);
+		JTextArea notes = new JTextArea();
+			notes.setLineWrap(true);
+			String text = "";
+			Iterator<String> iter = lines.iterator();
+			while (iter.hasNext()) {
+				text += iter.next() + "\n";
+			}
+			text = text.substring(0,text.length()-1);
+			notes.setText(text);
+			notes.setEditable(false);
+			notes.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			notes.addMouseListener(this);
+		this.add(notes, BorderLayout.CENTER);
 	}
+
+	public void mouseClicked(MouseEvent arg0) { }
+	public void mouseEntered(MouseEvent arg0) { }
+	public void mouseExited(MouseEvent arg0) { }
+	public void mousePressed(MouseEvent evt) {
+		int position = ((JTextArea)evt.getComponent()).viewToModel(evt.getPoint());
+		Iterator<String> iter = lines.iterator();
+		int line=-1;
+		while (position >= 0 && iter.hasNext()) {
+			position -= iter.next().length() + 1;
+			line++;
+		}
+		System.out.println("Line Clicked: " + line);
+	}
+	public void mouseReleased(MouseEvent arg0) { }
 }
