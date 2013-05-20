@@ -9,7 +9,7 @@ import view.*;
 
 public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource {
 	
-	private Curriculum currentCurriculum;
+	private Curriculum currentCurriculum; //Brandon's first commit
 	
 	public static void main(String[] args) {
 		new Controller();
