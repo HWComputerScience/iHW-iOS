@@ -13,9 +13,10 @@ public class PeriodPanel extends JPanel implements MouseListener {
 	private static final long serialVersionUID = -3652755502045723337L;
 	private List<String> lines;
 	
-	public PeriodPanel(Period p, List<String> bodyLines) {
+	public PeriodPanel(Period p, List<String> bodyLines, double heightFactor) {
+		final PeriodPanel thisPanel = this;
 		this.lines = bodyLines;
-		int height = p.getStartTime().minutesUntil(p.getEndTime())*2;
+		int height = (int)(p.getStartTime().minutesUntil(p.getEndTime())*heightFactor);
 		this.setMinimumSize(new Dimension(200,height));
 		this.setPreferredSize(new Dimension(0,height));
 		this.setMaximumSize(new Dimension(Short.MAX_VALUE,height));
@@ -31,7 +32,13 @@ public class PeriodPanel extends JPanel implements MouseListener {
 		JPanel bottomPanel = new JPanel();
 			bottomPanel.setLayout(new BorderLayout());
 			bottomPanel.add(new JLabel(p.getEndTime().toString12()), BorderLayout.WEST);
-			bottomPanel.add(new JLabel("Add "), BorderLayout.EAST);
+			JButton add = new JButton("Add");
+			add.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					new NoteFrame().setDelegate(thisPanel);
+				}
+			});
+			bottomPanel.add(add, BorderLayout.EAST);
 			bottomPanel.setBackground(Color.LIGHT_GRAY);
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		JTextArea notes = new JTextArea();
@@ -41,6 +48,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			while (iter.hasNext()) {
 				text += iter.next() + "\n";
 			}
+			text += "\n";
 			text = text.substring(0,text.length()-1);
 			notes.setText(text);
 			notes.setEditable(false);
@@ -48,19 +56,22 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			notes.addMouseListener(this);
 		this.add(notes, BorderLayout.CENTER);
 	}
-
-	public void mouseClicked(MouseEvent arg0) { }
-	public void mouseEntered(MouseEvent arg0) { }
-	public void mouseExited(MouseEvent arg0) { }
+	
 	public void mousePressed(MouseEvent evt) {
 		int position = ((JTextArea)evt.getComponent()).viewToModel(evt.getPoint());
 		Iterator<String> iter = lines.iterator();
 		int line=-1;
-		while (position >= 0 && iter.hasNext()) {
+		while (position >= 0) {
+			if (!iter.hasNext()) return;
 			position -= iter.next().length() + 1;
 			line++;
 		}
-		System.out.println("Line Clicked: " + line);
+		//System.out.println("Line Clicked: " + line);
+		new NoteFrame(lines.get(line)).setDelegate(this);
 	}
+	
+	public void mouseClicked(MouseEvent arg0) { }
+	public void mouseEntered(MouseEvent arg0) { }
+	public void mouseExited(MouseEvent arg0) { }
 	public void mouseReleased(MouseEvent arg0) { }
 }
