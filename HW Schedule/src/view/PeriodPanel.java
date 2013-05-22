@@ -1,10 +1,9 @@
 package view;
 
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 
 import model.Period;
@@ -12,10 +11,12 @@ import model.Period;
 public class PeriodPanel extends JPanel implements MouseListener {
 	private static final long serialVersionUID = -3652755502045723337L;
 	private List<String> lines;
+	private Period period;
+	private ScheduleViewDelegate delegate;
 	
-	public PeriodPanel(Period p, List<String> bodyLines, double heightFactor) {
-		final PeriodPanel thisPanel = this;
-		this.lines = bodyLines;
+	public PeriodPanel(Period p, List<String> notes, double heightFactor) {
+		this.period = p;
+		this.lines = notes;
 		int height = (int)(p.getStartTime().minutesUntil(p.getEndTime())*heightFactor);
 		this.setMinimumSize(new Dimension(200,height));
 		this.setPreferredSize(new Dimension(0,height));
@@ -34,15 +35,16 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			bottomPanel.add(new JLabel(p.getEndTime().toString12()), BorderLayout.WEST);
 			JButton add = new JButton("Add");
 			add.addActionListener(new ActionListener() {
+				//Add button was clicked
 				public void actionPerformed(ActionEvent evt) {
-					new NoteFrame().setDelegate(thisPanel);
+					new NoteFrame(period.getDate(), period.getNum()).setDelegate(delegate);
 				}
 			});
 			bottomPanel.add(add, BorderLayout.EAST);
 			bottomPanel.setBackground(Color.LIGHT_GRAY);
 		this.add(bottomPanel, BorderLayout.SOUTH);
-		JTextArea notes = new JTextArea();
-			notes.setLineWrap(true);
+		JTextArea notesBox = new JTextArea();
+			notesBox.setLineWrap(true);
 			String text = "";
 			Iterator<String> iter = lines.iterator();
 			while (iter.hasNext()) {
@@ -50,11 +52,11 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			}
 			text += "\n";
 			text = text.substring(0,text.length()-1);
-			notes.setText(text);
-			notes.setEditable(false);
-			notes.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			notes.addMouseListener(this);
-		this.add(notes, BorderLayout.CENTER);
+			notesBox.setText(text);
+			notesBox.setEditable(false);
+			notesBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			notesBox.addMouseListener(this);
+		this.add(notesBox, BorderLayout.CENTER);
 	}
 	
 	public void mousePressed(MouseEvent evt) {
@@ -67,9 +69,12 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			line++;
 		}
 		//System.out.println("Line Clicked: " + line);
-		new NoteFrame(lines.get(line)).setDelegate(this);
+		new NoteFrame(lines.get(line), period.getDate(), period.getNum()).setDelegate(delegate);
 	}
 	
+	public ScheduleViewDelegate getDelegate() { return delegate; }
+	public void setDelegate(ScheduleViewDelegate delegate) { this.delegate = delegate; }
+
 	public void mouseClicked(MouseEvent arg0) { }
 	public void mouseEntered(MouseEvent arg0) { }
 	public void mouseExited(MouseEvent arg0) { }

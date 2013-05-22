@@ -104,7 +104,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 	}
 	
 	public boolean editingExistingCourseFinished(String oldName, Course c) {
-		//TODO: update teh courseNames instance varilable
+		//TODO: update the courseNames instance varilable
 		regenerateListItems();
 		if (delegate==null) return false;
 		return delegate.editCourse(oldName, c);

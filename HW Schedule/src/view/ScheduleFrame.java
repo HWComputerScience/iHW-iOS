@@ -1,8 +1,7 @@
 package view;
 
-import java.awt.Dimension;
-import java.util.LinkedList;
-
+import java.awt.*;
+import java.util.*;
 import javax.swing.*;
 
 import model.Period;
@@ -23,7 +22,7 @@ public class ScheduleFrame extends JFrame {
 		lines.add("Hello, World");
 		lines.add("Here's another note");
 		lines.add("Here's a third");
-		mainPanel.add(new PeriodPanel(new Period("Test Period", new Time(8,0), new Time(8,45)), lines, 3.5));
+		mainPanel.add(new PeriodPanel(new Period("Test Period", new Date(), new Time(8,0), new Time(8,45), 1), lines, 3.5));
 		Dimension minSize = new Dimension(0,0);
 		Dimension prefSize = new Dimension(0,0);
 		Dimension maxSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);

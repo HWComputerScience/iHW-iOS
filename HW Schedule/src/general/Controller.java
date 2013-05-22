@@ -70,4 +70,13 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	public Course getCourse(String name) {
 		return currentCurriculum.getCourse(name);
 	}
+	
+	public void addNote(String text, Date d, int periodNum) {
+		// TODO tell the controller that the note was added and refresh the displayed notes
+	}
+	
+	public void replaceNote(String text, String toReplace, Date d, int periodNum) {
+		// TODO tell the controller that the note was replaced and refresh the displayed notes
+	}
+	
 }

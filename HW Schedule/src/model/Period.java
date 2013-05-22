@@ -7,11 +7,15 @@ public class Period {
 	private Time startTime;
 	private Time endTime;
 	private List<Note> notes;
+	private Date d;
+	private int periodNum;
 	
-	public Period(String name, Time start, Time end) {
+	public Period(String name, Date d, Time start, Time end, int periodNum) {
 		this.name = name;
 		this.startTime = start;
 		this.endTime = end;
+		this.d=d;
+		this.periodNum=periodNum;
 		notes = new LinkedList<Note>();
 	}
 	
@@ -19,6 +23,10 @@ public class Period {
 	public Time getStartTime() { return startTime; }
 	public Time getEndTime() { return endTime; }
 	public List<Note> getNotes() { return new ArrayList<Note>(notes); }
+	public Date getDate() { return d; }
+	public void setDate(Date d) { this.d = d; }
+	public int getNum() { return periodNum; }
+	public void setNum(int periodNum) { this.periodNum = periodNum; }
 	
 	public void addNote(Note note) {
 		notes.add(note);
@@ -28,7 +36,7 @@ public class Period {
 		notes.remove(note);
 	}
 	
-	public static Period newFreePeriod(Time start, Time end) {
-		return new Period("Free", start, end);
+	public static Period newFreePeriod(Date d, Time start, Time end, int periodNum) {
+		return new Period("Free", d, start, end, periodNum);
 	}
 }
