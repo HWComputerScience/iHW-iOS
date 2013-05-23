@@ -1,10 +1,9 @@
 package general;
 
-import java.util.*;
-
 import model.Course;
 import model.Curriculum;
 import model.Day;
+import model.Date;
 import view.*;
 
 public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource {

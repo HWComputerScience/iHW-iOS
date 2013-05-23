@@ -2,8 +2,9 @@ package view;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Date;
 import javax.swing.*;
+
+import model.Date;
 
 public class NoteFrame extends JFrame {
 	private static final long serialVersionUID = 6780081129703009164L;

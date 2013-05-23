@@ -7,6 +7,8 @@ public class NormalDay extends Day {
 	private int dayNumber;
 	private boolean hasBreak;
 	private int periodLength;
+	private Time breakEnd;
+	private String breakName;
 	
 	/**
 	 * Used to initialize a normal day that has an activities period or assembly.
@@ -20,6 +22,8 @@ public class NormalDay extends Day {
 					 Time breakEnd, 
 					 String breakName, 
 					 int pLength) {
+		this.breakEnd=breakEnd;
+		this.breakName=breakName;
 		date = d;
 		hasBreak = true;
 		periodLength = pLength;
@@ -55,7 +59,14 @@ public class NormalDay extends Day {
 	
 	public JSONObject saveDay() {
 		JSONObject obj = super.saveDay();
-		//TODO: add normal-day-specific stuff to json object (including "type"="normal")
+		obj.put("type", "normal");
+		obj.put("dayNumber", dayNumber);
+		obj.put("hasBreak", hasBreak);
+		obj.put("periodLength", periodLength);
+		if (hasBreak) {
+			obj.put("breakEnd", breakEnd);
+			obj.put("breakName", breakName);
+		}
 		return obj;
 	}
 	

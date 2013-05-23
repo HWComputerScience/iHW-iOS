@@ -19,7 +19,8 @@ public class Holiday extends Day {
 	
 	public JSONObject saveDay() {
 		JSONObject obj = super.saveDay();
-		//TODO: add holiday-specific stuff to json object (including "type"="holiday")
+		obj.put("name", name);
+		obj.put("type", "holiday");
 		return obj;
 	}
 	

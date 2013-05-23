@@ -1,7 +1,6 @@
 package view;
 
-import java.util.Date;
-
+import model.Date;
 import model.Course;
 
 public interface ScheduleViewDelegate {

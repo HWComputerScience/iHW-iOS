@@ -17,7 +17,8 @@ public class TestDay extends Day {
 	
 	public JSONObject saveDay() {
 		JSONObject obj = super.saveDay();
-		//TODO: add test-day-specific stuff to json object (including "type"="test")
+		obj.put("type", "test");
+		obj.put("tests", this.periods);
 		return obj;
 	}
 }

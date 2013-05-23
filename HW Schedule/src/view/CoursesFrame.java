@@ -12,7 +12,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 	private static final long serialVersionUID = 6934883684026565042L;
 	private List<String> courseNames;
 	private String selectedCourse;
-	private DefaultListModel listItems;
+	private DefaultListModel<String> listItems;
 	private ScheduleViewDelegate delegate;
 	private ScheduleViewDataSource dataSource;
 	
@@ -34,7 +34,7 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			title.setHorizontalAlignment(SwingConstants.CENTER);
 	//  }
 		contentPane.add(title, BorderLayout.NORTH);
-		JList list = new JList(); // {
+		JList<String> list = new JList<String>(); // {
 			
 			list.setModel(regenerateListItems());
 			list.setBackground(new Color(235, 229, 207));
@@ -78,8 +78,8 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 	
-	private ListModel regenerateListItems() {
-		listItems = new DefaultListModel();
+	private ListModel<String> regenerateListItems() {
+		listItems = new DefaultListModel<String>();
 		//TODO: Add course titles to the list from the courseNames instance variable, instead of sample data:
 		listItems.addElement("Course A");
 		listItems.addElement("Course B");

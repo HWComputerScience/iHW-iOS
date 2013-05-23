@@ -1,6 +1,7 @@
 package model;
 
 import java.util.*;
+import org.json.*;
 
 public class Period {
 	private String name;
@@ -34,6 +35,16 @@ public class Period {
 	
 	public void removeNote(Note note) {
 		notes.remove(note);
+	}
+	
+	public JSONObject savePeriod() {
+		JSONObject obj = new JSONObject();
+		obj.put("name", name);
+		obj.put("startTime", startTime);
+		obj.put("endTime", endTime);
+		obj.put("date", d);
+		obj.put("periodNum", periodNum);
+		return obj;
 	}
 	
 	public static Period newFreePeriod(Date d, Time start, Time end, int periodNum) {

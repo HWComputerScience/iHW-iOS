@@ -1,6 +1,6 @@
 package model;
 
-public class Time {
+public class Time implements org.json.JSONString {
 	private int hour;
 	private int minute;
 	
@@ -112,5 +112,10 @@ public class Time {
 		String minute = "" + getMinute();
 		if (minute.length() == 1) minute = "0" + minute;
 		return getHour12() + ":" + minute + " " + ampm;
+	}
+
+	@Override
+	public String toJSONString() {
+		return "\"" + hour + ":" + minute + "\"";
 	}
 }

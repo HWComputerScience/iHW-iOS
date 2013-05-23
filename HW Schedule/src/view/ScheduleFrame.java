@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import model.Period;
 import model.Time;
+import model.Date;
 
 public class ScheduleFrame extends JFrame {
 	private static final long serialVersionUID = -8726369403910041693L;
@@ -22,7 +23,7 @@ public class ScheduleFrame extends JFrame {
 		lines.add("Hello, World");
 		lines.add("Here's another note");
 		lines.add("Here's a third");
-		mainPanel.add(new PeriodPanel(new Period("Test Period", new Date(), new Time(8,0), new Time(8,45), 1), lines, 3.5));
+		mainPanel.add(new PeriodPanel(new Period("Test Period", new Date(1,9,2012), new Time(8,0), new Time(8,45), 1), lines, 3.5));
 		Dimension minSize = new Dimension(0,0);
 		Dimension prefSize = new Dimension(0,0);
 		Dimension maxSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
