@@ -110,6 +110,11 @@ public class Curriculum {
 		return new ArrayList<Note>(0);
 	}
 	
+	public void addNote (String text, Date d, int period)
+	{
+		notes.put(d, new Map(period,new List(text)));
+	}
+	
 	public void removeCourse(Course c) {
 		courses.remove(c);
 	}
