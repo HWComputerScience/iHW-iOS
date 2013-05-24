@@ -37,6 +37,11 @@ public class Date implements org.json.JSONString {
 		Date other = (Date)obj;
 		return (this.day==other.day && this.month==other.month && this.year==other.year);
 	}
+	
+	public Date nextDate() {
+		//TODO returns a new Date object that is one day later than this Date object
+		return this;
+	}
 
 	@Override
 	public String toJSONString() {

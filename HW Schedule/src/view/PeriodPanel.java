@@ -1,6 +1,5 @@
 package view;
 
-//import java.util.*;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
@@ -47,6 +46,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		notesBox = new JTextArea();
 			notesBox.setLineWrap(true);
+			notesBox.setWrapStyleWord(true);
 			updateNotes();
 			notesBox.setEditable(false);
 			notesBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -61,6 +61,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 	
 	public void addNote(String note) {
 		lines.add(note);
+		updateNotes();
 	}
 	
 	public void replaceNote(String oldNote, String newNote) {
@@ -76,6 +77,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 		if (!found) {
 			lines.add(newNote);
 		}
+		updateNotes();
 	}
 	
 	private void updateNotes() {
