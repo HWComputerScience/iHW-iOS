@@ -11,7 +11,7 @@ public class EditCourseFrame extends JFrame {
 	private static final long serialVersionUID = 412259773568289831L;
 	private JTextField nameField;
 	private JTextField periodField;
-	private JComboBox<String> termBox;
+	private JComboBox termBox;
 	private Checkbox[][] meetingBoxes;
 	private JLabel[] periodHeadings;
 	private int numPeriods;
@@ -58,7 +58,7 @@ public class EditCourseFrame extends JFrame {
 				termNames[3] = "1st Trimester";
 				termNames[4] = "2nd Trimester";
 				termNames[5] = "3rd Trimester";
-				termBox = new JComboBox<String>(termNames); //TODO: add terms
+				termBox = new JComboBox(termNames); //TODO: add terms
 				termBox.setAlignmentX(Component.RIGHT_ALIGNMENT);
 				periodPanel.add(termBox);
 				periodPanel.setAlignmentX(Component.CENTER_ALIGNMENT);

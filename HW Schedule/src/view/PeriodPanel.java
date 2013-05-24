@@ -1,7 +1,7 @@
 package view;
 
 //import java.util.*;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
@@ -12,6 +12,7 @@ import model.Period;
 public class PeriodPanel extends JPanel implements MouseListener {
 	private static final long serialVersionUID = -3652755502045723337L;
 	private List<String> lines;
+	private JTextArea notesBox;
 	private Period period;
 	private ScheduleViewDelegate delegate;
 	
@@ -44,20 +45,48 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			bottomPanel.add(add, BorderLayout.EAST);
 			bottomPanel.setBackground(Color.LIGHT_GRAY);
 		this.add(bottomPanel, BorderLayout.SOUTH);
-		JTextArea notesBox = new JTextArea();
+		notesBox = new JTextArea();
 			notesBox.setLineWrap(true);
-			String text = "";
-			Iterator<String> iter = lines.iterator();
-			while (iter.hasNext()) {
-				text += iter.next() + "\n";
-			}
-			text += "\n";
-			text = text.substring(0,text.length()-1);
-			notesBox.setText(text);
+			updateNotes();
 			notesBox.setEditable(false);
 			notesBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			notesBox.addMouseListener(this);
 		this.add(notesBox, BorderLayout.CENTER);
+	}
+	
+	public void removeNote(String note) {
+		lines.remove(note);
+		updateNotes();
+	}
+	
+	public void addNote(String note) {
+		lines.add(note);
+	}
+	
+	public void replaceNote(String oldNote, String newNote) {
+		ListIterator<String> iter = lines.listIterator();
+		boolean found = false;
+		while (iter.hasNext()) {
+			if (iter.next().equals(oldNote)) {
+				iter.set(newNote);
+				found=true;
+				break;
+			}
+		}
+		if (!found) {
+			lines.add(newNote);
+		}
+	}
+	
+	private void updateNotes() {
+		String text = "";
+		Iterator<String> iter = lines.iterator();
+		while (iter.hasNext()) {
+			text += iter.next() + "\n";
+		}
+		text += "\n";
+		text = text.substring(0,text.length()-1);
+		notesBox.setText(text);
 	}
 	
 	public void mousePressed(MouseEvent evt) {
