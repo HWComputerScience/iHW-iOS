@@ -20,6 +20,14 @@ public class Period {
 		notes = new LinkedList<Note>();
 	}
 	
+	public Period(JSONObject obj) {
+		this.name = obj.getString("name");
+		this.startTime = new Time(obj.getString("startTime"));
+		this.endTime = new Time(obj.getString("endTime"));
+		this.d = new Date(obj.getString("date"));
+		this.periodNum = obj.getInt("periodNum");
+	}
+	
 	public String getName() { return name; }
 	public Time getStartTime() { return startTime; }
 	public Time getEndTime() { return endTime; }

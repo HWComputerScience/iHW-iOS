@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
-import model.Note;
 import model.Period;
 import model.Time;
 import model.Date;

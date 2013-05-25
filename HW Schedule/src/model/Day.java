@@ -5,19 +5,21 @@ import org.json.*;
 
 public abstract class Day {
 	protected Date date;
-	protected Time startTime;
-	protected Time endTime;
 	protected List<Period> periods;
 	
+	public Day(Date d) {
+		this.date = d;
+	}
+	
+	public Day(JSONObject obj) {
+		date = new Date(obj.getString("date"));
+	}
+	
 	public model.Date getDate() { return date; }
-	public Time getStartTime() { return startTime; }
-	public Time getEndTime() { return endTime; }
 	
 	public JSONObject saveDay() {
 		JSONObject toReturn = new JSONObject();
 		toReturn.put("date", date);
-		toReturn.put("startTime", startTime);
-		toReturn.put("endTime", endTime);
-		return null;
+		return toReturn;
 	}
 }

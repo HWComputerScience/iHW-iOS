@@ -6,15 +6,15 @@ import org.json.*;
 public class Holiday extends Day {
 	private String name;
 	
-	public Holiday(String name) {
+	public Holiday(Date d, String name) {
+		super(d);
 		this.name = name;
 		this.periods = new ArrayList<Period>(0);
-		this.startTime = new Time(8,0);
-		this.startTime = new Time(8,0);
 	}
 	
 	public Holiday(JSONObject obj) {
-		//TODO: load from JSON object
+		super(obj);
+		name = obj.getString("name");
 	}
 	
 	public JSONObject saveDay() {

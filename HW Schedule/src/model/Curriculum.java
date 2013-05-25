@@ -2,6 +2,8 @@ package model;
 
 import java.util.*;
 
+import org.json.*;
+
 /**
  * The Curriculum class is the top-level class in the model. It represents one school year of classes.
  */
@@ -19,7 +21,7 @@ public class Curriculum {
 	private int campus;
 	private Set<Course> courses;
 	private Map<Date, Day> specialDays;
-	private Map<Date, Map<Integer, List<Note>>> notes; //Integer represents period number
+	private TreeMap<Date, TreeMap<Integer, List<Note>>> notes; //Integer represents period number
 	private int year; //2012 for the 2012-2013 school year, for example
 	private Date[] semesterEndDates; //3 values: the first day of the first semester and the last days of both semesters
 	private Date[] trimesterEndDates; //4 values: the first day of the first trimester and the last days of all trimesters
@@ -33,19 +35,57 @@ public class Curriculum {
 	 * The curriculumJSON stores courses, notes, and anything else that is specific
 	 * to the user and his/her schedule.
 	 */
-	public Curriculum(String yearJSON, String curriculumJSON) {
-		//TODO: load from JSON strings
-		//should call JSON object constructors from other model classes
-		//load year, semester/trimester end dates
+	public Curriculum(String curriculumJSON, String yearJSON) {
+		JSONObject curriculumObj = new JSONObject(curriculumJSON);
+		JSONObject yearObj = new JSONObject(yearJSON);
+		
+		//load year, semester/trimester end dates, etc.
+		year = curriculumObj.getInt("year");
+		campus = curriculumObj.getInt("campus");
+		JSONArray semestersArr = curriculumObj.getJSONArray("semesterEndDates");
+		semesterEndDates = new Date[semestersArr.length()];
+		for (int i=0; i<semestersArr.length(); i++) {
+			semesterEndDates[i] = new Date(semestersArr.getString(i));
+		}
+		JSONArray trimestersArr = curriculumObj.getJSONArray("trimesterEndDates");
+		trimesterEndDates = new Date[trimestersArr.length()];
+		for (int i=0; i<trimestersArr.length(); i++) {
+			trimesterEndDates[i] = new Date(trimestersArr.getString(i));
+		}
+		
 		//initialize and store courses in set
-		//initialize and store special days in map (call rebuildSpecialDays())
+		JSONArray coursesArr = yearObj.getJSONArray("courses");
+		courses = new HashSet<Course>(coursesArr.length());
+		for (int i=0; i<coursesArr.length(); i++) {
+			courses.add(new Course(coursesArr.getJSONObject(i)));
+		}
+		
+		//initialize and store special days in map
+		JSONArray specialDaysArr = curriculumObj.getJSONArray("specialDays");
+		specialDays = new TreeMap<Date, Day>();
+		for (int i=0; i<specialDaysArr.length(); i++) {
+			JSONObject dayObj = specialDaysArr.getJSONObject(i);
+			Day toAdd = null;
+			if (dayObj.getString("type").equals("normal")) toAdd = new NormalDay(dayObj, this);
+			else if (dayObj.getString("type").equals("test")) toAdd = new TestDay(dayObj);
+			else if (dayObj.getString("type").equals("holiday")) toAdd = new Holiday(dayObj);
+			else throw new IllegalStateException("Unrecognized day type found in curriculum.");
+			Date d = new Date(dayObj.getString("date"));
+			specialDays.put(d, toAdd);
+		}
+		
 		//initialize and store notes in map of maps
+		JSONArray notesArr = yearObj.getJSONArray("notes");
+		notes = new TreeMap<Date, TreeMap<Integer,List<Note>>>();
+		for (int i=0; i<notesArr.length(); i++) {
+			
+		}
 	}
 	
 	/**
 	 * When the user has changed his/her courses, the special days need to be reloaded.
 	 */
-	public void rebuildSpecialDays(String yearJSON) {
+	public void rebuildSpecialDays() {
 		//TODO: initialize and store special days in map
 	}
 	
@@ -64,11 +104,29 @@ public class Curriculum {
 		return new ArrayList<String>();
 	}
 	
-	public String saveCurriculum() {
-		String json = "";
-		//TODO: convert curriculum to a JSON string
-		//should call save methods from other model classes
-		return json;
+	public String saveYear() {
+		JSONObject obj = new JSONObject();
+		obj.put("year", this.year);
+		obj.put("campus", this.campus);
+		
+		JSONArray coursesArr = new JSONArray();
+		for (Course c : courses) {
+			coursesArr.put(c.saveCourse());
+		}
+		obj.put("courses", coursesArr);
+		
+		JSONArray notesArr = new JSONArray();
+		JSONObject note;
+		for (Date d : notes.keySet())
+		  for (int period : notes.get(d).keySet())
+		  for (Note n : notes.get(d).get(period)) {
+			note = n.saveNote();
+			note.put("date", d);
+			note.put("period", period);
+			notesArr.put(note);
+		}
+		obj.put("notes", notesArr);
+		return obj.toString(4);
 	}
 
 	public int getYear() { return year; }
@@ -100,7 +158,7 @@ public class Curriculum {
 		return null;
 	}
 	
-	public List<Note> getNote(Date d, int period) {
+	public List<Note> getNotes(Date d, int period) {
 		if (notes.containsKey(d)) {
 			Map<Integer, List<Note>> notesThisDay = notes.get(d);
 			if (notesThisDay.containsKey(period)) {
@@ -112,15 +170,23 @@ public class Curriculum {
 	
 	public void addNote (String text, Date d, int period)
 	{
-		notes.put(d, new Map(period,new List(text)));
+		//notes.put(d, new Map(period,new List(text))); // wrong and causes errors
+		//TODO: fix it
 	}
 	
 	public void removeCourse(Course c) {
 		courses.remove(c);
 	}
 	
-	public static String generateBlankCurriculumJSON() {
-		//TODO: Generate a blank, new curriculum JSON string with no courses or notes.
-		return "";
+	/**
+	 * Generates a blank, new year JSON string with no courses or notes.
+	 */
+	public static String generateBlankYearJSON(int campus, int year) {
+		JSONObject obj = new JSONObject();
+		obj.put("year", year);
+		obj.put("campus", campus);
+		obj.put("courses", new JSONArray());
+		obj.put("notes", new JSONArray());
+		return obj.toString(4);
 	}
 }

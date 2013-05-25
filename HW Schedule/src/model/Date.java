@@ -1,50 +1,49 @@
 package model;
 
-public class Date implements org.json.JSONString {
-	private int day;
-	private int month;
-	private int year;
-	
-	public Date(int day, int month, int year) {
-		this.day=day;
-		this.month=month;
-		this.year=year;
+import java.util.*;
+import org.json.*;
+
+public class Date extends GregorianCalendar implements JSONString {
+	private static final long serialVersionUID = -3262778562693738900L;
+
+	public Date(int month, int day, int year) {
+		super(year, month-1, day);
 	}
 	
-	public int getDay() {
-		return day;
-	}
-	public void setDay(int day) {
-		if (day>31 || day<1) throw new IllegalArgumentException();
-		this.day = day;
-	}
-	public int getMonth() {
-		return month;
-	}
-	public void setMonth(int month) {
-		if (month<1 || month>12) throw new IllegalArgumentException();
-		this.month = month;
-	}
-	public int getYear() {
-		return year;
-	}
-	public void setYear(int year) {
-		this.year = year;
-	}
-	
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Date)) return false;
-		Date other = (Date)obj;
-		return (this.day==other.day && this.month==other.month && this.year==other.year);
-	}
-	
-	public Date nextDate() {
-		//TODO returns a new Date object that is one day later than this Date object
-		return this;
+	public Date(String json) {
+		super(0,0,0);
+		String[] arr = json.split("/");
+		this.set(Integer.parseInt(arr[2]), Integer.parseInt(arr[0])-1, Integer.parseInt(arr[1]));
 	}
 
+	public int getDay() {
+		return this.get(DAY_OF_MONTH);
+	}
+	
+	public int getMonth() {
+		return this.get(MONTH)+1;
+	}
+	
+	public int getYear() {
+		return this.get(YEAR);
+	}
+	
+	public boolean isMonday() {
+		return (this.get(DAY_OF_WEEK) == MONDAY);
+	}
+	
+	public boolean isWeekend() {
+		return (this.get(DAY_OF_WEEK) == SATURDAY || this.get(DAY_OF_WEEK) == SUNDAY);
+	}
+	
+	public Date dateByAdding(int days) {
+		Date toReturn = (Date)this.clone();
+		toReturn.add(GregorianCalendar.DAY_OF_MONTH, days);
+		return toReturn;
+	}
+	
 	@Override
 	public String toJSONString() {
-		return "\"" + day + "/" + month + "/" + year + "\"";
+		return "\"" + getMonth() + "/" + getDay() + "/" + getYear() + "\"";
 	}
 }

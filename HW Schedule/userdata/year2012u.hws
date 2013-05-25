@@ -1,0 +1,13 @@
+{
+    "courses": [],
+    "year": 2012,
+    "notes": [
+	    {
+	    	"text": "hello, world!",
+	    	"isToDo": true,
+	    	"date": "9/5/12",
+	    	"period": 2
+		}
+	],
+    "campus": 5
+}

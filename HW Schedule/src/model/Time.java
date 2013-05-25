@@ -24,6 +24,12 @@ public class Time implements org.json.JSONString {
 		this.minute = minute;
 	}
 	
+	public Time(String json) {
+		String[] arr = json.split(":");
+		this.setHour(Integer.parseInt(arr[0]));
+		this.setMinute(Integer.parseInt(arr[1]));
+	}
+
 	/**
 	 * Returns the hour (0-23) of this time.
 	 */
@@ -78,16 +84,29 @@ public class Time implements org.json.JSONString {
 	public Time timeByAdding(int hours, int minutes) {
 		int newHours = this.hour+hours;
 		int newMinutes = this.minute+minutes;
-		while (newMinutes >= 60) {
-			newHours++;
-			newMinutes-=60;
+		if (minutes>=0 && hours>=0) {
+			while (newMinutes >= 60) {
+				newHours++;
+				newMinutes-=60;
+			}
+			newHours = newHours%24;
+			return new Time(newHours, newMinutes);
+		} else if (minutes<=0 && hours<=0) {
+			while (newMinutes < 0) {
+				newHours--;
+				newMinutes+=60;
+			}
+			while (newHours<0) {
+				newHours+=24;
+			}
+			newHours = newHours%24;
+			return new Time(newHours, newMinutes);
 		}
-		newHours = newHours%24;
-		return new Time(newHours, newMinutes);
+		throw new IllegalArgumentException();
 	}
 	
 	/**
-	 * Returns the number of minutes starting at this time until the specified time.
+	 * Returns the number of minutes from this time until the specified time.
 	 */
 	public int minutesUntil(Time t) {
 		return 60*(t.hour-this.hour) + t.minute-this.minute;

@@ -12,12 +12,14 @@ public class Note {
 	}
 	
 	public Note(JSONObject obj) {
-		//TODO: load from JSON object
+		this(obj.getString("text"), obj.getBoolean("isToDo"));
 	}
 	
 	public JSONObject saveNote() {
-		//TODO: save to JSON object
-		return null;
+		JSONObject obj = new JSONObject();
+		obj.put("text", text);
+		obj.put("isToDo", isToDo);
+		return obj;
 	}
 	
 	public boolean equals(Object other) {
