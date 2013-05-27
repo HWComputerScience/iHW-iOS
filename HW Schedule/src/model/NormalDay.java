@@ -73,7 +73,7 @@ public class NormalDay extends Day {
 			//add periods before break
 			for (int num=1; num<=periodsBeforeBreak; num++) {
 				Course course = c.getCourse(date, num);
-				if (course==null) periods.add(new Period("x", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());
 			}
@@ -83,7 +83,7 @@ public class NormalDay extends Day {
 			//add periods after break
 			for (int num=periodsBeforeBreak+1; num<=periodsBeforeBreak+periodsAfterBreak; num++) {
 				Course course = c.getCourse(date, num);
-				if (course==null) periods.add(new Period("x", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());
 			}
@@ -93,7 +93,7 @@ public class NormalDay extends Day {
 			//add all periods
 			for (int num=1; num<=numPeriods; num++) {
 				Course course = c.getCourse(date, num);
-				if (course==null) periods.add(new Period("x", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());
 			}

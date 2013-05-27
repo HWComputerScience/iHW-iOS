@@ -122,7 +122,7 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		ScheduleFrame frame = new ScheduleFrame();
 		frame.setDelegate(this);
 		frame.setDataSource(this);
-		frame.loadDayRange(new Date(9,10,2012), new Date(9,14,2012));
+		frame.loadDayRange(new Date(9,3,2012), new Date(9,7,2012));
 	}
 
 	public Day getDay(Date d) {

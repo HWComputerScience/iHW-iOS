@@ -11,6 +11,7 @@ import model.Date;
 
 public class ScheduleFrame extends JFrame {
 	private static final long serialVersionUID = -8726369403910041693L;
+	private static final double SCALE = 2;
 	
 	private ScheduleViewDelegate delegate;
 	private ScheduleViewDataSource dataSource;
@@ -34,9 +35,7 @@ public class ScheduleFrame extends JFrame {
 		mainPanel.setMinimumSize(new Dimension(numDaysDisplayed*200, 0));
 		
 		while (d.compareTo(end) <= 0) {
-			System.out.println("adding " + d);
 			JPanel dayPanel = new JPanel();
-			//dayPanel.setLayout(new BoxLayout(dayPanel, BoxLayout.PAGE_AXIS));
 			dayPanel.setLayout(new GridBagLayout());
 			GridBagConstraints cons = new GridBagConstraints();
 			cons.fill = GridBagConstraints.HORIZONTAL;
@@ -48,9 +47,29 @@ public class ScheduleFrame extends JFrame {
 			cons.anchor = GridBagConstraints.NORTHWEST;
 			day = dataSource.getDay(d);
 			if (day instanceof Holiday) {
-				dayPanel.add(new JLabel(((Holiday)day).getName(), JLabel.CENTER), cons);
+				JLabel title = new JLabel(day.getDate().toString(), JLabel.CENTER);
+				title.setFont(new Font("Georgia", Font.BOLD, 14));
+				title.setBackground(new Color(153,0,0));
+				title.setForeground(Color.WHITE);
+				title.setOpaque(true);
+				title.setAlignmentX(LEFT_ALIGNMENT);
+				dayPanel.add(title, cons);
+				JLabel title2 = new JLabel(((Holiday)day).getName(), JLabel.CENTER);
+				title2.setFont(new Font("Georgia", Font.BOLD, 24));
+				title2.setBackground(new Color(153,0,0));
+				title2.setForeground(Color.WHITE);
+				title2.setOpaque(true);
+				title2.setAlignmentX(LEFT_ALIGNMENT);
+				dayPanel.add(title2, cons);
+				cons.weighty = 1;
+				dayPanel.add(new JPanel(), cons);
 			} else {
-				JLabel title = new JLabel(day.getDate() + " (Day " + ((NormalDay)day).getDayNumber() + ")", SwingConstants.LEFT);
+				JLabel title;
+				if (day instanceof NormalDay) {
+					title = new JLabel(day.getDate() + " (Day " + ((NormalDay)day).getDayNumber() + ")", JLabel.CENTER);
+				} else {
+					title = new JLabel(day.getDate().toString(), JLabel.CENTER);
+				}
 				title.setFont(new Font("Georgia", Font.BOLD, 14));
 				title.setBackground(new Color(153,0,0));
 				title.setForeground(Color.WHITE);
@@ -58,33 +77,18 @@ public class ScheduleFrame extends JFrame {
 				title.setAlignmentX(LEFT_ALIGNMENT);
 				dayPanel.add(title, cons);
 				for (Period p : day.getPeriods()) {
-					PeriodPanel pp = new PeriodPanel(p, dataSource.getNotes(d, p.getNum()), 1.5);
+					PeriodPanel pp = new PeriodPanel(p, dataSource.getNotes(d, p.getNum()), SCALE);
 					pp.setAlignmentX(LEFT_ALIGNMENT);
 					dayPanel.add(pp, cons);
 				}
 				cons.weighty = 1;
 				dayPanel.add(new JPanel(), cons);
 			}
-			/*Dimension minSize = new Dimension(0,0);
-			Dimension prefSize = new Dimension(0,0);
-			Dimension maxSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
-			dayPanel.add(new Box.Filler(minSize, prefSize, maxSize));*/
 			mainPanel.add(dayPanel);
-			mainPanel.setPreferredSize(new Dimension(numDaysDisplayed*200,
-					Math.max(mainPanel.getPreferredSize().height, dayPanel.getSize().height)));
+			dayPanel.revalidate();
+			System.out.println(dayPanel.getSize().height);
 			d = d.dateByAdding(1);
 		}
-		/*
-		LinkedList<String> lines = new LinkedList<String>();
-		lines.add("Hello, World");
-		lines.add("Here's another note, and it's really really really really long.");
-		lines.add("Here's a third");
-		mainPanel.add(new PeriodPanel(new Period("Test Period", new Date(1,9,2012), new Time(8,0), new Time(8,45), 1), lines, 3.5));
-		*/
-		/*Dimension minSize = new Dimension(0,0);
-		Dimension prefSize = new Dimension(0,0);
-		Dimension maxSize = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
-		mainPanel.add(new Box.Filler(minSize, prefSize, maxSize));*/
 		this.setVisible(true);
 		this.validate();
 	}

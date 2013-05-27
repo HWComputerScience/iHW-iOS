@@ -124,7 +124,7 @@ public class Curriculum {
 	/**
 	 * When the user has changed his/her courses, the special days need to be reloaded.
 	 */
-	public void rebuildSpecialDays() {
+	private void rebuildSpecialDays() {
 		for (Date d : specialDays.keySet()) {
 			Day day = specialDays.get(d);
 			if (day instanceof NormalDay) {
@@ -236,6 +236,7 @@ public class Curriculum {
 			}
 		}
 		courses.add(c);
+		this.rebuildSpecialDays();
 		return true;
 	}
 	
@@ -342,6 +343,7 @@ public class Curriculum {
 	
 	public void removeCourse(Course c) {
 		courses.remove(c);
+		rebuildSpecialDays();
 	}
 	
 	/**

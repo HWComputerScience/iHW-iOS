@@ -36,6 +36,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			bottomPanel.setLayout(new BorderLayout());
 			bottomPanel.add(new JLabel(p.getEndTime().toString12()), BorderLayout.WEST);
 			JButton add = new JButton("Add");
+			add.setPreferredSize(new Dimension(50, topPanel.getHeight()));
 			add.addActionListener(new ActionListener() {
 				//Add button was clicked
 				public void actionPerformed(ActionEvent evt) {
@@ -46,6 +47,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			bottomPanel.setBackground(new Color(235, 229, 207));
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		notesBox = new JTextArea();
+			if (p.getName().equalsIgnoreCase("X")) notesBox.setBackground(new Color(235, 229, 207));
 			notesBox.setLineWrap(true);
 			notesBox.setWrapStyleWord(true);
 			updateNotes();

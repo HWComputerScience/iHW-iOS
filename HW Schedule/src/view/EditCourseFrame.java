@@ -135,7 +135,6 @@ public class EditCourseFrame extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(new JFrame(), "The course meetings you selected conflict with one or more of your other courses. Please change them and try again.", "HW Schedule",JOptionPane.WARNING_MESSAGE);
 				}
 			} else {
-				System.out.println("adding");
 				if (delegate.addCourse(course)) {
 					this.dispose();
 				} else {
