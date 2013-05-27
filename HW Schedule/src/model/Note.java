@@ -27,6 +27,10 @@ public class Note {
 		return false;
 	}
 	
+	public String toString() {
+		return text;
+	}
+	
 	public void setText(String newText) { this.text = newText; }
 	public String getText() { return text; }
 	public boolean isToDo() { return isToDo; }	

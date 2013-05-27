@@ -16,6 +16,7 @@ public abstract class Day {
 	}
 	
 	public model.Date getDate() { return date; }
+	public List<Period> getPeriods() { return periods; }
 	
 	public JSONObject saveDay() {
 		JSONObject toReturn = new JSONObject();

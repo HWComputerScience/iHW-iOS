@@ -15,7 +15,7 @@
 	],
 	"normalDay": {
 	    "periodLength": 45,
-	    "numPeriods": 0,
+	    "numPeriods": 8,
 	    "type": "normal",
 	    "hasBreak": false
 	},
@@ -30,6 +30,11 @@
 	    "hasBreak": true
 	},
 	"specialDays": [
+		{
+			"date": "9/3/2012",
+		    "name": "Labor Day",
+		    "type": "holiday"
+		},
 		{
 		    "periodLength": 40,
 		    "periodsAfterBreak": 8,

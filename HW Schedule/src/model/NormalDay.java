@@ -52,7 +52,7 @@ public class NormalDay extends Day {
 		if (c!= null) fillPeriods(c);
 	}
 	
-	public NormalDay(JSONObject obj, Curriculum c) {
+	public NormalDay(JSONObject obj) {
 		super(obj);
 		dayNumber = obj.optInt("dayNumber");
 		hasBreak = obj.getBoolean("hasBreak");
@@ -64,26 +64,38 @@ public class NormalDay extends Day {
 			breakLength = obj.getInt("breakLength");
 			breakName = obj.getString("breakName");
 		}
-		if (c!=null) fillPeriods(c);
 	}
 	
 	public void fillPeriods(Curriculum c) {
 		if (hasBreak) {
 			periods = new ArrayList<Period>(periodsBeforeBreak+periodsAfterBreak+1);
-			for (int i=1; i<=periodsBeforeBreak; i++) {
-				//ArrayList<Course> courses = c.getCourse(i);
-				//TODO: add the periods in this day up to the break
+			Time nextStart = new Time(8,0);
+			//add periods before break
+			for (int num=1; num<=periodsBeforeBreak; num++) {
+				Course course = c.getCourse(date, num);
+				if (course==null) periods.add(new Period("x", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());
 			}
-			//TODO: Add break as a period
-			for (int i=periodsBeforeBreak+1; i<=periodsAfterBreak; i++) {
-				//ArrayList<Course> courses = c.getCourses(i);
-				//TODO: add the periods in this day after the break
+			//add break
+			periods.add(new Period(breakName, date, nextStart, nextStart.timeByAdding(0, breakLength), 0));
+			nextStart = nextStart.timeByAdding(0, breakLength+c.getPassingPeriodLength());
+			//add periods after break
+			for (int num=periodsBeforeBreak+1; num<=periodsBeforeBreak+periodsAfterBreak; num++) {
+				Course course = c.getCourse(date, num);
+				if (course==null) periods.add(new Period("x", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());
 			}
 		} else {
 			periods = new ArrayList<Period>(numPeriods);
-			for (int i=1; i<=numPeriods; i++) {
-				//ArrayList<Course> courses = c.getCourses(i);
-				//TODO: add the periods in this day
+			Time nextStart = new Time(8,0);
+			//add all periods
+			for (int num=1; num<=numPeriods; num++) {
+				Course course = c.getCourse(date, num);
+				if (course==null) periods.add(new Period("x", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
+				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());
 			}
 		}
 	}

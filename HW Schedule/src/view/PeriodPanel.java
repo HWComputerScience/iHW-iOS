@@ -6,21 +6,22 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import model.Note;
 import model.Period;
 
 public class PeriodPanel extends JPanel implements MouseListener {
 	private static final long serialVersionUID = -3652755502045723337L;
-	private List<String> lines;
+	private List<Note> lines;
 	private JTextArea notesBox;
 	private Period period;
 	private ScheduleViewDelegate delegate;
 	
-	public PeriodPanel(Period p, List<String> notes, double heightFactor) {
+	public PeriodPanel(Period p, List<Note> notes, double heightFactor) {
 		this.period = p;
 		this.lines = notes;
 		int height = (int)(p.getStartTime().minutesUntil(p.getEndTime())*heightFactor);
 		this.setMinimumSize(new Dimension(200,height));
-		this.setPreferredSize(new Dimension(0,height));
+		this.setPreferredSize(new Dimension(200,height));
 		this.setMaximumSize(new Dimension(Short.MAX_VALUE,height));
 		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.setBackground(Color.WHITE);
@@ -29,7 +30,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 		JPanel topPanel = new JPanel();
 			topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.LINE_AXIS));
 			topPanel.add(new JLabel(p.getStartTime().toString12()+ "  " + p.getName()));
-			topPanel.setBackground(Color.LIGHT_GRAY);
+			topPanel.setBackground(new Color(235, 229, 207));
 		this.add(topPanel, BorderLayout.NORTH);
 		JPanel bottomPanel = new JPanel();
 			bottomPanel.setLayout(new BorderLayout());
@@ -42,7 +43,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 				}
 			});
 			bottomPanel.add(add, BorderLayout.EAST);
-			bottomPanel.setBackground(Color.LIGHT_GRAY);
+			bottomPanel.setBackground(new Color(235, 229, 207));
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		notesBox = new JTextArea();
 			notesBox.setLineWrap(true);
@@ -54,18 +55,18 @@ public class PeriodPanel extends JPanel implements MouseListener {
 		this.add(notesBox, BorderLayout.CENTER);
 	}
 	
-	public void removeNote(String note) {
+	public void removeNote(Note note) {
 		lines.remove(note);
 		updateNotes();
 	}
 	
-	public void addNote(String note) {
+	public void addNote(Note note) {
 		lines.add(note);
 		updateNotes();
 	}
 	
-	public void replaceNote(String oldNote, String newNote) {
-		ListIterator<String> iter = lines.listIterator();
+	public void replaceNote(Note oldNote, Note newNote) {
+		ListIterator<Note> iter = lines.listIterator();
 		boolean found = false;
 		while (iter.hasNext()) {
 			if (iter.next().equals(oldNote)) {
@@ -82,9 +83,9 @@ public class PeriodPanel extends JPanel implements MouseListener {
 	
 	private void updateNotes() {
 		String text = "";
-		Iterator<String> iter = lines.iterator();
+		Iterator<Note> iter = lines.iterator();
 		while (iter.hasNext()) {
-			text += iter.next() + "\n";
+			text += iter.next().getText() + "\n";
 		}
 		text += "\n";
 		text = text.substring(0,text.length()-1);
@@ -93,11 +94,11 @@ public class PeriodPanel extends JPanel implements MouseListener {
 	
 	public void mousePressed(MouseEvent evt) {
 		int position = ((JTextArea)evt.getComponent()).viewToModel(evt.getPoint());
-		Iterator<String> iter = lines.iterator();
+		Iterator<Note> iter = lines.iterator();
 		int line=-1;
 		while (position >= 0) {
 			if (!iter.hasNext()) return;
-			position -= iter.next().length() + 1;
+			position -= iter.next().getText().length() + 1;
 			line++;
 		}
 		//System.out.println("Line Clicked: " + line);

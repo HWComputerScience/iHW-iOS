@@ -38,7 +38,11 @@ public class Time implements org.json.JSONString {
 	/**
 	 * Returns the hour (1-12) of this time.
 	 */
-	public int getHour12() { return hour % 12; }
+	public int getHour12() { 
+		int ret = hour % 12;
+		if (ret==0) ret=12;
+		return ret;
+	}
 	
 	/**
 	 * Sets the hour (0-23) of this time.

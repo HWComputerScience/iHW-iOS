@@ -44,4 +44,9 @@ public class Date extends GregorianCalendar {
 	public String toString() {
 		return getMonth() + "/" + getDay() + "/" + getYear();
 	}
+
+	public int getDaysUntil(Date end) {
+		long diff = end.getTimeInMillis()-this.getTimeInMillis();
+		return (int)(diff/86400000);
+	}
 }

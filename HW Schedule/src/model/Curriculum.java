@@ -74,7 +74,7 @@ public class Curriculum {
 		for (int i=0; i<specialDaysArr.length(); i++) {
 			JSONObject dayObj = specialDaysArr.getJSONObject(i);
 			Day toAdd = null;
-			if (dayObj.getString("type").equals("normal")) toAdd = new NormalDay(dayObj, this);
+			if (dayObj.getString("type").equals("normal")) toAdd = new NormalDay(dayObj);
 			else if (dayObj.getString("type").equals("test")) toAdd = new TestDay(dayObj);
 			else if (dayObj.getString("type").equals("holiday")) toAdd = new Holiday(dayObj);
 			else throw new IllegalStateException("Unrecognized day type found in curriculum.");
@@ -105,6 +105,8 @@ public class Curriculum {
 			if (dayNum>campus) dayNum -= campus;
 			d=d.dateByAdding(1);
 		}
+		
+		rebuildSpecialDays();
 		
 		//initialize and store notes in map of maps
 		JSONArray notesArr = yearObj.getJSONArray("notes");
@@ -137,17 +139,23 @@ public class Curriculum {
 	 */
 	public Day getDay(Date d) {
 		if (specialDays.containsKey(d)) return specialDays.get(d);
-		else if (d.isWeekend()) return new Holiday(d, "");
+		else if (d.isWeekend() ||
+				d.compareTo(semesterEndDates[0]) < 0 ||
+				d.compareTo(semesterEndDates[2]) > 0) return new Holiday(d, "");
 		else if (d.isMonday()) {
 			JSONObject dayObj = new JSONObject(normalMondayTemplate, JSONObject.getNames(normalMondayTemplate));
 			dayObj.put("date", d.toString());
 			dayObj.put("dayNumber", dayNumbers.get(d));
-			return new NormalDay(dayObj, this);
+			NormalDay ret = new NormalDay(dayObj);
+			ret.fillPeriods(this);
+			return ret;
 		} else {
 			JSONObject dayObj = new JSONObject(normalDayTemplate, JSONObject.getNames(normalDayTemplate));
 			dayObj.put("date", d.toString());
 			dayObj.put("dayNumber", dayNumbers.get(d));
-			return new NormalDay(dayObj, this);
+			NormalDay ret = new NormalDay(dayObj);
+			ret.fillPeriods(this);
+			return ret;
 		}
 	}
 	
@@ -271,6 +279,7 @@ public class Curriculum {
 	}
 	
 	public Course getCourse(Date d, int period) {
+		if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) return null;
 		int dayNum = dayNumbers.get(d);
 		List<Integer> terms = termsFromDate(d);
 		for (Course c : courses) {

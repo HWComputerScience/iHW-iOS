@@ -102,7 +102,7 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		}
 		
 		currentCurriculum = new Curriculum(curriculumJSON, yearJSON);
-		//System.out.println(currentCurriculum.getDay(new Date(1,17,2013)).saveDay());
+		//System.out.println(currentCurriculum.getDay(new Date(9,3,2012)).saveDay());
 		showHomepage();
 	}
 	
@@ -122,7 +122,7 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		ScheduleFrame frame = new ScheduleFrame();
 		frame.setDelegate(this);
 		frame.setDataSource(this);
-		//some other stuff
+		frame.loadDayRange(new Date(9,10,2012), new Date(9,14,2012));
 	}
 
 	public Day getDay(Date d) {

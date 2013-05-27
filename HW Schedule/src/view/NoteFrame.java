@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import model.Date;
+import model.Note;
 
 public class NoteFrame extends JFrame {
 	private static final long serialVersionUID = 6780081129703009164L;
@@ -16,8 +17,8 @@ public class NoteFrame extends JFrame {
 		this("Add Note", "", d, periodNum);
 	}
 	
-	public NoteFrame(String existingText, Date d, int periodNum) {
-		this("Edit Note", existingText, d, periodNum);
+	public NoteFrame(Note note, Date d, int periodNum) {
+		this("Edit Note", note.getText(), d, periodNum);
 	}
 	
 	private NoteFrame(String title, final String existingText, Date date, int period) {
