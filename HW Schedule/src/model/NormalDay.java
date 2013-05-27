@@ -54,7 +54,7 @@ public class NormalDay extends Day {
 	
 	public NormalDay(JSONObject obj, Curriculum c) {
 		super(obj);
-		dayNumber = obj.getInt("dayNumber");
+		dayNumber = obj.optInt("dayNumber");
 		hasBreak = obj.getBoolean("hasBreak");
 		periodLength = obj.getInt("periodLength");
 		numPeriods = obj.getInt("numPeriods");
@@ -71,7 +71,7 @@ public class NormalDay extends Day {
 		if (hasBreak) {
 			periods = new ArrayList<Period>(periodsBeforeBreak+periodsAfterBreak+1);
 			for (int i=1; i<=periodsBeforeBreak; i++) {
-				//ArrayList<Course> courses = c.getCourses(i);
+				//ArrayList<Course> courses = c.getCourse(i);
 				//TODO: add the periods in this day up to the break
 			}
 			//TODO: Add break as a period

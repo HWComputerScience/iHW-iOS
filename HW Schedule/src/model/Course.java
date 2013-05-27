@@ -21,12 +21,23 @@ public class Course {
 	}
 	
 	public Course(JSONObject obj) {
-		//TODO: load course from JSON object
+		name=obj.getString("name");
+		period=obj.getInt("period");
+		term=obj.getInt("term");
+		JSONArray meetingsArr = obj.getJSONArray("meetings");
+		meetings = new int[meetingsArr.length()];
+		for (int i=0; i<meetingsArr.length(); i++) {
+			meetings[i]=meetingsArr.getInt(i);
+		}
 	}
 	
 	public JSONObject saveCourse() {
-		//TODO: create a JSON object with this course's info
-		return null;
+		JSONObject obj = new JSONObject();
+		obj.put("name", name);
+		obj.put("period", period);
+		obj.put("term", term);
+		obj.put("meetings", meetings);
+		return obj;
 	}
 
 	public String getName() { return name; }

@@ -12,12 +12,14 @@ import view.*;
 public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource {
 	
 	private Curriculum currentCurriculum;
+	private int campus;
+	private CoursesFrame cframe;
 	
 	public static void main(String[] args) {
 		//System.out.println(Curriculum.generateBlankYearJSON(Curriculum.CAMPUS_UPPER, 2012));
 		
-		JSONArray obj = new JSONArray();
-		//obj.put(new model.NormalDay(new Date(9,4,2012), null, 1, 0, 8, 40, "Convocation/Investiture", 40).saveDay());
+		//JSONArray obj = new JSONArray();
+		//obj.put(new model.NormalDay(new Date(9,4,2012), null, 0, 2, 6, 30, "Activities", 45).saveDay());
 		//obj.put(new model.NormalDay(new Date(1,17,2013), null, 0, 8, 45).saveDay());
 		
 		/*Period sat = new Period("SAT Reasoning Test & SAT Subject Tests", new Date(10,6,2013), new Time(8,0), new Time(14,30), 1);
@@ -25,25 +27,36 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		periods.add(sat);
 		obj.put(new TestDay(new Date(10,6,2013), periods).saveDay());
 		*/
-		obj.put(new Note("hello, world!", true).saveNote());
-		
-		System.out.println(obj.toString(4));
-		//new Controller();
+		//obj.put(new Note("hello, world!", true).saveNote());
+		/*
+		obj.put(new Course("Symphony", 1, Curriculum.TERM_FULL_YEAR,
+				new int[] {
+					Course.MEETING_DOUBLE_AFTER,
+					Course.MEETING_X_DAY,
+					Course.MEETING_SINGLE_PERIOD,
+					Course.MEETING_X_DAY,
+					Course.MEETING_SINGLE_PERIOD
+				}).saveCourse());
+		*/
+		//System.out.println(obj.toString(4));
+		new Controller();
 	}
 	
 	public Controller() {
 		GregorianCalendar today = new GregorianCalendar();
 		int year = today.get(GregorianCalendar.YEAR);
 		if (today.get(GregorianCalendar.MONTH) < GregorianCalendar.JULY) year--;
-		String campus = (String)JOptionPane.showInputDialog(new JFrame(),
+		String campusStr = (String)JOptionPane.showInputDialog(new JFrame(),
 				"Which campus do you attend?", 
 				"HW Schedule",
 				JOptionPane.QUESTION_MESSAGE,
 				null,
 				new String[] {"Middle School","Upper School"},
-				1);
-		if (campus==null) System.exit(0);
-		String campusChar = campus.substring(0, 1).toLowerCase();
+				"Upper School");
+		if (campusStr==null) System.exit(0);
+		String campusChar = campusStr.substring(0, 1).toLowerCase();
+		if (campusChar.equals("u")) campus = Curriculum.CAMPUS_UPPER;
+		else campus = Curriculum.CAMPUS_MIDDLE;
 		String curriculumJSON = "";
 		String filename = "schooldata/curriculum" + year + campusChar + ".hws";
 		try {
@@ -58,7 +71,7 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 			JOptionPane.showMessageDialog(new JFrame(), "Sorry, the curriculum file \"" + filename + "\" was not found for the selected campus and current year.", "HW Schedule",JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("EXCEPTION while reading curriculum file:");
+			System.err.println("EXCEPTION while reading curriculum file:");
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -74,25 +87,22 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 			}
 			f.close();
 		} catch (FileNotFoundException e) {
-			if (campusChar.equals("u")) {
-				yearJSON = Curriculum.generateBlankYearJSON(Curriculum.CAMPUS_UPPER, year);
-			} else {
-				yearJSON = Curriculum.generateBlankYearJSON(Curriculum.CAMPUS_MIDDLE, year);
-			}
+			yearJSON = Curriculum.generateBlankYearJSON(campus, year);
 			try {
 				PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
 				out.println(yearJSON);
 				out.close();
 			} catch(IOException e2) {
-				System.out.println("EXCEPTION while writing year file.");
+				System.err.println("EXCEPTION while writing year file.");
 			}
 		} catch (IOException e) {
-			System.out.println("EXCEPTION while reading year file:");
+			System.err.println("EXCEPTION while reading year file:");
 			e.printStackTrace();
 			System.exit(1);
 		}
 		
-		currentCurriculum = new Curriculum(curriculumJSON, yearJSON); //should load from file instead
+		currentCurriculum = new Curriculum(curriculumJSON, yearJSON);
+		//System.out.println(currentCurriculum.getDay(new Date(1,17,2013)).saveDay());
 		showHomepage();
 	}
 	
@@ -101,9 +111,10 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	}
 
 	public void showCourseEditor() {
-		CoursesFrame cframe = new CoursesFrame(currentCurriculum.getAllCourseNames(), 5,8);
+		cframe = new CoursesFrame(campus, campus+3);
 		cframe.setDelegate(this);
 		cframe.setDataSource(this);
+		cframe.regenerateListItems(currentCurriculum.getAllCourseNames());
 		//some other stuff
 	}
 
@@ -120,12 +131,12 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 
 	public void deleteCourse(String name) {
 		currentCurriculum.removeCourse(currentCurriculum.getCourse(name));
-		currentCurriculum.rebuildSpecialDays();
+		if (cframe!=null) cframe.regenerateListItems(currentCurriculum.getAllCourseNames());
 	}
 
 	public boolean addCourse(Course c) {
 		if (currentCurriculum.addCourse(c)) {
-			currentCurriculum.rebuildSpecialDays();
+			if (cframe!=null) cframe.regenerateListItems(currentCurriculum.getAllCourseNames());
 			return true;
 		}
 		return false;
@@ -135,10 +146,11 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		Course oldCourse = currentCurriculum.getCourse(oldName);
 		currentCurriculum.removeCourse(oldCourse);
 		if (currentCurriculum.addCourse(c)) {
-			currentCurriculum.rebuildSpecialDays();
+			if (cframe!=null) cframe.regenerateListItems(currentCurriculum.getAllCourseNames());
 			return true;
 		} else {
 			currentCurriculum.addCourse(oldCourse);
+			if (cframe!=null) cframe.regenerateListItems(currentCurriculum.getAllCourseNames());
 			return false;
 		}
 	}

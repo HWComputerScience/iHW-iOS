@@ -7,18 +7,29 @@ import javax.swing.text.*;
 
 import model.Course;
 
-public class EditCourseFrame extends JFrame {
+public class EditCourseFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 412259773568289831L;
+	private static final String[] termNames = new String[] {
+		"Full Year",
+		"1st Semester",
+		"2nd Semester",
+		"1st Trimester",
+		"2nd Trimester",
+		"3rd Trimester"
+	};
+	
 	private JTextField nameField;
 	private JTextField periodField;
 	private JComboBox termBox;
-	private Checkbox[][] meetingBoxes;
+	private JCheckBox[][] meetingBoxes;
 	private JLabel[] periodHeadings;
+	private int numDays;
 	private int numPeriods;
-	private CoursesFrame delegate;
+	private ScheduleViewDelegate delegate;
 	private String oldCourseName;
 	
 	public EditCourseFrame(int numDays, final int numPeriods) {
+		this.numDays = numDays;
 		this.numPeriods = numPeriods;
 		JPanel contentPane = (JPanel)this.getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -51,14 +62,7 @@ public class EditCourseFrame extends JFrame {
 				periodPanel.add(periodField);
 				periodField.setDocument(new PeriodFieldDocument());
 				periodPanel.add(new JLabel("Term:"));
-				String[] termNames = new String[6];
-				termNames[0] = "Full Year";
-				termNames[1] = "1st Semester";
-				termNames[2] = "2nd Semester";
-				termNames[3] = "1st Trimester";
-				termNames[4] = "2nd Trimester";
-				termNames[5] = "3rd Trimester";
-				termBox = new JComboBox(termNames); //TODO: add terms
+				termBox = new JComboBox(termNames);
 				termBox.setAlignmentX(Component.RIGHT_ALIGNMENT);
 				periodPanel.add(termBox);
 				periodPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -72,7 +76,7 @@ public class EditCourseFrame extends JFrame {
 				meetingsPanel.add(new JPanel());
 				for (int i=1; i<=numDays; i++) meetingsPanel.add(new JLabel("" + i, JLabel.CENTER));
 				periodHeadings = new JLabel[3];
-				meetingBoxes = new Checkbox[3][numDays];
+				meetingBoxes = new JCheckBox[3][numDays];
 				for (int r=1; r<=3; r++) for (int c=0; c<=numDays; c++) {
 					if (c==0) {
 						JLabel heading = new JLabel("", JLabel.CENTER);
@@ -81,7 +85,10 @@ public class EditCourseFrame extends JFrame {
 						meetingsPanel.add(heading);
 					} else {
 						JPanel panel = new JPanel();
-						meetingBoxes[r-1][c-1] = new Checkbox();
+						JCheckBox cb = new JCheckBox();
+						cb.addActionListener(this);
+						cb.setActionCommand("" + (r-1) + "/" + (c-1));
+						meetingBoxes[r-1][c-1] = cb;
 						panel.add(meetingBoxes[r-1][c-1]);
 						panel.setAlignmentX(CENTER_ALIGNMENT);
 						panel.setAlignmentY(CENTER_ALIGNMENT);
@@ -94,14 +101,7 @@ public class EditCourseFrame extends JFrame {
 			JButton submit = new JButton("Save");
 			submit.setAlignmentX(CENTER_ALIGNMENT);
 			submit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent evt) {
-					Course course = null;
-					//TODO: Validate all the form fields, create the new Course object from them, and:
-					if (delegate != null) {
-						if (oldCourseName != null) delegate.editingExistingCourseFinished(oldCourseName, course);
-						else delegate.editingNewCourseFinished(course);
-					}
-				}
+				public void actionPerformed(ActionEvent evt) { submit(); }
 			});
 			mainPanel.add(submit);
 			Dimension minSize = new Dimension(0,0);
@@ -115,9 +115,52 @@ public class EditCourseFrame extends JFrame {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 	
+	public void submit() {
+		int[] meetings = new int[numDays];
+		for (int i=0; i<numDays; i++) {
+			if (!meetingBoxes[1][i].isSelected()) meetings[i] = Course.MEETING_X_DAY;
+			else if (meetingBoxes[0][i].isSelected()) meetings[i] = Course.MEETING_DOUBLE_BEFORE;
+			else if (meetingBoxes[2][i].isSelected()) meetings[i] = Course.MEETING_DOUBLE_AFTER;
+			else meetings[i] = Course.MEETING_SINGLE_PERIOD;
+		}
+		Course course = new Course(nameField.getText(), 
+				Integer.parseInt(periodField.getText()), 
+				termBox.getSelectedIndex(),
+				meetings);
+		if (delegate != null) {
+			if (oldCourseName != null) {
+				if (delegate.editCourse(oldCourseName, course)) {
+					this.dispose();
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(), "The course meetings you selected conflict with one or more of your other courses. Please change them and try again.", "HW Schedule",JOptionPane.WARNING_MESSAGE);
+				}
+			} else {
+				System.out.println("adding");
+				if (delegate.addCourse(course)) {
+					this.dispose();
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(), "The course meetings you selected conflict with one or more of your other courses. Please change them and try again.", "HW Schedule",JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		}
+	}
+	
 	public void fillFieldsFromCourse(Course c) {
-		//TODO: fill all of the fields with data from the existing course.
-		//Also set the oldCourseName instance variable.
+		oldCourseName = c.getName();
+		nameField.setText(c.getName());
+		periodField.setText("" + c.getPeriod());
+		updateMeetingBoxes(c.getPeriod());
+		termBox.setSelectedIndex(c.getTerm());
+		for (int i=1; i<=numDays; i++) {
+			if (c.getMeetingOn(i) == Course.MEETING_SINGLE_PERIOD) meetingBoxes[1][i-1].setSelected(true);
+			else if (c.getMeetingOn(i) == Course.MEETING_DOUBLE_BEFORE) {
+				meetingBoxes[0][i-1].setSelected(true);
+				meetingBoxes[1][i-1].setSelected(true);
+			} else if (c.getMeetingOn(i) == Course.MEETING_DOUBLE_AFTER) {
+				meetingBoxes[1][i-1].setSelected(true);
+				meetingBoxes[2][i-1].setSelected(true);
+			}
+		}
 	}
 	
 	public void updateMeetingBoxes(int period) {
@@ -125,7 +168,7 @@ public class EditCourseFrame extends JFrame {
 			if (r<1 || r>numPeriods) {
 				periodHeadings[r-period+1].setText("");
 				for (int c=0; c<meetingBoxes[r-period+1].length; c++) {
-					meetingBoxes[r-period+1][c].setState(false);
+					meetingBoxes[r-period+1][c].setSelected(false);
 					meetingBoxes[r-period+1][c].setEnabled(false);
 					meetingBoxes[r-period+1][c].setVisible(false);
 				}
@@ -144,8 +187,8 @@ public class EditCourseFrame extends JFrame {
 		}
 	}
 	
-	public CoursesFrame getDelegate() { return delegate; }
-	public void setDelegate(CoursesFrame delegate) { this.delegate = delegate; }
+	public ScheduleViewDelegate getDelegate() { return delegate; }
+	public void setDelegate(ScheduleViewDelegate delegate) { this.delegate = delegate; }
 
 	/**
 	 * Controls the text of the period field in the EditCourseFrame.
@@ -172,6 +215,19 @@ public class EditCourseFrame extends JFrame {
 			} catch (Exception e) {	}
 			super.remove(offset, length);
 			updateMeetingBoxes(period);
+		}
+	}
+	
+	public void actionPerformed(ActionEvent evt) {
+		String[] loc = evt.getActionCommand().split("/");
+		int r = Integer.parseInt(loc[0]);
+		int c = Integer.parseInt(loc[1]);
+		boolean state = ((JCheckBox)evt.getSource()).isSelected();
+		if (r==1 && state==false) {
+			meetingBoxes[0][c].setSelected(false);
+			meetingBoxes[2][c].setSelected(false);
+		} else if (r!=1 && state==true) {
+			meetingBoxes[1][c].setSelected(true);
 		}
 	}
 }

@@ -1,9 +1,8 @@
 package model;
 
 import java.util.*;
-import org.json.*;
 
-public class Date extends GregorianCalendar implements JSONString {
+public class Date extends GregorianCalendar {
 	private static final long serialVersionUID = -3262778562693738900L;
 
 	public Date(int month, int day, int year) {
@@ -42,8 +41,7 @@ public class Date extends GregorianCalendar implements JSONString {
 		return toReturn;
 	}
 	
-	@Override
-	public String toJSONString() {
-		return "\"" + getMonth() + "/" + getDay() + "/" + getYear() + "\"";
+	public String toString() {
+		return getMonth() + "/" + getDay() + "/" + getYear();
 	}
 }
