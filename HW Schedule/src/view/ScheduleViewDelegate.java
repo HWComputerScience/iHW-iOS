@@ -11,4 +11,5 @@ public interface ScheduleViewDelegate {
 	boolean editCourse(String oldName, Course c);
 	void addNote(String newText, boolean isToDo, Date d, int periodNum);
 	void replaceNote(String newText, boolean isToDo, String existingText, Date d, int periodNum);
+	void removeNote(String existingText, Date d, int periodNum);
 }

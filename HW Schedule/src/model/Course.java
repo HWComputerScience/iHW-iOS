@@ -50,6 +50,15 @@ public class Course {
 	public int getMeetingOn(int dayNum) {
 		return meetings[dayNum-1];
 	}
+	
+	public int getTotalMeetings() {
+		int sum = 0;
+		for (int meeting : meetings) {
+			if (meeting>0) sum++;
+			if (meeting>1) sum++;
+		}
+		return sum;
+	}
 
 	public void setMeetings(int[] meetings) { this.meetings = meetings; }
 }

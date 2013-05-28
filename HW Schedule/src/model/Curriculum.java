@@ -284,6 +284,25 @@ public class Curriculum {
 		if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) return null;
 		int dayNum = dayNumbers.get(d);
 		List<Integer> terms = termsFromDate(d);
+		if (dayNum==0) {
+			Course maxMeetings = null;
+			int max = 0;
+			for (Course c : courses) {
+				boolean termFound = false;
+				for (int term : terms) {
+					if (term==c.getTerm()) {
+						termFound = true;
+						break;
+					}
+				}
+				if (!termFound) continue;
+				if (c.getPeriod() == period && c.getTotalMeetings() > max) {
+					maxMeetings = c;
+					max = c.getTotalMeetings();
+				}
+			}
+			return maxMeetings;
+		}
 		for (Course c : courses) {
 			boolean termFound = false;
 			for (int term : terms) {
@@ -293,10 +312,6 @@ public class Curriculum {
 				}
 			}
 			if (!termFound) continue;
-			if (dayNum==0) {
-				if (c.getPeriod()==period) return c;
-				continue;
-			}
 			if (c.getPeriod()==period) {
 				if (dayNum==0) return c;
 				if (c.getMeetingOn(dayNum) != Course.MEETING_X_DAY) return c; 

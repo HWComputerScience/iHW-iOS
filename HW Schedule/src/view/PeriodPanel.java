@@ -36,7 +36,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			bottomPanel.setLayout(new BorderLayout());
 			bottomPanel.add(new JLabel(p.getEndTime().toString12()), BorderLayout.WEST);
 			JButton add = new JButton("Add");
-			add.setPreferredSize(new Dimension(50, topPanel.getHeight()));
+			add.setPreferredSize(new Dimension(60, topPanel.getHeight()));
 			add.addActionListener(new ActionListener() {
 				//Add button was clicked
 				public void actionPerformed(ActionEvent evt) {
@@ -63,43 +63,6 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			notesBox.addMouseListener(this);
 		this.add(notesBox, BorderLayout.CENTER);
 	}
-	/*
-	public void removeNote(Note note) {
-		lines.remove(note);
-		updateNotes();
-	}*/
-	/*
-	public void addNote(Note note) {
-		lines.add(note);
-		updateNotes();
-	}*/
-	/*
-	public void replaceNote(Note oldNote, Note newNote) {
-		ListIterator<Note> iter = lines.listIterator();
-		boolean found = false;
-		while (iter.hasNext()) {
-			if (iter.next().equals(oldNote)) {
-				iter.set(newNote);
-				found=true;
-				break;
-			}
-		}
-		if (!found) {
-			lines.add(newNote);
-		}
-		updateNotes();
-	}*/
-	/*
-	private void updateNotes() {
-		String text = "";
-		Iterator<Note> iter = lines.iterator();
-		while (iter.hasNext()) {
-			text += iter.next().getText() + "\n";
-		}
-		text += "\n";
-		text = text.substring(0,text.length()-1);
-		notesBox.setText(text);
-	}*/
 	
 	public void mousePressed(MouseEvent evt) {
 		int position = ((JTextArea)evt.getComponent()).viewToModel(evt.getPoint());

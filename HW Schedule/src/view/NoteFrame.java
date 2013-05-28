@@ -41,11 +41,13 @@ public class NoteFrame extends JFrame {
 		JButton saveButton = new JButton("Save Note");
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (delegate!=null) {
+				if (delegate!=null && !noteText.getText().equals("")) {
 					if (existingText.equals("")) delegate.addNote(noteText.getText(), cb.isSelected(), d, periodNum);
 					else delegate.replaceNote(noteText.getText(), cb.isSelected(), existingText, d, periodNum);
+					thisFrame.dispose();
+				} else if (delegate != null && !existingText.equals("")) {
+					delegate.removeNote(existingText, d, periodNum);
 				}
-				thisFrame.dispose();
 			}
 		});
 		this.getContentPane().add(saveButton);

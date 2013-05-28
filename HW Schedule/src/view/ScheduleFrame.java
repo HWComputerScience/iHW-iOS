@@ -1,8 +1,8 @@
 package view;
 
 import java.awt.*;
-import java.util.GregorianCalendar;
-
+import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 
 import model.Day;
@@ -18,13 +18,61 @@ public class ScheduleFrame extends JFrame {
 	private ScheduleViewDelegate delegate;
 	private ScheduleViewDataSource dataSource;
 	private JPanel mainPanel;
+	private JScrollPane scrollPane;
 	private Date[] dateRange;
 	private boolean firstTimeDisplayed;
 	
 	public ScheduleFrame() {
+		this.setTitle("HW Schedule");
 		mainPanel = new JPanel();
-		this.setContentPane(new JScrollPane(mainPanel));
-		this.getContentPane().setMaximumSize(new Dimension(100,100));
+		scrollPane = new JScrollPane(mainPanel);
+		JPanel toolbar = new JPanel();
+		JButton leftWeek = new JButton("<<");
+		leftWeek.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadDayRange(getDateRange()[0].dateByAdding(-7), getDateRange()[1].dateByAdding(-7));
+			}
+		});
+		toolbar.add(leftWeek);
+		JButton leftDay = new JButton("<");
+		leftDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadDayRange(getDateRange()[0].dateByAdding(-1), getDateRange()[1].dateByAdding(-1));
+			}
+		});
+		toolbar.add(leftDay);
+		JButton less = new JButton("Less");
+		less.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadDayRange(getDateRange()[0], getDateRange()[1].dateByAdding(-1));
+			}
+		});
+		toolbar.add(less);
+		JButton more = new JButton("More");
+		more.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadDayRange(getDateRange()[0], getDateRange()[1].dateByAdding(1));
+			}
+		});
+		toolbar.add(more);
+		JButton rightOne = new JButton(">");
+		rightOne.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadDayRange(getDateRange()[0].dateByAdding(1), getDateRange()[1].dateByAdding(1));
+			}
+		});
+		toolbar.add(rightOne);
+		JButton rightWeek = new JButton(">>");
+		rightWeek.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadDayRange(getDateRange()[0].dateByAdding(7), getDateRange()[1].dateByAdding(7));
+			}
+		});
+		toolbar.add(rightWeek);
+		this.getContentPane().setLayout(new BorderLayout());
+		this.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		this.getContentPane().add(toolbar, BorderLayout.NORTH);
+		scrollPane.setMaximumSize(new Dimension(100,100));
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setMinimumSize(new Dimension(200,200));
 		firstTimeDisplayed = true;
@@ -79,7 +127,7 @@ public class ScheduleFrame extends JFrame {
 					title.setText(weekdayName + ", " + day.getDate() + " (Day " + ((NormalDay)day).getDayNumber() + ")");
 				} else {
 					String weekdayName = day.getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, getLocale());
-					title.setText(weekdayName + day.getDate().toString());
+					title.setText(weekdayName + ", " + day.getDate().toString());
 				}
 				dayPanel.add(title, cons);
 				for (Period p : day.getPeriods()) {
