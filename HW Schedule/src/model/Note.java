@@ -5,20 +5,23 @@ import org.json.*;
 public class Note {
 	private String text;
 	private boolean isToDo;
+	private boolean checked;
 	
-	public Note(String text, boolean isToDo) {
+	public Note(String text, boolean isToDo, boolean checked) {
 		this.text = text;
 		this.isToDo = isToDo;
+		this.checked = checked;
 	}
 	
 	public Note(JSONObject obj) {
-		this(obj.getString("text"), obj.getBoolean("isToDo"));
+		this(obj.getString("text"), obj.getBoolean("isToDo"), obj.getBoolean("isChecked"));
 	}
 	
 	public JSONObject saveNote() {
 		JSONObject obj = new JSONObject();
 		obj.put("text", text);
 		obj.put("isToDo", isToDo);
+		obj.put("isChecked", checked);
 		return obj;
 	}
 	
@@ -33,5 +36,6 @@ public class Note {
 	
 	public void setText(String newText) { this.text = newText; }
 	public String getText() { return text; }
-	public boolean isToDo() { return isToDo; }	
+	public boolean isToDo() { return isToDo; }
+	public boolean isChecked() { return checked; }
 }

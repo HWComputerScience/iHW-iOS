@@ -42,6 +42,15 @@ public class CoursesFrame extends JFrame implements ListSelectionListener {
 			list.setBackground(new Color(235, 229, 207));
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	//  }
+		list.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent evt) {
+		        if (evt.getClickCount() == 2 && dataSource != null && selectedCourse != null) {
+					EditCourseFrame ecf = new EditCourseFrame(numDays, numPeriods);
+					ecf.setDelegate(delegate);
+					ecf.fillFieldsFromCourse(dataSource.getCourse(selectedCourse));
+		        }
+		    }
+		});
 		contentPane.add(new JScrollPane(list), BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel(); // {
 			buttonPanel.setLayout(new GridLayout(1,3));

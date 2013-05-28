@@ -14,40 +14,42 @@ public class NoteFrame extends JFrame {
 	private int periodNum;
 	
 	public NoteFrame(Date d, int periodNum) {
-		this("Add Note", "", d, periodNum);
+		this("Add Note", "", false, false, d, periodNum);
 	}
 	
 	public NoteFrame(Note note, Date d, int periodNum) {
-		this("Edit Note", note.getText(), d, periodNum);
+		this("Edit Note", note.getText(), note.isToDo(), note.isChecked(), d, periodNum);
 	}
 	
-	private NoteFrame(String title, final String existingText, Date date, int period) {
+	private NoteFrame(String title, final String existingText, boolean isToDo, boolean checked, Date date, int period) {
 		this.d=date;
 		this.periodNum=period;
 		final NoteFrame thisFrame = this;
 		this.setTitle(title);
-		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
+		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.LINE_AXIS));
+		
 		JPanel mainPane = new JPanel();
-			mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.LINE_AXIS));
+			mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
 			final JTextField noteText = new JTextField(existingText);
 			noteText.setPreferredSize(new Dimension(50,noteText.getPreferredSize().height));
 			noteText.setMaximumSize(new Dimension(500,noteText.getPreferredSize().height));
 			noteText.setAlignmentX(Component.LEFT_ALIGNMENT);
 			mainPane.add(noteText);
-			JButton saveButton = new JButton("Save Note");
-			saveButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if (delegate!=null) {
-						if (existingText.equals("")) delegate.addNote(noteText.getText(), d, periodNum);
-						else delegate.replaceNote(noteText.getText(), existingText, d, periodNum);
-					}
-					thisFrame.setVisible(false);
-					thisFrame.dispose();
-				}
-			});
-			mainPane.add(saveButton);
+			final JCheckBox cb = new JCheckBox("This note is a to-do");
+			mainPane.add(cb);
 		this.getContentPane().add(mainPane);
-		this.getContentPane().add(new Checkbox("This note is a to-do"));
+		JButton saveButton = new JButton("Save Note");
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (delegate!=null) {
+					if (existingText.equals("")) delegate.addNote(noteText.getText(), cb.isSelected(), d, periodNum);
+					else delegate.replaceNote(noteText.getText(), cb.isSelected(), existingText, d, periodNum);
+				}
+				thisFrame.dispose();
+			}
+		});
+		this.getContentPane().add(saveButton);
+		this.getRootPane().setDefaultButton(saveButton);
 		this.setSize(new Dimension(300, 80));
 		this.setResizable(false);
 		this.setVisible(true);

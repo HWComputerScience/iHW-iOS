@@ -14,6 +14,7 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	private Curriculum currentCurriculum;
 	private int campus;
 	private CoursesFrame cframe;
+	private ScheduleFrame sframe;
 	
 	public static void main(String[] args) {
 		//System.out.println(Curriculum.generateBlankYearJSON(Curriculum.CAMPUS_UPPER, 2012));
@@ -119,10 +120,10 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	}
 
 	public void showSchedule() {
-		ScheduleFrame frame = new ScheduleFrame();
-		frame.setDelegate(this);
-		frame.setDataSource(this);
-		frame.loadDayRange(new Date(9,3,2012), new Date(9,7,2012));
+		sframe = new ScheduleFrame();
+		sframe.setDelegate(this);
+		sframe.setDataSource(this);
+		sframe.loadDayRange(new Date(9,3,2012), new Date(9,7,2012));
 	}
 
 	public Day getDay(Date d) {
@@ -159,12 +160,17 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		return currentCurriculum.getCourse(name);
 	}
 	
-	public void addNote(String text, Date d, int periodNum) {
-		// TODO tell the controller that the note was added and refresh the displayed notes
+	public void addNote(String text, boolean isToDo, Date d, int periodNum) {
+		currentCurriculum.addNote(text, isToDo, false, d, periodNum);
+		sframe.loadDayRange(sframe.getDateRange()[0], sframe.getDateRange()[1]);
 	}
 	
-	public void replaceNote(String text, String toReplace, Date d, int periodNum) {
-		// TODO tell the controller that the note was replaced and refresh the displayed notes
+	public void replaceNote(String text, boolean isToDo, String toReplace, Date d, int periodNum) {
+		Note old = currentCurriculum.removeNote(d, periodNum, toReplace);
+		boolean checked = false;
+		if (old != null) checked=old.isChecked();
+		currentCurriculum.addNote(text, isToDo, checked, d, periodNum);
+		sframe.loadDayRange(sframe.getDateRange()[0], sframe.getDateRange()[1]);
 	}
 	
 	public List<Note> getNotes(Date d, int period) {

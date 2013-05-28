@@ -114,7 +114,8 @@
 	    {
 	    	"text": "hello, world!",
 	    	"isToDo": true,
-	    	"date": "9/5/12",
+	    	"isChecked": false,
+	    	"date": "9/5/2012",
 	    	"period": 2
 		}
 	],

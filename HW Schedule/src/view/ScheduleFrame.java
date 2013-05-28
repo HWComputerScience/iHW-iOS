@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.*;
+import java.util.GregorianCalendar;
+
 import javax.swing.*;
 
 import model.Day;
@@ -16,6 +18,8 @@ public class ScheduleFrame extends JFrame {
 	private ScheduleViewDelegate delegate;
 	private ScheduleViewDataSource dataSource;
 	private JPanel mainPanel;
+	private Date[] dateRange;
+	private boolean firstTimeDisplayed;
 	
 	public ScheduleFrame() {
 		mainPanel = new JPanel();
@@ -23,17 +27,21 @@ public class ScheduleFrame extends JFrame {
 		this.getContentPane().setMaximumSize(new Dimension(100,100));
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setMinimumSize(new Dimension(200,200));
+		firstTimeDisplayed = true;
 		//will set visible to true once a date range is loaded (see below)
 	}
 	
 	public void loadDayRange(Date begin, Date end) {
+		dateRange = new Date[] {begin, end};
 		if (dataSource==null) return;
 		Date d = begin;
 		Day day;
 		int numDaysDisplayed = begin.getDaysUntil(end)+1;
+		mainPanel.removeAll();
 		mainPanel.setLayout(new GridLayout(1, numDaysDisplayed, 0, 10));
-		mainPanel.setMinimumSize(new Dimension(numDaysDisplayed*200, 0));
-		
+		mainPanel.setMinimumSize(new Dimension(numDaysDisplayed*200, 200));
+		if (firstTimeDisplayed) this.setSize(mainPanel.getMinimumSize());
+		firstTimeDisplayed = false;
 		while (d.compareTo(end) <= 0) {
 			JPanel dayPanel = new JPanel();
 			dayPanel.setLayout(new GridBagLayout());
@@ -46,16 +54,18 @@ public class ScheduleFrame extends JFrame {
 			cons.gridwidth = 1;
 			cons.anchor = GridBagConstraints.NORTHWEST;
 			day = dataSource.getDay(d);
+			JLabel title = new JLabel("", JLabel.CENTER);
+			title.setFont(new Font("Georgia", Font.BOLD, 14));
+			title.setBackground(new Color(153,0,0));
+			title.setForeground(Color.WHITE);
+			title.setOpaque(true);
+			title.setAlignmentX(LEFT_ALIGNMENT);
 			if (day instanceof Holiday) {
-				JLabel title = new JLabel(day.getDate().toString(), JLabel.CENTER);
-				title.setFont(new Font("Georgia", Font.BOLD, 14));
-				title.setBackground(new Color(153,0,0));
-				title.setForeground(Color.WHITE);
-				title.setOpaque(true);
-				title.setAlignmentX(LEFT_ALIGNMENT);
+				String weekdayName = day.getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, getLocale());
+				title.setText(weekdayName + ", " + day.getDate().toString());
 				dayPanel.add(title, cons);
 				JLabel title2 = new JLabel(((Holiday)day).getName(), JLabel.CENTER);
-				title2.setFont(new Font("Georgia", Font.BOLD, 24));
+				title2.setFont(new Font("Georgia", Font.PLAIN, 24));
 				title2.setBackground(new Color(153,0,0));
 				title2.setForeground(Color.WHITE);
 				title2.setOpaque(true);
@@ -64,20 +74,17 @@ public class ScheduleFrame extends JFrame {
 				cons.weighty = 1;
 				dayPanel.add(new JPanel(), cons);
 			} else {
-				JLabel title;
 				if (day instanceof NormalDay) {
-					title = new JLabel(day.getDate() + " (Day " + ((NormalDay)day).getDayNumber() + ")", JLabel.CENTER);
+					String weekdayName = day.getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, getLocale());
+					title.setText(weekdayName + ", " + day.getDate() + " (Day " + ((NormalDay)day).getDayNumber() + ")");
 				} else {
-					title = new JLabel(day.getDate().toString(), JLabel.CENTER);
+					String weekdayName = day.getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, getLocale());
+					title.setText(weekdayName + day.getDate().toString());
 				}
-				title.setFont(new Font("Georgia", Font.BOLD, 14));
-				title.setBackground(new Color(153,0,0));
-				title.setForeground(Color.WHITE);
-				title.setOpaque(true);
-				title.setAlignmentX(LEFT_ALIGNMENT);
 				dayPanel.add(title, cons);
 				for (Period p : day.getPeriods()) {
 					PeriodPanel pp = new PeriodPanel(p, dataSource.getNotes(d, p.getNum()), SCALE);
+					pp.setDelegate(delegate);
 					pp.setAlignmentX(LEFT_ALIGNMENT);
 					dayPanel.add(pp, cons);
 				}
@@ -86,12 +93,13 @@ public class ScheduleFrame extends JFrame {
 			}
 			mainPanel.add(dayPanel);
 			dayPanel.revalidate();
-			System.out.println(dayPanel.getSize().height);
 			d = d.dateByAdding(1);
 		}
 		this.setVisible(true);
 		this.validate();
 	}
+	
+	public Date[] getDateRange() { return dateRange; }
 	
 	public ScheduleViewDelegate getDelegate() { return delegate; }
 	public void setDelegate(ScheduleViewDelegate delegate) { this.delegate = delegate; }

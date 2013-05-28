@@ -50,23 +50,30 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			if (p.getName().equalsIgnoreCase("X")) notesBox.setBackground(new Color(235, 229, 207));
 			notesBox.setLineWrap(true);
 			notesBox.setWrapStyleWord(true);
-			updateNotes();
+			String text = "";
+			Iterator<Note> iter = lines.iterator();
+			while (iter.hasNext()) {
+				text += iter.next().getText() + "\n";
+			}
+			text += "\n";
+			text = text.substring(0,text.length()-1);
+			notesBox.setText(text);
 			notesBox.setEditable(false);
 			notesBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			notesBox.addMouseListener(this);
 		this.add(notesBox, BorderLayout.CENTER);
 	}
-	
+	/*
 	public void removeNote(Note note) {
 		lines.remove(note);
 		updateNotes();
-	}
-	
+	}*/
+	/*
 	public void addNote(Note note) {
 		lines.add(note);
 		updateNotes();
-	}
-	
+	}*/
+	/*
 	public void replaceNote(Note oldNote, Note newNote) {
 		ListIterator<Note> iter = lines.listIterator();
 		boolean found = false;
@@ -81,8 +88,8 @@ public class PeriodPanel extends JPanel implements MouseListener {
 			lines.add(newNote);
 		}
 		updateNotes();
-	}
-	
+	}*/
+	/*
 	private void updateNotes() {
 		String text = "";
 		Iterator<Note> iter = lines.iterator();
@@ -92,7 +99,7 @@ public class PeriodPanel extends JPanel implements MouseListener {
 		text += "\n";
 		text = text.substring(0,text.length()-1);
 		notesBox.setText(text);
-	}
+	}*/
 	
 	public void mousePressed(MouseEvent evt) {
 		int position = ((JTextArea)evt.getComponent()).viewToModel(evt.getPoint());

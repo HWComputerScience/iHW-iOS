@@ -117,7 +117,8 @@ public class Curriculum {
 			int period = obj.getInt("period");
 			String text = obj.getString("text");
 			boolean isToDo = obj.getBoolean("isToDo");
-			this.addNote(text, isToDo, d, period);
+			boolean checked = obj.getBoolean("isChecked");
+			this.addNote(text, isToDo, checked, d, period);
 		}
 	}
 	
@@ -314,7 +315,7 @@ public class Curriculum {
 	}
 	
 	public List<Note> getNotes(Date d, int period) {
-		if (notes.containsKey(d)) {
+		if (notes.get(d) != null) {
 			Map<Integer, List<Note>> notesThisDay = notes.get(d);
 			if (notesThisDay.containsKey(period)) {
 				return notesThisDay.get(period);
@@ -323,9 +324,9 @@ public class Curriculum {
 		return new ArrayList<Note>(0);
 	}
 	
-	public void addNote(String text, boolean isToDo, Date d, int period)
+	public void addNote(String text, boolean isToDo, boolean checked, Date d, int period)
 	{
-		Note toAdd = new Note(text, isToDo);
+		Note toAdd = new Note(text, isToDo, checked);
 		if (notes.get(d) == null) {
 			List<Note> list = new LinkedList<Note>();
 			list.add(toAdd);
@@ -339,6 +340,20 @@ public class Curriculum {
 		} else {
 			notes.get(d).get(period).add(toAdd);
 		}
+	}
+	
+	public Note removeNote(Date d, int period, String text) {
+		if (notes.containsKey(d) && notes.get(d).containsKey(period)) {
+			ListIterator<Note> iter = notes.get(d).get(period).listIterator();
+			while (iter.hasNext()) {
+				Note n = iter.next();
+				if (n.getText().equals(text)) {
+					iter.remove();
+					return n;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public void removeCourse(Course c) {
