@@ -36,6 +36,7 @@ public class NoteFrame extends JFrame {
 			noteText.setAlignmentX(Component.LEFT_ALIGNMENT);
 			mainPane.add(noteText);
 			final JCheckBox cb = new JCheckBox("This note is a to-do");
+			cb.setSelected(isToDo);
 			mainPane.add(cb);
 		this.getContentPane().add(mainPane);
 		JButton saveButton = new JButton("Save Note");
