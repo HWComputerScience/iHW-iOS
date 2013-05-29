@@ -47,6 +47,7 @@ public class NoteFrame extends JFrame {
 					thisFrame.dispose();
 				} else if (delegate != null && !existingText.equals("")) {
 					delegate.removeNote(existingText, d, periodNum);
+					thisFrame.dispose();
 				}
 			}
 		});

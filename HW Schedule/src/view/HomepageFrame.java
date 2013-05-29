@@ -49,6 +49,11 @@ public class HomepageFrame extends JFrame {
 		this.setResizable(false);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				//if (delegate!=null) delegate.save();
+			}
+		});
 		this.validate();
 	}
 	

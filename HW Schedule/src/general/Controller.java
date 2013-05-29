@@ -78,8 +78,10 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		}
 		
 		currentCurriculum = new Curriculum(curriculumJSON, yearJSON);
-		//System.out.println(currentCurriculum.getDay(new Date(9,3,2012)).saveDay());
 		showHomepage();
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() { save(); }
+		});
 	}
 	
 	public void showHomepage() {
@@ -91,7 +93,6 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 		cframe.setDelegate(this);
 		cframe.setDataSource(this);
 		cframe.regenerateListItems(currentCurriculum.getAllCourseNames());
-		//some other stuff
 	}
 
 	public void showSchedule() {
@@ -155,5 +156,19 @@ public class Controller implements ScheduleViewDelegate, ScheduleViewDataSource 
 	public void removeNote(String existingText, Date d, int periodNum) {
 		currentCurriculum.removeNote(d, periodNum, existingText);
 		if (sframe!=null) sframe.loadDayRange(sframe.getDateRange()[0], sframe.getDateRange()[1]);
+	}
+
+	public void save() {
+		String suffix;
+		if (currentCurriculum.getCampus() == Curriculum.CAMPUS_MIDDLE) suffix = "m";
+		else suffix = "u";
+		String filename = "userdata/year" + currentCurriculum.getYear() + suffix + ".hws";
+		try {
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
+			out.println(currentCurriculum.saveYear());
+			out.close();
+		} catch(IOException e) {
+			System.err.println("EXCEPTION while writing year file.");
+		}
 	}
 }

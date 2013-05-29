@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.text.*;
 
 import model.Day;
 import model.Holiday;
@@ -44,6 +45,7 @@ public class ScheduleFrame extends JFrame {
 		JButton less = new JButton("Less");
 		less.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (getDateRange()[0].equals(getDateRange()[1])) return;
 				loadDayRange(getDateRange()[0], getDateRange()[1].dateByAdding(-1));
 			}
 		});
@@ -112,17 +114,24 @@ public class ScheduleFrame extends JFrame {
 				String weekdayName = day.getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, getLocale());
 				title.setText(weekdayName + ", " + day.getDate().toString());
 				dayPanel.add(title, cons);
-				JLabel title2 = new JLabel(((Holiday)day).getName(), JLabel.CENTER);
+				JTextPane title2 = new JTextPane();
+				title2.setText(((Holiday)day).getName());
 				title2.setFont(new Font("Georgia", Font.PLAIN, 24));
 				title2.setBackground(new Color(153,0,0));
 				title2.setForeground(Color.WHITE);
 				title2.setOpaque(true);
+				title2.setEditable(false);
 				title2.setAlignmentX(LEFT_ALIGNMENT);
+				StyledDocument doc = title2.getStyledDocument();
+				SimpleAttributeSet center = new SimpleAttributeSet();
+				StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+				doc.setParagraphAttributes(0, doc.getLength(), center, false);
 				dayPanel.add(title2, cons);
+				title2.setPreferredSize(new Dimension(200, title2.getPreferredSize().height*2));
 				cons.weighty = 1;
 				dayPanel.add(new JPanel(), cons);
 			} else {
-				if (day instanceof NormalDay) {
+				if (day instanceof NormalDay && ((NormalDay)day).getDayNumber()>0) {
 					String weekdayName = day.getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, getLocale());
 					title.setText(weekdayName + ", " + day.getDate() + " (Day " + ((NormalDay)day).getDayNumber() + ")");
 				} else {

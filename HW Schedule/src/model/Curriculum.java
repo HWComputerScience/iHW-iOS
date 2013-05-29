@@ -81,11 +81,12 @@ public class Curriculum {
 			Date d = new Date(dayObj.getString("date"));
 			specialDays.put(d, toAdd);
 		}
+		
 		//initialize day numbers
 		dayNumbers = new TreeMap<Date, Integer>();
 		Date d = semesterEndDates[0];
 		int dayNum = 1;
-		while(d.compareTo(semesterEndDates[2]) < 0) {
+		while(d.compareTo(semesterEndDates[2]) <= 0) {
 			if (specialDays.get(d) != null) {
 				if (specialDays.get(d) instanceof NormalDay && ((NormalDay)specialDays.get(d)).getDayNumber()!=0) {
 					//This special day has a number; continue the count from this day's daynum
@@ -140,9 +141,9 @@ public class Curriculum {
 	 */
 	public Day getDay(Date d) {
 		if (specialDays.containsKey(d)) return specialDays.get(d);
-		else if (d.isWeekend() ||
-				d.compareTo(semesterEndDates[0]) < 0 ||
-				d.compareTo(semesterEndDates[2]) > 0) return new Holiday(d, "");
+		else if (d.compareTo(semesterEndDates[0]) < 0 ||
+				d.compareTo(semesterEndDates[2]) > 0) return new Holiday(d, "Summer");
+		else if (d.isWeekend()) return new Holiday(d, "");
 		else if (d.isMonday()) {
 			JSONObject dayObj = new JSONObject(normalMondayTemplate, JSONObject.getNames(normalMondayTemplate));
 			dayObj.put("date", d.toString());
@@ -389,4 +390,5 @@ public class Curriculum {
 	}
 
 	public int getPassingPeriodLength() { return passingPeriodLength; }
+	public int getCampus() { return campus; }
 }
