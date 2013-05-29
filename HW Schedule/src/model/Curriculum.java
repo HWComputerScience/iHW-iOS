@@ -284,10 +284,11 @@ public class Curriculum {
 	public Course getCourse(Date d, int period) {
 		if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) return null;
 		int dayNum = dayNumbers.get(d);
+		//if (d.equals(new Date(5,28,2013))) System.out.println(dayNum);
 		List<Integer> terms = termsFromDate(d);
 		if (dayNum==0) {
 			Course maxMeetings = null;
-			int max = 0;
+			int max = 1;
 			for (Course c : courses) {
 				boolean termFound = false;
 				for (int term : terms) {

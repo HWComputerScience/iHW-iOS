@@ -2,54 +2,6 @@
     "courses": [
         {
             "term": 0,
-            "name": "Symphony",
-            "meetings": [
-                3,
-                0,
-                1,
-                0,
-                1
-            ],
-            "period": 1
-        },
-        {
-            "term": 0,
-            "name": "Class Meeting",
-            "meetings": [
-                0,
-                0,
-                1,
-                0,
-                0
-            ],
-            "period": 5
-        },
-        {
-            "term": 0,
-            "name": "A.P. U.S. History",
-            "meetings": [
-                1,
-                0,
-                1,
-                1,
-                1
-            ],
-            "period": 6
-        },
-        {
-            "term": 0,
-            "name": "Design and Data Structures Honors",
-            "meetings": [
-                1,
-                1,
-                1,
-                0,
-                1
-            ],
-            "period": 8
-        },
-        {
-            "term": 0,
             "name": "Engish III Honors",
             "meetings": [
                 0,
@@ -59,6 +11,18 @@
                 1
             ],
             "period": 7
+        },
+        {
+            "term": 0,
+            "name": "Symphony",
+            "meetings": [
+                3,
+                0,
+                1,
+                0,
+                1
+            ],
+            "period": 1
         },
         {
             "term": 0,
@@ -85,6 +49,30 @@
             "period": 5
         },
         {
+            "term": 0,
+            "name": "Class Meeting",
+            "meetings": [
+                0,
+                0,
+                1,
+                0,
+                0
+            ],
+            "period": 5
+        },
+        {
+            "term": 0,
+            "name": "Design and Data Structures Honors",
+            "meetings": [
+                1,
+                1,
+                1,
+                0,
+                1
+            ],
+            "period": 8
+        },
+        {
             "term": 2,
             "name": "School Intern",
             "meetings": [
@@ -107,6 +95,18 @@
                 0
             ],
             "period": 3
+        },
+        {
+            "term": 0,
+            "name": "A.P. U.S. History",
+            "meetings": [
+                1,
+                0,
+                1,
+                1,
+                1
+            ],
+            "period": 6
         }
     ],
     "year": 2012,
