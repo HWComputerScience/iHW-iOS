@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">iHW for Android</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="welcome_message">Welcome to iHW for Android!</string>
+    <string name="title_activity_schedule">View Schedule</string>
+    <string name="title_activity_edit_courses">Edit Courses</string>
+    <string name="button_download">Download Course Information</string>
+    <string name="button_add_manually">Add Courses Manually</string>
+    <string name="login_hw_message">Please log into HW.com below.</string>
+    <string name="title_activity_download_schedule">Download Course Information</string>
+    <string name="title_activity_guided_edit_courses">GuidedEditCoursesActivity</string>
+    <string name="action_done">Done</string>
+    <string name="action_add_course">Add Course</string>
+    <string name="hint_course_name">Course Name</string>
+    <string name="hint_course_period">Period</string>
+    <string-array name="term_options">
+        <item >Full Year</item>
+        <item >First Semester</item>
+        <item >Second Semester</item>
+        <item >First Trimester</item>
+        <item >Second Trimester</item>
+        <item >Third Trimester</item>
+    </string-array>
+        <string name="action_delete">Delete</string>
+        <string name="message_no_courses">You have no courses. Click \"+\" above to add a course.</string>
+
+</resources>

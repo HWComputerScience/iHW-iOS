@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ihwapp.android"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.ihwapp.android.WelcomeActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.FirstRunActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.ScheduleActivity"
+            android:label="@string/title_activity_schedule" >
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.EditCoursesActivity"
+            android:label="@string/title_activity_edit_courses"
+            android:parentActivityName="com.ihwapp.android.ScheduleActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ihwapp.android.ScheduleActivity" />
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.DownloadScheduleActivity"
+            android:label="@string/title_activity_download_schedule" >
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.GuidedEditCoursesActivity"
+            android:label="@string/title_activity_guided_edit_courses" >
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.AddCourseActivity"
+            android:theme="@style/LargePopupTheme">
+        </activity>
+    </application>
+
+</manifest>

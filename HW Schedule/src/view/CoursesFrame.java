@@ -7,8 +7,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import model.Course;
-
 public class CoursesFrame extends JFrame implements ListSelectionListener {
 	private static final long serialVersionUID = 6934883684026565042L;
 	private List<String> courseNames;
