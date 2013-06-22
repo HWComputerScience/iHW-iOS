@@ -1,5 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/action_add" android:showAsAction="always" android:title="@string/action_add_course" android:checkable="false" android:icon="@drawable/ic_content_new"></item><item android:id="@+id/action_done" android:showAsAction="always" android:visible="true" android:title="@string/action_done" android:checkable="false" android:icon="@drawable/ic_action_done"></item>
-    
-
-</menu>

@@ -14,7 +14,7 @@
         android:id="@+id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_hw_message"
+        android:text="@string/prompt_hw_login"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <WebView

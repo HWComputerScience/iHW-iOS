@@ -119,7 +119,7 @@ public class DownloadScheduleActivity extends Activity {
 			/*changeInfoText("Schedule downloaded.");
 			ProgressBar pb = ((ProgressBar)findViewById(R.id.progressBar1));
 			pb.setVisibility(View.INVISIBLE);*/
-			Intent i = new Intent(thisActivity, EditCoursesActivity.class);
+			Intent i = new Intent(thisActivity, NormalCoursesActivity.class);
 			startActivity(i);
 		}
 	}
