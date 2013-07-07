@@ -25,6 +25,7 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 		super.onStart();
 		if (!Curriculum.loadCurrentCurriculum(this)) finish();
 		reloadData();
+		this.getListView().setDivider(this.getResources().getDrawable(android.R.drawable.divider_horizontal_bright));
 		this.getListView().setMultiChoiceModeListener(new ListSelectionListener());
 		this.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 	}
@@ -88,9 +89,10 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = this.getLayoutInflater().inflate(R.layout.course_list_item, null);
+			convertView = this.getLayoutInflater().inflate(R.layout.list_item_course, null);
 		}
 		((TextView)convertView.findViewById(R.id.text_course_name)).setText(courseNames[position]);
+		convertView.setBackgroundResource(R.drawable.list_item_selector);
 		return convertView;
 	}
 
@@ -173,8 +175,8 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
 			View item = getListView().getChildAt(position-getListView().getFirstVisiblePosition());
-			if (checked) item.setBackgroundColor(Color.argb(127, 180, 225, 255));
-			else item.setBackgroundColor(Color.TRANSPARENT);
+			//if (checked) item.setBackgroundColor(Color.argb(127, 180, 225, 255));
+			//else item.setBackgroundColor(Color.TRANSPARENT);
 			if (getListView().getCheckedItemCount() == 1) mode.getMenu().findItem(R.id.action_edit).setVisible(true);
 			else mode.getMenu().findItem(R.id.action_edit).setVisible(false);
 		}

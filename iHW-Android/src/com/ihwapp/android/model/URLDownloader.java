@@ -2,6 +2,9 @@ package com.ihwapp.android.model;
 
 import java.io.*;
 import java.net.*;
+
+import com.ihwapp.android.R;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,7 +22,7 @@ class URLDownloader extends AsyncTask<String, Void, String> {
 	private boolean cancelable;
 
 	public URLDownloader(Context ctx, boolean cancelable) {
-		progressDialog = new ProgressDialog(ctx);
+		progressDialog = new ProgressDialog(ctx, R.style.PopupTheme);
 		this.ocl = null;
 		this.oel = null;
 		this.cancelable = cancelable;
@@ -43,6 +46,7 @@ class URLDownloader extends AsyncTask<String, Void, String> {
 				URLDownloader.this.cancel(true);
 			}
 		});
+		Log.d("iHW", "preparing to download");
 	}
 
 	@Override
@@ -69,7 +73,7 @@ class URLDownloader extends AsyncTask<String, Void, String> {
 		} finally {
 			if (urlConnection != null) urlConnection.disconnect();
 		}
-		Log.d("iHW", "finished");
+		Log.d("iHW", "download finished");
 		return result;
 		/*
     	ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();

@@ -53,4 +53,9 @@ public class Date extends GregorianCalendar {
 		long diff = end.getTimeInMillis()-this.getTimeInMillis();
 		return (int)(diff/86400000);
 	}
+	
+	public String getDayOfWeek(boolean shortVersion) {
+		if (shortVersion) return this.getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, Locale.getDefault());
+		else return this.getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.LONG, Locale.getDefault());
+	}
 }

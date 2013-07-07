@@ -1,6 +1,7 @@
 package com.ihwapp.android.model;
 
 import java.util.*;
+
 import org.json.*;
 
 public class NormalDay extends Day {
@@ -118,6 +119,14 @@ public class NormalDay extends Day {
 			}
 		} catch (JSONException e) {}
 		return obj;
+	}
+	
+	public String getTitle() {
+		//String weekdayName = getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, Locale.getDefault());
+		//String title = weekdayName + ", " + getDate().toString();
+		String title = super.getTitle();
+		if (this.getDayNumber() > 0) title += " (Day " + getDayNumber() + ")";
+		return title;
 	}
 	
 	public int getDayNumber() { return dayNumber; }

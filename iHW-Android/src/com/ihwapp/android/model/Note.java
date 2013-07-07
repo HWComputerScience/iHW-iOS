@@ -6,11 +6,13 @@ public class Note {
 	private String text;
 	private boolean isToDo;
 	private boolean checked;
+	private boolean isImportant;
 	
-	public Note(String text, boolean isToDo, boolean checked) {
+	public Note(String text, boolean isToDo, boolean checked, boolean isImportant) {
 		this.text = text;
 		this.isToDo = isToDo;
 		this.checked = checked;
+		this.isImportant = isImportant;
 	}
 	
 	public Note(JSONObject obj) {
@@ -18,6 +20,7 @@ public class Note {
 			this.text = obj.getString("text");
 			this.isToDo = obj.getBoolean("isToDo");
 			this.checked = obj.getBoolean("isChecked");
+			this.isImportant = obj.getBoolean("isImportant");
 		} catch (JSONException e) {}
 	}
 	
@@ -27,6 +30,7 @@ public class Note {
 			obj.put("text", text);
 			obj.put("isToDo", isToDo);
 			obj.put("isChecked", checked);
+			obj.put("isImportant", isImportant);
 		} catch (JSONException e) {}
 		return obj;
 	}
@@ -44,4 +48,5 @@ public class Note {
 	public String getText() { return text; }
 	public boolean isToDo() { return isToDo; }
 	public boolean isChecked() { return checked; }
+	public boolean isImportant() { return isImportant; }
 }

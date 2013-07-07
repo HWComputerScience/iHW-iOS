@@ -5,6 +5,7 @@ import com.ihwapp.android.model.Curriculum;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.*;
 import android.view.*;
@@ -35,6 +36,9 @@ public class EditCourseActivity extends Activity {
 		nameBox = (EditText)this.findViewById(R.id.courseNameBox);
 		periodBox = (EditText)this.findViewById(R.id.coursePeriodBox);
 		termSpinner = (Spinner)this.findViewById(R.id.courseTermBox);
+		int etid = Resources.getSystem().getIdentifier("edit_text_holo_light", "drawable", "android");
+		nameBox.setBackgroundResource(etid);
+		periodBox.setBackgroundResource(etid);
 		ArrayAdapter<CharSequence> a = ArrayAdapter.createFromResource(this, R.array.term_options, R.layout.spinner_layout);
 		a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		termSpinner.setAdapter(a);
@@ -89,6 +93,8 @@ public class EditCourseActivity extends Activity {
 			for (int c=0; c<numDays; c++) {
 				if (r==0) meetingsLayout.setColumnStretchable(c+1, true);
 				CheckBox cb = new CheckBox(this);
+				int cbid = Resources.getSystem().getIdentifier("btn_check_holo_light", "drawable", "android");
+				cb.setButtonDrawable(cbid);
 				cb.setVisibility(View.INVISIBLE);
 				cb.setEnabled(false);
 				cb.setLayoutParams(cbParams);
@@ -208,7 +214,7 @@ public class EditCourseActivity extends Activity {
 				if (existingCourseName != null) success = c.replaceCourse(existingCourseName, toAdd);
 				else success = c.addCourse(toAdd);
 				if (!success) {
-					Toast.makeText(this, "The course meetings you selected conflict with one or more of your other courses. Please change them and try again.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, "The course meetings you selected conflict with one or more of your other courses. Please change them and try again.", Toast.LENGTH_LONG).show();
 				} else {
 					Curriculum.save(this);
 					if (item.getItemId() == android.R.id.home) {

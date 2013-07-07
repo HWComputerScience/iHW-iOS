@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="android:Theme.Holo">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -14,16 +14,36 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:windowBackground">@android:color/background_light</item>
+        <item name="android:textColor">@android:color/background_dark</item>
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
+        <item name="android:selectableItemBackground">@drawable/action_item_selector</item>
+        <item name="android:actionModeBackground">@drawable/cab_background</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="android:spinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
+        <item name="android:spinnerItemStyle">@android:style/Widget.Holo.Light.TextView.SpinnerItem</item>
+        <item name="android:textViewStyle">@android:style/Widget.Holo.Light.TextView</item>
+        <item name="android:editTextStyle">@android:style/Widget.Holo.Light.EditText</item>
+        <item name="android:buttonStyle">@android:style/Widget.Holo.Light.Button</item>
+        <item name="android:checkboxStyle">@android:style/Widget.Holo.Light.CompoundButton.CheckBox</item>
+        <item name="android:popupMenuStyle">@android:style/Widget.Holo.Light.PopupMenu</item>
+        <item name="android:textColorHint">#808080</item>
+        <item name="android:editTextColor">@android:color/background_dark</item>
     </style>
+    
     <style name="PopupTheme" parent="android:Theme.Holo.Light.Dialog">
-	    <item name="android:windowIsFloating">false</item>
-	    <item name="android:windowContentOverlay">@null</item>
-	    <item name="android:windowActionModeOverlay">true</item>
-	    <item name="android:windowIsTranslucent">true</item>
+	    <item name="android:windowBackground">@android:color/transparent</item>
 	</style>
-	
-    <style name="LargePopupTheme" 
-        parent="android:Theme.Holo.Light.DarkActionBar"></style>
+    
+    <style name="AppTheme.ActionBar" parent="@android:style/Widget.Holo.ActionBar">
+	    <item name="android:background">@drawable/dark_red</item>
+	    <item name="android:selectableItemBackground">@drawable/action_item_selector</item>
+	    <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+	</style>
 
+    <style name="AppTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Medium">
+	    <!-- <item name="android:textColor">@drawable/white</item>
+	    <item name="android:textSize">20sp</item> -->
+    </style>
+    
 </resources>

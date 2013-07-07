@@ -32,7 +32,8 @@
         </activity>
         <activity
             android:name="com.ihwapp.android.ScheduleActivity"
-            android:label="@string/title_activity_schedule" >
+            android:label="@string/title_activity_schedule"
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name="com.ihwapp.android.NormalCoursesActivity"
@@ -57,7 +58,6 @@
         </activity>
         <activity
             android:name="com.ihwapp.android.EditCourseActivity"
-            android:theme="@style/LargePopupTheme"
             android:configChanges="orientation|screenSize">
         </activity>
     </application>

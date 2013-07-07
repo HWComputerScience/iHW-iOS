@@ -5,7 +5,7 @@ import org.json.*;
 
 public abstract class Day {
 	protected Date date;
-	protected List<Period> periods;
+	protected ArrayList<Period> periods;
 	
 	public Day(Date d) {
 		this.date = d;
@@ -18,7 +18,7 @@ public abstract class Day {
 	}
 	
 	public com.ihwapp.android.model.Date getDate() { return date; }
-	public List<Period> getPeriods() { return periods; }
+	public ArrayList<Period> getPeriods() { return periods; }
 	
 	public JSONObject saveDay() {
 		try {
@@ -26,5 +26,9 @@ public abstract class Day {
 			toReturn.put("date", date);
 			return toReturn;
 		} catch (JSONException e) {return null;}
+	}
+	
+	public String getTitle() {
+		return getDate().toString();
 	}
 }

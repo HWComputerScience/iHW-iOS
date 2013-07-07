@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
     <LinearLayout
+        android:id="@+id/layout_left"
         android:layout_width="78dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
@@ -15,6 +17,7 @@
             android:id="@+id/text_starttime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textIsSelectable="false"
             android:textStyle="italic" />
@@ -22,7 +25,7 @@
         <TextView
             android:id="@+id/text_periodnum"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dip"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -33,6 +36,7 @@
             android:id="@+id/text_endtime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textIsSelectable="false"
             android:textStyle="italic" />
@@ -40,8 +44,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_right"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
         android:orientation="vertical" >
 
         <TextView
@@ -52,17 +58,6 @@
             android:textIsSelectable="false"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:ems="10"
-            android:gravity="top|left"
-            android:inputType="textLongMessage" >
-
-            <requestFocus />
-        </EditText>
     </LinearLayout>
 
 </LinearLayout>

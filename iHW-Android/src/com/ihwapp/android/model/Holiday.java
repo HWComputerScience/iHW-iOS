@@ -2,6 +2,7 @@
 package com.ihwapp.android.model;
 
 import java.util.*;
+
 import org.json.*;
 
 public class Holiday extends Day {
@@ -31,4 +32,9 @@ public class Holiday extends Day {
 	}
 	
 	public String getName() { return name; }
+	
+	/*public String getTitle() {
+		String weekdayName = getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, Locale.getDefault());
+		return weekdayName + ", " + getDate().toString();
+	}*/
 }

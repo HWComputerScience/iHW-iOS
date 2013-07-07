@@ -1,6 +1,7 @@
 package com.ihwapp.android.model;
 
 import java.util.*;
+
 import org.json.*;
 
 public class TestDay extends Day {
@@ -33,4 +34,9 @@ public class TestDay extends Day {
 		} catch (JSONException e) {}
 		return obj;
 	}
+	
+	/*public String getTitle() {
+		String weekdayName = getDate().getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, Locale.getDefault());
+		return weekdayName + ", " + getDate().toString();
+	}*/
 }

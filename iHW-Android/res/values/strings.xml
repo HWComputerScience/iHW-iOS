@@ -16,26 +16,36 @@
     <string name="action_add_course">Add Course</string>
     <string name="hint_course_name">Course Name</string>
     <string name="hint_course_period">Period</string>
+
     <string-array name="term_options">
-        <item >Full Year</item>
-        <item >First Semester</item>
-        <item >Second Semester</item>
-        <item >First Trimester</item>
-        <item >Second Trimester</item>
-        <item >Third Trimester</item>
+        <item>Full Year</item>
+        <item>First Semester</item>
+        <item>Second Semester</item>
+        <item>First Trimester</item>
+        <item>Second Trimester</item>
+        <item>Third Trimester</item>
     </string-array>
-        <string name="action_delete">Delete</string>
-        <string name="message_no_courses">You have no courses.</string>
-        <string name="campus_middle">Middle School</string>
-        <string name="campus_upper">Upper School</string>
-        <string name="prompt_choose_campus">Please tap the campus that you attend.</string>
-        <string name="prompt_get_courses">Where do you want to get your course list from?</string>
-        <string name="prompt_select_periods">Check the periods when this course meets below.</string>
-        <string name="label_period">Period</string>
-        <string name="action_edit_courses">Edit Courses</string>
-        <string name="prompt_no_courses">Tap \&quot;+\&quot; above to add a course.</string>
-        <string name="action_add">Add</string>
-        <string name="action_edit_course">Edit Course</string>
-        <string name="action_edit">Edit</string>
+
+    <string name="action_delete">Delete</string>
+    <string name="message_no_courses">You have no courses.</string>
+    <string name="campus_middle">Middle School</string>
+    <string name="campus_upper">Upper School</string>
+    <string name="prompt_choose_campus">Please tap the campus that you attend.</string>
+    <string name="prompt_get_courses">Where do you want to get your course list from?</string>
+    <string name="prompt_select_periods">Check the periods when this course meets below.</string>
+    <string name="label_period">Period</string>
+    <string name="action_edit_courses">Edit Courses</string>
+    <string name="prompt_no_courses">Tap \&quot;+\&quot; above to add a course.</string>
+    <string name="action_add">Add</string>
+    <string name="action_edit_course">Edit Course</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_goto_date">Goto Date...</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="prompt_note_text">Add note</string>
+    <string name="action_goto_today">Today</string>
+    <string name="option_show_checkbox">Show Checkbox</string>
+    <string name="option_mark_important">Mark Important</string>
+    <string name="option_hide_checkbox">Hide Checkbox</string>
+    <string name="option_mark_unimportant">Mark Unimportant</string>
 
 </resources>

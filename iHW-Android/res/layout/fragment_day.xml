@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#990000"
         android:textIsSelectable="false" />
 
     <com.ihwapp.android.Separator
@@ -25,8 +26,9 @@
         android:layout_margin="5dp"
         android:gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="28sp" 
-        android:textIsSelectable="false"/>
+        android:textColor="#990000"
+        android:textIsSelectable="false"
+        android:textSize="28sp" />
 
     <ScrollView
         android:id="@+id/scroll_periods"

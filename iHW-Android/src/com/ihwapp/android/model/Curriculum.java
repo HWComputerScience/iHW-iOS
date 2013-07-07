@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.ihwapp.android.Constants;
 import com.ihwapp.android.LaunchActivity;
+import com.ihwapp.android.R;
 
 import org.json.*;
 
@@ -57,7 +58,7 @@ public class Curriculum {
 		String curriculumJSON =  prefs.getString("curriculumJSON", "");
 		if (curriculumJSON == "") {
 			if (!downloadCurriculumJSON(ctx, campus, year, true)) {
-				new AlertDialog.Builder(ctx).setMessage("iHW requires internet access when running for the first time. Please try again later when you are connected to a Wi-Fi or cellular network.")
+				new AlertDialog.Builder(ctx, R.style.PopupTheme).setMessage("iHW requires internet access when running for the first time. Please try again later when you are connected to a Wi-Fi or cellular network.")
 				.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						Intent i = new Intent(ctx, LaunchActivity.class);
@@ -83,7 +84,7 @@ public class Curriculum {
 	/*
 	 * Downloads an updated current curriculum JSON from the server. Returns false if there is no Internet connection.
 	 */
-	public static boolean downloadCurriculumJSON(final Context ctx, int campus, final int year, boolean isImportant) {
+	public static boolean downloadCurriculumJSON(final Context ctx, final int campus, final int year, boolean isImportant) {
 		ConnectivityManager connMgr = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 	    if (networkInfo == null || !networkInfo.isConnected()) {
@@ -99,14 +100,14 @@ public class Curriculum {
 			public void onDownloadComplete(String result) {
 				SharedPreferences prefs = ctx.getSharedPreferences(year + campusCharFinal, Context.MODE_PRIVATE);
 				prefs.edit().putString("curriculumJSON", result).commit();
-				loadCurrentCurriculum(ctx);
+				loadCurriculum(ctx, campus, year);
 			}
 		});
 		if (isImportant) downloader.setOnErrorListener(new URLDownloader.OnErrorListener() {
 			public void onDownloadError(Exception e) {
 				Log.e("iHW", "Error downloading from URL: " + e.getClass() + " / " + e.getMessage());
 				if (e instanceof java.io.FileNotFoundException) {
-					new AlertDialog.Builder(ctx).setMessage("Sorry, the school schedule for the campus and year you selected is not available.")
+					new AlertDialog.Builder(ctx, R.style.PopupTheme).setMessage("Sorry, the school schedule for the campus and year you selected is not available.")
 					.setPositiveButton("Back", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							Intent i = new Intent(ctx, LaunchActivity.class);
@@ -294,7 +295,8 @@ public class Curriculum {
 				String text = obj.getString("text");
 				boolean isToDo = obj.getBoolean("isToDo");
 				boolean checked = obj.getBoolean("isChecked");
-				this.addNote(text, isToDo, checked, d, period);
+				boolean isImportant = obj.getBoolean("isImportant");
+				this.addNote(text, isToDo, checked, isImportant, d, period);
 			}
 		} catch (JSONException e) {}
 	}
@@ -539,9 +541,9 @@ public class Curriculum {
 		return new ArrayList<Note>(0);
 	}
 	
-	public void addNote(String text, boolean isToDo, boolean checked, Date d, int period)
+	public void addNote(String text, boolean isToDo, boolean checked, boolean isImportant, Date d, int period)
 	{
-		Note toAdd = new Note(text, isToDo, checked);
+		Note toAdd = new Note(text, isToDo, checked, isImportant);
 		if (notes.get(d) == null) {
 			List<Note> list = new LinkedList<Note>();
 			list.add(toAdd);
@@ -569,6 +571,16 @@ public class Curriculum {
 			}
 		}
 		return null;
+	}
+	
+	public void setNotes(Date d, int period, List<Note> list) {
+		if (notes.get(d) == null) { //if no notes this day
+			TreeMap<Integer, List<Note>> inner = new TreeMap<Integer, List<Note>>();
+			inner.put(period, list);
+			notes.put(d, inner);
+		} else {
+			notes.get(d).put(period, list);
+		}
 	}
 	
 	public void removeCourse(Course c) {

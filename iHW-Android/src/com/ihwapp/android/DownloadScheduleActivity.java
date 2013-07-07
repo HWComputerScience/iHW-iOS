@@ -46,7 +46,7 @@ public class DownloadScheduleActivity extends Activity {
 				if (url.equals("http://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx")) {
 					//Log.d(TAG, "Loaded My Schedule and Events");
 					if (!alreadyLoaded) {
-						((LinearLayout)findViewById(R.id.LinearLayout1)).setGravity(Gravity.CENTER);
+						((LinearLayout)findViewById(R.id.layout_notes)).setGravity(Gravity.CENTER);
 						changeInfoText("Please wait, finding schedule...");
 						view.setVisibility(View.INVISIBLE);
 						view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0));
