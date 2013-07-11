@@ -8,7 +8,7 @@
 
 #import "IHWAppDelegate.h"
 
-#import "IHWViewController.h"
+#import "IHWScheduleViewController.h"
 
 @implementation IHWAppDelegate
 
@@ -17,9 +17,9 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        self.viewController = [[IHWViewController alloc] initWithNibName:@"IHWViewController_iPhone" bundle:nil];
+        self.viewController = [[IHWScheduleViewController alloc] initWithNibName:@"IHWViewController_iPhone" bundle:nil];
     } else {
-        self.viewController = [[IHWViewController alloc] initWithNibName:@"IHWViewController_iPad" bundle:nil];
+        self.viewController = [[IHWScheduleViewController alloc] initWithNibName:@"IHWViewController_iPad" bundle:nil];
     }
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];

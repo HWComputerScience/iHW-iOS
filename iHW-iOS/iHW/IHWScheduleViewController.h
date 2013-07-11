@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IHWViewController : UIViewController
+@interface IHWScheduleViewController : UIViewController
 
 @end

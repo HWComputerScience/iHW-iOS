@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 Andrew Friedman. All rights reserved.
 //
 
-#import "IHWViewController.h"
+#import "IHWScheduleViewController.h"
 
-@interface IHWViewController ()
+@interface IHWScheduleViewController ()
 
 @end
 
-@implementation IHWViewController
+@implementation IHWScheduleViewController
 
 - (void)viewDidLoad
 {

@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class IHWViewController;
+@class IHWScheduleViewController;
 
 @interface IHWAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) IHWViewController *viewController;
+@property (strong, nonatomic) IHWScheduleViewController *viewController;
 
 @end

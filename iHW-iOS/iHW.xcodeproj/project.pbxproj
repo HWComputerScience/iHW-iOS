@@ -16,9 +16,9 @@
 		49FA8C67176BA71A00D4BB3A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 49FA8C66176BA71A00D4BB3A /* Default.png */; };
 		49FA8C69176BA71A00D4BB3A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 49FA8C68176BA71A00D4BB3A /* Default@2x.png */; };
 		49FA8C6B176BA71A00D4BB3A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 49FA8C6A176BA71A00D4BB3A /* Default-568h@2x.png */; };
-		49FA8C6E176BA71A00D4BB3A /* IHWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FA8C6D176BA71A00D4BB3A /* IHWViewController.m */; };
-		49FA8C71176BA71A00D4BB3A /* IHWViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49FA8C6F176BA71A00D4BB3A /* IHWViewController_iPhone.xib */; };
-		49FA8C74176BA71A00D4BB3A /* IHWViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49FA8C72176BA71A00D4BB3A /* IHWViewController_iPad.xib */; };
+		49FA8C6E176BA71A00D4BB3A /* IHWScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FA8C6D176BA71A00D4BB3A /* IHWScheduleViewController.m */; };
+		49FA8C71176BA71A00D4BB3A /* IHWScheduleViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49FA8C6F176BA71A00D4BB3A /* IHWScheduleViewController_iPhone.xib */; };
+		49FA8C74176BA71A00D4BB3A /* IHWScheduleViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49FA8C72176BA71A00D4BB3A /* IHWScheduleViewController_iPad.xib */; };
 		49FA8C7D176BA90600D4BB3A /* IHWDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FA8C7C176BA90600D4BB3A /* IHWDay.m */; };
 		49FA8C80176BAA0400D4BB3A /* IHWPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FA8C7F176BAA0400D4BB3A /* IHWPeriod.m */; };
 		49FA8C83176BAA3500D4BB3A /* IHWCourse.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FA8C82176BAA3500D4BB3A /* IHWCourse.m */; };
@@ -28,6 +28,13 @@
 		49FA8C8F176BACAA00D4BB3A /* IHWCustomDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FA8C8E176BACAA00D4BB3A /* IHWCustomDay.m */; };
 		49FA8C92176BACC900D4BB3A /* IHWNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FA8C91176BACC900D4BB3A /* IHWNote.m */; };
 		49FA8C95176BAE0A00D4BB3A /* IHWTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 49FA8C94176BAE0900D4BB3A /* IHWTime.m */; };
+		CBE76E5F178C8F0F00A3489D /* IHWCoursesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE76E5D178C8F0F00A3489D /* IHWCoursesViewController.m */; };
+		CBE76E65178C8F9200A3489D /* IHWCoursesViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBE76E61178C8F9200A3489D /* IHWCoursesViewController_iPad.xib */; };
+		CBE76E66178C8F9200A3489D /* IHWCoursesViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBE76E63178C8F9200A3489D /* IHWCoursesViewController_iPhone.xib */; };
+		CBE76E6A178C900A00A3489D /* IHWAddCourseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE76E68178C900A00A3489D /* IHWAddCourseViewController.m */; };
+		CBE76E70178C901600A3489D /* IHWAddCourseViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBE76E6C178C901600A3489D /* IHWAddCourseViewController_iPad.xib */; };
+		CBE76E71178C901600A3489D /* IHWAddCourseViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBE76E6E178C901600A3489D /* IHWAddCourseViewController_iPhone.xib */; };
+		CBE76E73178C927900A3489D /* IHWPeriodVew.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBE76E72178C927900A3489D /* IHWPeriodVew.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,10 +51,10 @@
 		49FA8C66176BA71A00D4BB3A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		49FA8C68176BA71A00D4BB3A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		49FA8C6A176BA71A00D4BB3A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		49FA8C6C176BA71A00D4BB3A /* IHWViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IHWViewController.h; sourceTree = "<group>"; };
-		49FA8C6D176BA71A00D4BB3A /* IHWViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IHWViewController.m; sourceTree = "<group>"; };
-		49FA8C70176BA71A00D4BB3A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IHWViewController_iPhone.xib; sourceTree = "<group>"; };
-		49FA8C73176BA71A00D4BB3A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IHWViewController_iPad.xib; sourceTree = "<group>"; };
+		49FA8C6C176BA71A00D4BB3A /* IHWScheduleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IHWScheduleViewController.h; sourceTree = "<group>"; };
+		49FA8C6D176BA71A00D4BB3A /* IHWScheduleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IHWScheduleViewController.m; sourceTree = "<group>"; };
+		49FA8C70176BA71A00D4BB3A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IHWScheduleViewController_iPhone.xib; sourceTree = "<group>"; };
+		49FA8C73176BA71A00D4BB3A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IHWScheduleViewController_iPad.xib; sourceTree = "<group>"; };
 		49FA8C7B176BA90600D4BB3A /* IHWDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDay.h; sourceTree = "<group>"; };
 		49FA8C7C176BA90600D4BB3A /* IHWDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDay.m; sourceTree = "<group>"; };
 		49FA8C7E176BAA0400D4BB3A /* IHWPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPeriod.h; sourceTree = "<group>"; };
@@ -66,6 +73,15 @@
 		49FA8C91176BACC900D4BB3A /* IHWNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWNote.m; sourceTree = "<group>"; };
 		49FA8C93176BAE0900D4BB3A /* IHWTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWTime.h; sourceTree = "<group>"; };
 		49FA8C94176BAE0900D4BB3A /* IHWTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWTime.m; sourceTree = "<group>"; };
+		CBE76E5C178C8F0F00A3489D /* IHWCoursesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWCoursesViewController.h; sourceTree = "<group>"; };
+		CBE76E5D178C8F0F00A3489D /* IHWCoursesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWCoursesViewController.m; sourceTree = "<group>"; };
+		CBE76E62178C8F9200A3489D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IHWCoursesViewController_iPad.xib; sourceTree = "<group>"; };
+		CBE76E64178C8F9200A3489D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IHWCoursesViewController_iPhone.xib; sourceTree = "<group>"; };
+		CBE76E67178C900A00A3489D /* IHWAddCourseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWAddCourseViewController.h; sourceTree = "<group>"; };
+		CBE76E68178C900A00A3489D /* IHWAddCourseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWAddCourseViewController.m; sourceTree = "<group>"; };
+		CBE76E6D178C901600A3489D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IHWAddCourseViewController_iPad.xib; sourceTree = "<group>"; };
+		CBE76E6F178C901600A3489D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/IHWAddCourseViewController_iPhone.xib; sourceTree = "<group>"; };
+		CBE76E72178C927900A3489D /* IHWPeriodVew.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWPeriodVew.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,10 +131,19 @@
 				49FA8C7A176BA8BD00D4BB3A /* model */,
 				49FA8C63176BA71A00D4BB3A /* IHWAppDelegate.h */,
 				49FA8C64176BA71A00D4BB3A /* IHWAppDelegate.m */,
-				49FA8C6C176BA71A00D4BB3A /* IHWViewController.h */,
-				49FA8C6D176BA71A00D4BB3A /* IHWViewController.m */,
-				49FA8C6F176BA71A00D4BB3A /* IHWViewController_iPhone.xib */,
-				49FA8C72176BA71A00D4BB3A /* IHWViewController_iPad.xib */,
+				49FA8C6C176BA71A00D4BB3A /* IHWScheduleViewController.h */,
+				49FA8C6D176BA71A00D4BB3A /* IHWScheduleViewController.m */,
+				49FA8C6F176BA71A00D4BB3A /* IHWScheduleViewController_iPhone.xib */,
+				49FA8C72176BA71A00D4BB3A /* IHWScheduleViewController_iPad.xib */,
+				CBE76E5C178C8F0F00A3489D /* IHWCoursesViewController.h */,
+				CBE76E5D178C8F0F00A3489D /* IHWCoursesViewController.m */,
+				CBE76E63178C8F9200A3489D /* IHWCoursesViewController_iPhone.xib */,
+				CBE76E61178C8F9200A3489D /* IHWCoursesViewController_iPad.xib */,
+				CBE76E67178C900A00A3489D /* IHWAddCourseViewController.h */,
+				CBE76E68178C900A00A3489D /* IHWAddCourseViewController.m */,
+				CBE76E6E178C901600A3489D /* IHWAddCourseViewController_iPhone.xib */,
+				CBE76E6C178C901600A3489D /* IHWAddCourseViewController_iPad.xib */,
+				CBE76E72178C927900A3489D /* IHWPeriodVew.xib */,
 				49FA8C5B176BA71A00D4BB3A /* Supporting Files */,
 			);
 			path = iHW;
@@ -219,8 +244,13 @@
 				49FA8C67176BA71A00D4BB3A /* Default.png in Resources */,
 				49FA8C69176BA71A00D4BB3A /* Default@2x.png in Resources */,
 				49FA8C6B176BA71A00D4BB3A /* Default-568h@2x.png in Resources */,
-				49FA8C71176BA71A00D4BB3A /* IHWViewController_iPhone.xib in Resources */,
-				49FA8C74176BA71A00D4BB3A /* IHWViewController_iPad.xib in Resources */,
+				49FA8C71176BA71A00D4BB3A /* IHWScheduleViewController_iPhone.xib in Resources */,
+				49FA8C74176BA71A00D4BB3A /* IHWScheduleViewController_iPad.xib in Resources */,
+				CBE76E65178C8F9200A3489D /* IHWCoursesViewController_iPad.xib in Resources */,
+				CBE76E66178C8F9200A3489D /* IHWCoursesViewController_iPhone.xib in Resources */,
+				CBE76E70178C901600A3489D /* IHWAddCourseViewController_iPad.xib in Resources */,
+				CBE76E71178C901600A3489D /* IHWAddCourseViewController_iPhone.xib in Resources */,
+				CBE76E73178C927900A3489D /* IHWPeriodVew.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,7 +263,7 @@
 			files = (
 				49FA8C61176BA71A00D4BB3A /* main.m in Sources */,
 				49FA8C65176BA71A00D4BB3A /* IHWAppDelegate.m in Sources */,
-				49FA8C6E176BA71A00D4BB3A /* IHWViewController.m in Sources */,
+				49FA8C6E176BA71A00D4BB3A /* IHWScheduleViewController.m in Sources */,
 				49FA8C7D176BA90600D4BB3A /* IHWDay.m in Sources */,
 				49FA8C80176BAA0400D4BB3A /* IHWPeriod.m in Sources */,
 				49FA8C83176BAA3500D4BB3A /* IHWCourse.m in Sources */,
@@ -243,6 +273,8 @@
 				49FA8C8F176BACAA00D4BB3A /* IHWCustomDay.m in Sources */,
 				49FA8C92176BACC900D4BB3A /* IHWNote.m in Sources */,
 				49FA8C95176BAE0A00D4BB3A /* IHWTime.m in Sources */,
+				CBE76E5F178C8F0F00A3489D /* IHWCoursesViewController.m in Sources */,
+				CBE76E6A178C900A00A3489D /* IHWAddCourseViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,20 +289,52 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		49FA8C6F176BA71A00D4BB3A /* IHWViewController_iPhone.xib */ = {
+		49FA8C6F176BA71A00D4BB3A /* IHWScheduleViewController_iPhone.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				49FA8C70176BA71A00D4BB3A /* en */,
 			);
-			name = IHWViewController_iPhone.xib;
+			name = IHWScheduleViewController_iPhone.xib;
 			sourceTree = "<group>";
 		};
-		49FA8C72176BA71A00D4BB3A /* IHWViewController_iPad.xib */ = {
+		49FA8C72176BA71A00D4BB3A /* IHWScheduleViewController_iPad.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				49FA8C73176BA71A00D4BB3A /* en */,
 			);
-			name = IHWViewController_iPad.xib;
+			name = IHWScheduleViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		CBE76E61178C8F9200A3489D /* IHWCoursesViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CBE76E62178C8F9200A3489D /* en */,
+			);
+			name = IHWCoursesViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		CBE76E63178C8F9200A3489D /* IHWCoursesViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CBE76E64178C8F9200A3489D /* en */,
+			);
+			name = IHWCoursesViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		CBE76E6C178C901600A3489D /* IHWAddCourseViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CBE76E6D178C901600A3489D /* en */,
+			);
+			name = IHWAddCourseViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		CBE76E6E178C901600A3489D /* IHWAddCourseViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CBE76E6F178C901600A3489D /* en */,
+			);
+			name = IHWAddCourseViewController_iPhone.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
