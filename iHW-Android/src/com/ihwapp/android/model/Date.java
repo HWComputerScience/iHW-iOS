@@ -58,4 +58,12 @@ public class Date extends GregorianCalendar {
 		if (shortVersion) return this.getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, Locale.getDefault());
 		else return this.getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.LONG, Locale.getDefault());
 	}
+	
+	public boolean equals(Object other) {
+		if (!(other instanceof Date)) return false;
+		Date otherDate = (Date)other;
+		return (this.getMonth()==otherDate.getMonth()) && 
+				(this.getDay() == otherDate.getDay()) && 
+				(this.getYear() == otherDate.getYear());
+	}
 }

@@ -51,13 +51,13 @@ public final class R {
     }
     public static final class id {
         public static final int RotatedTextView1=0x7f0a000a;
-        public static final int action_add=0x7f0a0022;
-        public static final int action_delete=0x7f0a0021;
-        public static final int action_done=0x7f0a0023;
-        public static final int action_edit=0x7f0a0020;
-        public static final int action_edit_courses=0x7f0a0028;
-        public static final int action_goto_date=0x7f0a0027;
-        public static final int action_goto_today=0x7f0a0026;
+        public static final int action_add=0x7f0a0023;
+        public static final int action_delete=0x7f0a0022;
+        public static final int action_done=0x7f0a0024;
+        public static final int action_edit=0x7f0a0021;
+        public static final int action_edit_courses=0x7f0a0029;
+        public static final int action_goto_date=0x7f0a0028;
+        public static final int action_goto_today=0x7f0a0027;
         public static final int button_add_manually=0x7f0a0012;
         public static final int button_campus_ms=0x7f0a000d;
         public static final int button_campus_us=0x7f0a000e;
@@ -77,12 +77,13 @@ public final class R {
         public static final int layout_notes=0x7f0a0001;
         public static final int layout_periods=0x7f0a0017;
         public static final int layout_right=0x7f0a001e;
-        public static final int option_is_important=0x7f0a0025;
-        public static final int option_is_todo=0x7f0a0024;
+        public static final int option_is_important=0x7f0a0026;
+        public static final int option_is_todo=0x7f0a0025;
         public static final int progressBar1=0x7f0a0004;
         public static final int scheduleViewPager=0x7f0a0013;
         public static final int scroll_periods=0x7f0a0005;
         public static final int separator1=0x7f0a0015;
+        public static final int text_countdown=0x7f0a0020;
         public static final int text_course_name=0x7f0a0000;
         public static final int text_day_title=0x7f0a0016;
         public static final int text_endtime=0x7f0a0010;

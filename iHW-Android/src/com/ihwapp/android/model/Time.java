@@ -3,6 +3,14 @@ package com.ihwapp.android.model;
 public class Time /*implements org.json.JSONString*/ {
 	private int hour;
 	private int minute;
+	private int second;
+	
+	public Time() {
+		Date now = new Date();
+		this.hour = now.get(Date.HOUR_OF_DAY);
+		this.minute = now.get(Date.MINUTE);
+		this.second = now.get(Date.SECOND);
+	}
 	
 	/**
 	 * Constructs a new time from the specified hour (0-23) and minute (0-59).
@@ -11,6 +19,7 @@ public class Time /*implements org.json.JSONString*/ {
 		if (hour<0 || hour>23 || minute<0 || minute>59) throw new IllegalArgumentException();
 		this.hour = hour;
 		this.minute = minute;
+		this.second = 0;
 	}
 	
 	/**
@@ -22,6 +31,7 @@ public class Time /*implements org.json.JSONString*/ {
 		else if (!pm && hour == 12) this.hour = hour-12;
 		else this.hour = hour;
 		this.minute = minute;
+		this.second = 0;
 	}
 	
 	public Time(String json) {
@@ -81,6 +91,21 @@ public class Time /*implements org.json.JSONString*/ {
 	}
 	
 	/**
+	 * Returns the second of this time.
+	 */
+	public int getSecond() {
+		return this.second;
+	}
+	
+	/**
+	 * Sets the second (0-59) of this time.
+	 */
+	public void setSecond(int second) {
+		if (second<0 || second>59) throw new IllegalArgumentException();
+		this.second = second;
+	}
+	
+	/**
 	 * Creates and returns a new Time by adding the
 	 * specified number of hours and minutes to this time.
 	 * Leaves this time unmodified.
@@ -94,7 +119,9 @@ public class Time /*implements org.json.JSONString*/ {
 				newMinutes-=60;
 			}
 			newHours = newHours%24;
-			return new Time(newHours, newMinutes);
+			Time newTime = new Time(newHours, newMinutes);
+			newTime.second = this.second;
+			return newTime;
 		} else if (minutes<=0 && hours<=0) {
 			while (newMinutes < 0) {
 				newHours--;
@@ -104,7 +131,9 @@ public class Time /*implements org.json.JSONString*/ {
 				newHours+=24;
 			}
 			newHours = newHours%24;
-			return new Time(newHours, newMinutes);
+			Time newTime = new Time(newHours, newMinutes);
+			newTime.second = this.second;
+			return newTime;
 		}
 		throw new IllegalArgumentException();
 	}
@@ -114,6 +143,10 @@ public class Time /*implements org.json.JSONString*/ {
 	 */
 	public int minutesUntil(Time t) {
 		return 60*(t.hour-this.hour) + t.minute-this.minute;
+	}
+	
+	public int secondsUntil(Time t) {
+		return 60*minutesUntil(t) + t.second-this.second;
 	}
 	
 	/**

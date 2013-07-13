@@ -18,7 +18,7 @@ import org.json.*;
  * It represents one school year of classes and notes.
  */
 public class Curriculum {
-	
+	//TODO base the curriculum on cycles instead of years for the notes.
 	private static Curriculum currentCurriculum;
 	
 	public static Curriculum getCurrentCurriculum(Context ctx) {

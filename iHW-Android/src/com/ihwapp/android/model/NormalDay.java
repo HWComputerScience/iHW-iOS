@@ -33,7 +33,7 @@ public class NormalDay extends Day {
 		this.dayNumber=dayNum;
 		hasBreak = true;
 		periodLength = pLength;
-		
+		periods = new ArrayList<Period>();
 		//if (c!=null) fillPeriods(c); 
 	}
 	
@@ -49,7 +49,7 @@ public class NormalDay extends Day {
 		hasBreak = false;
 		periodLength = pLength;
 		dayNumber = dayNum;
-		
+		periods = new ArrayList<Period>();
 		//if (c!= null) fillPeriods(c);
 	}
 	
@@ -67,6 +67,7 @@ public class NormalDay extends Day {
 				breakName = obj.getString("breakName");
 			}
 		} catch (JSONException e) {}
+		periods = new ArrayList<Period>();
 	}
 	
 	public void fillPeriods(Curriculum c) {

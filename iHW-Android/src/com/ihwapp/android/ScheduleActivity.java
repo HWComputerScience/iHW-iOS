@@ -69,8 +69,8 @@ public class ScheduleActivity extends FragmentActivity {
 	
 	public void gotoDate(Date d) {
 		int position = new Date(7,1,Curriculum.getCurrentYear(ScheduleActivity.this)).getDaysUntil(d);
-		if (position < 0) Toast.makeText(ScheduleActivity.this, "Please select a previous year from the \"choose years\" menu item (if available) to view that date.", Toast.LENGTH_LONG).show();
-		else if (position > adapter.getCount()) Toast.makeText(ScheduleActivity.this, "Please select a future year from the \"choose years\" menu item (if available) to view that date.", Toast.LENGTH_LONG).show();
+		if (position < 0) Toast.makeText(ScheduleActivity.this, "Please select a previous year (if available) from the \"choose years\" menu item to view that date.", Toast.LENGTH_LONG).show();
+		else if (position > adapter.getCount()) Toast.makeText(ScheduleActivity.this, "Please select a future year (if available) from the \"choose years\" menu item to view that date.", Toast.LENGTH_LONG).show();
 		position = Math.max(0, Math.min(adapter.getCount()-1, position));
 		if (currentDate==null) pager.setCurrentItem(position, false);
 		else pager.setCurrentItem(position, true);
