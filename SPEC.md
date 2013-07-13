@@ -22,7 +22,7 @@
 
 -   For each period, shows course name (or "X"), start and end times, and period number (if applicable).
 
--   For each period, lists the notes the user has added to the period and has an empty box to add an additional note.
+-   For each period, lists the notes the user has added to the period and always has an empty box to add an additional note.
 
 -   Ability to show/hide a checkbox for any note or mark it as important (makes it bigger/bolder and moves it to the top) or unimportant (restores font and moves it to the bottom)
 
@@ -51,6 +51,22 @@
 -   Has buttons to delete this course or save it.
 
 -   Rejects courses that do not have a name or at least one class meeting.
+
+## Required Features - Model
+
+-   Loads curriculum JSON when user selects a campus during first-run
+
+-   Reloads curriculum JSON on app launch every time there's an internet connection available
+
+-   Loads year JSON and cycle 0 on app launch
+
+-   Loads cycle JSON files as needed (preloading at least one day before and after the currently selected day)
+
+-   Loads the currently selected day, then preloads day(s) before and after it in the background
+
+-   Saves notes when the user is done editing a note, when a note option is changed, and when the user leaves the day where the notes are written.
+
+-   Saves courses whenever the user leaves the edit course view.
 
 ## User Interface Style
 
@@ -97,7 +113,7 @@
         “courses”: [...]
     }
 
--   Cycle JSON: contains notes for a specific cycle (0 for notes not in a cycle)
+-   Cycle JSON: contains notes for a specific cycle (cycle number is 0 for notes not in a cycle)
 
     -   Format:
 
@@ -123,7 +139,7 @@
         “meetings”: [1,1,1,1,0]
     }
 
--   Note Format for JSON: (period is NOT the same as “periodNum” in the Period JSON! periodNum can be any number, but period is the index of the period within the day [-1 for additional notes at the bottom of every day])
+-   Note Format for JSON: (IMPORTANT: period is NOT the same as “periodNum” in the Period JSON! periodNum can be any number, but period is the index of the period within the day [-1 for additional notes at the bottom of every day])
 
 <!-- -->
 
@@ -186,7 +202,7 @@
         "type": "holiday"
     }
 
--   Period format for JSON: (periodNum is NOT the same as “period” in the Note JSON! periodNum can be any number, but period is the index of the period within the day.)
+-   Period format for JSON: (IMPORTANT: periodNum is NOT the same as “period” in the Note JSON! periodNum can be any number, but period is the index of the period within the day.)
 
 <!-- -->
 
