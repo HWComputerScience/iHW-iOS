@@ -25,6 +25,7 @@
 		491CCB6F178E685800736453 /* IHWHoliday.m in Sources */ = {isa = PBXBuildFile; fileRef = 491CCB6E178E685800736453 /* IHWHoliday.m */; };
 		491CCB75178E689400736453 /* IHWCycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 491CCB74178E689400736453 /* IHWCycle.m */; };
 		491CCB78178E691000736453 /* IHWNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 491CCB77178E691000736453 /* IHWNote.m */; };
+		491CCB7B178F3BCE00736453 /* IHWDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 491CCB7A178F3BCE00736453 /* IHWDate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,8 @@
 		491CCB74178E689400736453 /* IHWCycle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWCycle.m; sourceTree = "<group>"; };
 		491CCB76178E691000736453 /* IHWNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWNote.h; sourceTree = "<group>"; };
 		491CCB77178E691000736453 /* IHWNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWNote.m; sourceTree = "<group>"; };
+		491CCB79178F3BCE00736453 /* IHWDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDate.h; sourceTree = "<group>"; };
+		491CCB7A178F3BCE00736453 /* IHWDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +151,8 @@
 				491CCB74178E689400736453 /* IHWCycle.m */,
 				491CCB76178E691000736453 /* IHWNote.h */,
 				491CCB77178E691000736453 /* IHWNote.m */,
+				491CCB79178F3BCE00736453 /* IHWDate.h */,
+				491CCB7A178F3BCE00736453 /* IHWDate.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -229,6 +234,7 @@
 				491CCB6F178E685800736453 /* IHWHoliday.m in Sources */,
 				491CCB75178E689400736453 /* IHWCycle.m in Sources */,
 				491CCB78178E691000736453 /* IHWNote.m in Sources */,
+				491CCB7B178F3BCE00736453 /* IHWDate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

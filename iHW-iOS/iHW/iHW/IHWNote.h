@@ -15,4 +15,6 @@
 @property BOOL isImportant;
 @property BOOL isChecked;
 
+- (id)initWithValue:(NSString *)val isImportant:(BOOL)important isToDo:(BOOL)todo;
+
 @end

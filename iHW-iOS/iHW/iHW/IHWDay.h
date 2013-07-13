@@ -7,7 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "IHWDate.h"
 
 @interface IHWDay : NSObject
+
+@property int dayNum;
+@property (strong, nonatomic) IHWDate *date;
+@property (strong, nonatomic) NSMutableArray *periods;
+@property int periodLength;
+@property BOOL hasBreak;
+@property int breakLength;
+@property (strong, nonatomic) NSString *breakName;
+
 
 @end
