@@ -10,6 +10,12 @@
 
 @implementation IHWDate
 
+- (id)init
+{
+    self = [super init];
+    return self;
+}
+
 - (id)initWithMonth:(int)m day:(int)d year:(int)y
 {
     NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -20,16 +26,76 @@
     return self;
 }
 
--(int)getMonth {
+- (id)initFromString:(NSString *)string
+{
+    NSArray *comps = [string componentsSeparatedByString:@"/"];
+    self = [self initWithMonth:[[comps objectAtIndex:0] intValue] day:[[comps objectAtIndex:1] intValue] year:[[comps objectAtIndex:2] intValue]];
+    return self;
+}
+
+-(int)month {
     return [[NSCalendar currentCalendar] components:NSMonthCalendarUnit fromDate:self].month;
 }
 
--(int)getDay {
+-(int)day {
     return [[NSCalendar currentCalendar] components:NSMonthCalendarUnit fromDate:self].day;
 }
 
--(int)getYear {
+-(int)year {
     return [[NSCalendar currentCalendar] components:NSMonthCalendarUnit fromDate:self].year;
+}
+
+- (BOOL)isMonday {
+    int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    return weekday==2;
+}
+
+- (BOOL)isWeekend {
+    int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    return weekday==1 || weekday == 7;
+}
+
+- (IHWDate *)dateByAddingDays:(int)days {
+    return [[IHWDate alloc] initWithTimeInterval:days*24*60*60 sinceDate:self];
+}
+
+- (IHWDate *)dateOfNextSunday {
+    int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int daysBehind = 8-weekday;
+    return [self dateByAddingDays:daysBehind];
+}
+
+- (IHWDate *)dateOfPreviousSunday {
+    int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int daysAhead = weekday-1;
+    return [self dateByAddingDays:-daysAhead];
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%d/%d/%d", self.month, self.day, self.year];
+}
+
+- (int)daysUntilDate:(IHWDate *)other {
+    return [other timeIntervalSinceDate:self]/60/60/24;
+}
+
+- (NSString *)dayOfWeek:(BOOL)shortVersion {
+    NSDateFormatter *weekday = [[NSDateFormatter alloc] init];
+    if (shortVersion) [weekday setDateFormat: @"EEE"];
+    else [weekday setDateFormat:@"EEEE"];
+    return [weekday stringFromDate:self];
+}
+
+- (BOOL)isEqualToDate:(NSDate *)other {
+    if (![other isKindOfClass:[IHWDate class]]) return NO;
+    IHWDate *otherDate = (IHWDate *)other;
+    return (self.month == otherDate.month && self.day == otherDate.day && self.year == otherDate.year);
+}
+
++ (NSComparator)comparator {
+    return ^(IHWDate *obj1, IHWDate *obj2) {
+        return [obj1 compare:obj2];
+    };
 }
 
 @end

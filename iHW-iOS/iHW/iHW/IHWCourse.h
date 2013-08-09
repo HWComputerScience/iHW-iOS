@@ -28,7 +28,10 @@
 @property int term;
 
 - (id)initWithName:(NSString *)n period:(int)p term:(int)t meetings:(NSArray *)m;
+- (id)initWithJSONDictionary:(NSDictionary *)dictionary;
+- (NSDictionary *)saveCourse;
 
--(int)getNumMeetings;
+-(int)getTotalMeetings;
+- (int)getMeetingOn:(int)dayNum;
 
 @end

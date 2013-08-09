@@ -8,12 +8,11 @@ import com.ihwapp.android.model.Note;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.*;
-import android.text.method.BaseKeyListener;
-import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
@@ -26,7 +25,7 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 	
 	private Date d;
 	private int period;
-	private List<Note> notes;
+	private ArrayList<Note> notes;
 	private ArrayList<View> noteViews;
 	private LinearLayout notesLayout;
 	private boolean bottomIsEmpty = true;
@@ -51,7 +50,6 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 		if (getArguments() != null) {
 			d = new Date(getArguments().getString("date"));
 			period = getArguments().getInt("period");
-			notes = Curriculum.getCurrentCurriculum(getActivity()).getNotes(d, period);
 		}
 	}
 
@@ -65,6 +63,8 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 	
 	public void onStart() {
 		super.onStart();
+		notes = Curriculum.getCurrentCurriculum().getNotes(d, period);
+		//Log.d("iHW", "####### notes == null: " + (notes==null));
 		noteViews = new ArrayList<View>(notes.size()+6);
 		notesLayout.removeAllViews();
 		for (Note n : notes) {
@@ -112,12 +112,15 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 		et.setMaxLines(Integer.MAX_VALUE);
 		noteViews.add(v);
 		notesLayout.addView(v);
+		((TextView)v.findViewById(R.id.text_bullet)).setTextColor(Color.LTGRAY);
 		
 		if (n==null) bottomIsEmpty = true;
 		else {
 			((EditText)v.findViewById(R.id.text_note)).setText(n.getText());
+			if (!n.getText().equals("")) ((TextView)v.findViewById(R.id.text_bullet)).setTextColor(Color.BLACK);
 			if (n.isToDo()) {
 				((CheckBox)v.findViewById(R.id.checkbox)).setVisibility(View.VISIBLE);
+				v.findViewById(R.id.text_bullet).setVisibility(View.GONE);
 			}
 			((CheckBox)v.findViewById(R.id.checkbox)).setChecked(n.isChecked());
 			if (n.isImportant()) makeImportant(noteViews.size()-1);
@@ -186,8 +189,8 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 			}
 		}
 		Log.d("iHW", "saved " + ct + " notes from " + d + ":" + period);
-		Curriculum.getCurrentCurriculum(getActivity()).setNotes(d, period, notes);
-		Curriculum.save(getActivity());
+		Curriculum.getCurrentCurriculum().setNotes(d, period, notes);
+		Curriculum.getCurrentCurriculum().saveCycle(d);
 		changesSaved = true;
 	}
 	
@@ -213,6 +216,7 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 				} else if (((EditText)tv).getText().toString().equals("")) {
 					makeUnimportant(getIndex());
 					((CheckBox)noteRow.findViewById(R.id.checkbox)).setVisibility(View.GONE);
+					noteRow.findViewById(R.id.text_bullet).setVisibility(View.VISIBLE);
 					((CheckBox)noteRow.findViewById(R.id.checkbox)).setChecked(false);
 				} else if (!((EditText)tv).getText().toString().equals("")) saveNotes();
 			} else {
@@ -228,11 +232,13 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 			if (!handlersAreValid) return;
 			EditText tv = (EditText)noteRow.findViewById(R.id.text_note);
 			if (!text.toString().equals("")) {
+				((TextView)noteRow.findViewById(R.id.text_bullet)).setTextColor(Color.BLACK);
 				noteRow.findViewById(R.id.button_note_settings).setVisibility(View.VISIBLE);
 				if (getIndex()==noteViews.size()-1) bottomIsEmpty = false;
 				if (!bottomIsEmpty) addAnotherNoteBox(null);
 				tv.requestFocus();
 			} else {
+				((TextView)noteRow.findViewById(R.id.text_bullet)).setTextColor(Color.LTGRAY);
 				noteRow.findViewById(R.id.button_note_settings).setVisibility(View.GONE);
 				if (popupMenu != null) popupMenu.dismiss();
 				if (getIndex()==noteViews.size()-2 && bottomIsEmpty) {
@@ -289,8 +295,13 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 			if (!handlersAreValid) return false;
 			if (item.getItemId() == R.id.option_is_todo) {
 				CheckBox cb = ((CheckBox)noteRow.findViewById(R.id.checkbox));
-				if (cb.getVisibility() == View.GONE) cb.setVisibility(View.VISIBLE);
-				else cb.setVisibility(View.GONE);
+				if (cb.getVisibility() == View.GONE) {
+					cb.setVisibility(View.VISIBLE);
+					noteRow.findViewById(R.id.text_bullet).setVisibility(View.GONE);
+				} else {
+					cb.setVisibility(View.GONE);
+					noteRow.findViewById(R.id.text_bullet).setVisibility(View.VISIBLE);
+				}
 			} else if (item.getItemId() == R.id.option_is_important) {
 				EditText et = ((EditText)noteRow.findViewById(R.id.text_note));
 				if (pixelsToSp(getActivity(), et.getTextSize()) == SIZE_MEDIUM) {

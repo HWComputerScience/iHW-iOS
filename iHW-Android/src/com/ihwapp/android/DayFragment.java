@@ -1,23 +1,21 @@
 package com.ihwapp.android;
 
-import java.lang.reflect.Field;
 import java.util.*;
-
-import org.json.*;
 
 import com.ihwapp.android.model.*;
 import com.ihwapp.android.model.Date;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.app.Activity;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
 public class DayFragment extends Fragment {
+	private Date date;
 	private Day day;
 	private int initScrollPos;
 	private ArrayList<OnFragmentVisibilityChangedListener> ofvcls;
@@ -25,29 +23,32 @@ public class DayFragment extends Fragment {
 	private View countdownView;
 	private ArrayList<ViewGroup> periodViews;
 	
+	/*****LIFECYCLE -- BEGINNINGS*****/
+	
+	public void setArguments(Bundle b) {
+		date = new Date(b.getString("date"));
+	}
+	
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		day = Curriculum.getCurrentCurriculum().getDay(date);
+		Log.d("iHW-lc", "DayFragment onAttach: " + date);
+	}
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initScrollPos = 0;
 		ofvcls = new ArrayList<OnFragmentVisibilityChangedListener>();
-		if (savedInstanceState != null) {
+		if (savedInstanceState != null && savedInstanceState.containsKey("date")) {
 			setArguments(savedInstanceState);
 			initScrollPos = savedInstanceState.getInt("scrollPos");
 		}
-	}
-	
-	public void setArguments(Bundle b) {
-		try {
-			JSONObject dayJSON = new JSONObject((String)b.get("dayJSON"));
-			String type = dayJSON.getString("type");
-			if (type.equals("normal")) {
-				day = new NormalDay(dayJSON);
-			}
-			else if (type.equals("test")) day = new TestDay(dayJSON);
-			else if (type.equals("holiday")) day = new Holiday(dayJSON);
-		} catch (JSONException e) { }
+		Log.d("iHW-lc", "DayFragment onCreate: " + date);
 	}
 
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		if (day==null) day = Curriculum.getCurrentCurriculum().getDay(date);
+		Log.d("iHW-lc", "DayFragment onCreateView: " + date);
 		final View v = inflater.inflate(R.layout.fragment_day, null);
 		//Typeface georgiaBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Georgia Bold.ttf");
 		/*Date d = day.getDate();
@@ -59,67 +60,17 @@ public class DayFragment extends Fragment {
 		titleText.setText(day.getTitle());
 		titleText.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		
-		
-		
-		new AsyncTask<Void, Void, ArrayList<Period>>() {
-
-			protected ArrayList<Period> doInBackground(Void... arg0) {
-				if (day instanceof NormalDay) ((NormalDay)day).fillPeriods(Curriculum.getCurrentCurriculum(getActivity()));
-				return day.getPeriods();
-			}
-			
-			protected void onPostExecute(ArrayList<Period> pds) {
-				LinearLayout pdsLayout = ((LinearLayout)v.findViewById(R.id.layout_periods));
-				periodViews = new ArrayList<ViewGroup>(pds.size());
-				FragmentTransaction transaction = DayFragment.this.getChildFragmentManager().beginTransaction();
-				for (int i=0; i<pds.size(); i++) {
-					final Period p = pds.get(i);
-					final View periodView = inflater.inflate(R.layout.view_period, null);
-					periodViews.add((ViewGroup)periodView);
-					if (p.getNum() > 0) {
-						((TextView)periodView.findViewById(R.id.text_periodnum)).setText(getOrdinal(p.getNum()));
-					}
-					((TextView)periodView.findViewById(R.id.text_title)).setText(p.getName());
-					((TextView)periodView.findViewById(R.id.text_starttime)).setText(p.getStartTime().toString12());
-					((TextView)periodView.findViewById(R.id.text_endtime)).setText(p.getEndTime().toString12());
-					FrameLayout fl = new FrameLayout(getActivity());
-					int id=day.getDate().getDay()*100+i;
-					fl.setId(id);
-					((LinearLayout)periodView.findViewById(R.id.layout_right)).addView(fl);
-					PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), i);
-					transaction.add(id, f, day.getDate().toString() + ":" + i);
-					pdsLayout.addView(periodView);
-					pdsLayout.addView(new Separator(getActivity()));
-				}
-				transaction.commit();
-				TextView moreNotesLabel = new TextView(getActivity());
-				if (pds.size() > 0) moreNotesLabel.setText("Additional Notes");
-				else moreNotesLabel.setText("Notes");
-				pdsLayout.addView(moreNotesLabel);
-				PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), -1);
-				DayFragment.this.addOnFragmentVisibilityChangedListener(f);
-				DayFragment.this.getChildFragmentManager().beginTransaction().replace(R.id.layout_periods, f, day.getDate().toString() + ":-1").commit();
-			}
-		}.execute();
-		
-		
-		//TODO this is a big performance hit:
 		//if (day instanceof NormalDay) ((NormalDay)day).fillPeriods(Curriculum.getCurrentCurriculum(getActivity()));
-		String dayName = "";
-		if (day instanceof Holiday) {
-			dayName = ((Holiday)day).getName();
-		}
-		TextView dayNameText = ((TextView)v.findViewById(R.id.text_day_title));
-		dayNameText.setTypeface(Typeface.SERIF, Typeface.BOLD);
-		if (dayName.equals("")) dayNameText.setVisibility(View.GONE);
-		else dayNameText.setText(dayName);
-		/*ArrayList<Period> pds = day.getPeriods();
+		ArrayList<Period> pds = day.getPeriods();
+		
 		LinearLayout pdsLayout = ((LinearLayout)v.findViewById(R.id.layout_periods));
 		periodViews = new ArrayList<ViewGroup>(pds.size());
+		FragmentTransaction transaction = DayFragment.this.getChildFragmentManager().beginTransaction();
 		for (int i=0; i<pds.size(); i++) {
 			final Period p = pds.get(i);
 			final View periodView = inflater.inflate(R.layout.view_period, null);
 			periodViews.add((ViewGroup)periodView);
+			((TextView)periodView.findViewById(R.id.text_periodnum)).setTypeface(Typeface.SERIF, Typeface.BOLD);
 			if (p.getNum() > 0) {
 				((TextView)periodView.findViewById(R.id.text_periodnum)).setText(getOrdinal(p.getNum()));
 			}
@@ -130,22 +81,36 @@ public class DayFragment extends Fragment {
 			int id=day.getDate().getDay()*100+i;
 			fl.setId(id);
 			((LinearLayout)periodView.findViewById(R.id.layout_right)).addView(fl);
+			PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), i);
+			transaction.add(id, f, day.getDate().toString() + ":" + i);
 			pdsLayout.addView(periodView);
 			pdsLayout.addView(new Separator(getActivity()));
 		}
+		transaction.commit();
 		TextView moreNotesLabel = new TextView(getActivity());
 		if (pds.size() > 0) moreNotesLabel.setText("Additional Notes");
 		else moreNotesLabel.setText("Notes");
 		pdsLayout.addView(moreNotesLabel);
 		PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), -1);
-		this.addOnFragmentVisibilityChangedListener(f);
-		this.getChildFragmentManager().beginTransaction().replace(R.id.layout_periods, f, day.getDate().toString() + ":-1").commit();*/
+		DayFragment.this.addOnFragmentVisibilityChangedListener(f);
+		DayFragment.this.getChildFragmentManager().beginTransaction().replace(R.id.layout_periods, f, day.getDate().toString() + ":-1").commit();
+		
+		String dayName = "";
+		if (day instanceof Holiday) {
+			dayName = ((Holiday)day).getName();
+		}
+		TextView dayNameText = ((TextView)v.findViewById(R.id.text_day_title));
+		dayNameText.setTypeface(Typeface.SERIF, Typeface.BOLD);
+		if (dayName.equals("")) dayNameText.setVisibility(View.GONE);
+		else dayNameText.setText(dayName);
+		this.getChildFragmentManager().beginTransaction().replace(R.id.layout_periods, f, day.getDate().toString() + ":-1").commit();
 		return v;
 	}
 	
 	public void onStart() {
 		super.onStart();
-		ArrayList<Period> pds = day.getPeriods();
+		Log.d("iHW-lc", "DayFragment onStart: " + date);
+		/*ArrayList<Period> pds = day.getPeriods();
 		//FragmentTransaction transaction = this.getChildFragmentManager().beginTransaction();
 		for (int i=0; i<pds.size(); i++) {
 			final Period p = pds.get(i);
@@ -153,26 +118,18 @@ public class DayFragment extends Fragment {
 			if (getView().findViewById(id) != null) {
 				PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), i);
 				transaction.add(id, f, day.getDate().toString() + ":" + i);
-			}*/
+			}*
 			int minsUntil = new Time().minutesUntil(p.getStartTime());
 			//TODO fix criteria for timer being shown:
 			if (day.getDate().equals(new Date()) && minsUntil < p.getStartTime().minutesUntil(p.getEndTime()) && minsUntil > 0) {
 				this.addCountdownTimerToPeriod(p, periodViews.get(i));
 			}
-		}
-		//transaction.commit();
-		
-		/*final ScrollView sv = (ScrollView)getView().findViewById(R.id.scroll_periods);
-		sv.post(new Runnable() { 
-			public void run() { 
-				sv.scrollTo(0, initScrollPos);
-			} 
-		});*/
-		
+		}*/
 	}
 	
 	public void onResume() {
 		super.onResume();
+		Log.d("iHW-lc", "DayFragment onResume: " + date);
 		final ScrollView sv = (ScrollView)getView().findViewById(R.id.scroll_periods);
 		sv.post(new Runnable() { 
 			public void run() { 
@@ -180,6 +137,42 @@ public class DayFragment extends Fragment {
 			} 
 		});
 	}
+	
+	/*****LIFECYCLE -- ENDINGS*****/
+	
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		Log.d("iHW-lc", "DayFragment onSaveInstanceState: " + date);
+		//outState.putString("dayJSON", day.saveDay().toString());
+		outState.putString("date", date.toString());
+		outState.putInt("scrollPos", ((ScrollView)getView().findViewById(R.id.scroll_periods)).getScrollY());
+	}
+	
+	public void onPause() {
+		super.onPause();
+		Log.d("iHW-lc", "DayFragment onPause: " + date);
+		initScrollPos = ((ScrollView)getView().findViewById(R.id.scroll_periods)).getScrollY();
+	}
+	
+	public void onStop() {
+		super.onStop();
+		Log.d("iHW-lc", "DayFragment onStop: " + date);
+		if (countdownTimer != null) countdownTimer.cancel();
+		countdownTimer = null;
+		if (countdownView != null) countdownView.setVisibility(View.GONE);
+		countdownView = null;
+	}
+	
+	public void onDestroyView() {
+		Log.d("iHW-lc", "DayFragment onDestroyView: " + date);
+		periodViews.clear();
+		periodViews = null;
+		countdownView = null;
+		((ViewGroup)this.getView()).removeAllViews();
+		super.onDestroyView();
+	}
+	
+	/*****OTHER METHODS*****/
 	
 	public void resetCountdownTimer() {
 		countdownTimer.cancel();
@@ -226,6 +219,7 @@ public class DayFragment extends Fragment {
 	}
 	
 	public void setUserVisibleHint(boolean isVisibleToUser) {
+		Log.d("iHW-lc", "DayFragment setUserVisibleHint: " + isVisibleToUser + "(" + date + ")");
 		if (this.getUserVisibleHint() != isVisibleToUser && (this.isVisible() || isVisibleToUser) && ofvcls != null) {
 			for (OnFragmentVisibilityChangedListener l : ofvcls) {
 				l.onFragmentVisibilityChanged(this, isVisibleToUser);
@@ -236,25 +230,6 @@ public class DayFragment extends Fragment {
 	
 	public void addOnFragmentVisibilityChangedListener(OnFragmentVisibilityChangedListener l) { ofvcls.add(l); }
 	public void removeOnFragmentVisibilityChangedListener(OnFragmentVisibilityChangedListener l) { ofvcls.remove(l); }
-	
-	public void onPause() {
-		super.onPause();
-		initScrollPos = ((ScrollView)getView().findViewById(R.id.scroll_periods)).getScrollY();
-	}
-	
-	public void onStop() {
-		super.onStop();
-		if (countdownTimer != null) countdownTimer.cancel();
-		countdownTimer = null;
-		if (countdownView != null) countdownView.setVisibility(View.GONE);
-		countdownView = null;
-	}
-	
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putString("dayJSON", day.saveDay().toString());
-		outState.putInt("scrollPos", ((ScrollView)getView().findViewById(R.id.scroll_periods)).getScrollY());
-	}
 	
 	private static String getOrdinal(int num) {
 		String suffix = "";

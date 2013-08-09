@@ -31,7 +31,7 @@ public class EditCourseActivity extends Activity {
 		this.setTitle("Add a Course");
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		numDays = Curriculum.getCurrentCampus(this);
+		numDays = Curriculum.getCurrentCampus();
 		numPeriods = numDays+3;
 		nameBox = (EditText)this.findViewById(R.id.courseNameBox);
 		periodBox = (EditText)this.findViewById(R.id.coursePeriodBox);
@@ -126,7 +126,7 @@ public class EditCourseActivity extends Activity {
 		existingCourseName = getIntent().getStringExtra("courseName");
 		if (existingCourseName != null) {
 			this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-			Course c = Curriculum.getCurrentCurriculum(this).getCourse(existingCourseName);
+			Course c = Curriculum.getCurrentCurriculum().getCourse(existingCourseName);
 			getActionBar().setTitle(c.getName());
 			nameBox.setText(c.getName());
 			periodBox.setText("" + c.getPeriod());
@@ -193,15 +193,17 @@ public class EditCourseActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.action_delete) {
 			if (existingCourseName != null) {
-				Curriculum c = Curriculum.getCurrentCurriculum(this);
+				Curriculum c = Curriculum.getCurrentCurriculum();
 				c.removeCourse(c.getCourse(existingCourseName));
-				Curriculum.save(this);
+				Curriculum.getCurrentCurriculum().saveCourses();
 			}
 			finish();
 			return true;
 		} else if (item.getItemId() == R.id.action_done || item.getItemId() == android.R.id.home) {
 			if (numMeetings>0 && !nameBox.getText().toString().equals("")) {
-				Curriculum c = Curriculum.getCurrentCurriculum(this);
+				//valid course information entered
+				Curriculum c = Curriculum.getCurrentCurriculum();
+				//generate meetings array
 				int[] meetings = new int[numDays];
 				for (int i=0; i<numDays; i++) {
 					if (!meetingBoxes[1][i].isChecked()) meetings[i] = Constants.MEETING_X_DAY;
@@ -210,13 +212,16 @@ public class EditCourseActivity extends Activity {
 					else meetings[i] = Constants.MEETING_SINGLE_PERIOD;
 				}
 				boolean success;
+				//create the course object and add it
 				Course toAdd = new Course(nameBox.getText().toString(), period, termSpinner.getSelectedItemPosition(), meetings);
 				if (existingCourseName != null) success = c.replaceCourse(existingCourseName, toAdd);
 				else success = c.addCourse(toAdd);
 				if (!success) {
+					//Curriculum rejected the course
 					Toast.makeText(this, "The course meetings you selected conflict with one or more of your other courses. Please change them and try again.", Toast.LENGTH_LONG).show();
 				} else {
-					Curriculum.save(this);
+					//Curriculum accepted the course
+					Curriculum.getCurrentCurriculum().saveCourses();
 					if (item.getItemId() == android.R.id.home) {
 						Toast.makeText(this, "Course saved.", Toast.LENGTH_SHORT).show();
 					}

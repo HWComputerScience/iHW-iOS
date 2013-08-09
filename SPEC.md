@@ -98,7 +98,7 @@
         “trimesterEndDates”: [...],
         “normalDay”: {...},
         “normalMonday”: {...},
-        “specialDays”: [...]
+        “specialDays”: {...} //maps dates to day objects
     }
 
 -   Year JSON (badly named): contains course information and other general information specific to the user
@@ -113,7 +113,13 @@
         “courses”: [...]
     }
 
--   Cycle JSON: contains notes for a specific cycle (cycle number is 0 for notes not in a cycle)
+-   Week JSON: contains notes for a specific week
+
+    -   Week numbers are as follows:
+
+        -   The partial week between July 1 and the first Sunday after July 1 has week number 0.
+
+        -   On and after the first Sunday after July 1, the week number is: (number of days since the first Sunday after July 1 / 7)+1.
 
     -   Format:
 
@@ -121,7 +127,7 @@
 
     {
         “number”: 1,
-        “notes”: [...]
+        “notes”: {...} //maps "date.period" to arrays of notes
     }
 
 -   Date Format for JSON: `“M/D/YYYY”` e.g. `“9/16/2012”`
@@ -147,9 +153,8 @@
         “text”: “Hello, World!”,
         “isChecked”: false,
         “isImportant”: false,
-        “isToDo”: false,
-        “period”: 1,
-        “date”: “9/4/2012”
+        “isToDo”: false
+        "period": 1
     }
 
 -   Normal Day (with break) Format for JSON (day number 0 for no day number):

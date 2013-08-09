@@ -7,38 +7,36 @@ import com.ihwapp.android.model.*;
 import android.graphics.*;
 import android.os.Bundle;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.*;
 import android.support.v4.app.*;
 import android.support.v4.view.*;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 
-public class ScheduleActivity extends FragmentActivity {
+public class ScheduleActivity extends FragmentActivity implements Curriculum.ModelLoadingListener{
 	private ViewPager pager;
 	private CustomFontPagerTitleStrip pts;
 	private DayPagerAdapter adapter;
 	private Date currentDate;
 	private int[] newDate;
+	private int lastIndex;
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("iHW-lc", "ScheduleActivity onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schedule);
-		this.setTitle("View Schedule!");
-		//this.getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#990000")));
-		if (savedInstanceState == null) Curriculum.reloadCurrentCurriculum(this);
-		else Curriculum.loadCurrentCurriculum(this);
-	}
-	
-	@SuppressWarnings("deprecation")
-	protected void onStart() {
-		super.onStart();
-		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
+		this.setTitle("View Schedule");
+		if (savedInstanceState != null) lastIndex = savedInstanceState.getInt("lastIndex");
+		else lastIndex = -1;
+		
+		
 		adapter = new DayPagerAdapter(this.getSupportFragmentManager());
-		int item = -1;
-		//item = Math.min(new Date(7,1,Curriculum.getCurrentYear(this)).getDaysUntil(new Date()), adapter.getCount()-1);
-		if (pager != null) item = pager.getCurrentItem();
 		pager = ((ViewPager)this.findViewById(R.id.scheduleViewPager));
 		pager.setSaveEnabled(false);
 		if (pager.findViewById("pager_title_strip".hashCode()) == null) {
@@ -55,20 +53,60 @@ public class ScheduleActivity extends FragmentActivity {
 		}
 		pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			public void onPageSelected(int position) {
-				currentDate = new Date(7,1,Curriculum.getCurrentYear(ScheduleActivity.this)).dateByAdding(position);
+				currentDate = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
+				lastIndex = position;
+				Curriculum.getCurrentCurriculum().clearUnnededItems(currentDate);
 			}
 			
 			public void onPageScrolled(int arg0, float arg1, int arg2) { }
 			public void onPageScrollStateChanged(int arg0) { }
 		});
+		pager.setOffscreenPageLimit(2);
+	}
+	
+	@SuppressWarnings("deprecation")
+	protected void onStart() {
+		super.onStart();
+		Log.d("iHW", "## onStart");
+		Log.d("iHW-lc", "ScheduleActivity onStart");
+		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
+				
+		if (Curriculum.getCurrentCurriculum().getFirstLoadedDate() != null) {
+			if (pager.getAdapter() == null) {
+				pager.setAdapter(adapter);
+				adapter.enabled = true;
+			}
+			if (lastIndex >= 0) pager.setCurrentItem(lastIndex, false);
+			else gotoDate(new Date());
+		} else {
+			Curriculum.getCurrentCurriculum().addModelLoadingListener(this);
+		}
+	}
+	
+	@Override
+	public void onProgressUpdate(int progress) {
+		if (progress==0) {
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setCancelable(false);
+			progressDialog.setMessage("Loading...");
+			progressDialog.show();
+		}
+	}
+
+	@Override
+	public void onFinishedLoading(Curriculum c) {
+		Log.d("iHW", "## onFinishedLoading");
+		Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
 		pager.setAdapter(adapter);
-		pager.setOffscreenPageLimit(1);
-		if (item>=0) pager.setCurrentItem(item, false);
+		adapter.enabled = true;
+		if (lastIndex >= 0) pager.setCurrentItem(lastIndex, false);
 		else gotoDate(new Date());
+		if (progressDialog != null) progressDialog.dismiss();
+		progressDialog = null;
 	}
 	
 	public void gotoDate(Date d) {
-		int position = new Date(7,1,Curriculum.getCurrentYear(ScheduleActivity.this)).getDaysUntil(d);
+		int position = new Date(7,1,Curriculum.getCurrentYear()).getDaysUntil(d);
 		if (position < 0) Toast.makeText(ScheduleActivity.this, "Please select a previous year (if available) from the \"choose years\" menu item to view that date.", Toast.LENGTH_LONG).show();
 		else if (position > adapter.getCount()) Toast.makeText(ScheduleActivity.this, "Please select a future year (if available) from the \"choose years\" menu item to view that date.", Toast.LENGTH_LONG).show();
 		position = Math.max(0, Math.min(adapter.getCount()-1, position));
@@ -111,6 +149,22 @@ public class ScheduleActivity extends FragmentActivity {
 		return false;
 	}
 	
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		Log.d("iHW-lc", "ScheduleActivity onSaveInstanceState");
+		outState.putInt("lastIndex", pager.getCurrentItem());
+	}
+	
+	public void onPause() {
+		super.onPause();
+		Log.d("iHW-lc", "ScheduleActivity onPause");
+	}
+	
+	public void onStop() {
+		super.onStop();
+		Log.d("iHW-lc", "ScheduleActivity onStop");
+	}
+	
 	public void onBackPressed() {
 		super.onBackPressed();
 		/*InputMethodManager ims = ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE));
@@ -118,31 +172,36 @@ public class ScheduleActivity extends FragmentActivity {
 	}
 	
 	private class DayPagerAdapter extends FragmentStatePagerAdapter {
+		public boolean enabled = false;
+		private int count = new Date(7,1,Curriculum.getCurrentYear())
+		.getDaysUntil(new Date(7,1,Curriculum.getCurrentYear()+1));
+		
 		public DayPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 		
 		public String getPageTitle(int position) {
-			Date date = new Date(7,1,Curriculum.getCurrentYear(ScheduleActivity.this)).dateByAdding(position);
+			if (!enabled) return "";
+			Date date = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
 			//Day d = Curriculum.getCurrentCurriculum(ScheduleActivity.this).getDay(date);
 			return date.getDayOfWeek(false).toUpperCase(Locale.getDefault());
 		}
 
 		@Override
 		public Fragment getItem(int position) {
-			Date date = new Date(7,1,Curriculum.getCurrentYear(ScheduleActivity.this)).dateByAdding(position);
-			Day d = Curriculum.getCurrentCurriculum(ScheduleActivity.this).getDay(date);
-			Fragment f = new DayFragment();
+			if (!enabled) return new Fragment();
+			Date date = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
+			DayFragment f = new DayFragment();
 			Bundle b = new Bundle();
-			b.putString("dayJSON", d.saveDay().toString());
+			Log.d("iHW", "asked for " + date.toString());
+			b.putString("date", date.toString());
 			f.setArguments(b);
 			return f;
 		}
 
 		@Override
 		public int getCount() {
-			return new Date(7,1,Curriculum.getCurrentYear(ScheduleActivity.this))
-					.getDaysUntil(new Date(7,1,Curriculum.getCurrentYear(ScheduleActivity.this)+1));
+			return count;
 		}
 	}
 }

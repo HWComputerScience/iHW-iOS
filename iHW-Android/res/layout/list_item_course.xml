@@ -16,6 +16,8 @@
         android:linksClickable="false"
         android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textIsSelectable="false"/>
+        android:textIsSelectable="false"
+        android:scrollHorizontally="true"
+		android:singleLine="true"/>
 
 </LinearLayout>

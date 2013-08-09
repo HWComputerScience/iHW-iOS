@@ -7,29 +7,45 @@
 //
 
 #import "IHWPeriod.h"
-#import "IHWNote.h"
+#import "IHWDate.h"
+
 
 @implementation IHWPeriod
 
--(void)addNote:(IHWNote *)note {
-    [self.notes addObject:note];
-}
--(void)removeNoteByValue:(NSString *)value {
-    for (int index = 0; index < self.notes.count; index++) {
-        if ([((IHWNote *)[self.notes objectAtIndex:index]).value isEqualToString:value]) {
-            [self.notes removeObjectAtIndex:index];
-            return;
-        }
+- (id)initWithName:(NSString *)name date:(IHWDate *)date start:(IHWTime *)start end:(IHWTime *)end number:(int)periodNum
+{
+    self = [super init];
+    if (self) {
+        self.name = name;
+        self.date = date;
+        self.startTime = start;
+        self.endTime = end;
+        self.periodNum = periodNum;
     }
+    return self;
 }
 
--(void)replaceNoteWithValue:(NSString *)value withNote:(IHWNote *)newNote {
-    for (int index = 0; index < self.notes.count; index++) {
-        if ([((IHWNote *)[self.notes objectAtIndex:index]).value isEqualToString:value]) {
-            [self.notes replaceObjectAtIndex:index withObject:newNote];
-            return;
-        }
+- (id)initWithJSONDictionary:(NSDictionary *)dictionary
+{
+    self = [super init];
+    if (self) {
+        self.name = [dictionary objectForKey:@"name"];
+        self.date = [[IHWDate alloc] initFromString:[dictionary objectForKey:@"date"]];
+        self.startTime = [[IHWTime alloc] initFromString:[dictionary objectForKey:@"startTime"]];
+        self.endTime = [[IHWTime alloc] initFromString:[dictionary objectForKey:@"endTime"]];
+        self.periodNum = [[dictionary objectForKey:@"periodNum"] intValue];
     }
+    return self;
+}
+
+- (NSDictionary *)savePeriod {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:self.name forKey:@"name"];
+    [dict setObject:self.date.description forKey:@"date"];
+    [dict setObject:self.startTime.description forKey:@"startTime"];
+    [dict setObject:self.endTime.description forKey:@"endTime"];
+    [dict setObject:[NSNumber numberWithInt:self.periodNum] forKey:@"periodNum"];
+    return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 @end

@@ -10,4 +10,10 @@
 
 @interface IHWHoliday : IHWDay
 
+@property (nonatomic, strong) NSString *name;
+
+- (id)initWithName:(NSString *)name onDate:(IHWDate *)date;
+- (id)initWithJSONDictionary:(NSDictionary *)dictionary;
+- (NSDictionary *)saveDay;
+
 @end

@@ -36,8 +36,9 @@ public class Time /*implements org.json.JSONString*/ {
 	
 	public Time(String json) {
 		String[] arr = json.split(":");
-		this.setHour(Integer.parseInt(arr[0]));
-		this.setMinute(Integer.parseInt(arr[1]));
+		this.hour = Integer.parseInt(arr[0]);
+		this.minute = Integer.parseInt(arr[1]);
+		this.second = 0;
 	}
 
 	/**
@@ -56,7 +57,7 @@ public class Time /*implements org.json.JSONString*/ {
 	
 	/**
 	 * Sets the hour (0-23) of this time.
-	 */
+	 *
 	public void setHour(int hour) { 
 		if (hour<0 || hour>23) throw new IllegalArgumentException();
 		this.hour = hour;
@@ -64,13 +65,13 @@ public class Time /*implements org.json.JSONString*/ {
 	
 	/**
 	 * Sets the hour (1-12) of this time.
-	 */
+	 *
 	public void setHour(int hour, boolean pm) {
 		if (hour<0 || hour>12) throw new IllegalArgumentException();
 		if (pm && hour != 12) this.hour = hour+12;
 		else if (!pm && hour == 12) this.hour = hour-12;
 		else this.hour = hour;
-	}
+	}*/
 	
 	/**
 	 * Returns whether or not this time represents a PM time.
@@ -84,11 +85,11 @@ public class Time /*implements org.json.JSONString*/ {
 	
 	/**
 	 * Sets the minute (0-59) of this time.
-	 */
+	 *
 	public void setMinute(int minute) {
 		if (minute<0 || minute>59) throw new IllegalArgumentException();
 		this.minute = minute;
-	}
+	}*/
 	
 	/**
 	 * Returns the second of this time.
@@ -99,11 +100,11 @@ public class Time /*implements org.json.JSONString*/ {
 	
 	/**
 	 * Sets the second (0-59) of this time.
-	 */
+	 *
 	public void setSecond(int second) {
 		if (second<0 || second>59) throw new IllegalArgumentException();
 		this.second = second;
-	}
+	}*/
 	
 	/**
 	 * Creates and returns a new Time by adding the

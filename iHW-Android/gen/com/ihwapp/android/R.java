@@ -16,6 +16,7 @@ public final class R {
     public static final class color {
         public static final int dark_red=0x7f040000;
         public static final int dark_tan=0x7f040002;
+        public static final int light_gray=0x7f040006;
         public static final int lighter_red=0x7f040001;
         public static final int lighter_tan=0x7f040003;
         public static final int orange=0x7f040004;
@@ -39,6 +40,7 @@ public final class R {
         public static final int ic_action_edit=0x7f020006;
         public static final int ic_content_new=0x7f020007;
         public static final int ic_launcher=0x7f020008;
+        public static final int light_gray=0x7f020014;
         public static final int lighter_red=0x7f02000f;
         public static final int lighter_tan=0x7f020011;
         public static final int list_item_selector=0x7f020009;
@@ -51,19 +53,19 @@ public final class R {
     }
     public static final class id {
         public static final int RotatedTextView1=0x7f0a000a;
-        public static final int action_add=0x7f0a0023;
-        public static final int action_delete=0x7f0a0022;
-        public static final int action_done=0x7f0a0024;
-        public static final int action_edit=0x7f0a0021;
-        public static final int action_edit_courses=0x7f0a0029;
-        public static final int action_goto_date=0x7f0a0028;
-        public static final int action_goto_today=0x7f0a0027;
+        public static final int action_add=0x7f0a0024;
+        public static final int action_delete=0x7f0a0023;
+        public static final int action_done=0x7f0a0025;
+        public static final int action_edit=0x7f0a0022;
+        public static final int action_edit_courses=0x7f0a002a;
+        public static final int action_goto_date=0x7f0a0029;
+        public static final int action_goto_today=0x7f0a0028;
         public static final int button_add_manually=0x7f0a0012;
         public static final int button_campus_ms=0x7f0a000d;
         public static final int button_campus_us=0x7f0a000e;
         public static final int button_download=0x7f0a0011;
-        public static final int button_note_settings=0x7f0a001a;
-        public static final int checkbox=0x7f0a0018;
+        public static final int button_note_settings=0x7f0a001b;
+        public static final int checkbox=0x7f0a0019;
         public static final int courseMeetingsContainer=0x7f0a0009;
         public static final int courseMeetingsLayout=0x7f0a000b;
         public static final int courseNameBox=0x7f0a0006;
@@ -73,24 +75,25 @@ public final class R {
         public static final int empty=0x7f0a0002;
         public static final int layout_choose_campus=0x7f0a000c;
         public static final int layout_get_courses=0x7f0a000f;
-        public static final int layout_left=0x7f0a001b;
+        public static final int layout_left=0x7f0a001c;
         public static final int layout_notes=0x7f0a0001;
         public static final int layout_periods=0x7f0a0017;
-        public static final int layout_right=0x7f0a001e;
-        public static final int option_is_important=0x7f0a0026;
-        public static final int option_is_todo=0x7f0a0025;
+        public static final int layout_right=0x7f0a001f;
+        public static final int option_is_important=0x7f0a0027;
+        public static final int option_is_todo=0x7f0a0026;
         public static final int progressBar1=0x7f0a0004;
         public static final int scheduleViewPager=0x7f0a0013;
         public static final int scroll_periods=0x7f0a0005;
         public static final int separator1=0x7f0a0015;
-        public static final int text_countdown=0x7f0a0020;
+        public static final int text_bullet=0x7f0a0018;
+        public static final int text_countdown=0x7f0a0021;
         public static final int text_course_name=0x7f0a0000;
         public static final int text_day_title=0x7f0a0016;
         public static final int text_endtime=0x7f0a0010;
-        public static final int text_note=0x7f0a0019;
-        public static final int text_periodnum=0x7f0a001d;
-        public static final int text_starttime=0x7f0a001c;
-        public static final int text_title=0x7f0a001f;
+        public static final int text_note=0x7f0a001a;
+        public static final int text_periodnum=0x7f0a001e;
+        public static final int text_starttime=0x7f0a001d;
+        public static final int text_title=0x7f0a0020;
         public static final int webView_download=0x7f0a0003;
     }
     public static final class layout {
@@ -146,6 +149,7 @@ public final class R {
         public static final int prompt_note_text=0x7f06001e;
         public static final int prompt_select_periods=0x7f060015;
         public static final int prompt_welcome=0x7f060003;
+        public static final int text_bullet=0x7f060024;
         public static final int title_activity_download_schedule=0x7f060009;
         public static final int title_activity_edit_courses=0x7f060005;
         public static final int title_activity_guided_edit_courses=0x7f06000a;

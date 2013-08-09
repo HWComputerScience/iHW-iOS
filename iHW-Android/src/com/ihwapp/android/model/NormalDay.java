@@ -71,12 +71,14 @@ public class NormalDay extends Day {
 	}
 	
 	public void fillPeriods(Curriculum c) {
+		Course[] courseList = c.getCourseList(date);
 		if (hasBreak) {
 			periods = new ArrayList<Period>(periodsBeforeBreak+periodsAfterBreak+1);
 			Time nextStart = new Time(8,0);
 			//add periods before break
 			for (int num=1; num<=periodsBeforeBreak; num++) {
-				Course course = c.getCourse(date, num);
+				//Course course = c.getCourse(date, num);
+				Course course = courseList[num];
 				if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());
@@ -86,7 +88,8 @@ public class NormalDay extends Day {
 			nextStart = nextStart.timeByAdding(0, breakLength+c.getPassingPeriodLength());
 			//add periods after break
 			for (int num=periodsBeforeBreak+1; num<=periodsBeforeBreak+periodsAfterBreak; num++) {
-				Course course = c.getCourse(date, num);
+				//Course course = c.getCourse(date, num);
+				Course course = courseList[num];
 				if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());
@@ -96,7 +99,8 @@ public class NormalDay extends Day {
 			Time nextStart = new Time(8,0);
 			//add all periods
 			for (int num=1; num<=numPeriods; num++) {
-				Course course = c.getCourse(date, num);
+				//Course course = c.getCourse(date, num);
+				Course course = courseList[num];
 				if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, periodLength), num));
 				nextStart = nextStart.timeByAdding(0, periodLength+c.getPassingPeriodLength());

@@ -1,387 +1,582 @@
 package com.ihwapp.android.model;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
-import android.app.AlertDialog;
-import android.content.*;
-import android.net.*;
-import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.ihwapp.android.Constants;
-import com.ihwapp.android.LaunchActivity;
-import com.ihwapp.android.R;
 
-import org.json.*;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
 
-/**
- * The Curriculum class is the top-level class in the model.
- * It represents one school year of classes and notes.
- */
 public class Curriculum {
-	//TODO base the curriculum on cycles instead of years for the notes.
 	private static Curriculum currentCurriculum;
+	public static Context ctx;
 	
-	public static Curriculum getCurrentCurriculum(Context ctx) {
-		return getCurriculum(ctx, getCurrentCampus(ctx), getCurrentYear(ctx));
-	}
-	
-	public static boolean loadCurrentCurriculum(Context ctx) {
-		return loadCurriculum(ctx, getCurrentCampus(ctx), getCurrentYear(ctx));
-	}
-	
-	public static boolean reloadCurrentCurriculum(Context ctx) {
-		return downloadCurriculumJSON(ctx, getCurrentCampus(ctx), getCurrentYear(ctx), false);
+	public static Curriculum getCurrentCurriculum() {
+		return getCurriculum(getCurrentCampus(), getCurrentYear());
 	}
 	
 	/*
 	 * Returns the curriculum specified by campus and year. If that curriculum is not ready yet,
 	 * attempts to load it immediately. If it cannot be loaded immediately, returns null.
 	 */
-	public static Curriculum getCurriculum(Context ctx, int campus, int year) {
-		if (loadCurriculum(ctx, campus, year)) return currentCurriculum;
-		else return null;
+	public static Curriculum getCurriculum(int campus, int year) {
+		if (currentCurriculum == null || currentCurriculum.getCampus() != campus || currentCurriculum.getYear() != year)
+			currentCurriculum = new Curriculum(campus, year, new Date());
+		return currentCurriculum;
 	}
 	
-	/*
-	 * Loads the curriculum specified by campus and year. If that curriculum is already loaded, does nothing.
-	 * Returns whether, after the calling of this method, the curriculum is ready to use.
-	 * (The curriculum would not be ready to use if a download from the server is necessary first)
-	 */
-	public static boolean loadCurriculum(final Context ctx, final int campus, final int year) {
-		if (currentCurriculum != null 
-				&& currentCurriculum.getYear() == year
-				&& currentCurriculum.getCampus() == campus) return true;
-		String campusChar = null;
-		if (campus==Constants.CAMPUS_MIDDLE) campusChar="m";
-		else if (campus==Constants.CAMPUS_UPPER) campusChar = "u";
-		SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
-		String curriculumJSON =  prefs.getString("curriculumJSON", "");
-		if (curriculumJSON == "") {
-			if (!downloadCurriculumJSON(ctx, campus, year, true)) {
-				new AlertDialog.Builder(ctx, R.style.PopupTheme).setMessage("iHW requires internet access when running for the first time. Please try again later when you are connected to a Wi-Fi or cellular network.")
-				.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						Intent i = new Intent(ctx, LaunchActivity.class);
-						ctx.startActivity(i);
-					}
-				})
-				.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						loadCurriculum(ctx, campus, year);
-					}
-				}).show();
-			}
-			return false;
-		} else {
-			String yearJSON = prefs.getString("yearJSON", generateBlankYearJSON(campus, year));
-			//Log.d("iHW", yearJSON);
-			currentCurriculum = new Curriculum(curriculumJSON, yearJSON);
-			return true;
-		}
-		
-	}
-	
-	/*
-	 * Downloads an updated current curriculum JSON from the server. Returns false if there is no Internet connection.
-	 */
-	public static boolean downloadCurriculumJSON(final Context ctx, final int campus, final int year, boolean isImportant) {
-		ConnectivityManager connMgr = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-	    if (networkInfo == null || !networkInfo.isConnected()) {
-	    	return false;
-	    }
-		String campusChar = null;
-		if (campus==Constants.CAMPUS_MIDDLE) campusChar="m";
-		else if (campus==Constants.CAMPUS_UPPER) campusChar = "u";
-		final String campusCharFinal = campusChar;
-		String url = "http://www.burnsfamily.info/curriculum" + year + campusChar + ".hws";
-		URLDownloader downloader = new URLDownloader(ctx, !isImportant);
-		downloader.setOnCompleteListener(new URLDownloader.OnCompleteListener() {
-			public void onDownloadComplete(String result) {
-				SharedPreferences prefs = ctx.getSharedPreferences(year + campusCharFinal, Context.MODE_PRIVATE);
-				prefs.edit().putString("curriculumJSON", result).commit();
-				loadCurriculum(ctx, campus, year);
-			}
-		});
-		if (isImportant) downloader.setOnErrorListener(new URLDownloader.OnErrorListener() {
-			public void onDownloadError(Exception e) {
-				Log.e("iHW", "Error downloading from URL: " + e.getClass() + " / " + e.getMessage());
-				if (e instanceof java.io.FileNotFoundException) {
-					new AlertDialog.Builder(ctx, R.style.PopupTheme).setMessage("Sorry, the school schedule for the campus and year you selected is not available.")
-					.setPositiveButton("Back", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							Intent i = new Intent(ctx, LaunchActivity.class);
-							ctx.startActivity(i);
-						}
-					}).show();
-				}
-			}
-		});
-		downloader.execute(url);
-		return true;
-	}
-	
-	public static int getCurrentYear(Context ctx) {
+	public static int getCurrentYear() {
 		SharedPreferences prefs = ctx.getSharedPreferences("iHW", Context.MODE_PRIVATE);
 		return prefs.getInt("year", 0);
 	}
 	
-	public static int getCurrentCampus(Context ctx) {
+	public static int getCurrentCampus() {
 		SharedPreferences prefs = ctx.getSharedPreferences("iHW", Context.MODE_PRIVATE);
 		return prefs.getInt("campus", 0);
 	}
 	
-	public static void setCurrentYear(Context ctx, int year) {
+	public static void setCurrentYear(int year) {
 		ctx.getSharedPreferences("iHW", Context.MODE_PRIVATE).edit().putInt("year", year).commit();
 	}
 	
-	public static void setCurrentCampus(Context ctx, int campus) {
+	public static void setCurrentCampus(int campus) {
 		ctx.getSharedPreferences("iHW", Context.MODE_PRIVATE).edit().putInt("campus", campus).commit();
 	}
 	
-	public static void save(Context ctx) {
-		String campusChar = null;
-		int campus = getCurrentCampus(ctx);
-		int year = getCurrentYear(ctx);
-		if (campus==Constants.CAMPUS_MIDDLE) campusChar="m";
-		else if (campus==Constants.CAMPUS_UPPER) campusChar = "u";
-		SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
-		prefs.edit().putString("yearJSON", currentCurriculum.saveYear()).commit();
-	}
-	
-	
-	public static void deleteCurrentYear(Context ctx) {
-		deleteYear(ctx, getCurrentCampus(ctx), getCurrentYear(ctx));
-	}
-	
-	public static void deleteYear(Context ctx, int campus, int year) {
-		String campusChar = null;
-		if (campus==Constants.CAMPUS_MIDDLE) campusChar="m";
-		else if (campus==Constants.CAMPUS_UPPER) campusChar = "u";
-		SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
-		prefs.edit().remove("yearJSON").commit();
-	}
-	
-	public static boolean isFirstRun(Context ctx) {
-		if (getCurrentYear(ctx) == 0 || getCurrentCampus(ctx) == 0) return true;
-		String campusChar = null;
-		int campus = getCurrentCampus(ctx);
-		int year = getCurrentYear(ctx);
-		if (campus==Constants.CAMPUS_MIDDLE) campusChar="m";
-		else if (campus==Constants.CAMPUS_UPPER) campusChar = "u";
-		SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
-		if (!prefs.contains("yearJSON") || !prefs.contains("curriculumJSON")) return true;
-		if (prefs.getString("yearJSON", "").equals(generateBlankYearJSON(campus, year))) return true;
+	public static boolean isFirstRun() {
+		if (getCurrentYear() == 0 || getCurrentCampus() == 0) return true;
+		else try {
+			String campusChar = getCampusChar(getCurrentCampus());
+			SharedPreferences prefs = ctx.getSharedPreferences(getCurrentYear() + campusChar, Context.MODE_PRIVATE);
+			String yearJSON = prefs.getString("yearJSON", "");
+			if (yearJSON.equals("")) return true;
+			return new JSONObject(yearJSON).getJSONArray("courses").length() == 0;
+		} catch (JSONException e) {}
 		return false;
 	}
 	
-	/**
-	 * Generates a blank, new year JSON string with no courses or notes.
-	 */
+	public static String getCampusChar(int campus) {
+		String campusChar = null;
+		if (campus==Constants.CAMPUS_MIDDLE) campusChar="m";
+		else if (campus==Constants.CAMPUS_UPPER) campusChar = "u";
+		return campusChar;
+	}
+	
+	public static int getWeekNumber(int year, Date d) {
+		Date firstDate = new Date(7,1,year).dateOfNextSunday();
+		if (d.compareTo(firstDate) < 0 && d.compareTo(new Date(7,1,year)) >= 0) return 0;
+		else if (d.compareTo(new Date(7,1,year+1)) < 0) return (firstDate.getDaysUntil(d)/7)+1;
+		else return -1;
+	}
+	
+	public static Date getWeekStart(int year, Date d) {
+		Date weekStart = d.dateOfPreviousSunday();
+		Date july1 = new Date(7,1,year);
+		if (weekStart.compareTo(july1) < 0) weekStart = july1;
+		return weekStart;
+	}
+	
 	public static String generateBlankYearJSON(int campus, int year) {
 		try {
 			JSONObject obj = new JSONObject();
 			obj.put("year", year);
 			obj.put("campus", campus);
 			obj.put("courses", new JSONArray());
-			obj.put("notes", new JSONArray());
 			return obj.toString(4);
 		} catch (JSONException e) {return null;}
 	}
 	
+	public static String generateBlankWeekJSON(Date startingDate) {
+		try {
+			JSONObject obj = new JSONObject();
+			obj.put("startingDate", startingDate.toString());
+			obj.put("notes", new JSONObject());
+			return obj.toString(4);
+		} catch (JSONException e) {return null;}
+	}
 	
+	/**
+	 * Returns true when two classes scheduled for terms a and b can coexist regardless
+	 * of whether their periods conflict or not.
+	 */
+	private static boolean termsCompatible(int a, int b) {
+		if (a==b) return false;
+		if (a==Constants.TERM_FULL_YEAR || b==Constants.TERM_FULL_YEAR) return false;
+		if (a==Constants.TERM_FIRST_SEMESTER) {
+			if (b==Constants.TERM_FIRST_TRIMESTER || b==Constants.TERM_SECOND_TRIMESTER) return false;
+		} else if (a==Constants.TERM_SECOND_SEMESTER) {
+			if (b==Constants.TERM_SECOND_TRIMESTER || b==Constants.TERM_THIRD_TRIMESTER) return false;
+		}
+		if (b==Constants.TERM_FIRST_SEMESTER) {
+			if (a==Constants.TERM_FIRST_TRIMESTER || a==Constants.TERM_SECOND_TRIMESTER) return false;
+		} else if (b==Constants.TERM_SECOND_SEMESTER) {
+			if (a==Constants.TERM_SECOND_TRIMESTER || a==Constants.TERM_THIRD_TRIMESTER) return false;
+		}
+		return true;
+	}
 	
+	public static void save() {
+		Log.d("iHW", "SAVE static method was called -- this is not correct!");
+	}
 	
+	/********************************END STATIC STUFF***********************************/
 	
+	/*******************************BEGIN INSTANCE STUFF********************************/
 	
 	private int campus;
-	private Set<Course> courses;
+	private HashSet<Course> courses;
 	private JSONObject normalDayTemplate;
 	private JSONObject normalMondayTemplate;
+	private SortedMap<Date, JSONObject> specialDayTemplates;
 	private int passingPeriodLength;
-	private Map<Date, Day> specialDays;
-	private Map<Date, Integer> dayNumbers;
-	private TreeMap<Date, TreeMap<Integer, List<Note>>> notes; //Integer represents period number
+	private SortedMap<Date, JSONObject> loadedWeeks; //contains week JSON by first day
+	private SortedMap<Date, Day> loadedDays; //will contain days from loadedEndDates[0] to loadedEndDates[1], inclusive
+	private SortedMap<Date, Integer> dayNumbers;
 	private int year; //2012 for the 2012-2013 school year, for example
 	private Date[] semesterEndDates; //3 values: the first day of the first semester and the last days of both semesters
 	private Date[] trimesterEndDates; //4 values: the first day of the first trimester and the last days of all trimesters
+	private int loadingProgress;
+	private boolean currentlyCaching = false;
+	private HashSet<ModelLoadingListener> mlls;
 	
-	/**
-	 * Loads a curriculum object from two JSON strings (which are in two different files).
-	 * 
-	 * The yearJSON string describes all of the unusual days in the year, and
-	 * anything else that is not specific to this particular user.
-	 * 
-	 * The curriculumJSON stores courses, notes, and anything else that is specific
-	 * to the user and his/her schedule.
-	 */
-	public Curriculum(String curriculumJSON, String yearJSON) {
-		try {
-			JSONObject curriculumObj = new JSONObject(curriculumJSON);
-			JSONObject yearObj = new JSONObject(yearJSON);
+	public Curriculum(int campus, int year, Date startingDate) {
+		this.campus = campus;
+		this.year = year;
+		loadingProgress = -1;
+		mlls = new HashSet<ModelLoadingListener>(5);
+		if (startingDate.compareTo(new Date(7,1,year)) < 0) startingDate = new Date(7,1,year);
+		else if (startingDate.compareTo(new Date(7,1,year+1)) >= 0) startingDate = new Date(7,1,year+1).dateByAdding(-1);
+		loadEverything(startingDate);
+	}
+
+	public int getCampus() { return campus; }
+	public int getYear() { return year; }
+	public int getPassingPeriodLength() { return passingPeriodLength; }
+	
+	/*********************************BEGIN LOADING STUFF**************************************/
+	
+	public void addModelLoadingListener(ModelLoadingListener ofll) { mlls.add(ofll); }
+	public void removeOnFinishedLoadingListener(ModelLoadingListener ofll) { mlls.remove(ofll); }
+	
+	public void loadEverything(final Date startingDate) {
+		if (loadingProgress > 0) {
+			Log.d("iHW", "Tried to load everything but loading has already started.");
+			return;
+		}
+		String campusChar = getCampusChar(this.campus);
+		SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
+		final String scheduleJSON =  prefs.getString("scheduleJSON", "");
+		
+		final AsyncTask<Void, Integer, Void> phase2 = new AsyncTask<Void, Integer, Void>() {
+			protected Void doInBackground(Void... params) {
+				Log.d("iHW", "starting phase 2");
+				boolean success = loadThisWeekAndDay(startingDate);
+				if (!success) { Log.e("iHW", "ERROR loading first week and day"); return null; }
+				this.publishProgress(4);
+				cacheNeededWeeksDays(startingDate);
+				this.publishProgress(5);
+				Log.d("iHW", "finished phase 2");
+				return null;
+			}
 			
-			//load year, semester/trimester end dates, etc.
-			year = curriculumObj.getInt("year");
-			campus = curriculumObj.getInt("campus");
-			JSONArray semestersArr = curriculumObj.getJSONArray("semesterEndDates");
+			protected void onProgressUpdate(Integer... values) {
+				loadingProgress++;
+				for (ModelLoadingListener mll : mlls) {
+					mll.onProgressUpdate(loadingProgress);
+					if (values[0] == 4) mll.onFinishedLoading(Curriculum.this);
+				}
+			}
+		};
+		
+		final AsyncTask<Void, Integer, Void> phase1a = new AsyncTask<Void,Integer,Void>() {
+			
+			protected Void doInBackground(Void... params) {
+				this.publishProgress(0);
+				Log.d("iHW", "starting phase 1a");
+				boolean success = downloadParseScheduleJSON(scheduleJSON.equals(""));
+				if (!success) { Log.e("iHW", "FATAL ERROR downloading schedule JSON"); return null; }
+				this.publishProgress(1);
+				success = loadDayNumbers();
+				if (!success) { Log.e("iHW", "ERROR loading day numbers"); return null; }
+				this.publishProgress(2);
+				Log.d("iHW", "finished phase 1a");
+				return null;
+			}
+			
+			protected void onProgressUpdate(Integer... values) {
+				loadingProgress++;
+				for (ModelLoadingListener mll : mlls) {
+					mll.onProgressUpdate(loadingProgress);
+				}
+				if (values[0] == 2 && loadingProgress == 3) {
+					phase2.execute();
+				}
+			}
+		};
+		
+		final AsyncTask<Void, Integer, Void> phase1b = new AsyncTask<Void, Integer, Void>() {
+			protected Void doInBackground(Void... params) {
+				Log.d("iHW", "starting phase 1b");
+				boolean success = loadCourses();
+				if (!success) { Log.e("iHW", "ERROR loading courses"); return null; }
+				this.publishProgress(3);
+				Log.d("iHW", "finished phase 1b");
+				return null;
+			}
+			
+			protected void onProgressUpdate(Integer... values) {
+				loadingProgress++;
+				for (ModelLoadingListener mll : mlls) {
+					mll.onProgressUpdate(loadingProgress);
+				}
+				if (loadingProgress == 3) {
+					phase2.execute();
+				}
+			}
+		};
+		
+		phase1a.execute();
+		phase1b.execute();
+	}
+	
+	public Date getFirstLoadedDate() {
+		if (loadedDays == null || loadedDays.size() == 0) return null;
+		return loadedDays.firstKey();
+	}
+	
+	public Date getLastLoadedDate() {
+		if (loadedDays == null || loadedDays.size() == 0) return null;
+		return loadedDays.lastKey();
+	}
+	
+	public boolean isLoaded(Date d) {
+		return loadedDays != null && loadedDays.containsKey(d) && loadedWeeks != null && loadedWeeks.containsKey(getWeekStart(year, d));
+	}
+	
+	private boolean downloadParseScheduleJSON(boolean important) {
+		Log.d("iHW", "Starting schedule JSON download (if able)");
+		ConnectivityManager connMgr = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+	    if (networkInfo == null || !networkInfo.isConnected()) { //no Internet connection
+	    	return !important; //false if no previous version is available, true if there is one
+	    } else { //Internet is available; should update
+	    	DownloadTask downloadTask = new DownloadTask();
+	    	if (important) {
+	    		Log.d("iHW", "downloading on MAIN THREAD");
+	    		String result = downloadTask.doInBackground();
+	    		downloadTask.onPostExecute(result);
+	    		return (!result.equals(""));
+	    	} else {
+	    		Log.d("iHW", "downloading in BACKGROUND");
+	    		parseScheduleJSON();
+	    		downloadTask.execute();
+	    		return true;
+	    	}
+	    }
+	}
+	
+	private class DownloadTask extends AsyncTask<Void, Void, String> {
+		public String doInBackground(Void... params) {
+			Log.d("iHW", "internet is available - will download schedule JSON");
+	    	HttpURLConnection urlConnection = null;
+			String result = null;
+			String campusChar = getCampusChar(campus);
+			String urlStr = "http://www.burnsfamily.info/curriculum" + year + campusChar + ".hws";
+			try {
+				URL url = new URL(urlStr);
+				urlConnection = (HttpURLConnection) url.openConnection();
+				InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+				InputStreamReader ir = new InputStreamReader(in);
+				StringBuilder sb = new StringBuilder();
+				BufferedReader br = new BufferedReader(ir);
+				String line = br.readLine();
+				while(line != null) {
+				    sb.append(line);
+				    line = br.readLine();
+				}
+				result = sb.toString();
+			} catch (Exception e) {
+				return ""; //false if no previous version is available, true if there is one
+			} finally {
+				if (urlConnection != null) urlConnection.disconnect();
+			}
+			return result;
+		}
+		
+		public void onPostExecute(String result) {
+			if (result != null && !result.equals("")) {
+				String campusChar = getCampusChar(campus);
+				Log.d("iHW", "downloaded schedule JSON successfully");
+				SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
+				prefs.edit().putString("scheduleJSON", result).commit();
+				boolean success = parseScheduleJSON();
+				if (!success) Log.e("iHW", "ERROR parsing schedule JSON");
+			}
+		}
+	}
+	
+	private boolean parseScheduleJSON() {
+		try {
+			Log.d("iHW", "Starting to parse schedule JSON");
+			String campusChar = getCampusChar(this.campus);
+			SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
+			String scheduleJSON =  prefs.getString("scheduleJSON", "");
+			if (scheduleJSON.equals("")) return false;
+			JSONObject scheduleObj = new JSONObject(scheduleJSON);
+			
+			//load semester/trimester end dates, etc.
+			JSONArray semestersArr = scheduleObj.getJSONArray("semesterEndDates");
 			semesterEndDates = new Date[semestersArr.length()];
 			for (int i=0; i<semestersArr.length(); i++) {
 				semesterEndDates[i] = new Date(semestersArr.getString(i));
 			}
-			JSONArray trimestersArr = curriculumObj.getJSONArray("trimesterEndDates");
+			JSONArray trimestersArr = scheduleObj.getJSONArray("trimesterEndDates");
 			trimesterEndDates = new Date[trimestersArr.length()];
 			for (int i=0; i<trimestersArr.length(); i++) {
 				trimesterEndDates[i] = new Date(trimestersArr.getString(i));
 			}
-			normalDayTemplate = curriculumObj.getJSONObject("normalDay");
-			normalMondayTemplate = curriculumObj.getJSONObject("normalMonday");
-			passingPeriodLength = curriculumObj.getInt("passingPeriodLength");
+			normalDayTemplate = scheduleObj.getJSONObject("normalDay");
+			normalMondayTemplate = scheduleObj.getJSONObject("normalMonday");
+			passingPeriodLength = scheduleObj.getInt("passingPeriodLength");
 			
-			//initialize and store courses in set
+			JSONObject specialDaysObj = scheduleObj.getJSONObject("specialDays");
+			SortedMap<Date, JSONObject> sdts = Collections.synchronizedSortedMap(new TreeMap<Date, JSONObject>());
+			Iterator<?> iter = specialDaysObj.keys();
+			while (iter.hasNext()) {
+				String key = (String)iter.next();
+				Date d = new Date(key);
+				sdts.put(d, specialDaysObj.getJSONObject(key));
+			}
+			specialDayTemplates = sdts;
+			Log.d("iHW", "finished parsing schedule JSON");
+			return true;
+		} catch (JSONException e) {}
+		return false;
+	}
+	
+	private boolean loadCourses() {
+		Log.d("iHW", "starting to load courses");
+		HashSet<Course> coursesSet = null;
+		try {
+			String campusChar = getCampusChar(campus);
+			SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
+			String yearJSON = prefs.getString("yearJSON", "");
+			if (yearJSON.equals("")) yearJSON = generateBlankYearJSON(campus, year);
+			
+			JSONObject yearObj = new JSONObject(yearJSON);
 			JSONArray coursesArr = yearObj.getJSONArray("courses");
-			courses = new HashSet<Course>(coursesArr.length());
+			coursesSet = new HashSet<Course>(coursesArr.length());
 			for (int i=0; i<coursesArr.length(); i++) {
-				courses.add(new Course(coursesArr.getJSONObject(i)));
+				coursesSet.add(new Course(coursesArr.getJSONObject(i)));
 			}
-			
-			//initialize and store special days in map
-			JSONArray specialDaysArr = curriculumObj.getJSONArray("specialDays");
-			specialDays = new TreeMap<Date, Day>();
-			for (int i=0; i<specialDaysArr.length(); i++) {
-				JSONObject dayObj = specialDaysArr.getJSONObject(i);
-				Day toAdd = null;
-				if (dayObj.getString("type").equals("normal")) toAdd = new NormalDay(dayObj);
-				else if (dayObj.getString("type").equals("test")) toAdd = new TestDay(dayObj);
-				else if (dayObj.getString("type").equals("holiday")) toAdd = new Holiday(dayObj);
-				else throw new IllegalStateException("Unrecognized day type found in curriculum.");
-				Date d = new Date(dayObj.getString("date"));
-				specialDays.put(d, toAdd);
-			}
-			
-			//initialize day numbers
-			dayNumbers = new TreeMap<Date, Integer>();
+			courses = coursesSet;
+			Log.d("iHW", "finished loading courses");
+			return true;
+		} catch (JSONException e) { }
+		return false;
+	}
+	
+	private boolean loadDayNumbers() {
+		Log.d("iHW", "starting to load day numbers");
+		if (specialDayTemplates == null) return false;
+		SortedMap<Date, Integer> dayNums = null;
+		try {
+			dayNums = Collections.synchronizedSortedMap(new TreeMap<Date, Integer>());
 			Date d = semesterEndDates[0];
 			int dayNum = 1;
 			while(d.compareTo(semesterEndDates[2]) <= 0) {
-				if (specialDays.get(d) != null) {
-					if (specialDays.get(d) instanceof NormalDay && ((NormalDay)specialDays.get(d)).getDayNumber()!=0) {
+				if (specialDayTemplates.containsKey(d)) {
+					if (specialDayTemplates.get(d).getString("type").equals("normal")) {
+						int thisNum = specialDayTemplates.get(d).optInt("dayNumber");
+						if (thisNum != 0) dayNum = thisNum+1;
 						//This special day has a number; continue the count from this day's daynum
-						dayNumbers.put(d, ((NormalDay)specialDays.get(d)).getDayNumber());
-						dayNum = ((NormalDay)specialDays.get(d)).getDayNumber() + 1;
+						dayNums.put(d, thisNum);
 					} else {
 						//This special day doesn't have a day number; set this daynum to 0 and don't increment
-						dayNumbers.put(d, 0);
+						dayNums.put(d, 0);
 					}
 				} else {
 					//This is a normal day; continue the count
 					if (!d.isWeekend()) {
-						dayNumbers.put(d, dayNum);
+						dayNums.put(d, dayNum);
 						dayNum++;
 					}
 				}
 				if (dayNum>campus) dayNum -= campus;
 				d=d.dateByAdding(1);
 			}
-			
-			//rebuildSpecialDays();
-			
-			//initialize and store notes in map of maps
-			JSONArray notesArr = yearObj.getJSONArray("notes");
-			notes = new TreeMap<Date, TreeMap<Integer,List<Note>>>();
-			for (int i=0; i<notesArr.length(); i++) {
-				JSONObject obj = notesArr.getJSONObject(i);
-				d = new Date(obj.getString("date"));
-				int period = obj.getInt("period");
-				String text = obj.getString("text");
-				boolean isToDo = obj.getBoolean("isToDo");
-				boolean checked = obj.getBoolean("isChecked");
-				boolean isImportant = obj.getBoolean("isImportant");
-				this.addNote(text, isToDo, checked, isImportant, d, period);
-			}
+			dayNumbers = dayNums;
+			Log.d("iHW", "finished loading day numbers");
+			return true;
 		} catch (JSONException e) {}
+		return false;
 	}
 	
-	/**
-	 * When the user has changed his/her courses, the special days need to be reloaded. UNNECESSARY because
-	 * the days are already built when they are displayed.
-	 */
-	/*private void rebuildSpecialDays() {
-		for (Date d : specialDays.keySet()) {
-			Day day = specialDays.get(d);
-			if (day instanceof NormalDay) {
-				((NormalDay)day).fillPeriods(this);
-			}
-		}
-	}*/
+	private boolean loadThisWeekAndDay(Date date) {
+		boolean success = loadWeek(date);
+		if (!success) { Log.e("iHW", "ERROR loading week"); return false; }
+		success = loadDay(date);
+		if (!success) { Log.e("iHW", "ERROR loading day"); return false; }
+		return true;
+	}
 	
-	/**
-	 * If day is special, return it from the list of special days.
-	 * Otherwise generate the day and return it.
-	 */
-	public Day getDay(Date d) {
+	private void cacheNeededWeeksDays(final Date currentDate) {
+		if (currentlyCaching) return;
+		currentlyCaching = true;
+		new AsyncTask<Void, Void, Void>() {
+			protected Void doInBackground(Void... params) {
+				Log.d("iHW", "starting to cache needed weeks and days");
+				Date currentWeekStart = getWeekStart(year, currentDate);
+				ArrayList<Date> weeksNeeded = new ArrayList<Date>(3);
+				for (int i=-7; i<=7; i+=7) weeksNeeded.add(currentWeekStart.dateByAdding(i));
+				loadedWeeks.keySet().retainAll(weeksNeeded);
+				for (Date d : weeksNeeded) if (isInBounds(d) && !loadedWeeks.containsKey(d)) {
+					loadWeek(d);
+				}
+				ArrayList<Date> daysNeeded = new ArrayList<Date>(7);
+				for (int i=-3; i<=3; i++) daysNeeded.add(currentDate.dateByAdding(i));
+				loadedDays.keySet().retainAll(daysNeeded);
+				for (Date d : daysNeeded) if (isInBounds(d) && !loadedDays.containsKey(d)) {
+					loadDay(d);
+				}
+				Log.d("iHW", "finished caching weeks and days");
+				currentlyCaching = false;
+				return null;
+			}
+		}.execute();
+	}
+	
+	private boolean loadWeek(Date date) {
 		try {
-			if (specialDays.containsKey(d)) return specialDays.get(d);
-			else if (d.compareTo(semesterEndDates[0]) < 0 ||
-					d.compareTo(semesterEndDates[2]) > 0) return new Holiday(d, "Summer");
-			else if (d.isWeekend()) return new Holiday(d, "");
+			Log.d("iHW", "starting to load week containing " + date);
+			int weekNumber = getWeekNumber(year, date);
+			Date weekStart = getWeekStart(year, date);
+			if (loadedWeeks != null && loadedWeeks.containsKey(new Date(weekStart.toString()))) return true;
+			if (weekNumber == -1) return false;
+			SharedPreferences prefs = ctx.getSharedPreferences(year + getCampusChar(campus), Context.MODE_PRIVATE);
+			String weekJSON = prefs.getString("week"+weekNumber, "");
+			if (weekJSON.equals("")) {
+				weekJSON = generateBlankWeekJSON(weekStart);
+			}
+			JSONObject weekJSONObj;
+			weekJSONObj = new JSONObject(weekJSON);
+			if (loadedWeeks == null) loadedWeeks = Collections.synchronizedSortedMap(new TreeMap<Date, JSONObject>());
+			loadedWeeks.put(new Date(weekStart.toString()), weekJSONObj);
+			Log.d("iHW", "finished loading week");
+			return true;
+		} catch (JSONException e) {}
+		return false;
+	}
+	
+	private boolean loadDay(Date d) {
+		if (!isInBounds(d)) return false;
+		try {
+			Log.d("iHW", "starting to load day: " + d);
+			//Date weekStart = getWeekStart(year, d);
+			if (loadedDays == null) loadedDays = Collections.synchronizedSortedMap(new TreeMap<Date, Day>());
+			//if (!loadedWeeks.containsKey(weekStart)) return false;
+			if (d.compareTo(semesterEndDates[0]) < 0 ||
+					d.compareTo(semesterEndDates[2]) > 0) {
+				loadedDays.put(d, new Holiday(d, "Summer"));
+				return true;
+			} else if (d.isWeekend()) {
+				loadedDays.put(d, new Holiday(d, ""));
+				return true;
+			}
+			JSONObject template = null;
+			if (specialDayTemplates.containsKey(d)) template = specialDayTemplates.get(d);
 			else if (d.isMonday()) {
 				JSONArray namesArr = normalMondayTemplate.names();
 				String[] names = new String[namesArr.length()];
 				for (int i=0; i<names.length; i++) names[i] = (String)namesArr.get(i);
-				JSONObject dayObj = new JSONObject(normalMondayTemplate, names);
-				dayObj.put("date", d.toString());
-				dayObj.put("dayNumber", dayNumbers.get(d));
-				NormalDay ret = new NormalDay(dayObj);
-				//ret.fillPeriods(this);
-				return ret;
+				template = new JSONObject(normalMondayTemplate, names);
+				template.put("date", d.toString());
+				template.put("dayNumber", dayNumbers.get(d));
 			} else {
 				JSONArray namesArr = normalDayTemplate.names();
 				String[] names = new String[namesArr.length()];
 				for (int i=0; i<names.length; i++) names[i] = (String)namesArr.get(i);
-				JSONObject dayObj = new JSONObject(normalDayTemplate, names);
-				dayObj.put("date", d.toString());
-				dayObj.put("dayNumber", dayNumbers.get(d));
-				NormalDay ret = new NormalDay(dayObj);
-				//ret.fillPeriods(this);
-				return ret;
+				template = new JSONObject(normalDayTemplate, names);
+				template.put("date", d.toString());
+				template.put("dayNumber", dayNumbers.get(d));
 			}
-		} catch (JSONException e) {return null;}
+			String type = template.getString("type");
+			if (type.equals("normal")) {
+				NormalDay day = new NormalDay(template);
+				day.fillPeriods(this);
+				loadedDays.put(d, day);
+			} else if (type.equals("test")) loadedDays.put(d, new TestDay(template));
+			else if (type.equals("holiday")) loadedDays.put(d, new Holiday(template));
+			else return false;
+			Log.d("iHW", "finished loading day");
+			return true;
+		} catch (JSONException e) { }
+		return false;
 	}
+	
+	public Day getDay(Date d) {
+		if (!isInBounds(d)) return null;
+		Log.d("iHW", "getting " + d.toString());
+		Log.d("iHW", "weeks loaded: " + loadedWeeks.keySet().toString());
+		if (!isLoaded(d)) {
+			boolean success = true;
+			if (loadedWeeks == null || !loadedWeeks.containsKey(getWeekStart(year, d))) success = loadWeek(d);
+			if (!success) Log.e("iHW", "ERROR loading week");
+			if (loadedDays == null || !loadedDays.containsKey(d)) success = loadDay(d);
+			if (!success) Log.e("iHW", "ERROR loading day");
+		}
+		if (!isLoaded(d)) return null;
+		else {
+			Day toReturn = loadedDays.get(d);
+			//cacheNeededWeeksDays(d);
+			
+			//Log.d("iHW", "Number of loaded days: " + loadedDays.size());
+			return toReturn;
+		}
+	}
+	
+	public void clearUnnededItems(Date d) {
+		Date currentWeekStart = getWeekStart(year, d);
+		ArrayList<Date> weeksNeeded = new ArrayList<Date>(3);
+		for (int i=-7; i<=7; i+=7) weeksNeeded.add(currentWeekStart.dateByAdding(i));
+		if (loadedWeeks != null) loadedWeeks.keySet().retainAll(weeksNeeded);
+		ArrayList<Date> daysNeeded = new ArrayList<Date>(7);
+		for (int i=-3; i<=3; i++) daysNeeded.add(d.dateByAdding(i));
+		if (loadedDays != null) loadedDays.keySet().retainAll(daysNeeded);
+	}
+	
+	private boolean isInBounds(Date d) {
+		return (d != null && d.compareTo(new Date(7,1,year)) >= 0 && d.compareTo(new Date(7,1,year+1)) < 0);
+	}
+	
+	public interface ModelLoadingListener {
+		public void onProgressUpdate(int progress);
+		public void onFinishedLoading(Curriculum c);
+	}
+	
+	/***************************END LOADING STUFF****************************/
+	
+	/**************************BEGIN COURSES STUFF***************************/
 	
 	public List<String> getAllCourseNames() {
 		List<String> list = new ArrayList<String>();
 		for (Course c : courses) list.add(c.getName());
 		return list;
 	}
-	
-	public String saveYear() {
-		try {
-			JSONObject obj = new JSONObject();
-			obj.put("year", this.year);
-			obj.put("campus", this.campus);
-			
-			JSONArray coursesArr = new JSONArray();
-			for (Course c : courses) {
-				coursesArr.put(c.saveCourse());
-			}
-			obj.put("courses", coursesArr);
-			
-			JSONArray notesArr = new JSONArray();
-			JSONObject note;
-			for (Date d : notes.keySet())
-			  for (int period : notes.get(d).keySet())
-			  for (Note n : notes.get(d).get(period)) {
-				note = n.saveNote();
-				note.put("date", d);
-				note.put("period", period);
-				notesArr.put(note);
-			}
-			obj.put("notes", notesArr);
-			return obj.toString(4);
-		} catch (JSONException e) {return null;}
-	}
-
-	public int getYear() { return year; }
 	
 	/**
 	 * Attempts to add the specified course to the curriculum.
@@ -428,7 +623,20 @@ public class Curriculum {
 		}
 		courses.add(c);
 		//this.rebuildSpecialDays();
+		loadedDays.clear();
 		return true;
+	}
+	
+	public void removeCourse(Course c) {
+		courses.remove(c);
+		//rebuildSpecialDays();
+		loadedDays.clear();
+	}
+	
+	public void removeAllCourses() {
+		courses.clear();
+		//rebuildSpecialDays();
+		loadedDays.clear();
 	}
 	
 	public boolean replaceCourse(String oldName, Course c) {
@@ -440,26 +648,7 @@ public class Curriculum {
 			this.addCourse(oldCourse);
 			return false;
 		}
-	}
-	
-	/**
-	 * Returns true when two classes scheduled for terms a and b can coexist regardless
-	 * of whether their periods conflict or not.
-	 */
-	private static boolean termsCompatible(int a, int b) {
-		if (a==b) return false;
-		if (a==Constants.TERM_FULL_YEAR || b==Constants.TERM_FULL_YEAR) return false;
-		if (a==Constants.TERM_FIRST_SEMESTER) {
-			if (b==Constants.TERM_FIRST_TRIMESTER || b==Constants.TERM_SECOND_TRIMESTER) return false;
-		} else if (a==Constants.TERM_SECOND_SEMESTER) {
-			if (b==Constants.TERM_SECOND_TRIMESTER || b==Constants.TERM_THIRD_TRIMESTER) return false;
-		}
-		if (b==Constants.TERM_FIRST_SEMESTER) {
-			if (a==Constants.TERM_FIRST_TRIMESTER || a==Constants.TERM_SECOND_TRIMESTER) return false;
-		} else if (b==Constants.TERM_SECOND_SEMESTER) {
-			if (a==Constants.TERM_SECOND_TRIMESTER || a==Constants.TERM_THIRD_TRIMESTER) return false;
-		}
-		return true;
+		
 	}
 	
 	public List<Integer> termsFromDate(Date d) {
@@ -484,7 +673,6 @@ public class Curriculum {
 	public Course getCourse(Date d, int period) {
 		if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) return null;
 		int dayNum = dayNumbers.get(d);
-		//if (d.equals(new Date(5,28,2013))) System.out.println(dayNum);
 		List<Integer> terms = termsFromDate(d);
 		if (dayNum==0) {
 			Course maxMeetings = null;
@@ -526,73 +714,119 @@ public class Curriculum {
 		return null;
 	}
 	
+	public Course[] getCourseList(Date d) {
+		if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) return null;
+		int dayNum = dayNumbers.get(d);
+		List<Integer> terms = termsFromDate(d);
+		Course[] courseList = new Course[campus+4]; //campus+3 is numPeriods, add 1 to keep 0 index empty
+		int[] maxMeetings = new int[campus+4];
+		for (Course c : courses) {
+			if (!terms.contains(c.getTerm())) continue;
+			if (dayNum==0) {
+				int meetings = c.getTotalMeetings();
+				if (meetings > maxMeetings[c.getPeriod()]) {
+					courseList[c.getPeriod()] = c;
+					maxMeetings[c.getPeriod()] = meetings;
+				}
+			} else if (c.getMeetingOn(dayNum) != Constants.MEETING_X_DAY) {
+				courseList[c.getPeriod()] = c;
+				if (c.getMeetingOn(dayNum) == Constants.MEETING_DOUBLE_AFTER) courseList[c.getPeriod()+1] = c;
+				if (c.getMeetingOn(dayNum) == Constants.MEETING_DOUBLE_BEFORE) courseList[c.getPeriod()-1] = c;
+			}
+		}
+		return courseList;
+	}
+	
 	public Course getCourse(String name) {
 		for (Course c : courses) if (c.getName().equals(name)) return c;
 		return null;
 	}
 	
-	public List<Note> getNotes(Date d, int period) {
-		if (notes.get(d) != null) {
-			Map<Integer, List<Note>> notesThisDay = notes.get(d);
-			if (notesThisDay.containsKey(period)) {
-				return notesThisDay.get(period);
-			}
-		}
-		return new ArrayList<Note>(0);
-	}
+	/**********************************END COURSES STUFF**************************************/
 	
-	public void addNote(String text, boolean isToDo, boolean checked, boolean isImportant, Date d, int period)
-	{
-		Note toAdd = new Note(text, isToDo, checked, isImportant);
-		if (notes.get(d) == null) {
-			List<Note> list = new LinkedList<Note>();
-			list.add(toAdd);
-			TreeMap<Integer, List<Note>> inner = new TreeMap<Integer, List<Note>>();
-			inner.put(period, list);
-			notes.put(d, inner);
-		} else if (notes.get(d).get(period) == null) {
-			List<Note> list = new LinkedList<Note>();
-			list.add(toAdd);
-			notes.get(d).put(period, list);
-		} else {
-			notes.get(d).get(period).add(toAdd);
-		}
-	}
+	/**********************************BEGIN NOTES STUFF**************************************/
 	
-	public Note removeNote(Date d, int period, String text) {
-		if (notes.containsKey(d) && notes.get(d).containsKey(period)) {
-			ListIterator<Note> iter = notes.get(d).get(period).listIterator();
-			while (iter.hasNext()) {
-				Note n = iter.next();
-				if (n.getText().equals(text)) {
-					iter.remove();
-					return n;
+	public ArrayList<Note> getNotes(Date d, int period) {
+		Date weekStart = getWeekStart(year, d);
+		if (!isLoaded(d)) {
+			boolean success = true;
+			if (!loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
+			if (!success) Log.e("iHW", "ERROR loading week");
+			if (!loadedDays.containsKey(d)) success = loadDay(d);
+			if (!success) Log.e("iHW", "ERROR loading day");
+		}
+		if (!isLoaded(d)) return null;
+		else {
+			try {
+				String key = d.toString() + "." + period;
+				JSONObject weekJSON = loadedWeeks.get(weekStart);
+				if (weekJSON.getJSONObject("notes").has(key)) {
+					JSONArray notesArr = weekJSON.getJSONObject("notes").getJSONArray(key);
+					ArrayList<Note> notes = new ArrayList<Note>(notesArr.length());
+					for (int i=0; i<notesArr.length(); i++) {
+						JSONObject noteObj = notesArr.getJSONObject(i);
+						notes.add(new Note(noteObj));
+					}
+					return notes;
+				} else {
+					return new ArrayList<Note>(6);
 				}
+			} catch (JSONException e) { 
+				Log.e("iHW", "JSONException!", e);
 			}
-		}
-		return null;
-	}
-	
-	public void setNotes(Date d, int period, List<Note> list) {
-		if (notes.get(d) == null) { //if no notes this day
-			TreeMap<Integer, List<Note>> inner = new TreeMap<Integer, List<Note>>();
-			inner.put(period, list);
-			notes.put(d, inner);
-		} else {
-			notes.get(d).put(period, list);
+			return null;
 		}
 	}
 	
-	public void removeCourse(Course c) {
-		courses.remove(c);
-		//rebuildSpecialDays();
+	public void setNotes(Date d, int period, ArrayList<Note> notes) {
+		Date weekStart = getWeekStart(year, d);
+		if (!isLoaded(d)) {
+			boolean success = true;
+			if (!loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
+			if (!success) Log.e("iHW", "ERROR loading week");
+			if (!loadedDays.containsKey(d)) success = loadDay(d);
+			if (!success) Log.e("iHW", "ERROR loading day");
+		}
+		if (!isLoaded(d)) return;
+		else {
+			try {
+				String key = d.toString() + "." + period;
+				JSONObject weekJSON = loadedWeeks.get(weekStart);
+				JSONArray notesArr = new JSONArray();
+				for (Note note : notes) notesArr.put(note.saveNote());
+				weekJSON.getJSONObject("notes").put(key, notesArr);
+			} catch (JSONException e) { }
+		}
 	}
 	
-	public void removeAllCourses() {
-		courses.clear();
-		//rebuildSpecialDays();
+	/**********************************END NOTES STUFF***************************************/
+	
+	/*********************************BEGIN SAVING STUFF*************************************/
+	
+	public void saveCycle(Date d) {
+		Date weekStart = getWeekStart(year, d);
+		JSONObject weekObj = loadedWeeks.get(weekStart);
+		int weekNumber = getWeekNumber(year, d);
+		SharedPreferences prefs = ctx.getSharedPreferences(year + getCampusChar(campus), Context.MODE_PRIVATE);
+		String weekJSON = weekObj.toString();
+		prefs.edit().putString("week"+weekNumber, weekJSON).apply();
 	}
-
-	public int getPassingPeriodLength() { return passingPeriodLength; }
-	public int getCampus() { return campus; }
+	
+	public void saveCourses() {
+		String campusChar = getCampusChar(campus);
+		SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
+		try {
+			JSONObject yearObj = new JSONObject();
+			yearObj.put("year", year);
+			yearObj.put("campus", campus);
+			JSONArray coursesArr = new JSONArray();
+			for (Course c : courses) coursesArr.put(c.saveCourse());
+			yearObj.put("courses", coursesArr);
+			String yearJSON = yearObj.toString();
+			prefs.edit().putString("yearJSON", yearJSON).apply();
+			
+		} catch (JSONException e) { }
+	}
+	
+	/**********************************END SAVING STUFF**************************************/
 }

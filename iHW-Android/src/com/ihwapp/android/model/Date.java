@@ -45,6 +45,18 @@ public class Date extends GregorianCalendar {
 		return toReturn;
 	}
 	
+	public Date dateOfNextSunday() {
+		int dayOfWeek = this.get(Date.DAY_OF_WEEK);
+		int daysBehind = (8-dayOfWeek)%7;
+		return dateByAdding(daysBehind);
+	}
+	
+	public Date dateOfPreviousSunday() {
+		int dayOfWeek = this.get(Date.DAY_OF_WEEK);
+		int daysAhead = dayOfWeek-1;
+		return dateByAdding(-daysAhead);
+	}
+	
 	public String toString() {
 		return getMonth() + "/" + getDay() + "/" + getYear();
 	}

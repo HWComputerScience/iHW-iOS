@@ -25,8 +25,8 @@ public class GuidedCoursesActivity extends CoursesActivity {
 			new AlertDialog.Builder(this).setMessage("Are you sure you want to go back? You will lose the courses you have added.")
 			.setNegativeButton("Go Back", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					Curriculum.getCurrentCurriculum(GuidedCoursesActivity.this).removeAllCourses();
-					Curriculum.save(GuidedCoursesActivity.this);
+					Curriculum.getCurrentCurriculum().removeAllCourses();
+					Curriculum.save();
 					GuidedCoursesActivity.this.finish();
 				}
 			}).setPositiveButton("Keep Editing", null).show();

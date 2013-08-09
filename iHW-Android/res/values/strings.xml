@@ -9,7 +9,7 @@
     <string name="title_activity_edit_courses">Edit Courses</string>
     <string name="button_download">Download from HW.com</string>
     <string name="button_add_manually">Add Courses Manually</string>
-    <string name="prompt_hw_login">Please log into HW.com below.</string>
+    <string name="prompt_hw_login">Loading login page...</string>
     <string name="title_activity_download_schedule">Download Course Information</string>
     <string name="title_activity_guided_edit_courses">GuidedEditCoursesActivity</string>
     <string name="action_done">Done</string>
@@ -47,5 +47,6 @@
     <string name="option_mark_important">Mark Important</string>
     <string name="option_hide_checkbox">Hide Checkbox</string>
     <string name="option_mark_unimportant">Mark Unimportant</string>
+    <string name="text_bullet">–</string>
 
 </resources>

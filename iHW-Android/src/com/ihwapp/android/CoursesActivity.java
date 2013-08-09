@@ -23,7 +23,7 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 	
 	protected void onStart() {
 		super.onStart();
-		if (!Curriculum.loadCurrentCurriculum(this)) finish();
+		//TODO if (!Curriculum.loadCurrentCurriculum(this)) finish();
 		reloadData();
 		this.getListView().setDivider(this.getResources().getDrawable(android.R.drawable.divider_horizontal_bright));
 		this.getListView().setMultiChoiceModeListener(new ListSelectionListener());
@@ -31,7 +31,7 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 	}
 	
 	private void reloadData() {
-		Object[] courseObjs = Curriculum.getCurrentCurriculum(this).getAllCourseNames().toArray();
+		Object[] courseObjs = Curriculum.getCurrentCurriculum().getAllCourseNames().toArray();
 		courseNames = Arrays.copyOf(courseObjs, courseObjs.length, String[].class);
 		this.setListAdapter(this);
 	}
@@ -158,12 +158,12 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 				i.putExtra("courseName", courseNames[(int)getListView().getCheckedItemIds()[0]]);
 				startActivity(i);
 			} else if (item.getItemId() == R.id.action_delete) {
-				Curriculum c = Curriculum.getCurrentCurriculum(CoursesActivity.this);
+				Curriculum c = Curriculum.getCurrentCurriculum();
 				long[] checked = getListView().getCheckedItemIds();
 				for (int i=0; i<checked.length; i++) {
 					c.removeCourse(c.getCourse(courseNames[(int)checked[i]]));
 				}
-				Curriculum.save(CoursesActivity.this);
+				Curriculum.save();
 				reloadData();
 				mode.finish();
 				return true;
@@ -174,7 +174,7 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 		@Override
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
-			View item = getListView().getChildAt(position-getListView().getFirstVisiblePosition());
+			//View item = getListView().getChildAt(position-getListView().getFirstVisiblePosition());
 			//if (checked) item.setBackgroundColor(Color.argb(127, 180, 225, 255));
 			//else item.setBackgroundColor(Color.TRANSPARENT);
 			if (getListView().getCheckedItemCount() == 1) mode.getMenu().findItem(R.id.action_edit).setVisible(true);

@@ -6,10 +6,12 @@
     <drawable name="lighter_tan">#EBE5CF</drawable>
     <drawable name="orange">#EEAE48</drawable>
     <drawable name="white">#FFFFFF</drawable>
+    <drawable name="light_gray">#CCCCCC</drawable>
     <color name="dark_red">#990000</color>
     <color name="lighter_red">#BB0000</color>
     <color name="dark_tan">#DAD0B7</color>
     <color name="lighter_tan">#EBE5CF</color>
     <color name="orange">#EECE48</color>
     <color name="white">#FFFFFF</color>
+    <color name="light_gray">#CCCCCC</color>
 </resources>

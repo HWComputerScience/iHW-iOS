@@ -63,7 +63,9 @@
                 android:lines="1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textIsSelectable="false"
-                android:textStyle="bold" />
+                android:textStyle="bold" 
+                android:scrollHorizontally="true"
+				android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/text_countdown"

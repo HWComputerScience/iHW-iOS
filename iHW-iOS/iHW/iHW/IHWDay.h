@@ -11,13 +11,12 @@
 
 @interface IHWDay : NSObject
 
-@property int dayNum;
 @property (strong, nonatomic) IHWDate *date;
 @property (strong, nonatomic) NSMutableArray *periods;
-@property int periodLength;
-@property BOOL hasBreak;
-@property int breakLength;
-@property (strong, nonatomic) NSString *breakName;
 
+- (id)initWithDate:(IHWDate *)date;
+- (id)initWithJSONDictionary:(NSDictionary *)dictionary;
+- (NSDictionary *)saveDay;
+- (NSString *)title;
 
 @end

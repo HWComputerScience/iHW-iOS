@@ -10,11 +10,24 @@
 
 @interface IHWDate : NSDate
 
+- (id)init;
 - (id)initWithMonth:(int)m day:(int)d year:(int)y;
+- (id)initFromString:(NSString *)string;
 
--(int)getMonth;
+-(int)month;
+-(int)day;
+-(int)year;
 
--(int)getDay;
+- (BOOL)isMonday;
+- (BOOL)isWeekend;
+- (IHWDate *)dateByAddingDays:(int)days;
+- (IHWDate *)dateOfNextSunday;
+- (IHWDate *)dateOfPreviousSunday;
+- (NSString *)description;
+- (int)daysUntilDate:(IHWDate *)other;
+- (NSString *)dayOfWeek:(BOOL)shortVersion;
+- (BOOL)isEqualToDate:(IHWDate *)otherDate;
 
--(int)getYear;
++ (NSComparator)comparator;
+
 @end

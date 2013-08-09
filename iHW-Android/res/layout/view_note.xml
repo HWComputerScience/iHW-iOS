@@ -6,6 +6,15 @@
     android:orientation="horizontal"
     android:paddingRight="4dp" >
 
+    <TextView
+        android:id="@+id/text_bullet"
+        android:layout_width="26dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingLeft="5dp"
+        android:text="@string/text_bullet"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <CheckBox
         android:id="@+id/checkbox"
         android:layout_width="26dp"

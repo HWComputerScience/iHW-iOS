@@ -10,11 +10,15 @@
 
 @interface IHWNote : NSObject
 
-@property (strong, nonatomic) NSString *value;
+@property (strong, nonatomic) NSString *text;
 @property BOOL isToDo;
 @property BOOL isImportant;
 @property BOOL isChecked;
 
-- (id)initWithValue:(NSString *)val isImportant:(BOOL)important isToDo:(BOOL)todo;
+- (id)initWithText:(NSString *)val isToDo:(BOOL)todo isChecked:(BOOL)checked isImportant:(BOOL)important;
+- (id)initWithJSONDictionary:(NSDictionary *)dictionary;
+- (NSDictionary *)saveNote;
+- (BOOL)isEqual:(id)object;
+- (NSString *)description;
 
 @end

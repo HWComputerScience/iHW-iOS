@@ -10,4 +10,8 @@
 
 @interface IHWCustomDay : IHWDay
 
+- (id)initWithTests:(NSArray *)tests onDate:(IHWDate *)date;
+- (id)initWithJSONDictionary:(NSDictionary *)dictionary;
+- (NSDictionary *)saveDay;
+
 @end
