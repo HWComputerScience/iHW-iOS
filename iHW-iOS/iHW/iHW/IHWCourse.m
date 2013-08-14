@@ -2,11 +2,12 @@
 //  IHWCourse.m
 //  iHW
 //
-//  Created by Andrew Friedman on 7/10/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Created by Jonathan Burns on 7/10/13.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import "IHWCourse.h"
+#import "IHWConstants.h"
 
 @implementation IHWCourse
 
@@ -17,7 +18,7 @@
         self.name = n;
         self.period = p;
         self.term = t;
-        self.meetings = m;
+        self.meetings = [NSArray arrayWithArray:m];
     }
     return self;
 }
@@ -43,10 +44,10 @@
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 
-- (int)getTotalMeetings {
+- (int)totalMeetings {
     int sum = 0;
     for (int index = 0; index <self.meetings.count; index++) {
-        if ([[self.meetings objectAtIndex:index] intValue] == MEETING_NORMAL) {
+        if ([[self.meetings objectAtIndex:index] intValue] == MEETING_SINGLE_PERIOD) {
             sum++;
         } else if ([[self.meetings objectAtIndex:index] intValue] == MEETING_DOUBLE_AFTER || [[self.meetings objectAtIndex:index] intValue] == MEETING_DOUBLE_BEFORE) {
             sum+=2;
@@ -55,7 +56,7 @@
     return sum;
 }
 
-- (int)getMeetingOn:(int)dayNum {
+- (int)meetingOn:(int)dayNum {
     return [[self.meetings objectAtIndex:dayNum-1] intValue];
 }
 

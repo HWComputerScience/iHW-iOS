@@ -3,15 +3,15 @@
 //  iHW
 //
 //  Created by Jonathan Burns on 8/8/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 @interface IHWFileManager : NSObject
 
-+ (BOOL)saveCurriculumJSON:(NSData *)json forYear:(int)year campus:(NSString *)campusChar;
-+ (NSData *)loadCurriculumJSONForYear:(int)year campus:(NSString *)campusChar;
++ (BOOL)saveScheduleJSON:(NSData *)json forYear:(int)year campus:(NSString *)campusChar;
++ (NSData *)loadScheduleJSONForYear:(int)year campus:(NSString *)campusChar;
 
 + (BOOL)saveYearJSON:(NSData *)json forYear:(int)year campus:(NSString *)campusChar;
 + (NSData *)loadYearJSONForYear:(int)year campus:(NSString *)campusChar;

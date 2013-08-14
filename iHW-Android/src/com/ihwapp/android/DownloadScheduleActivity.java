@@ -174,7 +174,7 @@ public class DownloadScheduleActivity extends Activity {
 		//parse period list
 		int numDays = Curriculum.getCurrentCampus();
 		int numPeriods = numDays+3;
-		boolean[][] meetings = new boolean[numDays][numPeriods+1];
+		boolean[][] periods = new boolean[numDays][numPeriods+1];
 		int[] periodFrequency = new int[numPeriods+1];
 		StringTokenizer s = new StringTokenizer(periodList, ".");
 		int minPeriod = numPeriods+1;
@@ -187,7 +187,7 @@ public class DownloadScheduleActivity extends Activity {
 				try { period = Integer.parseInt(token.substring(i,i+1)); }
 				catch (NumberFormatException e) {}
 				if (period > 0) {
-					meetings[day][period] = true;
+					periods[day][period] = true;
 					minPeriod = Math.min(minPeriod, period);
 					maxPeriod = Math.max(maxPeriod, period);
 					periodFrequency[period]++;
@@ -202,16 +202,16 @@ public class DownloadScheduleActivity extends Activity {
 		else if (maxPeriod-minPeriod == 1 && periodFrequency[maxPeriod] > periodFrequency[minPeriod]) coursePeriod = maxPeriod;
 		else if (maxPeriod-minPeriod == 1 && periodFrequency[maxPeriod] <= periodFrequency[minPeriod]) coursePeriod = minPeriod;
 		else return null;
-		//create periods array
-		int[] periods = new int[numDays];
+		//create meetings array
+		int[] meetings = new int[numDays];
 		for (int i=0; i<numDays; i++) {
-			if (!meetings[i][coursePeriod]) periods[i] = Constants.MEETING_X_DAY; 
-			else if (coursePeriod-1 > 0 && meetings[i][coursePeriod-1]) periods[i] = Constants.MEETING_DOUBLE_BEFORE;
-			else if (coursePeriod+1 <= numPeriods && meetings[i][coursePeriod+1]) periods[i] = Constants.MEETING_DOUBLE_AFTER;
-			else periods[i] = Constants.MEETING_SINGLE_PERIOD;
+			if (!periods[i][coursePeriod]) meetings[i] = Constants.MEETING_X_DAY; 
+			else if (coursePeriod-1 > 0 && periods[i][coursePeriod-1]) meetings[i] = Constants.MEETING_DOUBLE_BEFORE;
+			else if (coursePeriod+1 <= numPeriods && periods[i][coursePeriod+1]) meetings[i] = Constants.MEETING_DOUBLE_AFTER;
+			else meetings[i] = Constants.MEETING_SINGLE_PERIOD;
 		}
 		
-		return new Course(name, coursePeriod, term, periods);
+		return new Course(name, coursePeriod, term, meetings);
 	}
 
 }

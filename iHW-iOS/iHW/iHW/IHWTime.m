@@ -3,7 +3,7 @@
 //  iHW
 //
 //  Created by Jonathan Burns on 8/8/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import "IHWTime.h"

@@ -3,19 +3,19 @@
 //  iHW
 //
 //  Created by Jonathan Burns on 8/8/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import "IHWFileManager.h"
 
 @implementation IHWFileManager
 
-+ (BOOL)saveCurriculumJSON:(NSData *)json forYear:(int)year campus:(NSString *)campusChar {
++ (BOOL)saveScheduleJSON:(NSData *)json forYear:(int)year campus:(NSString *)campusChar {
     NSString *filename = [NSString stringWithFormat:@"curriculum%d%@.hws", year, campusChar];
     return [IHWFileManager saveFile:json toPathInsideDocuments:filename];
 }
 
-+ (NSData *)loadCurriculumJSONForYear:(int)year campus:(NSString *)campusChar {
++ (NSData *)loadScheduleJSONForYear:(int)year campus:(NSString *)campusChar {
     NSString *filename = [NSString stringWithFormat:@"curriculum%d%@.hws", year, campusChar];
     return [IHWFileManager loadFileFromPathInsideDocuments:filename];
 }
@@ -46,7 +46,7 @@
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, pathInsideDocuments];
     NSError *error = nil;
     [data writeToFile:filePath options:NSDataWritingAtomic error:&error];
-    if (error != nil) NSLog(@"%@", error.localizedDescription);
+    if (error != nil) NSLog(@"ERROR saving file %@: %@", pathInsideDocuments, error.debugDescription);
     return error == nil;
 }
 
@@ -58,7 +58,7 @@
     NSData *result = [NSData dataWithContentsOfFile:filePath options:0 error:&error];
     if (error == nil) return result;
     else {
-        NSLog(@"%@", error.localizedDescription);
+        NSLog(@"ERROR loading file %@: %@", pathInsideDocuments, error.debugDescription);
         return nil;
     }
 }

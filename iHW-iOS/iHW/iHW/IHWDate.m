@@ -2,13 +2,13 @@
 //  IHWDate.m
 //  iHW
 //
-//  Created by Andrew Friedman on 7/11/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Created by Jonathan Burns on 7/11/13.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import "IHWDate.h"
 
-@implementation IHWDate
+@implementation NSDate (IHW)
 
 - (id)init
 {
@@ -22,7 +22,7 @@
     components.day = d;
     components.month = m;
     components.year = y;
-    self = [super initWithTimeInterval:0 sinceDate:[[NSCalendar currentCalendar] dateFromComponents:components]];
+    self = [self initWithTimeInterval:0 sinceDate:[[NSCalendar currentCalendar] dateFromComponents:components]];
     return self;
 }
 
@@ -38,11 +38,11 @@
 }
 
 -(int)day {
-    return [[NSCalendar currentCalendar] components:NSMonthCalendarUnit fromDate:self].day;
+    return [[NSCalendar currentCalendar] components:NSDayCalendarUnit fromDate:self].day;
 }
 
 -(int)year {
-    return [[NSCalendar currentCalendar] components:NSMonthCalendarUnit fromDate:self].year;
+    return [[NSCalendar currentCalendar] components:NSYearCalendarUnit fromDate:self].year;
 }
 
 - (BOOL)isMonday {
@@ -90,6 +90,15 @@
     if (![other isKindOfClass:[IHWDate class]]) return NO;
     IHWDate *otherDate = (IHWDate *)other;
     return (self.month == otherDate.month && self.day == otherDate.day && self.year == otherDate.year);
+}
+
+- (BOOL)isEqual:(id)object {
+    if (![object isKindOfClass:[IHWDate class]]) return NO;
+    return [self isEqualToDate:object];
+}
+
+- (NSUInteger)hash {
+    return self.description.hash;
 }
 
 + (NSComparator)comparator {

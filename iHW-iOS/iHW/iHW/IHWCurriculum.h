@@ -2,32 +2,26 @@
 //  IHWLogic.h
 //  iHW
 //
-//  Created by Andrew Friedman on 7/10/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Created by Jonathan Burns on 7/10/13.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "MutableOrderedDictionary.h"
+//#import "MutableOrderedDictionary.h"
 #import "IHWDate.h"
 #import "IHWDay.h"
-
-typedef enum {
-    CAMPUS_MIDDLE = 6,
-    CAMPUS_UPPER = 5
-} CAMPUS;
-
-typedef enum {
-    TERM_FULL_YEAR = 0,
-    TERM_FIRST_SEMESTER,
-    TERM_SECOND_SEMESTER,
-    TERM_FIRST_TRIMESTER,
-    TERM_SECOND_TRIMESTER,
-    TERM_THIRD_TRIMESTER
-} COURSE_TERM;
+#import "IHWCourse.h"
+#import "IHWConstants.h"
 
 @interface IHWCurriculum : NSObject
 
 + (IHWCurriculum *)currentCurriculum;
++ (IHWCurriculum *)curriculumWithCampus:(int)campus andYear:(int)year;
++ (int)currentYear;
++ (int)currentCampus;
++ (void)setCurrentYear:(int)year;
++ (void)setCurrentCampus:(int)campus;
++ (BOOL)isFirstRun;
 
 
 
@@ -35,23 +29,48 @@ typedef enum {
 @property int year;
 @property int passingPeriodLength;
 @property int loadingProgress;
-@property NSMutableSet *courses;
-@property NSDictionary *normalDayTemplate;
-@property NSDictionary *normalMondayTemplate;
-@property MutableOrderedDictionary *specialDayTemplates;
-@property MutableOrderedDictionary *loadedWeeks;
-@property MutableOrderedDictionary *loadedDays;
-@property MutableOrderedDictionary *dayNumbers;
-@property NSArray *semesterEndDates;
-@property NSArray *trimesterEndDates;
-@property NSMutableSet *modelLoadingListeners;
+@property (strong, nonatomic) NSMutableSet *courses;
+@property (strong, nonatomic) NSDictionary *normalDayTemplate;
+@property (strong, nonatomic) NSDictionary *normalMondayTemplate;
+@property (strong, nonatomic) NSDictionary *specialDayTemplates;
+@property (strong, nonatomic) NSMutableDictionary *loadedWeeks;
+@property (strong, nonatomic) NSMutableDictionary *loadedDays;
+@property (strong, nonatomic) NSMutableDictionary *dayNumbers;
+@property (strong, nonatomic) NSArray *semesterEndDates;
+@property (strong, nonatomic) NSArray *trimesterEndDates;
+@property (strong, nonatomic) NSMutableSet *curriculumLoadingListeners;
+@property (strong, nonatomic) NSOperationQueue *loadingQueue;
 
 - (id)initWithCampus:(int)campus year:(int)year startingDate:(IHWDate *)date;
-- (void)loadEverything;
-- (IHWDate *)firstLoadedDate;
-- (IHWDate *)lastLoadedDate;
+- (void)loadEverythingWithStartingDate:(IHWDate *)date;
+- (BOOL)isLoading;
+- (BOOL)isLoaded;
+//- (IHWDate *)firstLoadedDate;
+//- (IHWDate *)lastLoadedDate;
 - (BOOL)dayIsLoaded:(IHWDate *)date;
-- (IHWDay *)getDayWithDate:(IHWDate *)date;
+- (IHWDay *)dayWithDate:(IHWDate *)date;
 - (void)clearUnneededItems:(IHWDate *)date;
+- (BOOL)dateInBounds:(IHWDate *)date;
 
+- (NSArray *)allCourseNames;
+- (BOOL)addCourse:(IHWCourse *)c;
+- (void)removeCourse:(IHWCourse *)c;
+- (void)removeAllCourses;
+- (BOOL)replaceCourseWithName:(NSString *)oldName withCourse:(IHWCourse *)c;
+- (IHWCourse *)courseWithName:(NSString *)name;
+- (IHWCourse *)courseMeetingOnDate:(IHWDate *)d period:(int)period;
+- (NSArray *)courseListForDate:(IHWDate *)d;
+- (NSArray *)termsFromDate:(IHWDate *)d;
+
+
+
+- (void)saveWeekWithDate:(IHWDate *)d;
+- (void)saveCourses;
+
+@end
+
+@protocol IHWCurriculumLoadingListener <NSObject>
+@optional
+- (void)curriculumFinishedLoading:(IHWCurriculum *)curriculum;
+- (void)curriculumFailedToLoad:(IHWCurriculum *)curriculum;
 @end

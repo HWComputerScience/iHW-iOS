@@ -23,7 +23,7 @@
 
 @interface MutableOrderedDictionary : NSMutableDictionary
 {
-	//NSMutableDictionary *dictionary;
+	NSMutableDictionary *dictionary;
 	NSMutableOrderedSet *array;
 }
 

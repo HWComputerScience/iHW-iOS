@@ -190,7 +190,7 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 		}
 		Log.d("iHW", "saved " + ct + " notes from " + d + ":" + period);
 		Curriculum.getCurrentCurriculum().setNotes(d, period, notes);
-		Curriculum.getCurrentCurriculum().saveCycle(d);
+		Curriculum.getCurrentCurriculum().saveWeek(d);
 		changesSaved = true;
 	}
 	

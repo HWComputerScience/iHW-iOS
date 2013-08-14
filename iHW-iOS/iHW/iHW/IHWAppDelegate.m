@@ -2,26 +2,40 @@
 //  IHWAppDelegate.m
 //  iHW
 //
-//  Created by Andrew Friedman on 7/10/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Created by Jonathan Burns on 7/10/13.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import "IHWAppDelegate.h"
+#import "CJSONSerializer.h"
+#import "IHWCurriculum.h"
+#import "IHWDate.h"
+#import "IHWFirstRunViewController.h"
+#import "IHWScheduleViewController.h"
+#import "IHWConstants.h"
 
 @implementation IHWAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    /* // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    // Override point for customization after application launch.
+    UIViewController *rootVC = nil;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        self.viewController = [[IHWViewController alloc] initWithNibName:@"IHWViewController_iPhone" bundle:nil];
+        if ([IHWCurriculum isFirstRun])
+            rootVC = [[IHWFirstRunViewController alloc] initWithNibName:@"IHWFirstRunViewController" bundle:nil];
+        else
+            rootVC = [[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil];
     } else {
-        self.viewController = [[IHWViewController alloc] initWithNibName:@"IHWViewController_iPad" bundle:nil];
+        if ([IHWCurriculum isFirstRun])
+            rootVC = [[IHWFirstRunViewController alloc] initWithNibName:@"IHWFirstRunViewController" bundle:nil]; //ADD IPAD VERSIONS HERE
+        else
+            rootVC = [[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil]; //ADD IPAD VERSIONS HERE
     }
-    self.window.rootViewController = self.viewController;
+    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:rootVC];
+    navc.navigationBar.tintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+    self.window.rootViewController = navc;
     [self.window makeKeyAndVisible];
-     */
     return YES;
 }
 

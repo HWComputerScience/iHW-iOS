@@ -2,23 +2,11 @@
 //  IHWCourse.h
 //  iHW
 //
-//  Created by Andrew Friedman on 7/10/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Created by Jonathan Burns on 7/10/13.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-
-#define MEETING_X 0
-#define MEETING_NORMAL 1
-#define MEETING_DOUBLE_BEFORE 2
-#define MEETING_DOUBLE_AFTER 3
-
-#define TERM_SEMESTER_1 4
-#define TERM_SEMESTER_2 5
-#define TERM_TRIMESTER_1 6
-#define TERM_TRIMESTER_2 7
-#define TERM_TRIMESTER_3 8
-
 
 @interface IHWCourse : NSObject
 
@@ -31,7 +19,7 @@
 - (id)initWithJSONDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)saveCourse;
 
--(int)getTotalMeetings;
-- (int)getMeetingOn:(int)dayNum;
+-(int)totalMeetings;
+- (int)meetingOn:(int)dayNum;
 
 @end

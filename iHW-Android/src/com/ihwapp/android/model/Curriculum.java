@@ -172,7 +172,7 @@ public class Curriculum {
 	public void addModelLoadingListener(ModelLoadingListener ofll) { mlls.add(ofll); }
 	public void removeOnFinishedLoadingListener(ModelLoadingListener ofll) { mlls.remove(ofll); }
 	
-	public void loadEverything(final Date startingDate) {
+	private void loadEverything(final Date startingDate) {
 		if (loadingProgress > 0) {
 			Log.d("iHW", "Tried to load everything but loading has already started.");
 			return;
@@ -392,7 +392,7 @@ public class Curriculum {
 	
 	private boolean loadDayNumbers() {
 		Log.d("iHW", "starting to load day numbers");
-		if (specialDayTemplates == null) return false;
+		if (specialDayTemplates == null || semesterEndDates == null) return false;
 		SortedMap<Date, Integer> dayNums = null;
 		try {
 			dayNums = Collections.synchronizedSortedMap(new TreeMap<Date, Integer>());
@@ -803,7 +803,7 @@ public class Curriculum {
 	
 	/*********************************BEGIN SAVING STUFF*************************************/
 	
-	public void saveCycle(Date d) {
+	public void saveWeek(Date d) {
 		Date weekStart = getWeekStart(year, d);
 		JSONObject weekObj = loadedWeeks.get(weekStart);
 		int weekNumber = getWeekNumber(year, d);

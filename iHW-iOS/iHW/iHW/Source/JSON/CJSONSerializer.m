@@ -177,7 +177,7 @@ static NSData *kTrue = NULL;
     {
     #pragma unused (outError)
     NSData *theResult = NULL;
-    switch (CFNumberGetType((__bridge CFNumberRef)inNumber))
+    switch (CFNumberGetType(( CFNumberRef)inNumber))
         {
         case kCFNumberCharType:
             {

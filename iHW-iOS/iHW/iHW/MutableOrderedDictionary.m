@@ -47,17 +47,12 @@ NSString *DescriptionForObject(NSObject *object, id locale, NSUInteger indent)
 
 @implementation MutableOrderedDictionary
 
-- (id)init
-{
-	return [self initWithCapacity:0];
-}
-
 - (id)initWithCapacity:(NSUInteger)capacity
 {
-	self = [super initWithCapacity:capacity];
+	self = [super init];
 	if (self != nil)
 	{
-		//dictionary = [[NSMutableDictionary alloc] initWithCapacity:capacity];
+		dictionary = [[NSMutableDictionary alloc] initWithCapacity:capacity];
 		array = [[NSMutableOrderedSet alloc] initWithCapacity:capacity];
 	}
 	return self;
@@ -70,31 +65,31 @@ NSString *DescriptionForObject(NSObject *object, id locale, NSUInteger indent)
 
 - (void)setObject:(id)anObject forKey:(id)aKey
 {
-	/*if (![dictionary objectForKey:aKey])*/ if (![super objectForKey:aKey])
+	if (![dictionary objectForKey:aKey]) //if (![super objectForKey:aKey])
 	{
 		[array addObject:aKey];
 	}
-	//[dictionary setObject:anObject forKey:aKey];
-    [super setObject:anObject forKey:aKey];
+	[dictionary setObject:anObject forKey:aKey];
+    //[super setObject:anObject forKey:aKey];
 }
 
 - (void)removeObjectForKey:(id)aKey
 {
-	//[dictionary removeObjectForKey:aKey];
-    [super removeObjectForKey:aKey];
+	[dictionary removeObjectForKey:aKey];
+    //[super removeObjectForKey:aKey];
 	[array removeObject:aKey];
 }
 
 - (NSUInteger)count
 {
-	//return [dictionary count];
-    return [super count];
+	return [dictionary count];
+    //return [super count];
 }
 
 - (id)objectForKey:(id)aKey
 {
-	//return [dictionary objectForKey:aKey];
-    return [super objectForKey:aKey];
+	return [dictionary objectForKey:aKey];
+    //return [super objectForKey:aKey];
 }
 
 - (NSEnumerator *)keyEnumerator
@@ -109,13 +104,13 @@ NSString *DescriptionForObject(NSObject *object, id locale, NSUInteger indent)
 
 - (void)insertObject:(id)anObject forKey:(id)aKey atIndex:(NSUInteger)anIndex
 {
-	/*if ([dictionary objectForKey:aKey])*/ if ([super objectForKey:aKey])
+	if ([dictionary objectForKey:aKey]) // if ([super objectForKey:aKey])
 	{
 		[self removeObjectForKey:aKey];
 	}
 	[array insertObject:aKey atIndex:anIndex];
-	//[dictionary setObject:anObject forKey:aKey];
-    [super setObject:anObject forKey:aKey];
+	[dictionary setObject:anObject forKey:aKey];
+    //[super setObject:anObject forKey:aKey];
 }
 
 - (void)insertObject:(id)anObject forKey:(id)aKey sortedUsingComparator:(NSComparator)comparator {

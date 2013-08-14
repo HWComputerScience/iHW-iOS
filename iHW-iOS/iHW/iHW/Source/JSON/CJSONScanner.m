@@ -458,7 +458,7 @@ static id kNSNO = NULL;
         NSString *theStringChunk = NULL;
         if ([self scanNotQuoteCharactersIntoString:&theStringChunk])
             {
-            CFStringAppend((__bridge CFMutableStringRef)theString, (__bridge CFStringRef)theStringChunk);
+            CFStringAppend(( CFMutableStringRef)theString, ( CFStringRef)theStringChunk);
             }
         else if ([self scanCharacter:'\\'] == YES)
             {
@@ -519,7 +519,7 @@ static id kNSNO = NULL;
                     }
                     break;
                 }
-            CFStringAppendCharacters((__bridge CFMutableStringRef)theString, &theCharacter, 1);
+            CFStringAppendCharacters(( CFMutableStringRef)theString, &theCharacter, 1);
             }
         else
             {

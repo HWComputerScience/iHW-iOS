@@ -34,6 +34,26 @@
 		CB048C4217B45CFA00E3F76E /* IHWFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C4117B45CFA00E3F76E /* IHWFileManager.m */; };
 		CB048C4817B573EC00E3F76E /* CDataScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C4517B573EC00E3F76E /* CDataScanner_Extensions.m */; };
 		CB048C4917B573EC00E3F76E /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C4717B573EC00E3F76E /* NSDictionary_JSONExtensions.m */; };
+		CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB44277817BB0DC00068D543 /* IHWDayViewController.m */; };
+		CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB44277917BB0DC00068D543 /* IHWDayViewController.xib */; };
+		CB61049B17B8945C00D3FD75 /* IHWFirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */; };
+		CB61049C17B8945C00D3FD75 /* IHWFirstRunViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */; };
+		CB61049F17B8952600D3FD75 /* mscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB61049D17B8952600D3FD75 /* mscampus.jpg */; };
+		CB6104A017B8952600D3FD75 /* uscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB61049E17B8952600D3FD75 /* uscampus.jpg */; };
+		CB6104A817B9457500D3FD75 /* IHWDownloadScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104A617B9457500D3FD75 /* IHWDownloadScheduleViewController.m */; };
+		CB6104A917B9457500D3FD75 /* IHWDownloadScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104A717B9457500D3FD75 /* IHWDownloadScheduleViewController.xib */; };
+		CB6104BC17B955F900D3FD75 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6104BB17B955F900D3FD75 /* libxml2.dylib */; };
+		CB6104CC17B9689600D3FD75 /* HTMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104C817B9689600D3FD75 /* HTMLNode.m */; };
+		CB6104CD17B9689600D3FD75 /* HTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104CA17B9689600D3FD75 /* HTMLParser.m */; };
+		CB6104CE17B9689600D3FD75 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = CB6104CB17B9689600D3FD75 /* README.md */; };
+		CB6104D117B96C1400D3FD75 /* IHWCoursesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104D017B96C1400D3FD75 /* IHWCoursesViewController.m */; };
+		CB6104D517B96C2600D3FD75 /* IHWGuidedCoursesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104D317B96C2500D3FD75 /* IHWGuidedCoursesViewController.m */; };
+		CB6104D617B96C2600D3FD75 /* IHWGuidedCoursesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104D417B96C2500D3FD75 /* IHWGuidedCoursesViewController.xib */; };
+		CB6104DA17B96C3200D3FD75 /* IHWNormalCoursesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104D817B96C3100D3FD75 /* IHWNormalCoursesViewController.m */; };
+		CB6104DB17B96C3200D3FD75 /* IHWNormalCoursesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104D917B96C3100D3FD75 /* IHWNormalCoursesViewController.xib */; };
+		CB6104DF17B9747E00D3FD75 /* IHWScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */; };
+		CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */; };
+		CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB88339117BAF720002BC200 /* IHWLoadingView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +107,37 @@
 		CB048C4517B573EC00E3F76E /* CDataScanner_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner_Extensions.m; sourceTree = "<group>"; };
 		CB048C4617B573EC00E3F76E /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
 		CB048C4717B573EC00E3F76E /* NSDictionary_JSONExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionary_JSONExtensions.m; sourceTree = "<group>"; };
+		CB44277717BB0DC00068D543 /* IHWDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDayViewController.h; sourceTree = "<group>"; };
+		CB44277817BB0DC00068D543 /* IHWDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDayViewController.m; sourceTree = "<group>"; };
+		CB44277917BB0DC00068D543 /* IHWDayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWDayViewController.xib; sourceTree = "<group>"; };
+		CB61049817B8945C00D3FD75 /* IHWFirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWFirstRunViewController.h; sourceTree = "<group>"; };
+		CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWFirstRunViewController.m; sourceTree = "<group>"; };
+		CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWFirstRunViewController.xib; sourceTree = "<group>"; };
+		CB61049D17B8952600D3FD75 /* mscampus.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mscampus.jpg; sourceTree = "<group>"; };
+		CB61049E17B8952600D3FD75 /* uscampus.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = uscampus.jpg; sourceTree = "<group>"; };
+		CB6104A417B8A43E00D3FD75 /* IHWConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IHWConstants.h; sourceTree = "<group>"; };
+		CB6104A517B9457500D3FD75 /* IHWDownloadScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDownloadScheduleViewController.h; sourceTree = "<group>"; };
+		CB6104A617B9457500D3FD75 /* IHWDownloadScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDownloadScheduleViewController.m; sourceTree = "<group>"; };
+		CB6104A717B9457500D3FD75 /* IHWDownloadScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWDownloadScheduleViewController.xib; sourceTree = "<group>"; };
+		CB6104BB17B955F900D3FD75 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		CB6104C717B9689600D3FD75 /* HTMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLNode.h; sourceTree = "<group>"; };
+		CB6104C817B9689600D3FD75 /* HTMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLNode.m; sourceTree = "<group>"; };
+		CB6104C917B9689600D3FD75 /* HTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLParser.h; sourceTree = "<group>"; };
+		CB6104CA17B9689600D3FD75 /* HTMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLParser.m; sourceTree = "<group>"; };
+		CB6104CB17B9689600D3FD75 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		CB6104CF17B96C1300D3FD75 /* IHWCoursesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWCoursesViewController.h; sourceTree = "<group>"; };
+		CB6104D017B96C1400D3FD75 /* IHWCoursesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWCoursesViewController.m; sourceTree = "<group>"; };
+		CB6104D217B96C2400D3FD75 /* IHWGuidedCoursesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWGuidedCoursesViewController.h; sourceTree = "<group>"; };
+		CB6104D317B96C2500D3FD75 /* IHWGuidedCoursesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWGuidedCoursesViewController.m; sourceTree = "<group>"; };
+		CB6104D417B96C2500D3FD75 /* IHWGuidedCoursesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWGuidedCoursesViewController.xib; sourceTree = "<group>"; };
+		CB6104D717B96C3100D3FD75 /* IHWNormalCoursesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWNormalCoursesViewController.h; sourceTree = "<group>"; };
+		CB6104D817B96C3100D3FD75 /* IHWNormalCoursesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWNormalCoursesViewController.m; sourceTree = "<group>"; };
+		CB6104D917B96C3100D3FD75 /* IHWNormalCoursesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWNormalCoursesViewController.xib; sourceTree = "<group>"; };
+		CB6104DC17B9747C00D3FD75 /* IHWScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWScheduleViewController.h; sourceTree = "<group>"; };
+		CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWScheduleViewController.m; sourceTree = "<group>"; };
+		CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWScheduleViewController.xib; sourceTree = "<group>"; };
+		CB88339017BAF71D002BC200 /* IHWLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWLoadingView.h; sourceTree = "<group>"; };
+		CB88339117BAF720002BC200 /* IHWLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWLoadingView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB6104BC17B955F900D3FD75 /* libxml2.dylib in Frameworks */,
 				491CCB32178E590B00736453 /* UIKit.framework in Frameworks */,
 				491CCB34178E590B00736453 /* Foundation.framework in Frameworks */,
 				491CCB36178E590B00736453 /* CoreGraphics.framework in Frameworks */,
@@ -123,6 +175,7 @@
 		491CCB30178E590B00736453 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CB6104BB17B955F900D3FD75 /* libxml2.dylib */,
 				491CCB31178E590B00736453 /* UIKit.framework */,
 				491CCB33178E590B00736453 /* Foundation.framework */,
 				491CCB35178E590B00736453 /* CoreGraphics.framework */,
@@ -133,9 +186,33 @@
 		491CCB37178E590B00736453 /* iHW */ = {
 			isa = PBXGroup;
 			children = (
+				CB6104A417B8A43E00D3FD75 /* IHWConstants.h */,
 				491CCB5A178E63E100736453 /* Model */,
 				491CCB40178E590B00736453 /* IHWAppDelegate.h */,
 				491CCB41178E590B00736453 /* IHWAppDelegate.m */,
+				CB61049817B8945C00D3FD75 /* IHWFirstRunViewController.h */,
+				CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */,
+				CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */,
+				CB6104A517B9457500D3FD75 /* IHWDownloadScheduleViewController.h */,
+				CB6104A617B9457500D3FD75 /* IHWDownloadScheduleViewController.m */,
+				CB6104A717B9457500D3FD75 /* IHWDownloadScheduleViewController.xib */,
+				CB6104CF17B96C1300D3FD75 /* IHWCoursesViewController.h */,
+				CB6104D017B96C1400D3FD75 /* IHWCoursesViewController.m */,
+				CB6104D217B96C2400D3FD75 /* IHWGuidedCoursesViewController.h */,
+				CB6104D317B96C2500D3FD75 /* IHWGuidedCoursesViewController.m */,
+				CB6104D417B96C2500D3FD75 /* IHWGuidedCoursesViewController.xib */,
+				CB6104D717B96C3100D3FD75 /* IHWNormalCoursesViewController.h */,
+				CB6104D817B96C3100D3FD75 /* IHWNormalCoursesViewController.m */,
+				CB6104D917B96C3100D3FD75 /* IHWNormalCoursesViewController.xib */,
+				CB6104DC17B9747C00D3FD75 /* IHWScheduleViewController.h */,
+				CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */,
+				CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */,
+				CB88339017BAF71D002BC200 /* IHWLoadingView.h */,
+				CB88339117BAF720002BC200 /* IHWLoadingView.m */,
+				CB44277717BB0DC00068D543 /* IHWDayViewController.h */,
+				CB44277817BB0DC00068D543 /* IHWDayViewController.m */,
+				CB44277917BB0DC00068D543 /* IHWDayViewController.xib */,
+				CB6104A117B8952A00D3FD75 /* Images */,
 				491CCB38178E590B00736453 /* Supporting Files */,
 			);
 			path = iHW;
@@ -146,14 +223,12 @@
 			children = (
 				CB048C3D17B4439E00E3F76E /* MutableOrderedDictionary.h */,
 				CB048C3E17B4439E00E3F76E /* MutableOrderedDictionary.m */,
+				CB6104C617B9689600D3FD75 /* HTML-Parser */,
 				CB048C1A17B409DA00E3F76E /* TouchJSON */,
 				491CCB39178E590B00736453 /* iHW-Info.plist */,
 				491CCB3A178E590B00736453 /* InfoPlist.strings */,
 				491CCB3D178E590B00736453 /* main.m */,
 				491CCB3F178E590B00736453 /* iHW-Prefix.pch */,
-				491CCB43178E590B00736453 /* Default.png */,
-				491CCB45178E590B00736453 /* Default@2x.png */,
-				491CCB47178E590B00736453 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -224,6 +299,30 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		CB6104A117B8952A00D3FD75 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				491CCB43178E590B00736453 /* Default.png */,
+				491CCB45178E590B00736453 /* Default@2x.png */,
+				491CCB47178E590B00736453 /* Default-568h@2x.png */,
+				CB61049D17B8952600D3FD75 /* mscampus.jpg */,
+				CB61049E17B8952600D3FD75 /* uscampus.jpg */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		CB6104C617B9689600D3FD75 /* HTML-Parser */ = {
+			isa = PBXGroup;
+			children = (
+				CB6104C717B9689600D3FD75 /* HTMLNode.h */,
+				CB6104C817B9689600D3FD75 /* HTMLNode.m */,
+				CB6104C917B9689600D3FD75 /* HTMLParser.h */,
+				CB6104CA17B9689600D3FD75 /* HTMLParser.m */,
+				CB6104CB17B9689600D3FD75 /* README.md */,
+			);
+			path = "HTML-Parser";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -280,6 +379,15 @@
 				491CCB44178E590B00736453 /* Default.png in Resources */,
 				491CCB46178E590B00736453 /* Default@2x.png in Resources */,
 				491CCB48178E590B00736453 /* Default-568h@2x.png in Resources */,
+				CB61049C17B8945C00D3FD75 /* IHWFirstRunViewController.xib in Resources */,
+				CB61049F17B8952600D3FD75 /* mscampus.jpg in Resources */,
+				CB6104A017B8952600D3FD75 /* uscampus.jpg in Resources */,
+				CB6104A917B9457500D3FD75 /* IHWDownloadScheduleViewController.xib in Resources */,
+				CB6104CE17B9689600D3FD75 /* README.md in Resources */,
+				CB6104D617B96C2600D3FD75 /* IHWGuidedCoursesViewController.xib in Resources */,
+				CB6104DB17B96C3200D3FD75 /* IHWNormalCoursesViewController.xib in Resources */,
+				CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */,
+				CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +418,16 @@
 				CB048C4217B45CFA00E3F76E /* IHWFileManager.m in Sources */,
 				CB048C4817B573EC00E3F76E /* CDataScanner_Extensions.m in Sources */,
 				CB048C4917B573EC00E3F76E /* NSDictionary_JSONExtensions.m in Sources */,
+				CB61049B17B8945C00D3FD75 /* IHWFirstRunViewController.m in Sources */,
+				CB6104A817B9457500D3FD75 /* IHWDownloadScheduleViewController.m in Sources */,
+				CB6104CC17B9689600D3FD75 /* HTMLNode.m in Sources */,
+				CB6104CD17B9689600D3FD75 /* HTMLParser.m in Sources */,
+				CB6104D117B96C1400D3FD75 /* IHWCoursesViewController.m in Sources */,
+				CB6104D517B96C2600D3FD75 /* IHWGuidedCoursesViewController.m in Sources */,
+				CB6104DA17B96C3200D3FD75 /* IHWNormalCoursesViewController.m in Sources */,
+				CB6104DF17B9747E00D3FD75 /* IHWScheduleViewController.m in Sources */,
+				CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */,
+				CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +470,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -377,6 +496,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;

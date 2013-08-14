@@ -2,8 +2,8 @@
 //  IHWAppDelegate.h
 //  iHW
 //
-//  Created by Andrew Friedman on 7/10/13.
-//  Copyright (c) 2013 Andrew Friedman. All rights reserved.
+//  Created by Jonathan Burns on 7/10/13.
+//  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -14,6 +14,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) IHWViewController *viewController;
+@property (strong, nonatomic) UINavigationController *navController;
 
 @end
