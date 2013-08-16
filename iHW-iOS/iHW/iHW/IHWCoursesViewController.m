@@ -8,6 +8,7 @@
 
 #import "IHWCoursesViewController.h"
 #import "IHWCurriculum.h"
+#import "IHWEditCourseViewController.h"
 
 @implementation IHWCoursesViewController
 
@@ -31,8 +32,13 @@
     self.courseNames = [[IHWCurriculum currentCurriculum] allCourseNames];
 }
 
+- (void)showNewCourseView {
+    [self.navigationController pushViewController:[[IHWEditCourseViewController alloc] initWithCourse:nil] animated:YES];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.courseNames.count;
+    if (tableView.isEditing) return self.courseNames.count+1;
+    else return self.courseNames.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -40,8 +46,21 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"courseName"];
     }
-    cell.textLabel.text = [self.courseNames objectAtIndex:indexPath.row];
+    NSString *text;
+    if (indexPath.row < self.courseNames.count) text = [self.courseNames objectAtIndex:indexPath.row];
+    else text = @"Add a course";
+    cell.textLabel.text = text;
     return cell;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.navigationController pushViewController:[[IHWEditCourseViewController alloc] initWithCourse:[[IHWCurriculum currentCurriculum] courseWithName:[self.courseNames objectAtIndex:indexPath.row]]] animated:YES];
+    return nil;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row < [tableView numberOfRowsInSection:indexPath.section]-1)return UITableViewCellEditingStyleDelete;
+    else return UITableViewCellEditingStyleInsert;
 }
 
 - (void)didReceiveMemoryWarning

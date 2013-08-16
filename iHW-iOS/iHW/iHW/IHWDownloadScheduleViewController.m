@@ -14,54 +14,7 @@
 #import "IHWGuidedCoursesViewController.h"
 #import "IHWNormalCoursesViewController.h"
 #import "IHWScheduleViewController.h"
-
-IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents) {
-    int term = TERM_FULL_YEAR;
-    if (code.length >= 6) term = [[code substringWithRange:NSMakeRange(5, 1)] intValue];
-    
-    //parse period list
-    int numDays = [IHWCurriculum currentCampus];
-    int numPeriods = numDays+3;
-    BOOL periods[numDays][numPeriods+1];
-    for (int d=0; d<numDays; d++) for (int p=0; p<=numPeriods; p++) {
-        periods[d][p] = NO;
-    }
-    int periodFrequency[numPeriods+1];
-    for (int p=0; p<=numPeriods; p++) {
-        periodFrequency[p] = 0;
-    }
-    int minPeriod = numPeriods+1;
-    int maxPeriod = 0;
-    int day = 0;
-    for (NSString *component in periodComponents) {
-        for (int i=0; i<component.length; i++) {
-            int period = [[component substringWithRange:NSMakeRange(i, 1)] intValue];
-            if (period > 0) {
-                periods[day][period] = YES;
-                minPeriod = MIN(minPeriod, period);
-                maxPeriod = MAX(maxPeriod, period);
-                periodFrequency[period]++;
-            }
-        }
-        day++;
-    }
-    //determine course period
-    int coursePeriod;
-    if (minPeriod == maxPeriod) coursePeriod = minPeriod;
-    else if (maxPeriod-minPeriod == 2) coursePeriod = maxPeriod-1;
-    else if (maxPeriod-minPeriod == 1 && periodFrequency[maxPeriod] > periodFrequency[minPeriod]) coursePeriod = maxPeriod;
-    else if (maxPeriod-minPeriod == 1 && periodFrequency[maxPeriod] <= periodFrequency[minPeriod]) coursePeriod = minPeriod;
-    else return nil;
-    //create meetings array
-    NSMutableArray *meetings = [NSMutableArray array];
-    for (int i=0; i<numDays; i++) {
-        if (!periods[i][coursePeriod]) [meetings setObject:[NSNumber numberWithInt:MEETING_X_DAY] atIndexedSubscript:i];
-        else if (coursePeriod-1 > 0 && periods[i][coursePeriod-1]) [meetings setObject:[NSNumber numberWithInt:MEETING_DOUBLE_BEFORE] atIndexedSubscript:i];
-        else if (coursePeriod+1 <= numPeriods && periods[i][coursePeriod+1]) [meetings setObject:[NSNumber numberWithInt:MEETING_DOUBLE_AFTER] atIndexedSubscript:i];
-        else [meetings setObject:[NSNumber numberWithInt:MEETING_SINGLE_PERIOD] atIndexedSubscript:i];
-    }
-    return [[IHWCourse alloc] initWithName:name period:coursePeriod term:term meetings:meetings];
-}
+#import "IHWUtils.h"
 
 @implementation IHWDownloadScheduleViewController {
     BOOL alreadyLoaded;

@@ -23,7 +23,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [IHWCurriculum setCurrentYear:[[[IHWDate alloc] init] dateByAddingDays:-365/2].year];
+        [IHWCurriculum setCurrentYear:[[IHWDate IHWDate] dateByAddingDays:-365/2].year];
     }
     return self;
 }

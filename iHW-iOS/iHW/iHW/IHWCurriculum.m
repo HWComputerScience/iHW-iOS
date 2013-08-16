@@ -13,70 +13,10 @@
 #import "IHWHoliday.h"
 #import "IHWNormalDay.h"
 #import "IHWCustomDay.h"
+#import "IHWUtils.h"
 
 static IHWCurriculum *currentCurriculum;
 
-#pragma mark ***********************UTILITIES***************************
-
-NSString *getCampusChar(int campus) {
-    NSString *campusChar = nil;
-    if (campus==CAMPUS_MIDDLE) campusChar = @"m";
-    else if (campus==CAMPUS_UPPER) campusChar = @"u";
-    return campusChar;
-}
-
-int getWeekNumber(int year, IHWDate *d) {
-    IHWDate *firstDate = [[[IHWDate alloc] initWithMonth:7 day:1 year:year] dateOfNextSunday];
-    if ([d compare:firstDate] == NSOrderedAscending && [d compare:[[IHWDate alloc] initWithMonth:7 day:1 year:year]] != NSOrderedAscending) return 0;
-    else if ([d compare:[[IHWDate alloc] initWithMonth:7 day:1 year:year+1]] == NSOrderedAscending) return ([firstDate daysUntilDate:d]/7)+1;
-    else return -1;
-}
-
-IHWDate *getWeekStart(int year, IHWDate *d) {
-    IHWDate *weekStart = [d dateOfPreviousSunday];
-    IHWDate *july1 = [[IHWDate alloc] initWithMonth:7 day:1 year:year];
-    if ([weekStart compare:july1] == NSOrderedAscending) weekStart = july1;
-    return weekStart;
-}
-
-NSData *generateBlankYearJSON(int campus, int year) {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    [dict setObject:[NSNumber numberWithInt:year] forKey:@"year"];
-    [dict setObject:[NSNumber numberWithInt:campus] forKey:@"campus"];
-    [dict setObject:[NSMutableArray array] forKey:@"courses"];
-    NSError *error = nil;
-    NSData *result = [[CJSONSerializer serializer] serializeDictionary:dict error:&error];
-    if (error==nil) return result;
-    else return nil;
-}
-
-NSData *generateBlankWeekJSON(IHWDate *startingDate) {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    [dict setObject:startingDate.description forKey:@"startingDate"];
-    [dict setObject:[NSMutableDictionary dictionary] forKey:@"notes"];
-    NSError *error = nil;
-    NSData *result = [[CJSONSerializer serializer] serializeDictionary:dict error:&error];
-    if (error==nil) return result;
-    else return nil;
-}
-
-BOOL termsCompatible(int a, int b) {
-    if (a==b) return NO;
-    if (a==TERM_FULL_YEAR || b==TERM_FULL_YEAR) return NO;
-    if (a==TERM_FIRST_SEMESTER) {
-        if (b==TERM_FIRST_TRIMESTER || b==TERM_SECOND_TRIMESTER) return NO;
-    } else if (a==TERM_SECOND_SEMESTER) {
-        if (b==TERM_SECOND_TRIMESTER || b==TERM_THIRD_TRIMESTER) return NO;
-    }
-    if (b==TERM_FIRST_SEMESTER) {
-        if (a==TERM_FIRST_TRIMESTER || a==TERM_SECOND_TRIMESTER) return NO;
-    } else if (b==TERM_SECOND_SEMESTER) {
-        if (a==TERM_SECOND_TRIMESTER || a==TERM_THIRD_TRIMESTER) return NO;
-    }
-    return YES;
-}
-
-#pragma mark -
 #pragma mark ****************PRIVATE INSTANCE VARS*****************
 
 @implementation IHWCurriculum {
@@ -94,9 +34,10 @@ BOOL termsCompatible(int a, int b) {
     if (currentCurriculum == nil || currentCurriculum.campus != campus || currentCurriculum.year != year) {
         [self setCurrentCampus:campus];
         [self setCurrentYear:year];
-        currentCurriculum = [[IHWCurriculum alloc] initWithCampus:campus year:year startingDate:[[IHWDate alloc] init]];
+        NSLog(@"Creating current curriculum: %@", [IHWDate IHWDate]);
+        currentCurriculum = [[IHWCurriculum alloc] initWithCampus:campus year:year startingDate:[IHWDate IHWDate]];
     } else {
-        if (!currentCurriculum.isLoaded && !currentCurriculum.isLoading) [currentCurriculum loadEverythingWithStartingDate:[[IHWDate alloc] init]];
+        if (!currentCurriculum.isLoaded && !currentCurriculum.isLoading) [currentCurriculum loadEverythingWithStartingDate:[IHWDate IHWDate]];
     }
     return currentCurriculum;
 }

@@ -11,7 +11,9 @@ typedef NSDate IHWDate;
 
 @interface NSDate (IHW)
 
-- (id)init;
++ (IHWDate *)IHWDate;
+
+- (id)initIHWDate;
 - (id)initWithMonth:(int)m day:(int)d year:(int)y;
 - (id)initFromString:(NSString *)string;
 
@@ -21,13 +23,13 @@ typedef NSDate IHWDate;
 
 - (BOOL)isMonday;
 - (BOOL)isWeekend;
-- (IHWDate *)dateByAddingDays:(int)days;
-- (IHWDate *)dateOfNextSunday;
-- (IHWDate *)dateOfPreviousSunday;
+- (NSDate *)dateByAddingDays:(int)days;
+- (NSDate *)dateOfNextSunday;
+- (NSDate *)dateOfPreviousSunday;
 - (NSString *)description;
-- (int)daysUntilDate:(IHWDate *)other;
+- (int)daysUntilDate:(NSDate *)other;
 - (NSString *)dayOfWeek:(BOOL)shortVersion;
-- (BOOL)isEqualToDate:(IHWDate *)otherDate;
+- (BOOL)isEqualToDate:(NSDate *)otherDate;
 
 + (NSComparator)comparator;
 

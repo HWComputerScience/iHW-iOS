@@ -10,9 +10,14 @@
 
 @implementation NSDate (IHW)
 
-- (id)init
++ (IHWDate *)IHWDate {
+    return [[IHWDate alloc] initIHWDate];
+}
+
+- (id)initIHWDate
 {
-    self = [super init];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:[self init]];
+    self = [[NSCalendar currentCalendar] dateFromComponents:components];
     return self;
 }
 
@@ -22,7 +27,7 @@
     components.day = d;
     components.month = m;
     components.year = y;
-    self = [self initWithTimeInterval:0 sinceDate:[[NSCalendar currentCalendar] dateFromComponents:components]];
+    self = [[NSCalendar currentCalendar] dateFromComponents:components];
     return self;
 }
 
@@ -55,17 +60,17 @@
     return weekday==1 || weekday == 7;
 }
 
-- (IHWDate *)dateByAddingDays:(int)days {
-    return [[IHWDate alloc] initWithTimeInterval:days*24*60*60 sinceDate:self];
+- (NSDate *)dateByAddingDays:(int)days {
+    return [[NSDate alloc] initWithTimeInterval:days*24*60*60 sinceDate:self];
 }
 
-- (IHWDate *)dateOfNextSunday {
+- (NSDate *)dateOfNextSunday {
     int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
     int daysBehind = 8-weekday;
     return [self dateByAddingDays:daysBehind];
 }
 
-- (IHWDate *)dateOfPreviousSunday {
+- (NSDate *)dateOfPreviousSunday {
     int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
     int daysAhead = weekday-1;
     return [self dateByAddingDays:-daysAhead];
@@ -75,7 +80,7 @@
     return [NSString stringWithFormat:@"%d/%d/%d", self.month, self.day, self.year];
 }
 
-- (int)daysUntilDate:(IHWDate *)other {
+- (int)daysUntilDate:(NSDate *)other {
     return [other timeIntervalSinceDate:self]/60/60/24;
 }
 
@@ -87,8 +92,8 @@
 }
 
 - (BOOL)isEqualToDate:(NSDate *)other {
-    if (![other isKindOfClass:[IHWDate class]]) return NO;
-    IHWDate *otherDate = (IHWDate *)other;
+    if (![other isKindOfClass:[NSDate class]]) return NO;
+    NSDate *otherDate = (NSDate *)other;
     return (self.month == otherDate.month && self.day == otherDate.day && self.year == otherDate.year);
 }
 
@@ -102,7 +107,7 @@
 }
 
 + (NSComparator)comparator {
-    return ^(IHWDate *obj1, IHWDate *obj2) {
+    return ^(NSDate *obj1, NSDate *obj2) {
         return [obj1 compare:obj2];
     };
 }

@@ -11,7 +11,8 @@
 @interface IHWCoursesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) NSArray *courseNames;
-
 @property (weak, nonatomic) IBOutlet UITableView *coursesTable;
+
+- (void)showNewCourseView;
 
 @end

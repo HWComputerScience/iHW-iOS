@@ -36,6 +36,16 @@
 		CB048C4917B573EC00E3F76E /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C4717B573EC00E3F76E /* NSDictionary_JSONExtensions.m */; };
 		CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB44277817BB0DC00068D543 /* IHWDayViewController.m */; };
 		CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB44277917BB0DC00068D543 /* IHWDayViewController.xib */; };
+		CB5DF79117BD415300D5651C /* IHWCheckboxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79017BD415200D5651C /* IHWCheckboxCell.m */; };
+		CB5DF79417BD424F00D5651C /* IHWPeriodsChooserLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79317BD424F00D5651C /* IHWPeriodsChooserLayout.m */; };
+		CB5DF79717BD4B1900D5651C /* IHWLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79617BD4B1800D5651C /* IHWLabelCell.m */; };
+		CB5DF79917BDF41500D5651C /* IHWUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79817BDF41500D5651C /* IHWUtils.m */; };
+		CB5DF7A317BDFA5400D5651C /* checkboxChecked.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF79F17BDFA5400D5651C /* checkboxChecked.png */; };
+		CB5DF7A417BDFA5400D5651C /* checkboxChecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */; };
+		CB5DF7A517BDFA5400D5651C /* checkboxUnchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */; };
+		CB5DF7A617BDFA5400D5651C /* checkboxUnchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */; };
+		CB5F682717BC48D000A583D6 /* IHWEditCourseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */; };
+		CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB5F682617BC48CF00A583D6 /* IHWEditCourseViewController.xib */; };
 		CB61049B17B8945C00D3FD75 /* IHWFirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */; };
 		CB61049C17B8945C00D3FD75 /* IHWFirstRunViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */; };
 		CB61049F17B8952600D3FD75 /* mscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB61049D17B8952600D3FD75 /* mscampus.jpg */; };
@@ -54,6 +64,8 @@
 		CB6104DF17B9747E00D3FD75 /* IHWScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */; };
 		CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */; };
 		CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB88339117BAF720002BC200 /* IHWLoadingView.m */; };
+		CBA2977917BBEB430087104A /* IHWPeriodCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = CBA2977817BBEB430087104A /* IHWPeriodCellView.m */; };
+		CBA2977B17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBA2977A17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +122,21 @@
 		CB44277717BB0DC00068D543 /* IHWDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDayViewController.h; sourceTree = "<group>"; };
 		CB44277817BB0DC00068D543 /* IHWDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDayViewController.m; sourceTree = "<group>"; };
 		CB44277917BB0DC00068D543 /* IHWDayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWDayViewController.xib; sourceTree = "<group>"; };
+		CB5DF78F17BD415200D5651C /* IHWCheckboxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWCheckboxCell.h; sourceTree = "<group>"; };
+		CB5DF79017BD415200D5651C /* IHWCheckboxCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWCheckboxCell.m; sourceTree = "<group>"; };
+		CB5DF79217BD424F00D5651C /* IHWPeriodsChooserLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPeriodsChooserLayout.h; sourceTree = "<group>"; };
+		CB5DF79317BD424F00D5651C /* IHWPeriodsChooserLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPeriodsChooserLayout.m; sourceTree = "<group>"; };
+		CB5DF79517BD4B1800D5651C /* IHWLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWLabelCell.h; sourceTree = "<group>"; };
+		CB5DF79617BD4B1800D5651C /* IHWLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWLabelCell.m; sourceTree = "<group>"; };
+		CB5DF79817BDF41500D5651C /* IHWUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWUtils.m; sourceTree = "<group>"; };
+		CB5DF79A17BDF60C00D5651C /* IHWUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IHWUtils.h; sourceTree = "<group>"; };
+		CB5DF79F17BDFA5400D5651C /* checkboxChecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxChecked.png; sourceTree = "<group>"; };
+		CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxChecked@2x.png"; sourceTree = "<group>"; };
+		CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxUnchecked.png; sourceTree = "<group>"; };
+		CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxUnchecked@2x.png"; sourceTree = "<group>"; };
+		CB5F682417BC48CF00A583D6 /* IHWEditCourseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWEditCourseViewController.h; sourceTree = "<group>"; };
+		CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWEditCourseViewController.m; sourceTree = "<group>"; };
+		CB5F682617BC48CF00A583D6 /* IHWEditCourseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWEditCourseViewController.xib; sourceTree = "<group>"; };
 		CB61049817B8945C00D3FD75 /* IHWFirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWFirstRunViewController.h; sourceTree = "<group>"; };
 		CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWFirstRunViewController.m; sourceTree = "<group>"; };
 		CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWFirstRunViewController.xib; sourceTree = "<group>"; };
@@ -138,6 +165,9 @@
 		CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWScheduleViewController.xib; sourceTree = "<group>"; };
 		CB88339017BAF71D002BC200 /* IHWLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWLoadingView.h; sourceTree = "<group>"; };
 		CB88339117BAF720002BC200 /* IHWLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWLoadingView.m; sourceTree = "<group>"; };
+		CBA2977717BBEB430087104A /* IHWPeriodCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPeriodCellView.h; sourceTree = "<group>"; };
+		CBA2977817BBEB430087104A /* IHWPeriodCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPeriodCellView.m; sourceTree = "<group>"; };
+		CBA2977A17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "IHWPeriodCell-SAMPLE.xib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +217,8 @@
 			isa = PBXGroup;
 			children = (
 				CB6104A417B8A43E00D3FD75 /* IHWConstants.h */,
+				CB5DF79A17BDF60C00D5651C /* IHWUtils.h */,
+				CB5DF79817BDF41500D5651C /* IHWUtils.m */,
 				491CCB5A178E63E100736453 /* Model */,
 				491CCB40178E590B00736453 /* IHWAppDelegate.h */,
 				491CCB41178E590B00736453 /* IHWAppDelegate.m */,
@@ -204,6 +236,15 @@
 				CB6104D717B96C3100D3FD75 /* IHWNormalCoursesViewController.h */,
 				CB6104D817B96C3100D3FD75 /* IHWNormalCoursesViewController.m */,
 				CB6104D917B96C3100D3FD75 /* IHWNormalCoursesViewController.xib */,
+				CB5F682417BC48CF00A583D6 /* IHWEditCourseViewController.h */,
+				CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */,
+				CB5F682617BC48CF00A583D6 /* IHWEditCourseViewController.xib */,
+				CB5DF78F17BD415200D5651C /* IHWCheckboxCell.h */,
+				CB5DF79017BD415200D5651C /* IHWCheckboxCell.m */,
+				CB5DF79517BD4B1800D5651C /* IHWLabelCell.h */,
+				CB5DF79617BD4B1800D5651C /* IHWLabelCell.m */,
+				CB5DF79217BD424F00D5651C /* IHWPeriodsChooserLayout.h */,
+				CB5DF79317BD424F00D5651C /* IHWPeriodsChooserLayout.m */,
 				CB6104DC17B9747C00D3FD75 /* IHWScheduleViewController.h */,
 				CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */,
 				CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */,
@@ -212,6 +253,9 @@
 				CB44277717BB0DC00068D543 /* IHWDayViewController.h */,
 				CB44277817BB0DC00068D543 /* IHWDayViewController.m */,
 				CB44277917BB0DC00068D543 /* IHWDayViewController.xib */,
+				CBA2977717BBEB430087104A /* IHWPeriodCellView.h */,
+				CBA2977817BBEB430087104A /* IHWPeriodCellView.m */,
+				CBA2977A17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib */,
 				CB6104A117B8952A00D3FD75 /* Images */,
 				491CCB38178E590B00736453 /* Supporting Files */,
 			);
@@ -307,6 +351,10 @@
 				491CCB47178E590B00736453 /* Default-568h@2x.png */,
 				CB61049D17B8952600D3FD75 /* mscampus.jpg */,
 				CB61049E17B8952600D3FD75 /* uscampus.jpg */,
+				CB5DF79F17BDFA5400D5651C /* checkboxChecked.png */,
+				CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */,
+				CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */,
+				CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -351,7 +399,7 @@
 			attributes = {
 				CLASSPREFIX = IHW;
 				LastUpgradeCheck = 0460;
-				ORGANIZATIONNAME = "Andrew Friedman";
+				ORGANIZATIONNAME = "Jonathan Burns";
 			};
 			buildConfigurationList = 491CCB29178E590B00736453 /* Build configuration list for PBXProject "iHW" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -388,6 +436,12 @@
 				CB6104DB17B96C3200D3FD75 /* IHWNormalCoursesViewController.xib in Resources */,
 				CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */,
 				CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */,
+				CBA2977B17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib in Resources */,
+				CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */,
+				CB5DF7A317BDFA5400D5651C /* checkboxChecked.png in Resources */,
+				CB5DF7A417BDFA5400D5651C /* checkboxChecked@2x.png in Resources */,
+				CB5DF7A517BDFA5400D5651C /* checkboxUnchecked.png in Resources */,
+				CB5DF7A617BDFA5400D5651C /* checkboxUnchecked@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,6 +482,12 @@
 				CB6104DF17B9747E00D3FD75 /* IHWScheduleViewController.m in Sources */,
 				CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */,
 				CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */,
+				CBA2977917BBEB430087104A /* IHWPeriodCellView.m in Sources */,
+				CB5F682717BC48D000A583D6 /* IHWEditCourseViewController.m in Sources */,
+				CB5DF79117BD415300D5651C /* IHWCheckboxCell.m in Sources */,
+				CB5DF79417BD424F00D5651C /* IHWPeriodsChooserLayout.m in Sources */,
+				CB5DF79717BD4B1900D5651C /* IHWLabelCell.m in Sources */,
+				CB5DF79917BDF41500D5651C /* IHWUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
