@@ -29,7 +29,7 @@
 @property int year;
 @property int passingPeriodLength;
 @property int loadingProgress;
-@property (strong, nonatomic) NSMutableSet *courses;
+@property (strong, nonatomic) NSMutableArray *courses;
 @property (strong, nonatomic) NSDictionary *normalDayTemplate;
 @property (strong, nonatomic) NSDictionary *normalMondayTemplate;
 @property (strong, nonatomic) NSDictionary *specialDayTemplates;
@@ -56,8 +56,10 @@
 - (BOOL)addCourse:(IHWCourse *)c;
 - (void)removeCourse:(IHWCourse *)c;
 - (void)removeAllCourses;
-- (BOOL)replaceCourseWithName:(NSString *)oldName withCourse:(IHWCourse *)c;
-- (IHWCourse *)courseWithName:(NSString *)name;
+//- (BOOL)replaceCourseWithName:(NSString *)oldName withCourse:(IHWCourse *)c;
+//- (IHWCourse *)courseWithName:(NSString *)name;
+- (BOOL)replaceCourseAtIndex:(NSInteger)index withCourse:(IHWCourse *)c;
+- (IHWCourse *)courseAtIndex:(NSInteger)index;
 - (IHWCourse *)courseMeetingOnDate:(IHWDate *)d period:(int)period;
 - (NSArray *)courseListForDate:(IHWDate *)d;
 - (NSArray *)termsFromDate:(IHWDate *)d;

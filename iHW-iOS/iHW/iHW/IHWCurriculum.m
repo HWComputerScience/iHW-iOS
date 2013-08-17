@@ -220,7 +220,7 @@ static IHWCurriculum *currentCurriculum;
 
 - (BOOL)loadCourses {
     NSLog(@">loading courses");
-    NSMutableSet *courseSet = [NSMutableSet set];
+    NSMutableArray *courseArray = [NSMutableArray array];
     NSError *error = nil;
     NSData *json = [IHWFileManager loadYearJSONForYear:self.year campus:getCampusChar(self.campus)];
     if (json == nil || [json isEqualToData:[NSData data]]) json = generateBlankYearJSON(self.campus, self.year);
@@ -229,9 +229,9 @@ static IHWCurriculum *currentCurriculum;
     if (error != nil) { NSLog(@"ERROR loading courses: %@", error.debugDescription); return NO; }
     for (NSDictionary *dict in coursesJSON) {
         IHWCourse *course = [[IHWCourse alloc] initWithJSONDictionary:dict];
-        [courseSet addObject:course];
+        [courseArray addObject:course];
     }
-    self.courses = courseSet;
+    self.courses = courseArray;
     return YES;
 }
 
@@ -416,6 +416,7 @@ static IHWCurriculum *currentCurriculum;
     [self.loadedDays removeAllObjects];
 }
 
+/*
 - (BOOL)replaceCourseWithName:(NSString *)oldName withCourse:(IHWCourse *)c {
     IHWCourse *oldCourse = [self courseWithName:oldName];
     [self removeCourse:oldCourse];
@@ -429,6 +430,20 @@ static IHWCurriculum *currentCurriculum;
 - (IHWCourse *)courseWithName:(NSString *)name {
     for (IHWCourse *c in self.courses) if ([c.name isEqualToString:name]) return c;
     return nil;
+}*/
+
+- (BOOL)replaceCourseAtIndex:(NSInteger)index withCourse:(IHWCourse *)c {
+    IHWCourse *oldCourse = [self courseAtIndex:index];
+    [self removeCourse:oldCourse];
+    if ([self addCourse:c]) return YES;
+    else {
+        [self addCourse:oldCourse];
+        return NO;
+    }
+}
+
+- (IHWCourse *)courseAtIndex:(NSInteger)index {
+    return [self.courses objectAtIndex:index];
 }
 
 - (IHWCourse *)courseMeetingOnDate:(IHWDate *)d period:(int)period {

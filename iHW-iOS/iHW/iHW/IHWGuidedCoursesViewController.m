@@ -7,10 +7,8 @@
 //
 
 #import "IHWGuidedCoursesViewController.h"
-
-@interface IHWGuidedCoursesViewController ()
-
-@end
+#import "IHWScheduleViewController.h"
+#import "IHWCurriculum.h"
 
 @implementation IHWGuidedCoursesViewController
 
@@ -18,7 +16,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(saveCourses)], [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showNewCourseView)]];
     }
     return self;
 }
@@ -32,6 +30,13 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
+}
+
+- (void)saveCourses {
+    [[IHWCurriculum currentCurriculum] saveCourses];
+    IHWScheduleViewController *svc = [[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil];
+    [self.navigationController pushViewController:svc animated:YES];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:svc]];
 }
 
 - (void)didReceiveMemoryWarning

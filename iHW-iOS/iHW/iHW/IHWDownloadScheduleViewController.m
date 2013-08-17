@@ -24,6 +24,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [[IHWCurriculum currentCurriculum] removeAllCourses];
         alreadyLoaded = NO;
     }
     return self;

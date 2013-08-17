@@ -41,9 +41,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    
     if (self.course != nil) {
         self.nameField.text = self.course.name;
         self.periodField.text = [NSString stringWithFormat:@"%d", self.course.period];
+        
+        self.deleteButton = [[GradientButton alloc] initWithFrame:CGRectMake(20, 284, 280, 44)];
+        [self.deleteButton useRedDeleteStyle];
+        [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateNormal];
+        [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateHighlighted];
+        [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateDisabled];
+        [[self.scrollView.subviews objectAtIndex:0] addSubview:self.deleteButton];
+        [self.deleteButton addTarget:self action:@selector(showDeleteCoursePopup) forControlEvents:UIControlEventTouchUpInside];
     }
     self.termField.text = stringForTerm(self.term);
     
@@ -65,11 +75,40 @@
 }
 
 - (void)cancelCourse {
-    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)saveCourse {
+- (void)saveCourse {    
+    //construct meetings array
+    NSMutableArray *meetings = [NSMutableArray array];
+    for (int i=1; i<=[IHWCurriculum currentCurriculum].campus; i++) {
+        BOOL thisPeriodChecked = ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:2]]).checked;
+        BOOL beforePeriodChecked = ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]]).checked;
+        BOOL afterPeriodChecked = ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:3]]).checked;
+        if (!thisPeriodChecked) [meetings addObject:[NSNumber numberWithInt:MEETING_X_DAY]];
+        else if (beforePeriodChecked) [meetings addObject:[NSNumber numberWithInt:MEETING_DOUBLE_BEFORE]];
+        else if (afterPeriodChecked) [meetings addObject:[NSNumber numberWithInt:MEETING_DOUBLE_AFTER]];
+        else [meetings addObject:[NSNumber numberWithInt:MEETING_SINGLE_PERIOD]];
+    }
+    IHWCourse *course = [[IHWCourse alloc] initWithName:self.nameField.text period:self.period term:self.term meetings:meetings];
     
+    if ([self.nameField.text isEqualToString:@""] || course.totalMeetings == 0) {
+        [[[UIAlertView alloc] initWithTitle:@"Invalid Course" message:@"The course must have a name and at least one class meeting. Please edit the course and try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+    }
+    
+    if (self.course != nil) [[IHWCurriculum currentCurriculum] removeCourse:self.course];
+    if (![[IHWCurriculum currentCurriculum] addCourse:course]) {
+        [[[UIAlertView alloc] initWithTitle:@"Courses Conflict!" message:@"The course period and meetings you selected conflict with one or more of your existing courses. Please change the course period or meetings and try again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        if (self.course != nil) [[IHWCurriculum currentCurriculum] addCourse:self.course];
+    } else {
+        [[IHWCurriculum currentCurriculum] saveCourses];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (void)showDeleteCoursePopup {
+    [[[UIActionSheet alloc] initWithTitle:@"Are you sure you want to delete this course?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil] showInView:self.view];
 }
 
 - (void)keyboardShown:(NSNotification *)aNotification {
@@ -112,8 +151,13 @@
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    self.termField.text = [actionSheet buttonTitleAtIndex:buttonIndex];
-    self.term = buttonIndex;
+    if (actionSheet.destructiveButtonIndex == -1) {
+        self.termField.text = [actionSheet buttonTitleAtIndex:buttonIndex];
+        self.term = buttonIndex;
+    } else if (buttonIndex == actionSheet.destructiveButtonIndex) {
+        [[IHWCurriculum currentCurriculum] removeCourse:self.course];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)updatePeriodsChooser {
@@ -156,7 +200,8 @@
             int meeting = [self.course meetingOn:indexPath.row];
             if (meeting != MEETING_X_DAY) {
                 if (thisPeriod == self.period) cell.checked = YES;
-            } else if (meeting == MEETING_DOUBLE_BEFORE) {
+            }
+            if (meeting == MEETING_DOUBLE_BEFORE) {
                 if (thisPeriod == self.period-1) cell.checked = YES;
             } else if (meeting == MEETING_DOUBLE_AFTER) {
                 if (thisPeriod == self.period+1) cell.checked = YES;
@@ -173,7 +218,7 @@
             if (thisPeriod < 1 || thisPeriod > [IHWCurriculum currentCampus]+3) {
                 cell.shouldHideOnAppear = YES;
             } else {
-                cell.textLabel.text = [NSString stringWithFormat:@"%@", getOrdinal(self.course.period+indexPath.section-2)];
+                cell.textLabel.text = [NSString stringWithFormat:@"%@", getOrdinal(self.period+indexPath.section-2)];
             }
         }
         return cell;

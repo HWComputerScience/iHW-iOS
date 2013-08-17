@@ -44,6 +44,7 @@
 		CB5DF7A417BDFA5400D5651C /* checkboxChecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */; };
 		CB5DF7A517BDFA5400D5651C /* checkboxUnchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */; };
 		CB5DF7A617BDFA5400D5651C /* checkboxUnchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */; };
+		CB5DF7AA17BF018F00D5651C /* GradientButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF7A817BEFFB500D5651C /* GradientButton.m */; };
 		CB5F682717BC48D000A583D6 /* IHWEditCourseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */; };
 		CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB5F682617BC48CF00A583D6 /* IHWEditCourseViewController.xib */; };
 		CB61049B17B8945C00D3FD75 /* IHWFirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */; };
@@ -134,6 +135,8 @@
 		CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxChecked@2x.png"; sourceTree = "<group>"; };
 		CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxUnchecked.png; sourceTree = "<group>"; };
 		CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxUnchecked@2x.png"; sourceTree = "<group>"; };
+		CB5DF7A717BEFFB500D5651C /* GradientButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GradientButton.h; sourceTree = "<group>"; };
+		CB5DF7A817BEFFB500D5651C /* GradientButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GradientButton.m; sourceTree = "<group>"; };
 		CB5F682417BC48CF00A583D6 /* IHWEditCourseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWEditCourseViewController.h; sourceTree = "<group>"; };
 		CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWEditCourseViewController.m; sourceTree = "<group>"; };
 		CB5F682617BC48CF00A583D6 /* IHWEditCourseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWEditCourseViewController.xib; sourceTree = "<group>"; };
@@ -267,6 +270,8 @@
 			children = (
 				CB048C3D17B4439E00E3F76E /* MutableOrderedDictionary.h */,
 				CB048C3E17B4439E00E3F76E /* MutableOrderedDictionary.m */,
+				CB5DF7A717BEFFB500D5651C /* GradientButton.h */,
+				CB5DF7A817BEFFB500D5651C /* GradientButton.m */,
 				CB6104C617B9689600D3FD75 /* HTML-Parser */,
 				CB048C1A17B409DA00E3F76E /* TouchJSON */,
 				491CCB39178E590B00736453 /* iHW-Info.plist */,
@@ -452,6 +457,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB5DF7AA17BF018F00D5651C /* GradientButton.m in Sources */,
 				CB048C3F17B443DA00E3F76E /* MutableOrderedDictionary.m in Sources */,
 				491CCB3E178E590B00736453 /* main.m in Sources */,
 				491CCB42178E590B00736453 /* IHWAppDelegate.m in Sources */,

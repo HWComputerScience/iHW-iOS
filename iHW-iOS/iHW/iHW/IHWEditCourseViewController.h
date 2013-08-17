@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "IHWCourse.h"
 #import "IHWCheckboxCell.h"
+#import "GradientButton.h"
 
 @interface IHWEditCourseViewController : UIViewController <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, IHWCheckboxCellDelegate, UIActionSheetDelegate>
 
@@ -17,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *periodField;
 @property (weak, nonatomic) IBOutlet UITextField *termField;
 @property (weak, nonatomic) IBOutlet UICollectionView *periodsChooserView;
+@property (strong, nonatomic) GradientButton *deleteButton;
 @property (nonatomic) int period;
 @property (nonatomic) int term;
 

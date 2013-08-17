@@ -30,6 +30,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     self.courseNames = [[IHWCurriculum currentCurriculum] allCourseNames];
+    [self.coursesTable reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)showNewCourseView {
@@ -37,8 +38,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView.isEditing) return self.courseNames.count+1;
-    else return self.courseNames.count;
+    return self.courseNames.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -54,13 +54,24 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.navigationController pushViewController:[[IHWEditCourseViewController alloc] initWithCourse:[[IHWCurriculum currentCurriculum] courseWithName:[self.courseNames objectAtIndex:indexPath.row]]] animated:YES];
+    //[self.navigationController pushViewController:[[IHWEditCourseViewController alloc] initWithCourse:[[IHWCurriculum currentCurriculum] courseWithName:[self.courseNames objectAtIndex:indexPath.row]]] animated:YES];
+    [self.navigationController pushViewController:[[IHWEditCourseViewController alloc] initWithCourse:[[IHWCurriculum currentCurriculum] courseAtIndex:indexPath.row]] animated:YES];
     return nil;
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row < [tableView numberOfRowsInSection:indexPath.section]-1)return UITableViewCellEditingStyleDelete;
-    else return UITableViewCellEditingStyleInsert;
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //IHWCourse *c = [[IHWCurriculum currentCurriculum] courseWithName:[self.courseNames objectAtIndex:indexPath.row]];
+        IHWCourse *c = [[IHWCurriculum currentCurriculum] courseAtIndex:indexPath.row];
+        [[IHWCurriculum currentCurriculum] removeCourse:c];
+        [[IHWCurriculum currentCurriculum] saveCourses];
+        self.courseNames = [[IHWCurriculum currentCurriculum] allCourseNames];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 - (void)didReceiveMemoryWarning
