@@ -121,9 +121,9 @@
     [colors addObject:(id)[color CGColor]];
     color = [UIColor colorWithRed:0.75 green:0.341 blue:0.345 alpha:1.0];
     [colors addObject:(id)[color CGColor]];
-    color = [UIColor colorWithRed:0.592 green:0.0 blue:0.0 alpha:1.0];
+    color = [UIColor colorWithRed:0.75 green:0.0 blue:0.0 alpha:1.0];
     [colors addObject:(id)[color CGColor]];
-    color = [UIColor colorWithRed:0.592 green:0.0 blue:0.0 alpha:1.0];
+    color = [UIColor colorWithRed:0.75 green:0.0 blue:0.0 alpha:1.0];
     [colors addObject:(id)[color CGColor]];
     self.normalGradientColors = colors;
     self.normalGradientLocations = [NSArray arrayWithObjects:
@@ -143,7 +143,7 @@
     [colors2 addObject:(id)[color CGColor]];
     color = [UIColor colorWithRed:0.5 green:0.153 blue:0.152 alpha:1.0];
     [colors2 addObject:(id)[color CGColor]];
-    color = [UIColor colorWithRed:0.388 green:0.004 blue:0.0 alpha:1.0];
+    color = [UIColor colorWithRed:0.5 green:0.004 blue:0.0 alpha:1.0];
     [colors addObject:(id)[color CGColor]];
     
     self.highlightGradientColors = colors;
@@ -154,7 +154,7 @@
                                        [NSNumber numberWithFloat:0.513f],
                                        [NSNumber numberWithFloat:0.445f],
                                        nil];
-    self.cornerRadius = 9.f;
+    self.cornerRadius = 6.f;
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
     

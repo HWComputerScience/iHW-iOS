@@ -23,7 +23,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [IHWCurriculum setCurrentYear:[[IHWDate IHWDate] dateByAddingDays:-365/2].year];
+        [IHWCurriculum setCurrentYear:[[IHWDate today] dateByAddingDays:-365/2].year];
     }
     return self;
 }
@@ -102,7 +102,7 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [self backButtonClicked:nil];
+    [self.navigationController setViewControllers:@[[[IHWFirstRunViewController alloc] initWithNibName:@"IHWFirstRunViewController" bundle:nil]]];
 }
 
 - (void)didReceiveMemoryWarning

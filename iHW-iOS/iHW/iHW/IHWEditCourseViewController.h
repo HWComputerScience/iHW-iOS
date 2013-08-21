@@ -11,14 +11,19 @@
 #import "IHWCheckboxCell.h"
 #import "GradientButton.h"
 
-@interface IHWEditCourseViewController : UIViewController <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, IHWCheckboxCellDelegate, UIActionSheetDelegate>
+@interface IHWEditCourseViewController : UIViewController <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, IHWCheckboxCellDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
+@property (weak, nonatomic) IBOutlet UILabel *periodLabel;
 @property (weak, nonatomic) IBOutlet UITextField *periodField;
 @property (weak, nonatomic) IBOutlet UITextField *termField;
-@property (weak, nonatomic) IBOutlet UICollectionView *periodsChooserView;
+@property (weak, nonatomic) IBOutlet UICollectionView *meetingsChooserView;
+
+@property (strong, nonatomic) UITapGestureRecognizer *periodLabelGestureRecognizer;
 @property (strong, nonatomic) GradientButton *deleteButton;
+@property (strong, nonatomic) NSArray *cells;
+
 @property (nonatomic) int period;
 @property (nonatomic) int term;
 

@@ -15,6 +15,10 @@
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (weak, nonatomic) IBOutlet UIView *pageContainerView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (strong, nonatomic) NSMutableDictionary *loadedViewControllers;
+@property (strong, nonatomic) NSOperationQueue *queue;
+@property (strong, nonatomic) NSMutableDictionary *operations;
 @property (strong, nonatomic) IHWLoadingView *loadingView;
 @property (strong, nonatomic) IHWDate *currentDate;
 

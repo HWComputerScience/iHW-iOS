@@ -12,6 +12,7 @@
 #import "IHWLabelCell.h"
 #import "IHWPeriodsChooserLayout.h"
 #import "IHWUtils.h"
+#import "ActionSheetStringPicker.h"
 
 @implementation IHWEditCourseViewController
 
@@ -19,6 +20,8 @@
 {
     self = [super initWithNibName:@"IHWEditCourseViewController" bundle:nil];
     if (self) {
+        self.cells = [[NSBundle mainBundle] loadNibNamed:@"IHWEditCourseCells" owner:self options:nil];
+        
         self.course = course;
         self.period = -1;
         self.term = TERM_FULL_YEAR;
@@ -32,8 +35,8 @@
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelCourse)];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(saveCourse)];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShown:) name:@"UIKeyboardDidShowNotification" object:nil];
-        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHidden:) name:@"UIKeyboardDidHideNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:@"UIKeyboardDidShowNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];
     }
     return self;
 }
@@ -41,37 +44,76 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     
     if (self.course != nil) {
         self.nameField.text = self.course.name;
         self.periodField.text = [NSString stringWithFormat:@"%d", self.course.period];
         
-        self.deleteButton = [[GradientButton alloc] initWithFrame:CGRectMake(20, 284, 280, 44)];
+        self.deleteButton = [[GradientButton alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
         [self.deleteButton useRedDeleteStyle];
         [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateNormal];
         [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateHighlighted];
         [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateDisabled];
-        [[self.scrollView.subviews objectAtIndex:0] addSubview:self.deleteButton];
         [self.deleteButton addTarget:self action:@selector(showDeleteCoursePopup) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [self.nameField becomeFirstResponder];
     }
     self.termField.text = stringForTerm(self.term);
+    
+    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    toolbar.barStyle = UIBarStyleBlackTranslucent;
+    [toolbar setItems:@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil], [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(resignPeriodField)]] animated:YES];
+    self.periodField.inputAccessoryView = toolbar;
     
     self.nameField.delegate = self;
     self.periodField.delegate = self;
     self.termField.delegate = self;
-    
-    self.periodField.keyboardType = UIKeyboardTypeNumberPad;
-    
-    self.periodsChooserView.delegate = self;
-    self.periodsChooserView.dataSource = self;
-    [self.periodsChooserView registerClass:[IHWCheckboxCell class] forCellWithReuseIdentifier:@"checkbox"];
-    [self.periodsChooserView registerClass:[IHWLabelCell class] forCellWithReuseIdentifier:@"label"];
-    self.periodsChooserView.collectionViewLayout = [[IHWPeriodsChooserLayout alloc] initWithNumDays:[IHWCurriculum currentCampus]];
-    self.periodsChooserView.backgroundColor = [UIColor clearColor];
-    
-    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.scrollView.contentSize = CGSizeMake(320, 276);
+        
+    self.meetingsChooserView.delegate = self;
+    self.meetingsChooserView.dataSource = self;
+    [self.meetingsChooserView registerClass:[IHWCheckboxCell class] forCellWithReuseIdentifier:@"checkbox"];
+    [self.meetingsChooserView registerClass:[IHWLabelCell class] forCellWithReuseIdentifier:@"label"];
+    self.meetingsChooserView.collectionViewLayout = [[IHWPeriodsChooserLayout alloc] initWithNumDays:[IHWCurriculum currentCampus]];
+    self.meetingsChooserView.backgroundColor = [UIColor clearColor];
+}
+
+- (void)resignPeriodField {
+    [self.periodField resignFirstResponder];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (self.course == nil) return 2;
+    return 3;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section==0) return 2;
+    else return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section > 0) {
+        return [[self.cells objectAtIndex:indexPath.section+1] frame].size.height;
+    }
+    return [[self.cells objectAtIndex:indexPath.row] frame].size.height;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1) {
+        return [self.cells objectAtIndex:2];
+    } else if (indexPath.section == 2) {
+        UITableViewCell *cell = [self.cells objectAtIndex:3];
+        [cell.contentView addSubview:self.deleteButton];
+        return cell;
+    }
+    return [self.cells objectAtIndex:indexPath.row];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    return nil;
 }
 
 - (void)cancelCourse {
@@ -82,9 +124,9 @@
     //construct meetings array
     NSMutableArray *meetings = [NSMutableArray array];
     for (int i=1; i<=[IHWCurriculum currentCurriculum].campus; i++) {
-        BOOL thisPeriodChecked = ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:2]]).checked;
-        BOOL beforePeriodChecked = ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]]).checked;
-        BOOL afterPeriodChecked = ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:3]]).checked;
+        BOOL thisPeriodChecked = ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:2]]).checked;
+        BOOL beforePeriodChecked = ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]]).checked;
+        BOOL afterPeriodChecked = ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:3]]).checked;
         if (!thisPeriodChecked) [meetings addObject:[NSNumber numberWithInt:MEETING_X_DAY]];
         else if (beforePeriodChecked) [meetings addObject:[NSNumber numberWithInt:MEETING_DOUBLE_BEFORE]];
         else if (afterPeriodChecked) [meetings addObject:[NSNumber numberWithInt:MEETING_DOUBLE_AFTER]];
@@ -108,15 +150,22 @@
 }
 
 - (void)showDeleteCoursePopup {
-    [[[UIActionSheet alloc] initWithTitle:@"Are you sure you want to delete this course?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil] showInView:self.view];
+    [[[UIActionSheet alloc] initWithTitle:@"Are you sure you want to delete this course?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete Course" otherButtonTitles:nil] showInView:self.view];
 }
 
-- (void)keyboardShown:(NSNotification *)aNotification {
-    NSDictionary *userInfo = [aNotification userInfo];
+- (void)keyboardDidShow:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
     NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [self.view convertRect:[aValue CGRectValue] fromView:nil];
-    CGRect intersection = CGRectIntersection(keyboardRect, self.scrollView.frame);
-    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height-intersection.size.height);
+    CGRect intersection = CGRectIntersection(keyboardRect, self.tableView.frame);
+    int offset = 0;
+    if (self.periodField.isFirstResponder) offset = self.periodField.inputAccessoryView.frame.size.height;
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-intersection.size.height+offset);
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    self.tableView.frame = self.view.bounds;
+
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -144,17 +193,25 @@
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     if (textField == self.termField) {
-        [[[UIActionSheet alloc] initWithTitle:@"Which term does this course meet in?" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Full Year", @"First Semester", @"Second Semester", @"First Trimester", @"Second Trimester", @"Third Trimester", nil] showInView:self.view];
+        [self.nameField resignFirstResponder];
+        [self.periodField resignFirstResponder];
+        [ActionSheetStringPicker showPickerWithTitle:@"Select Term" rows:@[@"Full Year", @"First Semester", @"Second Semester", @"First Trimester", @"Second Trimester", @"Third Trimester"] initialSelection:self.term doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
+            self.termField.text = stringForTerm(selectedIndex);
+            self.term = selectedIndex;
+        } cancelBlock:nil origin:self.view];
         return NO;
     }
     return YES;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    self.tableView.frame = self.view.bounds;
+    [textField resignFirstResponder];
+    return YES;
+}
+
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (actionSheet.destructiveButtonIndex == -1) {
-        self.termField.text = [actionSheet buttonTitleAtIndex:buttonIndex];
-        self.term = buttonIndex;
-    } else if (buttonIndex == actionSheet.destructiveButtonIndex) {
+    if (buttonIndex == actionSheet.destructiveButtonIndex) {
         [[IHWCurriculum currentCurriculum] removeCourse:self.course];
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -163,7 +220,7 @@
 - (void)updatePeriodsChooser {
     int numDays = [IHWCurriculum currentCampus];
     for (int day = 0; day <= numDays; day++) for (int periodIndex = 0; periodIndex <= 3; periodIndex++) {
-        UICollectionViewCell *cell = [self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:day inSection:periodIndex]];
+        UICollectionViewCell *cell = [self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:day inSection:periodIndex]];
         int thisPeriod = self.period+periodIndex-2;
         if (day==0 && periodIndex > 0) {
             if (thisPeriod < 1 || thisPeriod > [IHWCurriculum currentCampus]+3) {
@@ -174,6 +231,7 @@
             }
         } else if (day > 0 && periodIndex > 0) {
             if (thisPeriod < 1 || thisPeriod > [IHWCurriculum currentCampus]+3) {
+                [(IHWCheckboxCell *)cell setChecked:NO];
                 cell.hidden = YES;
             } else {
                 cell.hidden = NO;
@@ -226,16 +284,16 @@
 }
 
 - (void)checkboxCell:(IHWCheckboxCell *)cell didChangeCheckedStateToState:(BOOL)newState {
-    NSIndexPath *indexPath = [self.periodsChooserView indexPathForCell:cell];
+    NSIndexPath *indexPath = [self.meetingsChooserView indexPathForCell:cell];
     if (indexPath.section == 1 && newState) {
-        ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:2]]).checked = YES;
-        ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:3]]).checked = NO;
+        ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:2]]).checked = YES;
+        ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:3]]).checked = NO;
     } else if (indexPath.section == 3 && newState) {
-        ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:2]]).checked = YES;
-        ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:1]]).checked = NO;
+        ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:2]]).checked = YES;
+        ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:1]]).checked = NO;
     } else if (indexPath.section == 2 && !newState) {
-        ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:1]]).checked = NO;
-        ((IHWCheckboxCell *)[self.periodsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:3]]).checked = NO;
+        ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:1]]).checked = NO;
+        ((IHWCheckboxCell *)[self.meetingsChooserView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:3]]).checked = NO;
     }
 }
 

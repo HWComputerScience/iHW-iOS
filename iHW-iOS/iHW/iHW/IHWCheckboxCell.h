@@ -15,9 +15,11 @@
 @interface IHWCheckboxCell : UICollectionViewCell
 
 @property (nonatomic, strong) UIButton *checkboxButton;
-@property (nonatomic) BOOL checked;
 @property (nonatomic, weak) NSObject<IHWCheckboxCellDelegate> *delegate;
 @property (nonatomic) BOOL shouldHideOnAppear;
+
+- (BOOL)checked;
+- (void)setChecked:(BOOL)checked;
 
 @end
 

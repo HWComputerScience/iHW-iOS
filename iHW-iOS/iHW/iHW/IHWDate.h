@@ -11,9 +11,9 @@ typedef NSDate IHWDate;
 
 @interface NSDate (IHW)
 
-+ (IHWDate *)IHWDate;
++ (IHWDate *)today;
 
-- (id)initIHWDate;
+- (id)initToday;
 - (id)initWithMonth:(int)m day:(int)d year:(int)y;
 - (id)initFromString:(NSString *)string;
 

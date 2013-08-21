@@ -13,7 +13,9 @@
 @interface IHWAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
 @property (strong, nonatomic) UINavigationController *navController;
+
+- (void)showNetworkIcon;
+- (void)hideNetworkIcon;
 
 @end

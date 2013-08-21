@@ -12,15 +12,19 @@
 
 @interface IHWDayViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property (strong, nonatomic) UILabel *dayNameLabel;
 @property (nonatomic, strong) IHWDate *date;
 @property (nonatomic, strong) IHWDay *day;
-@property (nonatomic, strong) NSMutableArray *rowHeights;
+@property (nonatomic, strong) NSMutableArray *cells;
+@property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonatomic) BOOL hasUnsavedChanges;
 
 @property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *periodsTableView;
-@property (weak, nonatomic) IBOutlet UILabel *dayNameLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomSpaceConstraint;
 
 - (id)initWithDate:(IHWDate *)date;
+- (void)updateRowHeightAtIndex:(int)index toHeight:(int)height;
 
 @end

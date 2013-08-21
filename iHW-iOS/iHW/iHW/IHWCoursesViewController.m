@@ -9,6 +9,7 @@
 #import "IHWCoursesViewController.h"
 #import "IHWCurriculum.h"
 #import "IHWEditCourseViewController.h"
+#import "IHWUtils.h"
 
 @implementation IHWCoursesViewController
 
@@ -44,12 +45,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"courseName"];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"courseName"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"courseName"];
     }
-    NSString *text;
-    if (indexPath.row < self.courseNames.count) text = [self.courseNames objectAtIndex:indexPath.row];
-    else text = @"Add a course";
-    cell.textLabel.text = text;
+    cell.textLabel.text = [self.courseNames objectAtIndex:indexPath.row];
+    IHWCourse *c = [[IHWCurriculum currentCurriculum] courseAtIndex:indexPath.row];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Period %d (%@)", c.period, stringForTerm(c.term)];
     return cell;
 }
 

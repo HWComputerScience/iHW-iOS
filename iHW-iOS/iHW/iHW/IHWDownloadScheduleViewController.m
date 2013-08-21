@@ -7,6 +7,7 @@
 //
 
 #import "IHWDownloadScheduleViewController.h"
+#import "IHWAppDelegate.h"
 #import "HTMLParser.h"
 #import "IHWCourse.h"
 #import "IHWCurriculum.h"
@@ -46,12 +47,16 @@
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    return ([request.URL isEqual:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]
+    BOOL result = ([request.URL isEqual:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]
             || [request.URL isEqual:[NSURL URLWithString:@"http://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx"]]
             || [request.URL isEqual:[NSURL URLWithString:@"https://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx"]]);
+    if (result)
+        [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(showNetworkIcon) withObject:nil waitUntilDone:NO];
+    return result;
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
+    [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(hideNetworkIcon) withObject:nil waitUntilDone:NO];
     NSURL *url = webView.request.mainDocumentURL;
     NSLog(@"URL did finish load: %@", url.description);
     if ([url isEqual:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]) {
@@ -99,9 +104,11 @@
 
 - (void)downloadScheduleFromURL:(NSString *)urlStr {
     self.loadingText.text = @"Schedule found. Downloading...";
+    [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(showNetworkIcon) withObject:nil waitUntilDone:NO];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [connection self]; //to stop warnings
+    
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -109,6 +116,7 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(hideNetworkIcon) withObject:nil waitUntilDone:NO];
     NSError *error = nil;
     HTMLParser *parser = [[HTMLParser alloc] initWithData:self.resultData error:&error];
     if (error != nil) { NSLog(@"ERROR parsing schedule HTML: %@", error.debugDescription); return; }

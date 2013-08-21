@@ -7,6 +7,7 @@
 //
 
 #import "IHWCurriculum.h"
+#import "IHWAppDelegate.h"
 #import "CJSONSerializer.h"
 #import "CJSONDeserializer.h"
 #import "IHWFileManager.h"
@@ -14,6 +15,7 @@
 #import "IHWNormalDay.h"
 #import "IHWCustomDay.h"
 #import "IHWUtils.h"
+#import "IHWNote.h"
 
 static IHWCurriculum *currentCurriculum;
 
@@ -34,10 +36,10 @@ static IHWCurriculum *currentCurriculum;
     if (currentCurriculum == nil || currentCurriculum.campus != campus || currentCurriculum.year != year) {
         [self setCurrentCampus:campus];
         [self setCurrentYear:year];
-        NSLog(@"Creating current curriculum: %@", [IHWDate IHWDate]);
-        currentCurriculum = [[IHWCurriculum alloc] initWithCampus:campus year:year startingDate:[IHWDate IHWDate]];
+        NSLog(@"Creating current curriculum: %@", [IHWDate today]);
+        currentCurriculum = [[IHWCurriculum alloc] initWithCampus:campus year:year startingDate:[IHWDate today]];
     } else {
-        if (!currentCurriculum.isLoaded && !currentCurriculum.isLoading) [currentCurriculum loadEverythingWithStartingDate:[IHWDate IHWDate]];
+        if (!currentCurriculum.isLoaded && !currentCurriculum.isLoading) [currentCurriculum loadEverythingWithStartingDate:[IHWDate today]];
     }
     return currentCurriculum;
 }
@@ -153,22 +155,21 @@ static IHWCurriculum *currentCurriculum;
     }
 }
 
-/*
-- (IHWDate *)firstLoadedDate {
-    if (self.loadedDays == nil || self.loadedDays.count == 0) return nil;
-    else return [self.loadedDays keyAtIndex:0];
-}
-
-- (IHWDate *)lastLoadedDate {
-    if (self.loadedDays == nil || self.loadedDays.count == 0) return nil;
-    else return [self.loadedDays keyAtIndex:self.loadedDays.count];
-}*/
-
 - (BOOL)dayIsLoaded:(IHWDate *)date {
-    return (self.loadedDays != nil
-            && [self.loadedDays objectForKey:date] != nil
-            && self.loadedWeeks != nil
+    if (self.loadedDays == nil || self.loadedWeeks == nil) return NO;
+    if ([NSThread isMainThread]) {
+    return ([self.loadedDays objectForKey:date] != nil
             && [self.loadedWeeks objectForKey:getWeekStart(self.year, date)] != nil);
+    } else {
+        __block BOOL result;
+        NSOperation *oper = [NSBlockOperation blockOperationWithBlock:^{
+            result = ([self.loadedDays objectForKey:date] != nil
+                      && [self.loadedWeeks objectForKey:getWeekStart(self.year, date)] != nil);
+        }];
+        [[NSOperationQueue mainQueue] addOperation:oper];
+        [oper waitUntilFinished];
+        return result;
+    }
 }
 
 - (BOOL)downloadParseScheduleJSON {
@@ -177,7 +178,9 @@ static IHWCurriculum *currentCurriculum;
     NSURLResponse *response = nil;
     NSString *urlStr = [NSString stringWithFormat:@"http://www.burnsfamily.info/curriculum%d%@.hws", self.year, getCampusChar(self.campus)];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:5];
+    [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(showNetworkIcon) withObject:nil waitUntilDone:NO];
     NSData *scheduleJSON = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(hideNetworkIcon) withObject:nil waitUntilDone:NO];
     //NSData *scheduleJSON = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr] options:0 error:&error];
     NSString *campusChar = getCampusChar(self.campus);
     if (error != nil) {
@@ -271,9 +274,9 @@ static IHWCurriculum *currentCurriculum;
 }
 
 - (BOOL)loadWeek:(IHWDate *)date {
-    NSLog(@">loading week");
     int weekNumber = getWeekNumber(self.year, date);
     IHWDate *weekStart = getWeekStart(self.year, date);
+    NSLog(@">loading week: %@", weekStart.description);
     if (self.loadedWeeks != nil && [self.loadedWeeks objectForKey:weekStart] != nil) return YES;
     if (weekNumber == -1) return NO;
     NSData *weekJSON = [IHWFileManager loadWeekJSONForWeekNumber:weekNumber year:self.year campus:getCampusChar(self.campus)];
@@ -297,11 +300,13 @@ static IHWCurriculum *currentCurriculum;
         || [date compare:[self.semesterEndDates objectAtIndex:2]] == NSOrderedDescending) {
         //Date is during Summer
         //[self.loadedDays insertObject:[[IHWHoliday alloc] initWithName:@"Summer" onDate:date] forKey:date sortedUsingComparator:[IHWDate comparator]];
-        [self.loadedDays setObject:[[IHWHoliday alloc] initWithName:@"Summer" onDate:date] forKey:date];
+        IHWHoliday *holiday = [[IHWHoliday alloc] initWithName:@"Summer" onDate:date];
+        [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:holiday waitUntilDone:YES];
         return YES;
     } else if (date.isWeekend) {
         //[self.loadedDays insertObject:[[IHWHoliday alloc] initWithName:@"" onDate:date] forKey:date sortedUsingComparator:[IHWDate comparator]];
-        [self.loadedDays setObject:[[IHWHoliday alloc] initWithName:@"" onDate:date] forKey:date];
+        IHWHoliday *holiday = [[IHWHoliday alloc] initWithName:@"" onDate:date];
+        [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:holiday waitUntilDone:YES];
         return YES;
     }
     NSDictionary *template = [self.specialDayTemplates objectForKey:date];
@@ -327,11 +332,16 @@ static IHWCurriculum *currentCurriculum;
         day = [[IHWHoliday alloc] initWithJSONDictionary:template];
     } else return NO;
     //[self.loadedDays insertObject:day forKey:date sortedUsingComparator:[IHWDate comparator]];
-    [self.loadedDays setObject:day forKey:date];
+    [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:day waitUntilDone:YES];
     return YES;
 }
 
+- (void)addLoadedDay:(IHWDay *)day {
+    [self.loadedDays setObject:day forKey:day.date];
+}
+
 - (IHWDay *)dayWithDate:(IHWDate *)date {
+    //NSLog(@"Getting day with date %@", date.description);
     if (![self dateInBounds:date]) return nil;
     if (![self dayIsLoaded:date]) {
         BOOL success = [self loadWeekAndDay:date];
@@ -343,15 +353,16 @@ static IHWCurriculum *currentCurriculum;
 
 - (void)clearUnneededItems:(IHWDate *)date {
     IHWDate *weekStart = getWeekStart(self.year, date);
-    NSMutableSet *weeksNeeded = [NSMutableSet setWithCapacity:3];
+    NSMutableArray *weeksNeeded = [NSMutableArray array];
     [weeksNeeded addObject:getWeekStart(self.year, [weekStart dateByAddingDays:-1])];
     [weeksNeeded addObject:weekStart];
     [weeksNeeded addObject:getWeekStart(self.year, [weekStart dateByAddingDays:7])];
-#pragma mark todo replace this
-    //if (self.loadedWeeks != nil) [self.loadedWeeks filterKeysFromSet:weeksNeeded];
-    NSMutableSet *daysNeeded = [NSMutableSet setWithCapacity:7];
+    if (self.loadedWeeks != nil)
+        self.loadedWeeks = [[self.loadedWeeks dictionaryWithValuesForKeys:weeksNeeded] mutableCopy];
+    NSMutableArray *daysNeeded = [NSMutableArray array];
     for (int i=-3; i<=3; i++) [daysNeeded addObject:[date dateByAddingDays:i]];
-    //if (self.loadedDays != nil) [self.loadedDays filterKeysFromSet:daysNeeded];
+    if (self.loadedDays != nil)
+        self.loadedDays = [[self.loadedDays dictionaryWithValuesForKeys:daysNeeded] mutableCopy];
 }
 
 - (BOOL)dateInBounds:(IHWDate *)date {
@@ -541,13 +552,62 @@ static IHWCurriculum *currentCurriculum;
 #pragma mark -
 #pragma mark *********************NOTES STUFF*********************
 
+- (NSArray *)notesOnDate:(IHWDate *)date period:(int)period {
+    IHWDate *weekStart = getWeekStart(self.year, date);
+    BOOL success = true;
+    if ([self.loadedWeeks objectForKey:weekStart] == nil) success = [self loadWeek:date];
+    if (!success) { NSLog(@"ERROR loading week"); return nil; }
+    else {
+        NSString *key = [NSString stringWithFormat:@"%@.%d", date.description, period];
+        NSDictionary *weekJSON = [self.loadedWeeks objectForKey:weekStart];
+        NSArray *notesArr = [[weekJSON objectForKey:@"notes"] objectForKey:key];
+        if (notesArr != nil) {
+            NSMutableArray *notes = [NSMutableArray array];
+            for (int i=0; i<notesArr.count; i++) {
+                [notes addObject:[[IHWNote alloc] initWithJSONDictionary:[notesArr objectAtIndex:i]]];
+            }
+            return [NSArray arrayWithArray:notes];
+        } else {
+            return [NSArray array];
+        }
+    }
+}
 
+- (void)setNotes:(NSArray *)notes onDate:(IHWDate *)date period:(int)period {
+    IHWDate *weekStart = getWeekStart(self.year, date);
+    if (![self dayIsLoaded:date]) {
+        BOOL success = true;
+        if ([self.loadedWeeks objectForKey:weekStart] == nil) success = [self loadWeek:date];
+        if (!success) NSLog(@"ERROR loading week");
+        if ([self.loadedDays objectForKey:date] == nil) success = [self loadDay:date];
+        if (!success) NSLog(@"ERROR loading day");
+    }
+    if ([self dayIsLoaded:date]) {
+        NSString *key = [NSString stringWithFormat:@"%@.%d", date.description, period];
+        NSMutableDictionary *weekJSON = [[self.loadedWeeks objectForKey:weekStart] mutableCopy];
+        NSMutableDictionary *notesDict = [[weekJSON objectForKey:@"notes"] mutableCopy];
+        NSMutableArray *notesArr = [NSMutableArray array];
+        for (IHWNote *note in notes) {
+            [notesArr addObject:[note saveNote]];
+        }
+        [notesDict setObject:notesArr forKey:key];
+        [weekJSON setObject:notesDict forKey:@"notes"];
+        [self.loadedWeeks setObject:weekJSON forKey:weekStart];
+    }
+}
 
 #pragma mark -
 #pragma mark ********************SAVING STUFF*********************
 
-- (void)saveWeekWithDate:(IHWDate *)d {
-#pragma mark TODO save week
+- (void)saveWeekWithDate:(IHWDate *)date {
+    NSLog(@"Saving week");
+    IHWDate *weekStart = getWeekStart(self.year, date);
+    NSDictionary *weekObj = [self.loadedWeeks objectForKey:weekStart];
+    int weekNumber = getWeekNumber(self.year, weekStart);
+    NSError *error = nil;
+    NSData *data = [[CJSONSerializer serializer] serializeDictionary:weekObj error:&error];
+    if (error != nil) { NSLog(@"ERROR saving week JSON"); return; }
+    [IHWFileManager saveWeekJSON:data forWeekNumber:weekNumber year:self.year campus:getCampusChar(self.campus)];
 }
 
 - (void)saveCourses {

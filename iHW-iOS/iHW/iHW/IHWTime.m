@@ -10,7 +10,7 @@
 
 @implementation IHWTime
 
-- (id)init
+- (id)initNow
 {
     self = [super init];
     if (self) {

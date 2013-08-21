@@ -34,6 +34,17 @@
 		CB048C4217B45CFA00E3F76E /* IHWFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C4117B45CFA00E3F76E /* IHWFileManager.m */; };
 		CB048C4817B573EC00E3F76E /* CDataScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C4517B573EC00E3F76E /* CDataScanner_Extensions.m */; };
 		CB048C4917B573EC00E3F76E /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C4717B573EC00E3F76E /* NSDictionary_JSONExtensions.m */; };
+		CB25B9BC17C303E00085B9E2 /* UIViewController+IHW.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25B9BB17C303E00085B9E2 /* UIViewController+IHW.m */; };
+		CB25B9BF17C535910085B9E2 /* ActionSheetDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25B9BE17C534AF0085B9E2 /* ActionSheetDatePicker.m */; };
+		CB25B9CC17C53D520085B9E2 /* backbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9C817C53D520085B9E2 /* backbutton.png */; };
+		CB25B9CD17C53D520085B9E2 /* backbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9C917C53D520085B9E2 /* backbutton@2x.png */; };
+		CB25B9CE17C53D520085B9E2 /* forwardbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9CA17C53D520085B9E2 /* forwardbutton.png */; };
+		CB25B9CF17C53D520085B9E2 /* forwardbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9CB17C53D520085B9E2 /* forwardbutton@2x.png */; };
+		CB25B9D417C541690085B9E2 /* graygear.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D017C541680085B9E2 /* graygear.png */; };
+		CB25B9D517C541690085B9E2 /* graygear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D117C541680085B9E2 /* graygear@2x.png */; };
+		CB25B9D617C541690085B9E2 /* whitegear.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D217C541680085B9E2 /* whitegear.png */; };
+		CB25B9D717C541690085B9E2 /* whitegear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D317C541680085B9E2 /* whitegear@2x.png */; };
+		CB25B9DA17C542A20085B9E2 /* IHWNoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25B9D917C542A00085B9E2 /* IHWNoteView.m */; };
 		CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB44277817BB0DC00068D543 /* IHWDayViewController.m */; };
 		CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB44277917BB0DC00068D543 /* IHWDayViewController.xib */; };
 		CB5DF79117BD415300D5651C /* IHWCheckboxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79017BD415200D5651C /* IHWCheckboxCell.m */; };
@@ -45,11 +56,14 @@
 		CB5DF7A517BDFA5400D5651C /* checkboxUnchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */; };
 		CB5DF7A617BDFA5400D5651C /* checkboxUnchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */; };
 		CB5DF7AA17BF018F00D5651C /* GradientButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF7A817BEFFB500D5651C /* GradientButton.m */; };
+		CB5DF7AC17BF3A5600D5651C /* IHWEditCourseCells.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7AB17BF3A5300D5651C /* IHWEditCourseCells.xib */; };
+		CB5DF7AE17BFDDF400D5651C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB5DF7AD17BFDDF300D5651C /* QuartzCore.framework */; };
+		CB5DF7B717C12F7800D5651C /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF7B017C12B9D00D5651C /* AbstractActionSheetPicker.m */; };
+		CB5DF7B817C12F7D00D5651C /* ActionSheetStringPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF7B217C12B9E00D5651C /* ActionSheetStringPicker.m */; };
 		CB5F682717BC48D000A583D6 /* IHWEditCourseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */; };
 		CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB5F682617BC48CF00A583D6 /* IHWEditCourseViewController.xib */; };
 		CB61049B17B8945C00D3FD75 /* IHWFirstRunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */; };
 		CB61049C17B8945C00D3FD75 /* IHWFirstRunViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */; };
-		CB61049F17B8952600D3FD75 /* mscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB61049D17B8952600D3FD75 /* mscampus.jpg */; };
 		CB6104A017B8952600D3FD75 /* uscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB61049E17B8952600D3FD75 /* uscampus.jpg */; };
 		CB6104A817B9457500D3FD75 /* IHWDownloadScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104A617B9457500D3FD75 /* IHWDownloadScheduleViewController.m */; };
 		CB6104A917B9457500D3FD75 /* IHWDownloadScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104A717B9457500D3FD75 /* IHWDownloadScheduleViewController.xib */; };
@@ -66,7 +80,6 @@
 		CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */; };
 		CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB88339117BAF720002BC200 /* IHWLoadingView.m */; };
 		CBA2977917BBEB430087104A /* IHWPeriodCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = CBA2977817BBEB430087104A /* IHWPeriodCellView.m */; };
-		CBA2977B17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBA2977A17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -120,6 +133,20 @@
 		CB048C4517B573EC00E3F76E /* CDataScanner_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner_Extensions.m; sourceTree = "<group>"; };
 		CB048C4617B573EC00E3F76E /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
 		CB048C4717B573EC00E3F76E /* NSDictionary_JSONExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionary_JSONExtensions.m; sourceTree = "<group>"; };
+		CB25B9BA17C303E00085B9E2 /* UIViewController+IHW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+IHW.h"; sourceTree = "<group>"; };
+		CB25B9BB17C303E00085B9E2 /* UIViewController+IHW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+IHW.m"; sourceTree = "<group>"; };
+		CB25B9BD17C534AF0085B9E2 /* ActionSheetDatePicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionSheetDatePicker.h; sourceTree = "<group>"; };
+		CB25B9BE17C534AF0085B9E2 /* ActionSheetDatePicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionSheetDatePicker.m; sourceTree = "<group>"; };
+		CB25B9C817C53D520085B9E2 /* backbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backbutton.png; sourceTree = "<group>"; };
+		CB25B9C917C53D520085B9E2 /* backbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbutton@2x.png"; sourceTree = "<group>"; };
+		CB25B9CA17C53D520085B9E2 /* forwardbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forwardbutton.png; sourceTree = "<group>"; };
+		CB25B9CB17C53D520085B9E2 /* forwardbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "forwardbutton@2x.png"; sourceTree = "<group>"; };
+		CB25B9D017C541680085B9E2 /* graygear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = graygear.png; sourceTree = "<group>"; };
+		CB25B9D117C541680085B9E2 /* graygear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graygear@2x.png"; sourceTree = "<group>"; };
+		CB25B9D217C541680085B9E2 /* whitegear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whitegear.png; sourceTree = "<group>"; };
+		CB25B9D317C541680085B9E2 /* whitegear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitegear@2x.png"; sourceTree = "<group>"; };
+		CB25B9D817C5429F0085B9E2 /* IHWNoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWNoteView.h; sourceTree = "<group>"; };
+		CB25B9D917C542A00085B9E2 /* IHWNoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWNoteView.m; sourceTree = "<group>"; };
 		CB44277717BB0DC00068D543 /* IHWDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDayViewController.h; sourceTree = "<group>"; };
 		CB44277817BB0DC00068D543 /* IHWDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDayViewController.m; sourceTree = "<group>"; };
 		CB44277917BB0DC00068D543 /* IHWDayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWDayViewController.xib; sourceTree = "<group>"; };
@@ -137,13 +164,18 @@
 		CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxUnchecked@2x.png"; sourceTree = "<group>"; };
 		CB5DF7A717BEFFB500D5651C /* GradientButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GradientButton.h; sourceTree = "<group>"; };
 		CB5DF7A817BEFFB500D5651C /* GradientButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GradientButton.m; sourceTree = "<group>"; };
+		CB5DF7AB17BF3A5300D5651C /* IHWEditCourseCells.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWEditCourseCells.xib; sourceTree = "<group>"; };
+		CB5DF7AD17BFDDF300D5651C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CB5DF7AF17C12B9D00D5651C /* AbstractActionSheetPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AbstractActionSheetPicker.h; sourceTree = "<group>"; };
+		CB5DF7B017C12B9D00D5651C /* AbstractActionSheetPicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AbstractActionSheetPicker.m; sourceTree = "<group>"; };
+		CB5DF7B117C12B9E00D5651C /* ActionSheetStringPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionSheetStringPicker.h; sourceTree = "<group>"; };
+		CB5DF7B217C12B9E00D5651C /* ActionSheetStringPicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionSheetStringPicker.m; sourceTree = "<group>"; };
 		CB5F682417BC48CF00A583D6 /* IHWEditCourseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWEditCourseViewController.h; sourceTree = "<group>"; };
 		CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWEditCourseViewController.m; sourceTree = "<group>"; };
 		CB5F682617BC48CF00A583D6 /* IHWEditCourseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWEditCourseViewController.xib; sourceTree = "<group>"; };
 		CB61049817B8945C00D3FD75 /* IHWFirstRunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWFirstRunViewController.h; sourceTree = "<group>"; };
 		CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWFirstRunViewController.m; sourceTree = "<group>"; };
 		CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWFirstRunViewController.xib; sourceTree = "<group>"; };
-		CB61049D17B8952600D3FD75 /* mscampus.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mscampus.jpg; sourceTree = "<group>"; };
 		CB61049E17B8952600D3FD75 /* uscampus.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = uscampus.jpg; sourceTree = "<group>"; };
 		CB6104A417B8A43E00D3FD75 /* IHWConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IHWConstants.h; sourceTree = "<group>"; };
 		CB6104A517B9457500D3FD75 /* IHWDownloadScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDownloadScheduleViewController.h; sourceTree = "<group>"; };
@@ -170,7 +202,6 @@
 		CB88339117BAF720002BC200 /* IHWLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWLoadingView.m; sourceTree = "<group>"; };
 		CBA2977717BBEB430087104A /* IHWPeriodCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPeriodCellView.h; sourceTree = "<group>"; };
 		CBA2977817BBEB430087104A /* IHWPeriodCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPeriodCellView.m; sourceTree = "<group>"; };
-		CBA2977A17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "IHWPeriodCell-SAMPLE.xib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +209,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB5DF7AE17BFDDF400D5651C /* QuartzCore.framework in Frameworks */,
 				CB6104BC17B955F900D3FD75 /* libxml2.dylib in Frameworks */,
 				491CCB32178E590B00736453 /* UIKit.framework in Frameworks */,
 				491CCB34178E590B00736453 /* Foundation.framework in Frameworks */,
@@ -209,6 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				CB6104BB17B955F900D3FD75 /* libxml2.dylib */,
+				CB5DF7AD17BFDDF300D5651C /* QuartzCore.framework */,
 				491CCB31178E590B00736453 /* UIKit.framework */,
 				491CCB33178E590B00736453 /* Foundation.framework */,
 				491CCB35178E590B00736453 /* CoreGraphics.framework */,
@@ -225,6 +258,8 @@
 				491CCB5A178E63E100736453 /* Model */,
 				491CCB40178E590B00736453 /* IHWAppDelegate.h */,
 				491CCB41178E590B00736453 /* IHWAppDelegate.m */,
+				CB25B9BA17C303E00085B9E2 /* UIViewController+IHW.h */,
+				CB25B9BB17C303E00085B9E2 /* UIViewController+IHW.m */,
 				CB61049817B8945C00D3FD75 /* IHWFirstRunViewController.h */,
 				CB61049917B8945C00D3FD75 /* IHWFirstRunViewController.m */,
 				CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */,
@@ -242,6 +277,7 @@
 				CB5F682417BC48CF00A583D6 /* IHWEditCourseViewController.h */,
 				CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */,
 				CB5F682617BC48CF00A583D6 /* IHWEditCourseViewController.xib */,
+				CB5DF7AB17BF3A5300D5651C /* IHWEditCourseCells.xib */,
 				CB5DF78F17BD415200D5651C /* IHWCheckboxCell.h */,
 				CB5DF79017BD415200D5651C /* IHWCheckboxCell.m */,
 				CB5DF79517BD4B1800D5651C /* IHWLabelCell.h */,
@@ -258,7 +294,8 @@
 				CB44277917BB0DC00068D543 /* IHWDayViewController.xib */,
 				CBA2977717BBEB430087104A /* IHWPeriodCellView.h */,
 				CBA2977817BBEB430087104A /* IHWPeriodCellView.m */,
-				CBA2977A17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib */,
+				CB25B9D817C5429F0085B9E2 /* IHWNoteView.h */,
+				CB25B9D917C542A00085B9E2 /* IHWNoteView.m */,
 				CB6104A117B8952A00D3FD75 /* Images */,
 				491CCB38178E590B00736453 /* Supporting Files */,
 			);
@@ -272,6 +309,12 @@
 				CB048C3E17B4439E00E3F76E /* MutableOrderedDictionary.m */,
 				CB5DF7A717BEFFB500D5651C /* GradientButton.h */,
 				CB5DF7A817BEFFB500D5651C /* GradientButton.m */,
+				CB5DF7AF17C12B9D00D5651C /* AbstractActionSheetPicker.h */,
+				CB5DF7B017C12B9D00D5651C /* AbstractActionSheetPicker.m */,
+				CB5DF7B117C12B9E00D5651C /* ActionSheetStringPicker.h */,
+				CB5DF7B217C12B9E00D5651C /* ActionSheetStringPicker.m */,
+				CB25B9BD17C534AF0085B9E2 /* ActionSheetDatePicker.h */,
+				CB25B9BE17C534AF0085B9E2 /* ActionSheetDatePicker.m */,
 				CB6104C617B9689600D3FD75 /* HTML-Parser */,
 				CB048C1A17B409DA00E3F76E /* TouchJSON */,
 				491CCB39178E590B00736453 /* iHW-Info.plist */,
@@ -354,12 +397,19 @@
 				491CCB43178E590B00736453 /* Default.png */,
 				491CCB45178E590B00736453 /* Default@2x.png */,
 				491CCB47178E590B00736453 /* Default-568h@2x.png */,
-				CB61049D17B8952600D3FD75 /* mscampus.jpg */,
 				CB61049E17B8952600D3FD75 /* uscampus.jpg */,
 				CB5DF79F17BDFA5400D5651C /* checkboxChecked.png */,
 				CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */,
 				CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */,
 				CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */,
+				CB25B9C817C53D520085B9E2 /* backbutton.png */,
+				CB25B9C917C53D520085B9E2 /* backbutton@2x.png */,
+				CB25B9CA17C53D520085B9E2 /* forwardbutton.png */,
+				CB25B9CB17C53D520085B9E2 /* forwardbutton@2x.png */,
+				CB25B9D017C541680085B9E2 /* graygear.png */,
+				CB25B9D117C541680085B9E2 /* graygear@2x.png */,
+				CB25B9D217C541680085B9E2 /* whitegear.png */,
+				CB25B9D317C541680085B9E2 /* whitegear@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -433,7 +483,6 @@
 				491CCB46178E590B00736453 /* Default@2x.png in Resources */,
 				491CCB48178E590B00736453 /* Default-568h@2x.png in Resources */,
 				CB61049C17B8945C00D3FD75 /* IHWFirstRunViewController.xib in Resources */,
-				CB61049F17B8952600D3FD75 /* mscampus.jpg in Resources */,
 				CB6104A017B8952600D3FD75 /* uscampus.jpg in Resources */,
 				CB6104A917B9457500D3FD75 /* IHWDownloadScheduleViewController.xib in Resources */,
 				CB6104CE17B9689600D3FD75 /* README.md in Resources */,
@@ -441,12 +490,20 @@
 				CB6104DB17B96C3200D3FD75 /* IHWNormalCoursesViewController.xib in Resources */,
 				CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */,
 				CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */,
-				CBA2977B17BBEB540087104A /* IHWPeriodCell-SAMPLE.xib in Resources */,
 				CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */,
 				CB5DF7A317BDFA5400D5651C /* checkboxChecked.png in Resources */,
 				CB5DF7A417BDFA5400D5651C /* checkboxChecked@2x.png in Resources */,
 				CB5DF7A517BDFA5400D5651C /* checkboxUnchecked.png in Resources */,
 				CB5DF7A617BDFA5400D5651C /* checkboxUnchecked@2x.png in Resources */,
+				CB5DF7AC17BF3A5600D5651C /* IHWEditCourseCells.xib in Resources */,
+				CB25B9CC17C53D520085B9E2 /* backbutton.png in Resources */,
+				CB25B9CD17C53D520085B9E2 /* backbutton@2x.png in Resources */,
+				CB25B9CE17C53D520085B9E2 /* forwardbutton.png in Resources */,
+				CB25B9CF17C53D520085B9E2 /* forwardbutton@2x.png in Resources */,
+				CB25B9D417C541690085B9E2 /* graygear.png in Resources */,
+				CB25B9D517C541690085B9E2 /* graygear@2x.png in Resources */,
+				CB25B9D617C541690085B9E2 /* whitegear.png in Resources */,
+				CB25B9D717C541690085B9E2 /* whitegear@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +514,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB25B9BF17C535910085B9E2 /* ActionSheetDatePicker.m in Sources */,
+				CB5DF7B817C12F7D00D5651C /* ActionSheetStringPicker.m in Sources */,
+				CB5DF7B717C12F7800D5651C /* AbstractActionSheetPicker.m in Sources */,
 				CB5DF7AA17BF018F00D5651C /* GradientButton.m in Sources */,
 				CB048C3F17B443DA00E3F76E /* MutableOrderedDictionary.m in Sources */,
 				491CCB3E178E590B00736453 /* main.m in Sources */,
@@ -494,6 +554,8 @@
 				CB5DF79417BD424F00D5651C /* IHWPeriodsChooserLayout.m in Sources */,
 				CB5DF79717BD4B1900D5651C /* IHWLabelCell.m in Sources */,
 				CB5DF79917BDF41500D5651C /* IHWUtils.m in Sources */,
+				CB25B9BC17C303E00085B9E2 /* UIViewController+IHW.m in Sources */,
+				CB25B9DA17C542A20085B9E2 /* IHWNoteView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

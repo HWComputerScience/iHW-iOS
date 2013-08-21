@@ -33,8 +33,8 @@
 @property (strong, nonatomic) NSDictionary *normalDayTemplate;
 @property (strong, nonatomic) NSDictionary *normalMondayTemplate;
 @property (strong, nonatomic) NSDictionary *specialDayTemplates;
-@property (strong, nonatomic) NSMutableDictionary *loadedWeeks;
-@property (strong, nonatomic) NSMutableDictionary *loadedDays;
+@property (strong) NSMutableDictionary *loadedWeeks;
+@property (strong) NSMutableDictionary *loadedDays;
 @property (strong, nonatomic) NSMutableDictionary *dayNumbers;
 @property (strong, nonatomic) NSArray *semesterEndDates;
 @property (strong, nonatomic) NSArray *trimesterEndDates;
@@ -64,7 +64,8 @@
 - (NSArray *)courseListForDate:(IHWDate *)d;
 - (NSArray *)termsFromDate:(IHWDate *)d;
 
-
+- (NSArray *)notesOnDate:(IHWDate *)date period:(int)period;
+- (void)setNotes:(NSArray *)notes onDate:(IHWDate *)date period:(int)period;
 
 - (void)saveWeekWithDate:(IHWDate *)d;
 - (void)saveCourses;

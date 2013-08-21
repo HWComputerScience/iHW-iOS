@@ -8,16 +8,18 @@
 
 #import "IHWDate.h"
 
+static NSCalendar *cal;
+
 @implementation NSDate (IHW)
 
-+ (IHWDate *)IHWDate {
-    return [[IHWDate alloc] initIHWDate];
++ (IHWDate *)today {
+    return [[IHWDate alloc] initToday];
 }
 
-- (id)initIHWDate
+- (id)initToday
 {
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:[self init]];
-    self = [[NSCalendar currentCalendar] dateFromComponents:components];
+    NSDateComponents *components = [cal components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:[self init]];
+    self = [cal dateFromComponents:components];
     return self;
 }
 
@@ -27,7 +29,7 @@
     components.day = d;
     components.month = m;
     components.year = y;
-    self = [[NSCalendar currentCalendar] dateFromComponents:components];
+    self = [cal dateFromComponents:components];
     return self;
 }
 
@@ -39,24 +41,24 @@
 }
 
 -(int)month {
-    return [[NSCalendar currentCalendar] components:NSMonthCalendarUnit fromDate:self].month;
+    return [cal components:NSMonthCalendarUnit fromDate:self].month;
 }
 
 -(int)day {
-    return [[NSCalendar currentCalendar] components:NSDayCalendarUnit fromDate:self].day;
+    return [cal components:NSDayCalendarUnit fromDate:self].day;
 }
 
 -(int)year {
-    return [[NSCalendar currentCalendar] components:NSYearCalendarUnit fromDate:self].year;
+    return [cal components:NSYearCalendarUnit fromDate:self].year;
 }
 
 - (BOOL)isMonday {
-    int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int weekday = [cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
     return weekday==2;
 }
 
 - (BOOL)isWeekend {
-    int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int weekday = [cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
     return weekday==1 || weekday == 7;
 }
 
@@ -65,13 +67,13 @@
 }
 
 - (NSDate *)dateOfNextSunday {
-    int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int weekday = [cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
     int daysBehind = 8-weekday;
     return [self dateByAddingDays:daysBehind];
 }
 
 - (NSDate *)dateOfPreviousSunday {
-    int weekday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int weekday = [cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
     int daysAhead = weekday-1;
     return [self dateByAddingDays:-daysAhead];
 }
@@ -86,6 +88,7 @@
 
 - (NSString *)dayOfWeek:(BOOL)shortVersion {
     NSDateFormatter *weekday = [[NSDateFormatter alloc] init];
+    weekday.timeZone = cal.timeZone;
     if (shortVersion) [weekday setDateFormat: @"EEE"];
     else [weekday setDateFormat:@"EEEE"];
     return [weekday stringFromDate:self];
@@ -110,6 +113,11 @@
     return ^(NSDate *obj1, NSDate *obj2) {
         return [obj1 compare:obj2];
     };
+}
+
++ (void)initialize {
+    cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    cal.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
 }
 
 @end

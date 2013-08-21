@@ -14,7 +14,7 @@
 @property int minute;
 @property int second;
 
-- (id)init;
+- (id)initNow;
 - (id)initWithHour:(int)hour andMinute:(int)minute;
 - (id)initWithHour:(int)hour minute:(int)minute andPM:(BOOL)isPM;
 - (id)initFromString:(NSString *)string;

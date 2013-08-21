@@ -45,9 +45,11 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, pathInsideDocuments];
     NSError *error = nil;
+    [[NSFileManager defaultManager] createDirectoryAtPath:[filePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
+    if (error != nil) { NSLog(@"ERROR saving file %@: %@", pathInsideDocuments, error.debugDescription); return NO; }
     [data writeToFile:filePath options:NSDataWritingAtomic error:&error];
-    if (error != nil) NSLog(@"ERROR saving file %@: %@", pathInsideDocuments, error.debugDescription);
-    return error == nil;
+    if (error != nil) { NSLog(@"ERROR saving file %@: %@", pathInsideDocuments, error.debugDescription); return NO; }
+    return YES;
 }
 
 + (NSData *)loadFileFromPathInsideDocuments:(NSString *)pathInsideDocuments {
