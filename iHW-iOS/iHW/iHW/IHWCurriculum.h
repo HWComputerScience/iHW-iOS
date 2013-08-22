@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 //#import "MutableOrderedDictionary.h"
 #import "IHWDate.h"
+#import "IHWTime.h"
 #import "IHWDay.h"
 #import "IHWCourse.h"
 #import "IHWConstants.h"
@@ -30,6 +31,7 @@
 @property int passingPeriodLength;
 @property int loadingProgress;
 @property (strong, nonatomic) NSMutableArray *courses;
+@property (strong, nonatomic) IHWTime *dayStartTime;
 @property (strong, nonatomic) NSDictionary *normalDayTemplate;
 @property (strong, nonatomic) NSDictionary *normalMondayTemplate;
 @property (strong, nonatomic) NSDictionary *specialDayTemplates;

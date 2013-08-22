@@ -13,9 +13,7 @@
 #import "IHWHoliday.h"
 #import "UIViewController+IHW.h"
 
-@implementation IHWDayViewController {
-    CGRect fullTableViewFrame;
-}
+@implementation IHWDayViewController
 
 - (id)initWithDate:(IHWDate *)date
 {
@@ -24,8 +22,9 @@
         self.date = date;
         //NSLog(@"init: %@", self.date.description);
         self.day = [[IHWCurriculum currentCurriculum] dayWithDate:self.date];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:@"UIKeyboardDidShowNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:@"UIKeyboardWillShowNotification" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];
+        self.scrollToIndex = -1;
     }
     return self;
 }
@@ -90,44 +89,41 @@
    //NSLog(@"viewDidAppear");
 }
 
-- (void)keyboardDidShow:(NSNotification *)notification {
-    fullTableViewFrame = self.periodsTableView.frame;
+- (void)keyboardWillShow:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
     NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [self.view convertRect:[aValue CGRectValue] fromView:nil];
     CGRect intersection = CGRectIntersection(keyboardRect, self.periodsTableView.frame);
-    [UIView animateWithDuration:[[userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-        //self.periodsTableView.frame = CGRectMake(self.periodsTableView.frame.origin.x, self.periodsTableView.frame.origin.y, self.periodsTableView.frame.size.width, self.periodsTableView.frame.size.height-intersection.size.height);
-        self.bottomSpaceConstraint.constant = -intersection.size.height;
-        [self.view layoutIfNeeded];
+    [UIView animateWithDuration:0.2 animations:^{
+    self.periodsTableView.contentInset = UIEdgeInsetsMake(0, 0, intersection.size.height, 0);
+        [self.periodsTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollToIndex inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+        self.scrollToIndex = -1;
     }];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    [UIView animateWithDuration:[[userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-        //self.periodsTableView.frame = fullTableViewFrame;
-        self.bottomSpaceConstraint.constant = 0;
-        [self.view layoutIfNeeded];
-    }];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.periodsTableView.contentInset = UIEdgeInsetsZero;
+    }];    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if ([self.day isKindOfClass:[IHWHoliday class]] && ![((IHWHoliday*)self.day).name isEqualToString:@""]) return 60;
+    if ([self.day isKindOfClass:[IHWHoliday class]] && ![((IHWHoliday*)self.day).name isEqualToString:@""]) return 64;
     return 0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (![self.day isKindOfClass:[IHWHoliday class]]) return nil;
-    self.dayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.periodsTableView.bounds.size.width, 60)];
+    self.dayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.periodsTableView.bounds.size.width, 64)];
     self.dayNameLabel.numberOfLines = 2;
+    self.dayNameLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.dayNameLabel.font = [UIFont systemFontOfSize:25];
     self.dayNameLabel.textAlignment = NSTextAlignmentCenter;
     self.dayNameLabel.text = ((IHWHoliday *)self.day).name;
     
     CALayer *border = [CALayer layer];
     border.backgroundColor = [self.periodsTableView.separatorColor CGColor];
-    border.frame = CGRectMake(0, 59, self.periodsTableView.bounds.size.width, 1);
+    border.frame = CGRectMake(0, 63, self.periodsTableView.bounds.size.width, 1);
     [self.dayNameLabel.layer addSublayer:border];
     
     return self.dayNameLabel;

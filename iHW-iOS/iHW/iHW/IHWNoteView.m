@@ -12,7 +12,7 @@
 
 #define NOTE_HEIGHT 24
 #define BUTTON_WIDTH 24
-#define IMPORTANT_NOTE_HEIGHT 28
+#define IMPORTANT_NOTE_HEIGHT 30
 
 @implementation IHWNoteView
 @synthesize note = _note;
@@ -42,6 +42,8 @@
         self.textField = [[UITextField alloc] initWithFrame:CGRectZero];
         self.textField.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.textField];
+        self.textField.adjustsFontSizeToFitWidth = YES;
+        self.textField.minimumFontSize = 12;
         self.textField.placeholder = @"Add a note";
         self.textField.borderStyle = UITextBorderStyleNone;
         self.textField.delegate = self;
@@ -133,6 +135,7 @@
     }
     if (self.note != nil) self.note.isImportant = important;
     [self.delegate reLayoutViews:YES];
+    [self setNeedsUpdateConstraints];
 }
 
 - (void)toggleImportant {
@@ -142,6 +145,8 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.optionsButton.hidden = NO;
+    if (self.delegate.index == -1) self.delegate.dayViewController.scrollToIndex = self.delegate.dayViewController.cells.count-1;
+    else self.delegate.dayViewController.scrollToIndex = self.delegate.index;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

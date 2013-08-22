@@ -18,6 +18,7 @@
 @property int periodsAfterBreak;
 @property int periodLength;
 @property int breakLength;
+@property (strong, nonatomic) NSDictionary *periodLengths;
 @property (strong, nonatomic) NSString *breakName;
 
 - (id)initWithBreak:(NSString *)breakName OnDate:(IHWDate *)date

@@ -60,12 +60,16 @@
         self.dayNum = [[dictionary objectForKey:@"dayNumber"] intValue];
         self.hasBreak = [[dictionary objectForKey:@"hasBreak"] boolValue];
         self.periodLength = [[dictionary objectForKey:@"periodLength"] intValue];
+        self.periodLengths = [dictionary objectForKey:@"periodLengths"];
         self.numPeriods = [[dictionary objectForKey:@"numPeriods"] intValue];
         if (self.hasBreak) {
             self.periodsBeforeBreak = [[dictionary objectForKey:@"periodsBeforeBreak"] intValue];
             self.periodsAfterBreak = [[dictionary objectForKey:@"periodsAfterBreak"] intValue];
             self.breakLength = [[dictionary objectForKey:@"breakLength"] intValue];
             self.breakName = [dictionary objectForKey:@"breakName"];
+        } else {
+            self.periodsBeforeBreak = self.numPeriods;
+            self.periodsAfterBreak = 0;
         }
         self.periods = [NSMutableArray array];
     }
@@ -75,47 +79,43 @@
 - (void)fillPeriodsFromCurriculum:(IHWCurriculum *)c {
     NSArray *courseList = [c courseListForDate:self.date];
     self.periods = [NSMutableArray array];
-    IHWTime *nextStart = [[IHWTime alloc] initWithHour:8 andMinute:0];
+    IHWTime *nextStart = c.dayStartTime;
     int index = 0;
+    
+    //add periods before break
+    for (int num=1; num<=self.periodsBeforeBreak; num++) {
+        IHWTime *endTime = [self addPeriodWithNum:num fromCourseList:courseList atIndex:index startTime:nextStart];
+        nextStart = [endTime timeByAddingHours:0 andMinutes:c.passingPeriodLength];
+        index++;
+    }
+    
     if (self.hasBreak) {
-        //add periods before break
-        for (int num=1; num<=self.periodsBeforeBreak; num++) {
-            if ([courseList objectAtIndex:num] != [NSNull null]) {
-                IHWCourse *course = [courseList objectAtIndex:num];
-                [self.periods addObject:[[IHWPeriod alloc] initWithName:course.name date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.periodLength] number:num index:index]];
-            } else {
-                [self.periods addObject:[[IHWPeriod alloc] initWithName:@"X" date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.periodLength] number:num index:index]];
-            }
-            index++;
-            nextStart = [nextStart timeByAddingHours:0 andMinutes:(self.periodLength+c.passingPeriodLength)];
-        }
         //add break
         [self.periods addObject:[[IHWPeriod alloc] initWithName:self.breakName date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.breakLength] number:0 index:index]];
         index++;
         nextStart = [nextStart timeByAddingHours:0 andMinutes:(self.breakLength+c.passingPeriodLength)];
-        //add periods after break
-        for (int num = self.periodsBeforeBreak+1; num<=self.periodsBeforeBreak+self.periodsAfterBreak; num++) {
-            if ([courseList objectAtIndex:num] != [NSNull null]) {
-                IHWCourse *course = [courseList objectAtIndex:num];
-                [self.periods addObject:[[IHWPeriod alloc] initWithName:course.name date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.periodLength] number:num index:index]];
-            } else {
-                [self.periods addObject:[[IHWPeriod alloc] initWithName:@"X" date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.periodLength] number:num index:index]];
-            }
-            index++;
-            nextStart = [nextStart timeByAddingHours:0 andMinutes:(self.periodLength+c.passingPeriodLength)];
-        }
-    } else {
-        for (int num = 1; num <= self.numPeriods; num++) {
-            if ([courseList objectAtIndex:num] != [NSNull null]) {
-                IHWCourse *course = [courseList objectAtIndex:num];
-                [self.periods addObject:[[IHWPeriod alloc] initWithName:course.name date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.periodLength] number:num index:index]];
-            } else {
-                [self.periods addObject:[[IHWPeriod alloc] initWithName:@"X" date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.periodLength] number:num index:index]];
-            }
-            index++;
-            nextStart = [nextStart timeByAddingHours:0 andMinutes:(self.periodLength+c.passingPeriodLength)];
-        }
     }
+    //add periods after break
+    for (int num = self.periodsBeforeBreak+1; num<=self.periodsBeforeBreak+self.periodsAfterBreak; num++) {
+        IHWTime *endTime = [self addPeriodWithNum:num fromCourseList:courseList atIndex:index startTime:nextStart];
+        nextStart = [endTime timeByAddingHours:0 andMinutes:c.passingPeriodLength];
+        index++;
+    }
+}
+
+- (IHWTime *)addPeriodWithNum:(int)num fromCourseList:(NSArray *)courseList atIndex:(int)index startTime:(IHWTime *)startTime {
+    int duration = self.periodLength;
+    if (self.periodLengths != nil && [self.periodLengths objectForKey:[[NSNumber numberWithInt:num] stringValue]] != nil) {
+        duration = [[self.periodLengths objectForKey:[[NSNumber numberWithInt:num] stringValue]] intValue];
+    }
+    if ([courseList objectAtIndex:num] != [NSNull null]) {
+        IHWCourse *course = [courseList objectAtIndex:num];
+        IHWPeriod *period = [[IHWPeriod alloc] initWithName:course.name date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index];
+        [self.periods addObject:period];
+    } else {
+        [self.periods addObject:[[IHWPeriod alloc] initWithName:@"X" date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index]];
+    }
+    return [startTime timeByAddingHours:0 andMinutes:duration];
 }
 
 - (NSDictionary *)saveDay {

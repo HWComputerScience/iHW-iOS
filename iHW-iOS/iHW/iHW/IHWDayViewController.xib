@@ -43,7 +43,6 @@
 						<string key="NSFrame">{{0, 46}, {320, 326}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -192,29 +191,6 @@
 					</object>
 					<int key="connectionID">73</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">bottomSpaceConstraint</string>
-						<reference key="source" ref="372490531"/>
-						<object class="IBNSLayoutConstraint" key="destination" id="788414653">
-							<reference key="firstItem" ref="1063512763"/>
-							<int key="firstAttribute">4</int>
-							<int key="relation">0</int>
-							<reference key="secondItem" ref="191373211"/>
-							<int key="secondAttribute">4</int>
-							<float key="multiplier">1</float>
-							<object class="IBLayoutConstant" key="constant">
-								<double key="value">0.0</double>
-							</object>
-							<float key="priority">1000</float>
-							<reference key="containingView" ref="191373211"/>
-							<int key="scoringType">9</int>
-							<float key="scoringTypeFloat">40</float>
-							<int key="contentType">3</int>
-						</object>
-					</object>
-					<int key="connectionID">89</int>
-				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -228,7 +204,22 @@
 						<int key="objectID">1</int>
 						<reference key="object" ref="191373211"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="788414653"/>
+							<object class="IBNSLayoutConstraint" id="788414653">
+								<reference key="firstItem" ref="1063512763"/>
+								<int key="firstAttribute">4</int>
+								<int key="relation">0</int>
+								<reference key="secondItem" ref="191373211"/>
+								<int key="secondAttribute">4</int>
+								<float key="multiplier">1</float>
+								<object class="IBLayoutConstant" key="constant">
+									<double key="value">0.0</double>
+								</object>
+								<float key="priority">1000</float>
+								<reference key="containingView" ref="191373211"/>
+								<int key="scoringType">9</int>
+								<float key="scoringTypeFloat">40</float>
+								<int key="contentType">3</int>
+							</object>
 							<object class="IBNSLayoutConstraint" id="777758900">
 								<reference key="firstItem" ref="1063512763"/>
 								<int key="firstAttribute">6</int>
@@ -533,16 +524,11 @@
 					<string key="className">IHWDayViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="bottomSpaceConstraint">NSLayoutConstraint</string>
 						<string key="periodsTableView">UITableView</string>
 						<string key="titleLabel">UILabel</string>
 						<string key="weekdayLabel">UILabel</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="bottomSpaceConstraint">
-							<string key="name">bottomSpaceConstraint</string>
-							<string key="candidateClassName">NSLayoutConstraint</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="periodsTableView">
 							<string key="name">periodsTableView</string>
 							<string key="candidateClassName">UITableView</string>

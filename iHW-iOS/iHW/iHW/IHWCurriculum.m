@@ -218,6 +218,9 @@ static IHWCurriculum *currentCurriculum;
         [trimesterEndDates addObject:[[IHWDate alloc] initFromString:str]];
     }
     self.trimesterEndDates = trimesterEndDates;
+    if ([scheduleDict objectForKey:@"dayStartTime"] != nil)
+        self.dayStartTime = [[IHWTime alloc] initFromString:[scheduleDict objectForKey:@"dayStartTime"]];
+    else self.dayStartTime = [[IHWTime alloc] initWithHour:8 andMinute:0];
     self.normalDayTemplate = [scheduleDict objectForKey:@"normalDay"];
     self.normalMondayTemplate = [scheduleDict objectForKey:@"normalMonday"];
     self.passingPeriodLength = [[scheduleDict objectForKey:@"passingPeriodLength"] intValue];
