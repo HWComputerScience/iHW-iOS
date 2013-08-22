@@ -120,6 +120,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (![self.day isKindOfClass:[IHWHoliday class]]) return nil;
     self.dayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.periodsTableView.bounds.size.width, 60)];
+    self.dayNameLabel.numberOfLines = 2;
     self.dayNameLabel.font = [UIFont systemFontOfSize:25];
     self.dayNameLabel.textAlignment = NSTextAlignmentCenter;
     self.dayNameLabel.text = ((IHWHoliday *)self.day).name;
@@ -158,6 +159,7 @@
     else view = [[IHWPeriodCellView alloc] initWithPeriod:[self.day.periods objectAtIndex:index] atIndex:index forTableViewCell:cell];
     cell.frame = CGRectMake(0, 0, self.view.bounds.size.width, [view neededHeight]);
     view.dayViewController = self;
+    [view createCountdownViewIfNeeded];
     //[self.rowHeights setObject:[NSNumber numberWithFloat:[view neededHeight]] atIndexedSubscript:index];
     [cell.contentView addSubview:view];
     return cell;
@@ -185,9 +187,15 @@
     [self.periodsTableView endUpdates];
 }
 
+- (void)moveCountdownToPeriodAfterPeriodAtIndex:(int)index {
+    if (self.cells.count > index+1) {
+        [[((UITableViewCell *)[self.cells objectAtIndex:index+1]).contentView.subviews objectAtIndex:0] createCountdownViewIfNeeded];
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     if (self.hasUnsavedChanges) {
-        //NSLog(@"Committing changes");
+        NSLog(@"Committing changes");
         [[IHWCurriculum currentCurriculum] saveWeekWithDate:self.date];
         self.hasUnsavedChanges = NO;
     }
@@ -196,7 +204,7 @@
 - (void)applicationDidEnterBackground {
     [super applicationDidEnterBackground];
     if (self.hasUnsavedChanges) {
-        //NSLog(@"Committing changes");
+        NSLog(@"Committing changes");
         [[IHWCurriculum currentCurriculum] saveWeekWithDate:self.date];
         self.hasUnsavedChanges = NO;
     }

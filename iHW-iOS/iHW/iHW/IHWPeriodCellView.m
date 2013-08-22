@@ -12,6 +12,8 @@
 #import "IHWNoteView.h"
 #import "IHWAppDelegate.h"
 #import "IHWScheduleViewController.h"
+#import "IHWDate.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation IHWPeriodCellView
 
@@ -33,6 +35,7 @@
         self.endLabel.translatesAutoresizingMaskIntoConstraints = NO;
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
         self.notesView.translatesAutoresizingMaskIntoConstraints = NO;
+        self.clipsToBounds = YES;
                 
         self.startLabel.font = [UIFont systemFontOfSize:17];
         self.periodLabel.font = [UIFont boldSystemFontOfSize:25];
@@ -85,6 +88,42 @@
     return self;
 }
 
+- (void)createCountdownViewIfNeeded {
+    if (self.index == -1) return;
+    if ([self.period.date isEqualToDate:[IHWDate today]]) {
+        int secondsUntil = [[IHWTime now] secondsUntilTime:self.period.startTime];
+        if (secondsUntil > 0 &&
+            ((self.index > 0 && [((IHWPeriod *)[self.dayViewController.day.periods objectAtIndex:self.index-1]).startTime secondsUntilTime:[IHWTime now]] > 0)
+             || (self.index == 0 && secondsUntil < 60*60))) {
+                self.countdownView = [[UIView alloc] initWithFrame:CGRectMake(self.bounds.size.width-124, -10, 124+10, 24+10)];
+                self.countdownView.backgroundColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+                self.countdownView.layer.cornerRadius = 10;
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectOffset(self.countdownView.bounds, 5, 4)];
+                label.backgroundColor = [UIColor clearColor];
+                label.text = [NSString stringWithFormat:@"Starts in %d:%02d", secondsUntil/60, secondsUntil%60];
+                label.textColor = [UIColor whiteColor];
+                label.font = [UIFont boldSystemFontOfSize:17];
+                [self.countdownView addSubview:label];
+                [self addSubview:self.countdownView];
+                self.countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateCountdownView) userInfo:nil repeats:YES];
+            }
+    }
+}
+
+- (void)updateCountdownView {
+    int secondsUntil = [[IHWTime now] secondsUntilTime:self.period.startTime];
+    if (secondsUntil >= 0) {
+        UILabel *label = [self.countdownView.subviews objectAtIndex:0];
+        label.text = [NSString stringWithFormat:@"Starts in %d:%02d", secondsUntil/60, secondsUntil%60];
+    } else {
+        [self.countdownTimer invalidate];
+        self.countdownTimer = nil;
+        [self.countdownView removeFromSuperview];
+        self.countdownView = nil;
+        [self.dayViewController moveCountdownToPeriodAfterPeriodAtIndex:self.index];
+    }
+}
+
 - (void)updateConstraints {
     [super updateConstraints];
     if (self.index == -1) {
@@ -112,75 +151,20 @@
     [self reLayoutViews:animated];
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    UIButton *button = ((IHWNoteView *)[self.notesView.subviews objectAtIndex:textField.tag]).optionsButton;
-    button.hidden = NO;
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    textField.text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    int noteIndex = textField.tag;
-    IHWNoteView *view = [self.notesView.subviews objectAtIndex:noteIndex];
-    
-    if (![textField.text isEqualToString:@""]) {
-        /*
-        if (noteIndex < self.period.notes.count) {
-            IHWNote *prevNote = [self.period.notes objectAtIndex:noteIndex];
-            prevNote.text = textField.text;
-        } else {
-            IHWNote *prevNote = [[IHWNote alloc] initWithText:textField.text isToDo:NO isChecked:NO isImportant:NO];
-            [self.period.notes setObject:prevNote atIndexedSubscript:noteIndex];
-        }*/
-        if (view.note == nil) {
-            IHWNote *note = [view copyFieldsToNewNote];
-            [self.period.notes setObject:note atIndexedSubscript:noteIndex];
-        }
-    }
-    if (![textField.text isEqualToString:@""] && noteIndex == self.notesView.subviews.count-1) {
+- (void)noteViewChangedAtIndex:(int)index {
+    IHWNoteView *noteView = [self.notesView.subviews objectAtIndex:index];
+    [self.period.notes setObject:noteView.note atIndexedSubscript:index];
+    if (![noteView.textField.text isEqualToString:@""] && index == self.notesView.subviews.count-1) {
         [self addNoteView:nil animated:YES];
-    } else if ([textField.text isEqualToString:@""] && noteIndex != self.notesView.subviews.count-1) {
-        if (self.period.notes.count > noteIndex) [self.period.notes removeObjectAtIndex:noteIndex];
-        [[self.notesView.subviews objectAtIndex:noteIndex] removeFromSuperview];
+    } else if ([noteView.textField.text isEqualToString:@""] && index != self.notesView.subviews.count-1) {
+        if (self.period.notes.count > index) [self.period.notes removeObjectAtIndex:index];
+        [noteView removeFromSuperview];
         [self reLayoutViews:YES];
-        UITextField *nextFocus = ((IHWNoteView *)[self.notesView.subviews objectAtIndex:noteIndex]).textField;
-        [nextFocus becomeFirstResponder];
-        nextFocus.selectedTextRange = [nextFocus textRangeFromPosition:nextFocus.beginningOfDocument toPosition:nextFocus.beginningOfDocument];
+        IHWNoteView *nextFocus = [self.notesView.subviews objectAtIndex:index];
+        [nextFocus.textField becomeFirstResponder];
+        nextFocus.textField.selectedTextRange = [nextFocus.textField textRangeFromPosition:nextFocus.textField.beginningOfDocument toPosition:nextFocus.textField.beginningOfDocument];
     }
     [self saveNotes];
-    return NO;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return NO;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    int noteIndex = textField.tag;
-    UIButton *button = ((IHWNoteView *)[self.notesView.subviews objectAtIndex:noteIndex]).optionsButton;
-    button.hidden = YES;
-}
-
-- (void)optionsButtonPressed:(UIButton *)button {
-    int noteIndex = button.tag;
-    NSString *todoTitle;
-    if (((IHWNoteView *)[self.notesView.subviews objectAtIndex:noteIndex]).isToDo) todoTitle = @"Hide checkbox";
-    else todoTitle = @"Show checkbox";
-    NSString *importantTitle;
-    if (((IHWNoteView *)[self.notesView.subviews objectAtIndex:noteIndex]).isImportant) importantTitle = @"Make unimportant";
-    else importantTitle = @"Make important";
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Note Options" delegate:self cancelButtonTitle:@"Close" destructiveButtonTitle:nil otherButtonTitles:todoTitle, importantTitle, nil];
-    sheet.tag = noteIndex;
-    [sheet showFromToolbar:((IHWScheduleViewController *)[((IHWAppDelegate *)[UIApplication sharedApplication].delegate).navController.viewControllers objectAtIndex:0]).toolbar];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    int noteIndex = actionSheet.tag;
-    if (buttonIndex == 0) {
-        [((IHWNoteView *)[self.notesView.subviews objectAtIndex:noteIndex]) toggleToDo];
-    } else if (buttonIndex == 1) {
-        [((IHWNoteView *)[self.notesView.subviews objectAtIndex:noteIndex]) toggleImportant];
-    }
 }
 
 - (void)reLayoutViews:(BOOL)animated {
@@ -188,12 +172,15 @@
     int yPos = 0;
     for (int index=0; index < self.notesView.subviews.count; index++) {
         IHWNoteView *view = [self.notesView.subviews objectAtIndex:index];
-        for (UIView *subview in view.subviews) {
-            subview.tag = index;
-        }
+        view.index = index;
         [self.notesView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[view]|" options:NSLayoutFormatAlignAllLeft metrics:nil views:@{@"view": view}]];
-        [self.notesView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-yPos-[view(==noteHeight)]" options:NSLayoutFormatAlignAllLeft metrics:@{@"yPos": [NSNumber numberWithInt:yPos], @"noteHeight":[NSNumber numberWithInt:NOTE_HEIGHT]} views:@{@"view": view}]];
-        yPos += NOTE_HEIGHT;
+        [self.notesView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-yPos-[view]" options:NSLayoutFormatAlignAllLeft metrics:@{@"yPos": [NSNumber numberWithInt:yPos]} views:@{@"view": view}]];
+        if (view.heightConstraint == nil) {
+            view.heightConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:view.neededHeight];
+            [self.notesView addConstraint:view.heightConstraint];
+        }
+        view.heightConstraint.constant = view.neededHeight;
+        yPos += view.neededHeight;
     }
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, [self neededHeight]);
     if (animated) [UIView animateWithDuration:0.3 animations:^{
@@ -210,7 +197,11 @@
 }
 
 - (int)neededHeight {
-    return MAX(72, self.notesView.subviews.count*NOTE_HEIGHT+3+19+2);
+    int noteHeight = 0;
+    for (IHWNoteView *view in self.notesView.subviews) {
+        noteHeight += view.neededHeight;
+    }
+    return MAX(72, noteHeight+3+19+2);
 }
 
 + (BOOL)requiresConstraintBasedLayout {

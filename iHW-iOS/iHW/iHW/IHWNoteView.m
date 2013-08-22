@@ -7,41 +7,52 @@
 //
 
 #import "IHWNoteView.h"
+#import "IHWScheduleViewController.h"
+#import "IHWAppDelegate.h"
+
+#define NOTE_HEIGHT 24
+#define BUTTON_WIDTH 24
+#define IMPORTANT_NOTE_HEIGHT 28
 
 @implementation IHWNoteView
 @synthesize note = _note;
 
 - (id)initWithNote:(IHWNote *)note index:(int)noteIndex cellView:(IHWPeriodCellView *)cellView
 {
-    int yPos = noteIndex*NOTE_HEIGHT;
-    self = [super initWithFrame:CGRectMake(4, yPos, cellView.notesView.bounds.size.width, NOTE_HEIGHT)];
+    CGRect frame = CGRectZero;
+    if (cellView.notesView.subviews.count > 0){
+        IHWNoteView *previous = [cellView.notesView.subviews objectAtIndex:cellView.notesView.subviews.count-1];
+        CGFloat yPos = previous.frame.origin.y+previous.neededHeight;
+        frame = CGRectMake(4, yPos, cellView.notesView.bounds.size.width, 0);
+    }
+    self = [super initWithFrame:frame];
     if (self) {
+        self.index = noteIndex;
+        self.delegate = cellView;
         
-        self.checkbox = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, NOTE_HEIGHT)];
+        self.checkbox = [[UIButton alloc] initWithFrame:CGRectZero];
         self.checkbox.translatesAutoresizingMaskIntoConstraints = NO;
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxUnchecked"] forState:UIControlStateNormal];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxUnchecked"] forState:UIControlStateSelected|UIControlStateHighlighted];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxChecked"] forState:UIControlStateSelected];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxChecked"] forState:UIControlStateHighlighted];
         [self addSubview:self.checkbox];
-        //[self.checkbox addTarget:self action:@selector(toggleChecked) forControlEvents:UIControlEventTouchUpInside];
+        [self.checkbox addTarget:self action:@selector(toggleChecked) forControlEvents:UIControlEventTouchUpInside];
         
-        self.textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width-NOTE_HEIGHT, NOTE_HEIGHT)];
+        self.textField = [[UITextField alloc] initWithFrame:CGRectZero];
         self.textField.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.textField];
         self.textField.placeholder = @"Add a note";
         self.textField.borderStyle = UITextBorderStyleNone;
-        self.textField.delegate = cellView;
+        self.textField.delegate = self;
         self.textField.returnKeyType = UIReturnKeyDone;
-        self.textField.tag = noteIndex;
         
-        self.optionsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.bounds.size.width-NOTE_HEIGHT, NOTE_HEIGHT, NOTE_HEIGHT)];
+        self.optionsButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [self.optionsButton setImage:[UIImage imageNamed:@"graygear"] forState:UIControlStateNormal];
         [self addSubview:self.optionsButton];
         self.optionsButton.translatesAutoresizingMaskIntoConstraints = NO;
         self.optionsButton.hidden = YES;
-        self.optionsButton.tag = noteIndex;
-        [self.optionsButton addTarget:cellView action:@selector(optionsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.optionsButton addTarget:self action:@selector(optionsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         self.note = note;
     }
@@ -51,10 +62,10 @@
 - (void)updateConstraints {
     [super updateConstraints];
     if (self.constraints != nil) [self removeConstraints:self.constraints];
-    int checkboxWidth = NOTE_HEIGHT;
+    int checkboxWidth = BUTTON_WIDTH;
     int checkboxMargin = 4;
     if (self.checkbox.hidden) { checkboxWidth = 0; checkboxMargin = 0; }
-    NSDictionary *metrics = @{@"noteHeight":[NSNumber numberWithInt:NOTE_HEIGHT], @"checkboxWidth":[NSNumber numberWithInt:checkboxWidth], @"checkboxMargin":[NSNumber numberWithInt:checkboxMargin]};
+    NSDictionary *metrics = @{@"noteHeight":[NSNumber numberWithInt:[self neededHeight]], @"checkboxWidth":[NSNumber numberWithInt:checkboxWidth], @"checkboxMargin":[NSNumber numberWithInt:checkboxMargin]};
     NSDictionary *views = @{@"checkbox":self.checkbox, @"text": self.textField, @"button":self.optionsButton};
     self.constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[checkbox(==checkboxWidth)]-checkboxMargin-[text][button(==noteHeight)]-4-|" options:NSLayoutFormatAlignAllTop metrics:metrics views:views];
     self.constraints = [self.constraints arrayByAddingObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[text(==checkbox,==button,==noteHeight)]|" options:NSLayoutFormatAlignAllTop metrics:metrics views:views]];
@@ -75,8 +86,8 @@
     }
 }
 
-- (IHWNote *)copyFieldsToNewNote {
-    return [[IHWNote alloc] initWithText:self.textField.text isToDo:self.isToDo isChecked:self.isChecked isImportant:self.isImportant];
+- (void)copyFieldsToNewNote {
+    _note = [[IHWNote alloc] initWithText:self.textField.text isToDo:self.isToDo isChecked:self.isChecked isImportant:self.isImportant];
 }
 
 - (void)setToDo:(BOOL)isToDo {
@@ -91,6 +102,7 @@
 
 - (void)toggleToDo {
     [self setToDo:![self isToDo]];
+    [self.delegate noteViewChangedAtIndex:self.index];
 }
 
 - (BOOL)isChecked {
@@ -98,14 +110,13 @@
 }
 
 - (void)setChecked:(BOOL)checked {
-    //BOOL changed = (self.checkbox.selected != checked);
     self.checkbox.selected = checked;
     if (self.note != nil) self.note.isChecked = checked;
-    //if (changed && [self.delegate respondsToSelector:@selector(checkboxCell:didChangeCheckedStateToState:)]) [self.delegate checkboxCell:self didChangeCheckedStateToState:checked];
 }
 
 - (void)toggleChecked {
     [self setChecked:![self isChecked]];
+    [self.delegate noteViewChangedAtIndex:self.index];
 }
 
 - (BOOL)isImportant {
@@ -113,11 +124,65 @@
 }
 
 - (void)setImportant:(BOOL)important {
+    if (important) {
+        self.textField.font = [UIFont boldSystemFontOfSize:23];
+        self.textField.textColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+    } else {
+        self.textField.font = [UIFont systemFontOfSize:17];
+        self.textField.textColor = [UIColor blackColor];
+    }
     if (self.note != nil) self.note.isImportant = important;
+    [self.delegate reLayoutViews:YES];
 }
 
 - (void)toggleImportant {
     [self setImportant:![self isImportant]];
+    [self.delegate noteViewChangedAtIndex:self.index];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    self.optionsButton.hidden = NO;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    textField.text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if (self.note == nil) [self copyFieldsToNewNote];
+    else self.note.text = textField.text;
+    [self.delegate noteViewChangedAtIndex:self.index];
+    return NO;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    self.optionsButton.hidden = YES;
+}
+
+- (void)optionsButtonPressed:(UIButton *)button {
+    NSString *todoTitle;
+    if (self.isToDo) todoTitle = @"Hide checkbox";
+    else todoTitle = @"Show checkbox";
+    NSString *importantTitle;
+    if (self.isImportant) importantTitle = @"Make unimportant";
+    else importantTitle = @"Make important";
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Note Options" delegate:self cancelButtonTitle:@"Close" destructiveButtonTitle:nil otherButtonTitles:todoTitle, importantTitle, nil];
+    [sheet showFromToolbar:((IHWScheduleViewController *)[((IHWAppDelegate *)[UIApplication sharedApplication].delegate).navController.viewControllers objectAtIndex:0]).toolbar];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self toggleToDo];
+    } else if (buttonIndex == 1) {
+        [self toggleImportant];
+    }
+}
+
+- (int)neededHeight {
+    if (self.isImportant) return IMPORTANT_NOTE_HEIGHT;
+    else return NOTE_HEIGHT;
 }
 
 @end

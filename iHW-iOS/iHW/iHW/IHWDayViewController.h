@@ -26,5 +26,6 @@
 
 - (id)initWithDate:(IHWDate *)date;
 - (void)updateRowHeightAtIndex:(int)index toHeight:(int)height;
+- (void)moveCountdownToPeriodAfterPeriodAtIndex:(int)index;
 
 @end

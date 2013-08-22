@@ -10,6 +10,10 @@
 
 @implementation IHWTime
 
++ (IHWTime *)now {
+    return [[self alloc] initNow];
+}
+
 - (id)initNow
 {
     self = [super init];

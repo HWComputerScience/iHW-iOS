@@ -14,6 +14,7 @@
 @property int minute;
 @property int second;
 
++ (IHWTime *)now;
 - (id)initNow;
 - (id)initWithHour:(int)hour andMinute:(int)minute;
 - (id)initWithHour:(int)hour minute:(int)minute andPM:(BOOL)isPM;
