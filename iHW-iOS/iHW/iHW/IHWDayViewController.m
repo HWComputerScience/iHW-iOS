@@ -87,7 +87,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-   // NSLog(@"viewDidAppear");
+   //NSLog(@"viewDidAppear");
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {
@@ -195,7 +195,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     if (self.hasUnsavedChanges) {
-        NSLog(@"Committing changes");
+        //NSLog(@"Committing changes");
         [[IHWCurriculum currentCurriculum] saveWeekWithDate:self.date];
         self.hasUnsavedChanges = NO;
     }
@@ -204,7 +204,7 @@
 - (void)applicationDidEnterBackground {
     [super applicationDidEnterBackground];
     if (self.hasUnsavedChanges) {
-        NSLog(@"Committing changes");
+        //NSLog(@"Committing changes");
         [[IHWCurriculum currentCurriculum] saveWeekWithDate:self.date];
         self.hasUnsavedChanges = NO;
     }

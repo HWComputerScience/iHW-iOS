@@ -1048,35 +1048,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">IHWFirstRunViewController</string>
 					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="backButtonClicked:">id</string>
-						<string key="downloadClicked:">id</string>
-						<string key="manualClicked:">id</string>
-						<string key="middleSchoolClicked:">id</string>
-						<string key="upperSchoolClicked:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="backButtonClicked:">
-							<string key="name">backButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="downloadClicked:">
-							<string key="name">downloadClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="manualClicked:">
-							<string key="name">manualClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="middleSchoolClicked:">
-							<string key="name">middleSchoolClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="upperSchoolClicked:">
-							<string key="name">upperSchoolClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="backButton">UIButton</string>
 						<string key="downloadButton">UIButton</string>

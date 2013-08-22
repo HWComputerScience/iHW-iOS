@@ -20,7 +20,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [self checkDatesWorking];
     
     // Override point for customization after application launch.
     UIViewController *rootVC = nil;
@@ -40,22 +39,6 @@
     self.window.rootViewController = self.navController;
     [self.window makeKeyAndVisible];
     return YES;
-}
-
-- (void)checkDatesWorking {
-    NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    cal.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-    NSDateComponents *firstComponents = [[NSDateComponents alloc] init];
-    firstComponents.day = 3;
-    firstComponents.month = 11;
-    firstComponents.year = 2013;
-    firstComponents.hour = 0;
-    firstComponents.minute = 0;
-    firstComponents.second = 0;
-    NSDate *firstDate = [cal dateFromComponents:firstComponents];
-    NSDate *secondDate = [[NSDate alloc] initWithTimeInterval:1*24*60*60 sinceDate:firstDate];
-    NSDateComponents *secondComponents = [cal components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:secondDate];
-    NSLog(@"Day: %d", secondComponents.day);
 }
 
 - (void)showNetworkIcon {

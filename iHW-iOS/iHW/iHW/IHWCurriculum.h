@@ -38,7 +38,7 @@
 @property (strong, nonatomic) NSMutableDictionary *dayNumbers;
 @property (strong, nonatomic) NSArray *semesterEndDates;
 @property (strong, nonatomic) NSArray *trimesterEndDates;
-@property (strong, nonatomic) NSMutableSet *curriculumLoadingListeners;
+@property (strong) NSMutableSet *curriculumLoadingListeners;
 @property (strong, nonatomic) NSOperationQueue *loadingQueue;
 
 - (id)initWithCampus:(int)campus year:(int)year startingDate:(IHWDate *)date;

@@ -11,6 +11,8 @@
 #import "IHWDayViewController.h"
 #import "IHWNormalCoursesViewController.h"
 #import "ActionSheetDatePicker.h"
+#import "IHWPreferencesViewController.h"
+#import "IHWAppDelegate.h"
 
 @implementation IHWScheduleViewController
 
@@ -29,6 +31,17 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Courses" style:UIBarButtonItemStyleBordered target:self action:@selector(showCourses)];
     
+    UIToolbar *tools = [[UIToolbar alloc]
+                        initWithFrame:CGRectMake(0,0,36,44)];
+    tools.clipsToBounds = NO;
+    tools.barStyle = -1;
+    NSMutableArray *buttons = [[NSMutableArray alloc] initWithCapacity:1];
+    UIBarButtonItem *bi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"whitegear"] style:UIBarButtonItemStylePlain target:self action:@selector(optionsButtonClicked)];
+    [buttons addObject:bi];
+    [tools setItems:buttons animated:NO];
+    UIBarButtonItem *rightButtons = [[UIBarButtonItem alloc] initWithCustomView:tools];
+    self.navigationItem.rightBarButtonItem = rightButtons;
+    
     self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     self.pageViewController.dataSource = self;
     self.pageViewController.delegate = self;
@@ -40,12 +53,12 @@
     
     self.pageViewController.view.frame = self.pageContainerView.bounds;
     [self.pageContainerView addSubview:self.pageViewController.view];
-    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     if (![[IHWCurriculum currentCurriculum] isLoaded]) {
-        [[IHWCurriculum currentCurriculum].curriculumLoadingListeners addObject:self];
+        if (![[IHWCurriculum currentCurriculum].curriculumLoadingListeners containsObject:self])
+            [[IHWCurriculum currentCurriculum].curriculumLoadingListeners addObject:self];
         self.loadingView = [[IHWLoadingView alloc] initWithText:@"Loading..."];
     } else {
         if (self.currentDate == nil) self.currentDate = [IHWDate today];
@@ -57,26 +70,42 @@
 }
 
 - (void)curriculumFinishedLoading:(IHWCurriculum *)curriculum {
+    //NSLog(@"Curriculum finished loading");
     [self.loadingView dismiss];
     [curriculum.curriculumLoadingListeners removeObject:self];
     self.loadingView = nil;
     if (self.currentDate == nil) self.currentDate = [IHWDate today];
+    if ([self.currentDate compare:[[IHWDate alloc] initWithMonth:7 day:1 year:[IHWCurriculum currentYear]]] == NSOrderedAscending) {
+        self.currentDate = [[IHWDate alloc] initWithMonth:7 day:1 year:[IHWCurriculum currentYear]];
+    }
+    else if ([self.currentDate compare:[[IHWDate alloc] initWithMonth:7 day:1 year:[IHWCurriculum currentYear]+1]] != NSOrderedAscending) {
+        self.currentDate = [[[IHWDate alloc] initWithMonth:7 day:1 year:[IHWCurriculum currentYear]+1] dateByAddingDays:-1];
+    }
     [self.loadedViewControllers setObject:[[IHWDayViewController alloc] initWithDate:self.currentDate] forKey:self.currentDate];
     [self.pageViewController setViewControllers:[NSArray arrayWithObject:[self.loadedViewControllers objectForKey:self.currentDate]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     [self cacheViewControllersAroundDate:self.currentDate];
 }
 
 - (void)curriculumFailedToLoad:(IHWCurriculum *)curriculum {
+    //NSLog(@"Curriculum failed to load");
     [self.loadingView dismiss];
     [curriculum.curriculumLoadingListeners removeObject:self];
     self.loadingView = nil;
-    [[[UIAlertView alloc] initWithTitle:@"Schedule Currently Unavailable" message:@"Please check your internet connection and try again later." delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:nil] show];
+    if (self.unavailableAlert == nil) {
+        self.unavailableAlert = [[UIAlertView alloc] initWithTitle:@"Schedule Currently Unavailable" message:@"Please check your internet connection and try again later." delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:@"Choose year", nil];
+        [self.unavailableAlert show];
+    }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [[IHWCurriculum currentCurriculum].curriculumLoadingListeners addObject:self];
-    [[IHWCurriculum currentCurriculum] loadEverythingWithStartingDate:[IHWDate today]];
-    self.loadingView = [[IHWLoadingView alloc] initWithText:@"Loading..."];
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    self.unavailableAlert = nil;
+    if (buttonIndex == 0) {
+        [[IHWCurriculum currentCurriculum].curriculumLoadingListeners addObject:self];
+        [[IHWCurriculum currentCurriculum] loadEverythingWithStartingDate:[IHWDate today]];
+        self.loadingView = [[IHWLoadingView alloc] initWithText:@"Loading..."];
+    } else if (buttonIndex == 1) {
+        [self presentViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil] animated:YES completion:nil];
+    }
 }
 
 - (void)cacheViewControllersAroundDate:(IHWDate *)aroundDate {
@@ -110,6 +139,10 @@
 - (void)showCourses {
     UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWNormalCoursesViewController alloc] initWithNibName:@"IHWNormalCoursesViewController" bundle:nil]];
     [self presentViewController:navc animated:YES completion:nil];
+}
+
+- (void)optionsButtonClicked {
+    [self presentViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil] animated:YES completion:nil];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {

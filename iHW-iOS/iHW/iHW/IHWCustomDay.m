@@ -15,6 +15,7 @@
 {
     self = [super initWithDate:date];
     if (self) {
+        //NSLog(@"Tests: %@", tests);
         self.periods = [tests mutableCopy];
     }
     return self;
@@ -25,10 +26,12 @@
     self = [super initWithJSONDictionary:dictionary];
     if (self) {
         NSArray *dicts = [dictionary objectForKey:@"tests"];
+        //NSLog(@"Test dictionary: %@", dicts);
         self.periods = [NSMutableArray array];
         for (NSDictionary *periodDict in dicts) {
             [self.periods addObject:[[IHWPeriod alloc] initWithJSONDictionary:periodDict]];
         }
+        //NSLog(@"Periods: %@", self.periods);
     }
     return self;
 }

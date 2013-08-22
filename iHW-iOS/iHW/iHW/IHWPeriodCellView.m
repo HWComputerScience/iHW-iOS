@@ -191,7 +191,7 @@
 }
 
 - (void)saveNotes {
-    NSLog(@"Saving notes: %@", self.period.notes);
+    //NSLog(@"Saving notes: %@", self.period.notes);
     [self.period saveNotes];
     self.dayViewController.hasUnsavedChanges = YES;
 }

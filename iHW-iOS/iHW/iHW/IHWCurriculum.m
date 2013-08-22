@@ -36,7 +36,7 @@ static IHWCurriculum *currentCurriculum;
     if (currentCurriculum == nil || currentCurriculum.campus != campus || currentCurriculum.year != year) {
         [self setCurrentCampus:campus];
         [self setCurrentYear:year];
-        NSLog(@"Creating current curriculum: %@", [IHWDate today]);
+        //NSLog(@"Creating current curriculum: %@", [IHWDate today]);
         currentCurriculum = [[IHWCurriculum alloc] initWithCampus:campus year:year startingDate:[IHWDate today]];
     } else {
         if (!currentCurriculum.isLoaded && !currentCurriculum.isLoading) [currentCurriculum loadEverythingWithStartingDate:[IHWDate today]];
@@ -97,7 +97,7 @@ static IHWCurriculum *currentCurriculum;
 }
 
 - (void)loadEverythingWithStartingDate:(IHWDate *)date {
-    NSLog(@">loading everything");
+    //NSLog(@">loading everything");
     if (self.loadingProgress >= 0) return;
     self.loadingProgress = 0;
     self.loadingQueue = [[NSOperationQueue alloc] init];
@@ -127,9 +127,14 @@ static IHWCurriculum *currentCurriculum;
 - (void)loadingFailed {
     [self.loadingQueue setSuspended:YES];
     self.loadingProgress = -1;
+    __block NSMutableSet *toSendSelector = [NSMutableSet set];
     for (NSObject<IHWCurriculumLoadingListener> *mll in self.curriculumLoadingListeners) {
-        if ([mll respondsToSelector:@selector(curriculumFailedToLoad:)]) [mll performSelectorOnMainThread:@selector(curriculumFailedToLoad:) withObject:self waitUntilDone:NO];
+        if ([mll respondsToSelector:@selector(curriculumFailedToLoad:)])
+            [toSendSelector addObject:mll];
     }
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [toSendSelector makeObjectsPerformSelector:@selector(curriculumFailedToLoad:) withObject:self];
+    }];
 }
 
 - (BOOL)isLoading {
@@ -142,15 +147,20 @@ static IHWCurriculum *currentCurriculum;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"operationCount"] && object == self.loadingQueue) {
-        NSLog(@"loading queue changed count: %d", self.loadingQueue.operationCount);
+        //NSLog(@"loading queue changed count: %d", self.loadingQueue.operationCount);
         if (self.loadingQueue.operationCount == 0) {
             [self.loadingQueue removeObserver:self forKeyPath:@"operationCount"];
             self.loadingQueue = nil;
             self.loadingProgress = 1;
+            __block NSMutableArray *toSendSelector = [NSMutableArray array];
             for (NSObject<IHWCurriculumLoadingListener> *mll in self.curriculumLoadingListeners) {
-                if ([mll respondsToSelector:@selector(curriculumFinishedLoading:)]) [mll performSelectorOnMainThread:@selector(curriculumFinishedLoading:) withObject:self waitUntilDone:NO];
-                
+                if ([mll respondsToSelector:@selector(curriculumFinishedLoading:)]) {
+                    [toSendSelector addObject:mll];
+                }
             }
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [toSendSelector makeObjectsPerformSelector:@selector(curriculumFinishedLoading:) withObject:self];
+            }];
         }
     }
 }
@@ -173,7 +183,7 @@ static IHWCurriculum *currentCurriculum;
 }
 
 - (BOOL)downloadParseScheduleJSON {
-    NSLog(@">downloading schedule JSON");
+    //NSLog(@">downloading schedule JSON");
     NSError *error = nil;
     NSURLResponse *response = nil;
     NSString *urlStr = [NSString stringWithFormat:@"http://www.burnsfamily.info/curriculum%d%@.hws", self.year, getCampusChar(self.campus)];
@@ -194,7 +204,7 @@ static IHWCurriculum *currentCurriculum;
 }
 
 - (BOOL)parseScheduleJSON:(NSData *)scheduleJSON {
-    NSLog(@">parsing schedule JSON");
+    //NSLog(@">parsing schedule JSON");
     NSError *error = nil;
     NSDictionary *scheduleDict = [[CJSONDeserializer deserializer] deserializeAsDictionary:scheduleJSON error:&error];
     if (error != nil) { NSLog(@"ERROR parsing schedule JSON: %@", error.debugDescription); return NO; }
@@ -222,7 +232,7 @@ static IHWCurriculum *currentCurriculum;
 }
 
 - (BOOL)loadCourses {
-    NSLog(@">loading courses");
+    //NSLog(@">loading courses");
     NSMutableArray *courseArray = [NSMutableArray array];
     NSError *error = nil;
     NSData *json = [IHWFileManager loadYearJSONForYear:self.year campus:getCampusChar(self.campus)];
@@ -239,7 +249,7 @@ static IHWCurriculum *currentCurriculum;
 }
 
 - (BOOL)loadDayNumbers {
-    NSLog(@">loading day numbers");
+    //NSLog(@">loading day numbers");
     if (self.specialDayTemplates == nil || self.semesterEndDates == nil) return NO;
     NSMutableDictionary *dayNums = [[NSMutableDictionary alloc] init];
     IHWDate *d = [self.semesterEndDates objectAtIndex:0];
@@ -265,7 +275,12 @@ static IHWCurriculum *currentCurriculum;
 }
 
 - (BOOL)loadWeekAndDay:(IHWDate *)date {
-    NSLog(@">loading week and day");
+    if ([date compare:[[IHWDate alloc] initWithMonth:7 day:1 year:self.year]] == NSOrderedAscending) {
+        date = [[IHWDate alloc] initWithMonth:7 day:1 year:self.year];
+    }
+    else if ([date compare:[[IHWDate alloc] initWithMonth:7 day:1 year:self.year+1]] != NSOrderedAscending) {
+        date = [[[IHWDate alloc] initWithMonth:7 day:1 year:self.year+1] dateByAddingDays:-1];
+    }
     BOOL success = [self loadWeek:date];
     if (!success) { NSLog(@"ERROR loading week: %@", date.description); return NO; }
     success = [self loadDay:date];
@@ -276,7 +291,7 @@ static IHWCurriculum *currentCurriculum;
 - (BOOL)loadWeek:(IHWDate *)date {
     int weekNumber = getWeekNumber(self.year, date);
     IHWDate *weekStart = getWeekStart(self.year, date);
-    NSLog(@">loading week: %@", weekStart.description);
+    //NSLog(@">loading week: %@", weekStart.description);
     if (self.loadedWeeks != nil && [self.loadedWeeks objectForKey:weekStart] != nil) return YES;
     if (weekNumber == -1) return NO;
     NSData *weekJSON = [IHWFileManager loadWeekJSONForWeekNumber:weekNumber year:self.year campus:getCampusChar(self.campus)];
@@ -293,23 +308,25 @@ static IHWCurriculum *currentCurriculum;
 }
 
 - (BOOL)loadDay:(IHWDate *)date {
-    NSLog(@">loading day: %@", date);
+    //NSLog(@">loading day: %@", date);
     if (![self dateInBounds:date]) return NO;
     if (self.loadedDays == nil) self.loadedDays = [NSMutableDictionary dictionary];
-    if ([date compare:[self.semesterEndDates objectAtIndex:0]] == NSOrderedAscending
-        || [date compare:[self.semesterEndDates objectAtIndex:2]] == NSOrderedDescending) {
-        //Date is during Summer
-        //[self.loadedDays insertObject:[[IHWHoliday alloc] initWithName:@"Summer" onDate:date] forKey:date sortedUsingComparator:[IHWDate comparator]];
-        IHWHoliday *holiday = [[IHWHoliday alloc] initWithName:@"Summer" onDate:date];
-        [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:holiday waitUntilDone:YES];
-        return YES;
-    } else if (date.isWeekend) {
-        //[self.loadedDays insertObject:[[IHWHoliday alloc] initWithName:@"" onDate:date] forKey:date sortedUsingComparator:[IHWDate comparator]];
-        IHWHoliday *holiday = [[IHWHoliday alloc] initWithName:@"" onDate:date];
-        [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:holiday waitUntilDone:YES];
-        return YES;
-    }
     NSDictionary *template = [self.specialDayTemplates objectForKey:date];
+    if (template == nil) {
+        if ([date compare:[self.semesterEndDates objectAtIndex:0]] == NSOrderedAscending
+            || [date compare:[self.semesterEndDates objectAtIndex:2]] == NSOrderedDescending) {
+            //Date is during Summer
+            //[self.loadedDays insertObject:[[IHWHoliday alloc] initWithName:@"Summer" onDate:date] forKey:date sortedUsingComparator:[IHWDate comparator]];
+            IHWHoliday *holiday = [[IHWHoliday alloc] initWithName:@"Summer" onDate:date];
+            [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:holiday waitUntilDone:YES];
+            return YES;
+        } else if (date.isWeekend) {
+            //[self.loadedDays insertObject:[[IHWHoliday alloc] initWithName:@"" onDate:date] forKey:date sortedUsingComparator:[IHWDate comparator]];
+            IHWHoliday *holiday = [[IHWHoliday alloc] initWithName:@"" onDate:date];
+            [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:holiday waitUntilDone:YES];
+            return YES;
+        }
+    }
     if (template==nil && date.isMonday) {
         NSMutableDictionary *dict = [self.normalMondayTemplate mutableCopy];
         [dict setObject:date.description forKey:@"date"];
@@ -322,12 +339,13 @@ static IHWCurriculum *currentCurriculum;
         template = dict;
     }
     NSString *type = [template objectForKey:@"type"];
+    //NSLog(@"Type: %@", type);
     IHWDay *day;
     if ([type isEqualToString:@"normal"]) {
         day = [[IHWNormalDay alloc] initWithJSONDictionary:template];
         [(IHWNormalDay *)day fillPeriodsFromCurriculum:self];
     } else if ([type isEqualToString:@"test"]) {
-        day = [[IHWNormalDay alloc] initWithJSONDictionary:template];
+        day = [[IHWCustomDay alloc] initWithJSONDictionary:template];
     } else if ([type isEqualToString:@"holiday"]) {
         day = [[IHWHoliday alloc] initWithJSONDictionary:template];
     } else return NO;
@@ -600,7 +618,7 @@ static IHWCurriculum *currentCurriculum;
 #pragma mark ********************SAVING STUFF*********************
 
 - (void)saveWeekWithDate:(IHWDate *)date {
-    NSLog(@"Saving week");
+    //NSLog(@"Saving week");
     IHWDate *weekStart = getWeekStart(self.year, date);
     NSDictionary *weekObj = [self.loadedWeeks objectForKey:weekStart];
     int weekNumber = getWeekNumber(self.year, weekStart);

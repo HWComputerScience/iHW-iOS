@@ -25,7 +25,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [[IHWCurriculum currentCurriculum] removeAllCourses];
         alreadyLoaded = NO;
     }
     return self;
@@ -42,8 +41,13 @@
     [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
 - (IBAction)backPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([IHWCurriculum isFirstRun]) [self.navigationController popViewControllerAnimated:YES];
+    else [self.navigationController setViewControllers:@[[[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil]] animated:YES];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
@@ -58,7 +62,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(hideNetworkIcon) withObject:nil waitUntilDone:NO];
     NSURL *url = webView.request.mainDocumentURL;
-    NSLog(@"URL did finish load: %@", url.description);
+    //NSLog(@"URL did finish load: %@", url.description);
     if ([url isEqual:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]) {
         self.webView.hidden = NO;
         self.loginPromptLabel.hidden = NO;
@@ -117,6 +121,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(hideNetworkIcon) withObject:nil waitUntilDone:NO];
+    [[IHWCurriculum currentCurriculum] removeAllCourses];
     NSError *error = nil;
     HTMLParser *parser = [[HTMLParser alloc] initWithData:self.resultData error:&error];
     if (error != nil) { NSLog(@"ERROR parsing schedule HTML: %@", error.debugDescription); return; }
@@ -127,7 +132,7 @@
     BOOL shouldShowWarning = NO;
     for (HTMLNode *div in divs) {
         if ([[div getAttributeNamed:@"id"] isEqualToString:@"nameStudentName1-0"]) {
-            NSLog(@"Welcome, %@", [[[div findChildTags:@"span"] objectAtIndex:0] contents]);
+            //NSLog(@"Welcome, %@", [[[div findChildTags:@"span"] objectAtIndex:0] contents]);
         } else if ([[div getAttributeNamed:@"id"] isEqualToString:@"sectCode1"]) {
             lastCode = [[[div findChildTags:@"span"] objectAtIndex:0] contents];
             if (lastCode.length <= 4) shouldShowWarning = YES;
@@ -142,7 +147,7 @@
             }
             IHWCourse *c = parseCourse(lastCode, lastName, lastPeriodComponents);
             if (c != nil) {
-                if (![[IHWCurriculum currentCurriculum] addCourse:c]) NSLog(@"Course Conflict!");
+                if (![[IHWCurriculum currentCurriculum] addCourse:c]) NSLog(@"WARNING: Course Conflict!");
             }
             lastCode = nil;
             lastName = nil;
