@@ -130,7 +130,7 @@ public class Curriculum {
 	}
 	
 	public static void save() {
-		Log.d("iHW", "SAVE static method was called -- this is not correct!");
+		Log.e("iHW", "SAVE static method was called -- this is not correct!");
 	}
 	
 	/********************************END STATIC STUFF***********************************/
@@ -357,7 +357,7 @@ public class Curriculum {
 			normalMondayTemplate = scheduleObj.getJSONObject("normalMonday");
 			passingPeriodLength = scheduleObj.getInt("passingPeriodLength");
 			String timeStr = scheduleObj.optString("dayStartTime");
-			if (timeStr != null) dayStartTime = new Time(timeStr);
+			if (timeStr != null && !timeStr.equals("")) dayStartTime = new Time(timeStr);
 			else dayStartTime = new Time(8,0);
 			
 			JSONObject specialDaysObj = scheduleObj.getJSONObject("specialDays");

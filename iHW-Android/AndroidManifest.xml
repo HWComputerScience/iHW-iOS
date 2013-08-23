@@ -9,7 +9,7 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -33,13 +33,13 @@
         <activity
             android:name="com.ihwapp.android.ScheduleActivity"
             android:label="@string/title_activity_schedule"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize|stateUnchanged" >
         </activity>
         <activity
             android:name="com.ihwapp.android.NormalCoursesActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_edit_courses"
-            android:parentActivityName="com.ihwapp.android.ScheduleActivity"
-            android:configChanges="orientation|screenSize" >
+            android:parentActivityName="com.ihwapp.android.ScheduleActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -48,17 +48,26 @@
         </activity>
         <activity
             android:name="com.ihwapp.android.DownloadScheduleActivity"
-            android:label="@string/title_activity_download_schedule"
-            android:configChanges="orientation|screenSize" >
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_download_schedule" >
         </activity>
         <activity
             android:name="com.ihwapp.android.GuidedCoursesActivity"
-            android:label="@string/title_activity_guided_edit_courses"
-            android:configChanges="orientation|screenSize" >
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_guided_edit_courses" >
         </activity>
         <activity
             android:name="com.ihwapp.android.EditCourseActivity"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize" >
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.PreferencesActivity"
+            android:label="@string/title_activity_preferences"
+            android:parentActivityName="com.ihwapp.android.ScheduleActivity"
+            android:windowSoftInputMode="stateUnchanged" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ihwapp.android.ScheduleActivity" />
         </activity>
     </application>
 

@@ -117,6 +117,7 @@ public class DownloadScheduleActivity extends Activity {
 			String lastName = null;
 			String lastPeriodList = null;
 			boolean shouldShowWarning = false;
+			Curriculum.getCurrentCurriculum().removeAllCourses();
 			
 			for (Element div : divs) {
 				if (div.attr("id").equals("nameStudentName1-0")) {

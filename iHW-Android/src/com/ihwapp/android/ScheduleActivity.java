@@ -35,8 +35,8 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		if (savedInstanceState != null) lastIndex = savedInstanceState.getInt("lastIndex");
 		else lastIndex = -1;
 		
-		adapter = new DayPagerAdapter(this.getSupportFragmentManager());
-		pager = ((ViewPager)this.findViewById(R.id.scheduleViewPager));
+		if (pager == null) pager = ((ViewPager)this.findViewById(R.id.scheduleViewPager));
+		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 		pager.setSaveEnabled(false);
 		if (pager.findViewById("pager_title_strip".hashCode()) == null) {
 			pts = new CustomFontPagerTitleStrip(this);
@@ -65,19 +65,18 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	
 	protected void onStart() {
 		super.onStart();
-		Log.d("iHW", "## onStart");
-		Log.d("iHW-lc", "ScheduleActivity onStart");
+		Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
 		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
-				
+		pager.setAdapter(null);
 		if (Curriculum.getCurrentCurriculum().getFirstLoadedDate() != null) {
-			if (pager.getAdapter() == null) {
-				pager.setAdapter(adapter);
-				adapter.enabled = true;
-			}
+			Log.d("iHW", "Setting adapter");
+			pager.setAdapter(adapter);
+			adapter.enabled = true;
 			if (lastIndex >= 0) pager.setCurrentItem(lastIndex, false);
 			else gotoDate(new Date());
 		} else {
 			Curriculum.getCurrentCurriculum().addModelLoadingListener(this);
+			pager.setAdapter(adapter);
 		}
 	}
 	
@@ -105,8 +104,8 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	
 	public void gotoDate(Date d) {
 		int position = new Date(7,1,Curriculum.getCurrentYear()).getDaysUntil(d);
-		if (position < 0) Toast.makeText(ScheduleActivity.this, "Please select a previous year (if available) from the \"choose years\" menu item to view that date.", Toast.LENGTH_LONG).show();
-		else if (position > adapter.getCount()) Toast.makeText(ScheduleActivity.this, "Please select a future year (if available) from the \"choose years\" menu item to view that date.", Toast.LENGTH_LONG).show();
+		if (position < 0) Toast.makeText(ScheduleActivity.this, "Please select a previous year (if available) from the \"Options\" menu item to view that date.", Toast.LENGTH_LONG).show();
+		else if (position > adapter.getCount()) Toast.makeText(ScheduleActivity.this, "Please select a future year (if available) from the \"Options\" menu item to view that date.", Toast.LENGTH_LONG).show();
 		position = Math.max(0, Math.min(adapter.getCount()-1, position));
 		if (currentDate==null) pager.setCurrentItem(position, false);
 		else pager.setCurrentItem(position, true);
@@ -143,6 +142,10 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 				}
 			});
 			dpd.show();
+		} else if (item.getItemId() == R.id.action_options) {
+			Intent i = new Intent(this, PreferencesActivity.class);
+			startActivity(i);
+			return true;
 		}
 		return false;
 	}
@@ -159,8 +162,13 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	}
 	
 	public void onStop() {
-		super.onStop();
 		Log.d("iHW-lc", "ScheduleActivity onStop");
+		super.onStop();
+	}
+	
+	public void onDestroy() {
+		Log.d("iHW-lc", "ScheduleActivity onDestroy");
+		super.onDestroy();
 	}
 	
 	public void onBackPressed() {
@@ -191,7 +199,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 			Date date = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
 			DayFragment f = new DayFragment();
 			Bundle b = new Bundle();
-			Log.d("iHW", "asked for " + date.toString());
+			Log.d("iHW", "pager: " + pager + " asked for " + date.toString());
 			b.putString("date", date.toString());
 			f.setArguments(b);
 			return f;

@@ -1,6 +1,7 @@
 package com.ihwapp.android;
 
 import com.ihwapp.android.model.Curriculum;
+import com.ihwapp.android.model.Date;
 
 import android.app.*;
 import android.content.Intent;
@@ -14,6 +15,11 @@ public class FirstRunActivity extends Activity {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Date d = new Date();
+		d.add(Date.MONTH, -6);
+		Curriculum.setCurrentYear(d.get(Date.YEAR));
+		
 		this.setContentView(R.layout.activity_firstrun);
 		campusLayout = (LinearLayout)this.findViewById(R.id.layout_choose_campus);
 		coursesLayout = (LinearLayout)this.findViewById(R.id.layout_get_courses);

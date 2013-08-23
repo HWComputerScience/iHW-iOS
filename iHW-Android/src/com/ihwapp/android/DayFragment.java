@@ -6,6 +6,7 @@ import com.ihwapp.android.model.*;
 import com.ihwapp.android.model.Date;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -32,10 +33,12 @@ public class DayFragment extends Fragment {
 		super.onAttach(activity);
 		day = Curriculum.getCurrentCurriculum().getDay(date);
 		Log.d("iHW-lc", "DayFragment onAttach: " + date);
+		if (date == null) ((FragmentActivity)activity).getSupportFragmentManager().beginTransaction().remove(this).commit();
 	}
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (date == null) return;
 		initScrollPos = 0;
 		ofvcls = new ArrayList<OnFragmentVisibilityChangedListener>();
 		if (savedInstanceState != null && savedInstanceState.containsKey("date")) {
@@ -46,6 +49,7 @@ public class DayFragment extends Fragment {
 	}
 
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		if (date==null) return null;
 		if (day==null) day = Curriculum.getCurrentCurriculum().getDay(date);
 		Log.d("iHW-lc", "DayFragment onCreateView: " + date);
 		final View v = inflater.inflate(R.layout.fragment_day, null);
@@ -115,28 +119,15 @@ public class DayFragment extends Fragment {
 	
 	public void onStart() {
 		super.onStart();
+		if (date==null) return;
 		Log.d("iHW-lc", "DayFragment onStart: " + date);
-		/*ArrayList<Period> pds = day.getPeriods();
-		//FragmentTransaction transaction = this.getChildFragmentManager().beginTransaction();
-		for (int i=0; i<pds.size(); i++) {
-			final Period p = pds.get(i);
-			/*int id=day.getDate().getDay()*100+i;
-			if (getView().findViewById(id) != null) {
-				PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), i);
-				transaction.add(id, f, day.getDate().toString() + ":" + i);
-			}*
-			int minsUntil = new Time().minutesUntil(p.getStartTime());
-			//TODO fix criteria for timer being shown:
-			if (day.getDate().equals(new Date()) && minsUntil < p.getStartTime().minutesUntil(p.getEndTime()) && minsUntil > 0) {
-				this.addCountdownTimerToPeriod(p, periodViews.get(i));
-			}
-		}*/
 	}
 	
 	public void onResume() {
 		super.onResume();
 		Log.d("iHW-lc", "DayFragment onResume: " + date);
 		final ScrollView sv = (ScrollView)getView().findViewById(R.id.scroll_periods);
+		sv.setFocusableInTouchMode(true);
 		sv.post(new Runnable() { 
 			public void run() { 
 				sv.scrollTo(0, initScrollPos);
@@ -156,7 +147,7 @@ public class DayFragment extends Fragment {
 	
 	public void onPause() {
 		super.onPause();
-		Log.d("iHW-lc", "DayFragment onPause: " + date);
+		Log.d("iHW-lc", "DayFragment (" + this + ") onPause: " + date);
 		initScrollPos = ((ScrollView)getView().findViewById(R.id.scroll_periods)).getScrollY();
 	}
 	
@@ -171,11 +162,28 @@ public class DayFragment extends Fragment {
 	
 	public void onDestroyView() {
 		Log.d("iHW-lc", "DayFragment onDestroyView: " + date);
+		super.onDestroyView();
+		if (date == null) return;
 		periodViews.clear();
 		periodViews = null;
+		countdownTimer = null;
 		countdownView = null;
 		((ViewGroup)this.getView()).removeAllViews();
-		super.onDestroyView();
+	}
+	
+	public void onDestroy() {
+		Log.d("iHW-lc", "DayFragment onDestroy: " + date);
+		super.onDestroy();
+	}
+	
+	public void onDetach() {
+		Log.d("iHW-lc", "DayFragment " + this + " onDetach from " + this.getActivity() + ": " + date);
+		super.onDetach();
+		if (date==null) return;
+		this.ofvcls.clear();
+		this.ofvcls = null;
+		day = null;
+		date = null;
 	}
 	
 	/*****OTHER METHODS*****/

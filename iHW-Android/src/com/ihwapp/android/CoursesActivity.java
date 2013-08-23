@@ -163,7 +163,7 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 				for (int i=0; i<checked.length; i++) {
 					c.removeCourse(c.getCourse(courseNames[(int)checked[i]]));
 				}
-				Curriculum.save();
+				Curriculum.getCurrentCurriculum().saveCourses();
 				reloadData();
 				mode.finish();
 				return true;

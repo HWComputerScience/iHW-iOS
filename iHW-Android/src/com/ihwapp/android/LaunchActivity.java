@@ -1,7 +1,6 @@
 package com.ihwapp.android;
 
 import com.ihwapp.android.model.Curriculum;
-import com.ihwapp.android.model.Date;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,9 +21,6 @@ public class LaunchActivity extends Activity {
 			return;
 		}
 		shouldFinish = true;
-		Date d = new Date();
-		d.add(Date.MONTH, -6);
-		Curriculum.setCurrentYear(d.get(Date.YEAR));
 		Intent i = null;
 		if (Curriculum.isFirstRun()) {
 			i = new Intent(this, FirstRunActivity.class);
