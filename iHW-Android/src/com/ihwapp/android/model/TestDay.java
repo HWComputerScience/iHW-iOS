@@ -17,7 +17,7 @@ public class TestDay extends Day {
 			JSONArray tests = obj.getJSONArray("tests");
 			this.periods = new ArrayList<Period>(tests.length());
 			for (int i=0; i<tests.length(); i++) {
-				periods.add(new Period(tests.getJSONObject(i)));
+				periods.add(new Period(tests.getJSONObject(i), i));
 			}
 		} catch (JSONException e) {}
 	}

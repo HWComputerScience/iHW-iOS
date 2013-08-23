@@ -21,7 +21,7 @@
 @property int index;
 
 - (id)initWithName:(NSString *)name date:(IHWDate *)date start:(IHWTime *)start end:(IHWTime *)end number:(int)periodNum index:(int)periodIndex;
-- (id)initWithJSONDictionary:(NSDictionary *)dictionary;
+- (id)initWithJSONDictionary:(NSDictionary *)dictionary atIndex:(int)periodIndex;
 - (void)loadNotesFromCurriculum;
 - (void)saveNotes;
 - (NSDictionary *)savePeriod;

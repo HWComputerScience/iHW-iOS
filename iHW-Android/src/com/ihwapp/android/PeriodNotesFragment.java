@@ -2,9 +2,9 @@ package com.ihwapp.android;
 
 import java.util.*;
 
-import com.ihwapp.android.model.Curriculum;
 import com.ihwapp.android.model.Date;
 import com.ihwapp.android.model.Note;
+import com.ihwapp.android.model.Period;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -24,8 +24,7 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 	public static final int SIZE_LARGE = 24;
 	
 	private Date d;
-	private int period;
-	private ArrayList<Note> notes;
+	private Period period;
 	private ArrayList<View> noteViews;
 	private LinearLayout notesLayout;
 	private boolean bottomIsEmpty = true;
@@ -34,11 +33,11 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 	boolean handlersAreValid;
 	boolean changesSaved = true;
 
-	public static PeriodNotesFragment newInstance(Date d, int period) {
+	public static PeriodNotesFragment newInstance(Date d, Period period) {
 		PeriodNotesFragment fragment = new PeriodNotesFragment();
 		Bundle args = new Bundle();
 		args.putString("date", d.toString());
-		args.putInt("period", period);
+		args.putParcelable("period", period);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -49,7 +48,7 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
 			d = new Date(getArguments().getString("date"));
-			period = getArguments().getInt("period");
+			period = getArguments().getParcelable("period");
 		}
 	}
 
@@ -63,11 +62,10 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 	
 	public void onStart() {
 		super.onStart();
-		notes = Curriculum.getCurrentCurriculum().getNotes(d, period);
 		//Log.d("iHW", "####### notes == null: " + (notes==null));
-		noteViews = new ArrayList<View>(notes.size()+6);
+		noteViews = new ArrayList<View>(this.period.getNotes().size()+6);
 		notesLayout.removeAllViews();
-		for (Note n : notes) {
+		for (Note n : this.period.getNotes()) {
 			addAnotherNoteBox(n);
 		}
 		addAnotherNoteBox(null);
@@ -175,7 +173,7 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 	
 	private void saveNotes() {
 		if (changesSaved) return;
-		notes = new ArrayList<Note>(noteViews.size());
+		ArrayList<Note> notes = new ArrayList<Note>(noteViews.size());
 		int ct=0;
 		for (View v : noteViews) {
 			String text = ((EditText)v.findViewById(R.id.text_note)).getText().toString();
@@ -189,8 +187,8 @@ public class PeriodNotesFragment extends Fragment implements DayFragment.OnFragm
 			}
 		}
 		Log.d("iHW", "saved " + ct + " notes from " + d + ":" + period);
-		Curriculum.getCurrentCurriculum().setNotes(d, period, notes);
-		Curriculum.getCurrentCurriculum().saveWeek(d);
+		this.period.setNotes(notes);
+		this.period.saveNotes();
 		changesSaved = true;
 	}
 	

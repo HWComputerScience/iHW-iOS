@@ -2,7 +2,10 @@ package com.ihwapp.android.model;
 
 import org.json.*;
 
-public class Note {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Note implements Parcelable {
 	private String text;
 	private boolean isToDo;
 	private boolean checked;
@@ -49,4 +52,32 @@ public class Note {
 	public boolean isToDo() { return isToDo; }
 	public boolean isChecked() { return checked; }
 	public boolean isImportant() { return isImportant; }
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(text);
+		dest.writeInt(isToDo ? 1 : 0);
+		dest.writeInt(checked ? 1 : 0);
+		dest.writeInt(isImportant ? 1 : 0);
+	}
+	
+	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
+		public Note createFromParcel(Parcel in) {
+		    return new Note(in);
+		}
+		
+		public Note[] newArray(int size) {
+		    return new Note[size];
+		}
+	};
+	
+	public Note(Parcel in) {
+		this(in.readString(), (in.readInt()==1), (in.readInt()==1), (in.readInt()==1));
+	}
+	
 }

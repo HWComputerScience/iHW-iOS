@@ -196,10 +196,11 @@ static IHWCurriculum *currentCurriculum;
     if (error != nil) {
         NSLog(@"ERROR downloading schedule JSON: %@", error.debugDescription);
         scheduleJSON = [IHWFileManager loadScheduleJSONForYear:self.year campus:campusChar];
+    } else {
+        [IHWFileManager saveScheduleJSON:scheduleJSON forYear:self.year campus:campusChar];
     }
     if (scheduleJSON == nil) return NO;
     else [self parseScheduleJSON:scheduleJSON];
-    [IHWFileManager saveScheduleJSON:scheduleJSON forYear:self.year campus:campusChar];
     return YES;
 }
 

@@ -150,6 +150,7 @@ public class Curriculum {
 	private Date[] semesterEndDates; //3 values: the first day of the first semester and the last days of both semesters
 	private Date[] trimesterEndDates; //4 values: the first day of the first trimester and the last days of all trimesters
 	private int loadingProgress;
+	private Time dayStartTime;
 	private boolean currentlyCaching = false;
 	private HashSet<ModelLoadingListener> mlls;
 	
@@ -166,6 +167,7 @@ public class Curriculum {
 	public int getCampus() { return campus; }
 	public int getYear() { return year; }
 	public int getPassingPeriodLength() { return passingPeriodLength; }
+	public Time getDayStartTime() { return dayStartTime; }
 	
 	/*********************************BEGIN LOADING STUFF**************************************/
 	
@@ -272,7 +274,9 @@ public class Curriculum {
 		ConnectivityManager connMgr = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 	    if (networkInfo == null || !networkInfo.isConnected()) { //no Internet connection
-	    	return !important; //false if no previous version is available, true if there is one
+	    	if (important) return false;
+	    	parseScheduleJSON();
+	    	return true;
 	    } else { //Internet is available; should update
 	    	DownloadTask downloadTask = new DownloadTask();
 	    	if (important) {
@@ -352,6 +356,9 @@ public class Curriculum {
 			normalDayTemplate = scheduleObj.getJSONObject("normalDay");
 			normalMondayTemplate = scheduleObj.getJSONObject("normalMonday");
 			passingPeriodLength = scheduleObj.getInt("passingPeriodLength");
+			String timeStr = scheduleObj.optString("dayStartTime");
+			if (timeStr != null) dayStartTime = new Time(timeStr);
+			else dayStartTime = new Time(8,0);
 			
 			JSONObject specialDaysObj = scheduleObj.getJSONObject("specialDays");
 			SortedMap<Date, JSONObject> sdts = Collections.synchronizedSortedMap(new TreeMap<Date, JSONObject>());
@@ -748,14 +755,9 @@ public class Curriculum {
 	
 	public ArrayList<Note> getNotes(Date d, int period) {
 		Date weekStart = getWeekStart(year, d);
-		if (!isLoaded(d)) {
-			boolean success = true;
-			if (!loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
-			if (!success) Log.e("iHW", "ERROR loading week");
-			if (!loadedDays.containsKey(d)) success = loadDay(d);
-			if (!success) Log.e("iHW", "ERROR loading day");
-		}
-		if (!isLoaded(d)) return null;
+		boolean success = true;
+		if (!loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
+		if (!success) { Log.e("iHW", "ERROR loading week"); return null; }
 		else {
 			try {
 				String key = d.toString() + "." + period;

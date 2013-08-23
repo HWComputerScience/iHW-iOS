@@ -65,6 +65,7 @@ public class DayFragment extends Fragment {
 		
 		LinearLayout pdsLayout = ((LinearLayout)v.findViewById(R.id.layout_periods));
 		periodViews = new ArrayList<ViewGroup>(pds.size());
+		
 		FragmentTransaction transaction = DayFragment.this.getChildFragmentManager().beginTransaction();
 		for (int i=0; i<pds.size(); i++) {
 			final Period p = pds.get(i);
@@ -81,8 +82,8 @@ public class DayFragment extends Fragment {
 			int id=day.getDate().getDay()*100+i;
 			fl.setId(id);
 			((LinearLayout)periodView.findViewById(R.id.layout_right)).addView(fl);
-			PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), i);
-			transaction.add(id, f, day.getDate().toString() + ":" + i);
+			PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), p);
+			transaction.replace(id, f, day.getDate().toString() + ":" + i);
 			pdsLayout.addView(periodView);
 			pdsLayout.addView(new Separator(getActivity()));
 		}
@@ -91,7 +92,7 @@ public class DayFragment extends Fragment {
 		if (pds.size() > 0) moreNotesLabel.setText("Additional Notes");
 		else moreNotesLabel.setText("Notes");
 		pdsLayout.addView(moreNotesLabel);
-		PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), -1);
+		PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), new Period("", date, new Time(0,0), new Time(0,0), 0, -1));
 		DayFragment.this.addOnFragmentVisibilityChangedListener(f);
 		DayFragment.this.getChildFragmentManager().beginTransaction().replace(R.id.layout_periods, f, day.getDate().toString() + ":-1").commit();
 		

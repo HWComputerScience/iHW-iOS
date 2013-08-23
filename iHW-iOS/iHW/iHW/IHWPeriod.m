@@ -27,7 +27,7 @@
     return self;
 }
 
-- (id)initWithJSONDictionary:(NSDictionary *)dictionary
+- (id)initWithJSONDictionary:(NSDictionary *)dictionary atIndex:(int)periodIndex
 {
     self = [super init];
     if (self) {
@@ -36,6 +36,7 @@
         self.startTime = [[IHWTime alloc] initFromString:[dictionary objectForKey:@"startTime"]];
         self.endTime = [[IHWTime alloc] initFromString:[dictionary objectForKey:@"endTime"]];
         self.periodNum = [[dictionary objectForKey:@"periodNum"] intValue];
+        self.index = periodIndex;
         [self loadNotesFromCurriculum];
     }
     return self;

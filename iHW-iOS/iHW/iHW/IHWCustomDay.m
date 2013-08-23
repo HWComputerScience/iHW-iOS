@@ -28,8 +28,10 @@
         NSArray *dicts = [dictionary objectForKey:@"tests"];
         //NSLog(@"Test dictionary: %@", dicts);
         self.periods = [NSMutableArray array];
+        int i=0;
         for (NSDictionary *periodDict in dicts) {
-            [self.periods addObject:[[IHWPeriod alloc] initWithJSONDictionary:periodDict]];
+            [self.periods addObject:[[IHWPeriod alloc] initWithJSONDictionary:periodDict atIndex:i]];
+            i++;
         }
         //NSLog(@"Periods: %@", self.periods);
     }

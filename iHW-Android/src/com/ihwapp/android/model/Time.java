@@ -1,6 +1,9 @@
 package com.ihwapp.android.model;
 
-public class Time /*implements org.json.JSONString*/ {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Time implements Parcelable {
 	private int hour;
 	private int minute;
 	private int second;
@@ -169,6 +172,33 @@ public class Time /*implements org.json.JSONString*/ {
 		String minute = "" + getMinute();
 		if (minute.length() == 1) minute = "0" + minute;
 		return getHour12() + ":" + minute + " " + ampm;
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(hour);
+		dest.writeInt(minute);
+		dest.writeInt(second);
+	}
+	
+	public static final Parcelable.Creator<Time> CREATOR = new Parcelable.Creator<Time>() {
+		public Time createFromParcel(Parcel in) {
+		    return new Time(in);
+		}
+		
+		public Time[] newArray(int size) {
+		    return new Time[size];
+		}
+	};
+	
+	public Time(Parcel in) {
+		this(in.readInt(), in.readInt());
+		this.second = in.readInt();
 	}
 	
 	/*
