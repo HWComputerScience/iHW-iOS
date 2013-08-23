@@ -11,7 +11,6 @@ import android.app.ProgressDialog;
 import android.content.*;
 import android.support.v4.app.*;
 import android.support.v4.view.*;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
@@ -26,6 +25,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	private int lastIndex;
 	private ProgressDialog progressDialog;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d("iHW-lc", "ScheduleActivity onCreate");
@@ -34,7 +34,6 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		this.setTitle("View Schedule");
 		if (savedInstanceState != null) lastIndex = savedInstanceState.getInt("lastIndex");
 		else lastIndex = -1;
-		
 		
 		adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 		pager = ((ViewPager)this.findViewById(R.id.scheduleViewPager));
@@ -64,7 +63,6 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		pager.setOffscreenPageLimit(2);
 	}
 	
-	@SuppressWarnings("deprecation")
 	protected void onStart() {
 		super.onStart();
 		Log.d("iHW", "## onStart");

@@ -496,17 +496,16 @@ public class Curriculum {
 			//Date weekStart = getWeekStart(year, d);
 			if (loadedDays == null) loadedDays = Collections.synchronizedSortedMap(new TreeMap<Date, Day>());
 			//if (!loadedWeeks.containsKey(weekStart)) return false;
-			if (d.compareTo(semesterEndDates[0]) < 0 ||
-					d.compareTo(semesterEndDates[2]) > 0) {
+			JSONObject template = null;
+			if (specialDayTemplates.containsKey(d)) {
+				template = specialDayTemplates.get(d);
+			} else if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) {
 				loadedDays.put(d, new Holiday(d, "Summer"));
 				return true;
 			} else if (d.isWeekend()) {
 				loadedDays.put(d, new Holiday(d, ""));
 				return true;
-			}
-			JSONObject template = null;
-			if (specialDayTemplates.containsKey(d)) template = specialDayTemplates.get(d);
-			else if (d.isMonday()) {
+			} else if (d.isMonday()) {
 				JSONArray namesArr = normalMondayTemplate.names();
 				String[] names = new String[namesArr.length()];
 				for (int i=0; i<names.length; i++) names[i] = (String)namesArr.get(i);
@@ -536,7 +535,7 @@ public class Curriculum {
 	}
 	
 	public Day getDay(Date d) {
-		if (!isInBounds(d)) return null;
+		if (!isInBounds(d)) { Log.d("iHW", "Date out of bounds: " + d); return null; }
 		Log.d("iHW", "getting " + d.toString());
 		Log.d("iHW", "weeks loaded: " + loadedWeeks.keySet().toString());
 		if (!isLoaded(d)) {
@@ -550,8 +549,6 @@ public class Curriculum {
 		else {
 			Day toReturn = loadedDays.get(d);
 			//cacheNeededWeeksDays(d);
-			
-			//Log.d("iHW", "Number of loaded days: " + loadedDays.size());
 			return toReturn;
 		}
 	}

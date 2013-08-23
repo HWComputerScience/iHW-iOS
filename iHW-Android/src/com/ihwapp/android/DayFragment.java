@@ -6,7 +6,6 @@ import com.ihwapp.android.model.*;
 import com.ihwapp.android.model.Date;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -57,6 +56,7 @@ public class DayFragment extends Fragment {
 		if (day instanceof NormalDay && ((NormalDay)day).getDayNumber() > 0) title += " (Day " + ((NormalDay)day).getDayNumber() + ")";
 		((TextView)v.findViewById(R.id.date_view)).setText(title);*/
 		TextView titleText = ((TextView)v.findViewById(R.id.date_view));
+		Log.d("iHW", "Day: " + day);
 		titleText.setText(day.getTitle());
 		titleText.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		
@@ -66,35 +66,41 @@ public class DayFragment extends Fragment {
 		LinearLayout pdsLayout = ((LinearLayout)v.findViewById(R.id.layout_periods));
 		periodViews = new ArrayList<ViewGroup>(pds.size());
 		
-		FragmentTransaction transaction = DayFragment.this.getChildFragmentManager().beginTransaction();
+		//FragmentTransaction transaction = DayFragment.this.getChildFragmentManager().beginTransaction();
 		for (int i=0; i<pds.size(); i++) {
 			final Period p = pds.get(i);
-			final View periodView = inflater.inflate(R.layout.view_period, null);
-			periodViews.add((ViewGroup)periodView);
-			((TextView)periodView.findViewById(R.id.text_periodnum)).setTypeface(Typeface.SERIF, Typeface.BOLD);
-			if (p.getNum() > 0) {
-				((TextView)periodView.findViewById(R.id.text_periodnum)).setText(getOrdinal(p.getNum()));
-			}
-			((TextView)periodView.findViewById(R.id.text_title)).setText(p.getName());
-			((TextView)periodView.findViewById(R.id.text_starttime)).setText(p.getStartTime().toString12());
-			((TextView)periodView.findViewById(R.id.text_endtime)).setText(p.getEndTime().toString12());
-			FrameLayout fl = new FrameLayout(getActivity());
+			final PeriodView periodView = new PeriodView(getActivity());
+			DayFragment.this.addOnFragmentVisibilityChangedListener(periodView);
+			periodView.setPeriod(p);
+			periodViews.add(periodView);
+			
+			/*FrameLayout fl = new FrameLayout(getActivity());
 			int id=day.getDate().getDay()*100+i;
 			fl.setId(id);
 			((LinearLayout)periodView.findViewById(R.id.layout_right)).addView(fl);
 			PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), p);
-			transaction.replace(id, f, day.getDate().toString() + ":" + i);
+			transaction.replace(id, f, day.getDate().toString() + ":" + i);*/
 			pdsLayout.addView(periodView);
 			pdsLayout.addView(new Separator(getActivity()));
 		}
-		transaction.commit();
-		TextView moreNotesLabel = new TextView(getActivity());
+		//transaction.commit();
+		
+		/*TextView moreNotesLabel = new TextView(getActivity());
 		if (pds.size() > 0) moreNotesLabel.setText("Additional Notes");
 		else moreNotesLabel.setText("Notes");
 		pdsLayout.addView(moreNotesLabel);
 		PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), new Period("", date, new Time(0,0), new Time(0,0), 0, -1));
 		DayFragment.this.addOnFragmentVisibilityChangedListener(f);
 		DayFragment.this.getChildFragmentManager().beginTransaction().replace(R.id.layout_periods, f, day.getDate().toString() + ":-1").commit();
+		*/
+		
+		PeriodView moreNotesView = new PeriodView(getActivity());
+		DayFragment.this.addOnFragmentVisibilityChangedListener(moreNotesView);
+		String moreNotesTitle;
+		if (pds.size() > 0) moreNotesTitle = "Additional Notes";
+		else moreNotesTitle = "Notes";
+		moreNotesView.setPeriod(new Period(moreNotesTitle, date, new Time(0,0), new Time(0,0), 0, -1));
+		pdsLayout.addView(moreNotesView);
 		
 		String dayName = "";
 		if (day instanceof Holiday) {
@@ -104,7 +110,6 @@ public class DayFragment extends Fragment {
 		dayNameText.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		if (dayName.equals("")) dayNameText.setVisibility(View.GONE);
 		else dayNameText.setText(dayName);
-		this.getChildFragmentManager().beginTransaction().replace(R.id.layout_periods, f, day.getDate().toString() + ":-1").commit();
 		return v;
 	}
 	
@@ -231,15 +236,6 @@ public class DayFragment extends Fragment {
 	
 	public void addOnFragmentVisibilityChangedListener(OnFragmentVisibilityChangedListener l) { ofvcls.add(l); }
 	public void removeOnFragmentVisibilityChangedListener(OnFragmentVisibilityChangedListener l) { ofvcls.remove(l); }
-	
-	private static String getOrdinal(int num) {
-		String suffix = "";
-		if (num%10==1) suffix="st";
-		else if (num%10==2) suffix="nd";
-		else if (num%10==3) suffix="rd";
-		else suffix = "th";
-		return num+suffix;
-	}
 	
 	public interface OnFragmentVisibilityChangedListener {
 		public void onFragmentVisibilityChanged(Fragment f, boolean isVisible);

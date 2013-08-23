@@ -33,6 +33,8 @@ public class Period implements Parcelable {
 			this.endTime = new Time(obj.getString("endTime"));
 			this.d = new Date(obj.getString("date"));
 			this.periodNum = obj.getInt("periodNum");
+			this.periodIndex = periodIndex;
+			loadNotesFromCurriculum();
 		} catch (JSONException e) {}
 	}
 	
@@ -50,6 +52,7 @@ public class Period implements Parcelable {
 	
 	public void loadNotesFromCurriculum() {
 		this.notes = Curriculum.getCurrentCurriculum().getNotes(d, periodIndex);
+		if (this.notes == null) this.notes = new ArrayList<Note>();
 	}
 	
 	public void saveNotes() {
