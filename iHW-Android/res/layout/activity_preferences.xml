@@ -27,13 +27,22 @@
 
         <EditText
             android:id="@+id/text_year"
-            android:layout_width="100dp"
+            android:layout_width="65dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:gravity="center_vertical|right"
             android:inputType="number" >
 
             <requestFocus />
         </EditText>
+
+        <TextView
+            android:id="@+id/text_hint_year"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".01"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
             android:id="@+id/button_change_year"

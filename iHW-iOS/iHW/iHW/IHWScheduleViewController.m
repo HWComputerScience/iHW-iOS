@@ -20,7 +20,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.navigationItem.title = @"iHW for iOS";
+        self.navigationItem.title = @"My Schedule";
     }
     return self;
 }
@@ -32,12 +32,12 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Courses" style:UIBarButtonItemStyleBordered target:self action:@selector(showCourses)];
     
     UIToolbar *tools = [[UIToolbar alloc]
-                        initWithFrame:CGRectMake(0,0,36,44)];
+                        initWithFrame:CGRectMake(0,0,64,44)];
     tools.clipsToBounds = NO;
     tools.barStyle = -1;
-    NSMutableArray *buttons = [[NSMutableArray alloc] initWithCapacity:1];
-    UIBarButtonItem *bi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"whitegear"] style:UIBarButtonItemStylePlain target:self action:@selector(optionsButtonClicked)];
-    [buttons addObject:bi];
+    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"whitegear"] style:UIBarButtonItemStylePlain target:self action:@selector(optionsButtonClicked)];
+    UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh)];
+    NSArray *buttons = @[item2, item1];
     [tools setItems:buttons animated:NO];
     UIBarButtonItem *rightButtons = [[UIBarButtonItem alloc] initWithCustomView:tools];
     self.navigationItem.rightBarButtonItem = rightButtons;
@@ -143,6 +143,12 @@
 
 - (void)optionsButtonClicked {
     [self presentViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil] animated:YES completion:nil];
+}
+
+- (void)refresh {
+    self.loadingView = [[IHWLoadingView alloc] initWithText:@"Loading..."];
+    [[IHWCurriculum reloadCurrentCurriculum].curriculumLoadingListeners addObject:self];
+    [self.pageViewController setViewControllers:[NSArray arrayWithObject:[[UIViewController alloc] init]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {

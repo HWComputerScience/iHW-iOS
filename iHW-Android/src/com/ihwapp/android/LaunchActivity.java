@@ -25,6 +25,7 @@ public class LaunchActivity extends Activity {
 		if (Curriculum.isFirstRun()) {
 			i = new Intent(this, FirstRunActivity.class);
 		} else {
+			Curriculum.reloadCurrentCurriculum();
 			i = new Intent(this, ScheduleActivity.class);
 		}
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

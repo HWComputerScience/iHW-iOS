@@ -6,6 +6,7 @@ import com.ihwapp.android.model.*;
 
 import android.graphics.*;
 import android.os.Bundle;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.*;
@@ -37,7 +38,6 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		
 		if (pager == null) pager = ((ViewPager)this.findViewById(R.id.scheduleViewPager));
 		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
-		pager.setSaveEnabled(false);
 		if (pager.findViewById("pager_title_strip".hashCode()) == null) {
 			pts = new CustomFontPagerTitleStrip(this);
 			pts.setId("pager_title_strip".hashCode());
@@ -67,8 +67,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		super.onStart();
 		Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
 		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
-		pager.setAdapter(null);
-		if (Curriculum.getCurrentCurriculum().getFirstLoadedDate() != null) {
+		if (Curriculum.getCurrentCurriculum().isLoaded()) {
 			Log.d("iHW", "Setting adapter");
 			pager.setAdapter(adapter);
 			adapter.enabled = true;
@@ -76,14 +75,13 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 			else gotoDate(new Date());
 		} else {
 			Curriculum.getCurrentCurriculum().addModelLoadingListener(this);
-			pager.setAdapter(adapter);
 		}
 	}
 	
 	@Override
 	public void onProgressUpdate(int progress) {
-		if (progress==0) {
-			progressDialog = new ProgressDialog(this);
+		if (progress < 4 && progressDialog == null) {
+			progressDialog = new ProgressDialog(this, R.style.PopupTheme);
 			progressDialog.setCancelable(false);
 			progressDialog.setMessage("Loading...");
 			progressDialog.show();
@@ -100,6 +98,23 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		else gotoDate(new Date());
 		if (progressDialog != null) progressDialog.dismiss();
 		progressDialog = null;
+	}
+	
+	public void onLoadFailed(Curriculum c) {
+		if (progressDialog != null) progressDialog.dismiss();
+		progressDialog = null;
+		new AlertDialog.Builder(this, R.style.PopupTheme).setMessage("iHW requires internet access when running for the first time. Please try again later when you are connected to a Wi-Fi or cellular network.")
+		.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(ScheduleActivity.this, LaunchActivity.class);
+				startActivity(i);
+			}
+		})
+		.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Curriculum.reloadCurrentCurriculum().addModelLoadingListener(ScheduleActivity.this);
+			}
+		}).show();
 	}
 	
 	public void gotoDate(Date d) {
@@ -142,6 +157,8 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 				}
 			});
 			dpd.show();
+		} else if (item.getItemId() == R.id.action_refresh) {
+			Curriculum.reloadCurrentCurriculum().addModelLoadingListener(this);
 		} else if (item.getItemId() == R.id.action_options) {
 			Intent i = new Intent(this, PreferencesActivity.class);
 			startActivity(i);

@@ -32,6 +32,11 @@ static IHWCurriculum *currentCurriculum;
     return [self curriculumWithCampus:[self currentCampus] andYear:[self currentYear]];
 }
 
++ (IHWCurriculum *)reloadCurrentCurriculum {
+    currentCurriculum = nil;
+    return [IHWCurriculum currentCurriculum];
+}
+
 + (IHWCurriculum *)curriculumWithCampus:(int)campus andYear:(int)year {
     if (currentCurriculum == nil || currentCurriculum.campus != campus || currentCurriculum.year != year) {
         [self setCurrentCampus:campus];

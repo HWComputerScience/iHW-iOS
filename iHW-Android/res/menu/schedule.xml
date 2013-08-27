@@ -1,6 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/action_goto_today" android:title="@string/action_goto_today" android:showAsAction="ifRoom"></item><item android:id="@+id/action_goto_date" android:showAsAction="ifRoom" android:title="@string/action_goto_date" android:icon="@drawable/ic_action_date"></item><item android:id="@+id/action_edit_courses" android:title="@string/action_edit_courses" android:icon="@drawable/ic_action_edit"></item>
-    <item android:id="@+id/action_options" android:title="@string/action_options" android:icon="@drawable/ic_action_settings"></item>
+    <item android:id="@+id/action_refresh" android:icon="@drawable/ic_action_refresh" android:title="Refresh"></item><item android:id="@+id/action_options" android:title="@string/action_options" android:icon="@drawable/ic_action_settings"></item>
+    
     
     
 

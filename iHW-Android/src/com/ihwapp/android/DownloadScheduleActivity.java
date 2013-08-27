@@ -1,7 +1,5 @@
 package com.ihwapp.android;
 
-import java.util.StringTokenizer;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 import org.jsoup.select.Elements;
@@ -65,13 +63,32 @@ public class DownloadScheduleActivity extends Activity {
 					} else {						
 						view.loadUrl("javascript:console.log(\"SCHEDULE_URL=\"+document.getElementById(\"dnn_ctr8420_InteractiveSchedule_txtWindowPopupUrl\").value)");
 					}
-				}
+				}/* else {
+					new AlertDialog.Builder(DownloadScheduleActivity.this)
+						.setTitle("Schedule Unavailable")
+						.setMessage("Your schedule is not currently available on HW.com. You can still enter your courses manually, though:")
+						.setPositiveButton("Add Courses Manually", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							Intent i = new Intent(DownloadScheduleActivity.this, GuidedCoursesActivity.class);
+							i.putExtra("firstRun", true);
+							startActivity(i);
+						}
+					}).setCancelable(false).create().show();
+				}*/
+			}
+			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+				Log.e("iHW", errorCode + ": " + description);
+				showScheduleUnavailableError();
 			}
 		});
 		webview.setWebChromeClient(new WebChromeClient() {
 			public boolean onConsoleMessage (ConsoleMessage consoleMessage) {
 				if (consoleMessage.message().startsWith("SCHEDULE_URL=")) {
-					new DownloadParseScheduleTask().execute(consoleMessage.message().substring(13));
+					String url = consoleMessage.message().substring(13);
+					if (url.length() != 0) new DownloadParseScheduleTask().execute(url);
+					else {
+						showScheduleUnavailableError();
+					}
 				}
 				return false;
 			}
@@ -112,6 +129,10 @@ public class DownloadScheduleActivity extends Activity {
 		}
 
 		protected void onPostExecute(Document result) {
+			if (result == null) {
+				showScheduleUnavailableError();
+				return;
+			}
 			Elements divs = result.getElementsByTag("div");
 			String lastCode = null;
 			String lastName = null;
@@ -132,7 +153,22 @@ public class DownloadScheduleActivity extends Activity {
 				} else if (div.attr("id").equals("sectPeriodList1")) {
 					lastPeriodList = div.getElementsByTag("span").first().text();
 					Log.d(TAG, "Course meets: " + lastPeriodList);
-					Course c = parseCourse(lastCode, lastName, lastPeriodList);
+					String[] tokens = lastPeriodList.split("\\.");
+					Log.d("iHW", "Number of tokens: " + tokens.length);
+					if (tokens.length != Curriculum.getCurrentCampus()) {
+						new AlertDialog.Builder(DownloadScheduleActivity.this, R.style.PopupTheme).setTitle("Wrong Campus!")
+						.setMessage("You chose the wrong campus during the setup. Please start again.")
+						.setPositiveButton("Back", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								Intent i = new Intent(thisActivity, LaunchActivity.class);
+								i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+								i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+								startActivity(i);
+							}
+						}).setCancelable(false).create().show();
+						return;
+					}
+					Course c = parseCourse(lastCode, lastName, tokens);
 					if (c!=null) Curriculum.getCurrentCurriculum().addCourse(c);
 					lastCode = null;
 					lastName = null;
@@ -167,7 +203,28 @@ public class DownloadScheduleActivity extends Activity {
 		}
 	}
 	
-	public static Course parseCourse(String code, String name, String periodList) {
+	public void showScheduleUnavailableError() {
+		new AlertDialog.Builder(DownloadScheduleActivity.this, R.style.PopupTheme)
+			.setTitle("Schedule Unavailable")
+			.setMessage("Your schedule is not currently available on HW.com. You can still enter your courses manually, though:")
+			.setPositiveButton("Add Courses Manually", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(DownloadScheduleActivity.this, GuidedCoursesActivity.class);
+				i.putExtra("firstRun", true);
+				startActivity(i);
+				DownloadScheduleActivity.this.finish();
+			}
+		}).setNegativeButton("Back", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(thisActivity, LaunchActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(i);
+			}
+		}).setCancelable(false).create().show();
+	}
+	
+	public static Course parseCourse(String code, String name, String[] periodTokens) {
 		//parse for term
 		int term = Constants.TERM_FULL_YEAR;
 		if (code.length() >= 6) term = Integer.parseInt(code.substring(5,6));
@@ -177,12 +234,10 @@ public class DownloadScheduleActivity extends Activity {
 		int numPeriods = numDays+3;
 		boolean[][] periods = new boolean[numDays][numPeriods+1];
 		int[] periodFrequency = new int[numPeriods+1];
-		StringTokenizer s = new StringTokenizer(periodList, ".");
 		int minPeriod = numPeriods+1;
 		int maxPeriod = 0;
 		int day = 0;
-		while (s.hasMoreTokens()) {
-			String token = s.nextToken();
+		for (String token : periodTokens) {
 			for (int i=0; i<token.length(); i++) {
 				int period = 0;
 				try { period = Integer.parseInt(token.substring(i,i+1)); }

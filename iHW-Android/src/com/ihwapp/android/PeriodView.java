@@ -1,10 +1,17 @@
 package com.ihwapp.android;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import com.ihwapp.android.model.Curriculum;
+import com.ihwapp.android.model.Date;
+import com.ihwapp.android.model.Day;
 import com.ihwapp.android.model.Note;
 import com.ihwapp.android.model.Period;
+import com.ihwapp.android.model.Time;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
@@ -26,6 +33,8 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 	private boolean isVisible;
 	private PopupMenu popupMenu;
 	boolean changesSaved = true;
+	private TextView countdownView;
+	private Timer countdownTimer;
 
 	public PeriodView(Context context) {
 		super(context);
@@ -49,6 +58,7 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 		notesLayout = new LinearLayout(context);
 		notesLayout.setOrientation(LinearLayout.VERTICAL);
 		((LinearLayout)this.findViewById(R.id.layout_right)).addView(notesLayout);
+		countdownView = ((TextView)this.findViewById(R.id.text_countdown));
 	}
 	
 	public void setPeriod(Period p) {
@@ -145,6 +155,7 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 	
 	private void saveNotes() {
 		if (changesSaved) return;
+		Log.d("iHW", "Saving notes for period at: " + this.period.getDate() + ":" + this.period.getIndex());
 		ArrayList<Note> notes = new ArrayList<Note>(notesLayout.getChildCount());
 		for (int i=0; i<notesLayout.getChildCount(); i++) {
 			View v = notesLayout.getChildAt(i);
@@ -160,6 +171,41 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 		this.period.setNotes(notes);
 		this.period.saveNotes();
 		changesSaved = true;
+	}
+	
+	public void addCountdownTimerIfNeeded() {
+		if (this.period.getIndex() == -1) return;
+		if (this.period.getDate().equals(new Date())) {
+			Time now = new Time();
+			int secondsUntil = now.secondsUntil(this.period.getStartTime());
+			Day d = Curriculum.getCurrentCurriculum().getDay(this.period.getDate());
+			if (secondsUntil > 0 &&
+				((this.period.getIndex() > 0 && d.getPeriods().get(this.period.getIndex()-1).getStartTime().secondsUntil(now) > 0)
+				|| (this.period.getIndex() == 0 && secondsUntil < 60*60))) {
+				countdownView.setVisibility(View.VISIBLE);
+				if (countdownTimer != null) countdownTimer.cancel();
+				countdownTimer = new Timer();
+				countdownTimer.scheduleAtFixedRate(new TimerTask() {
+					public void run() {
+						((Activity)PeriodView.this.getContext()).runOnUiThread(new Runnable() {
+							public void run() {
+								int secsUntil = new Time().secondsUntil(period.getStartTime());
+								if (secsUntil >= 0) {
+									String secs = "" + secsUntil%60;
+									if (secsUntil%60 < 10) secs = "0" + secs;
+									countdownView.setText("Starts in " + secsUntil/60 + ":" + secs);
+								} else {
+									PeriodView.this.findViewById(R.id.text_countdown).setVisibility(View.GONE);
+									countdownTimer.cancel();
+									countdownView.setVisibility(View.GONE);
+									countdownTimer = null;
+								}
+							}
+						});
+					}
+				}, 0, 1000);
+			}
+		}
 	}
 	
 	public void onFragmentVisibilityChanged(Fragment f, boolean isVisible) {

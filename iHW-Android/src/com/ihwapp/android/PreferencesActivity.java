@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.support.v4.app.NavUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 
 public class PreferencesActivity extends Activity {
@@ -24,8 +26,28 @@ public class PreferencesActivity extends Activity {
 	
 	protected void onStart() {
 		super.onStart();
-		((EditText)this.findViewById(R.id.text_year)).setText("" + Curriculum.getCurrentYear());
+		int year = Curriculum.getCurrentYear();
+		((EditText)this.findViewById(R.id.text_year)).setText("" + year);
+		((TextView)findViewById(R.id.text_hint_year)).setText("-" + ((year+1)%100));
 		((TextView)this.findViewById(R.id.text_disclaimer)).setMovementMethod(new ScrollingMovementMethod());
+		
+		((EditText)this.findViewById(R.id.text_year)).addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable editText) {
+				try {
+					int year = Integer.parseInt(editText.toString());
+					String nextYear = "" + ((year+1)%100);
+					while (nextYear.length() < 2) nextYear = "0" + nextYear;
+					((TextView)findViewById(R.id.text_hint_year)).setText("-" + nextYear);
+				} catch (NumberFormatException e) {
+					((TextView)findViewById(R.id.text_hint_year)).setText("");
+				}
+			}
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) { }
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) { }
+		});
+		
 		((Button)this.findViewById(R.id.button_change_year)).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				int year = Curriculum.getCurrentYear();

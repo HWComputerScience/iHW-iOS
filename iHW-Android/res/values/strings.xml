@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">iHW for Android</string>
+    <string name="app_name">iHW Beta</string>
     <string name="hello_world">Hello world!</string>
-    <string name="prompt_welcome">Welcome to iHW for Android!</string>
+    <string name="prompt_welcome">Welcome to iHW for Android! (Beta)</string>
     <string name="title_activity_schedule">View Schedule</string>
     <string name="title_activity_edit_courses">Edit Courses</string>
     <string name="button_download">Download from HW.com</string>
     <string name="button_add_manually">Add Courses Manually</string>
-    <string name="prompt_hw_login">Loading login page...</string>
+    <string name="prompt_hw_login">Loading login page&#8230;</string>
     <string name="title_activity_download_schedule">Download Course Information</string>
     <string name="title_activity_guided_edit_courses">GuidedEditCoursesActivity</string>
     <string name="action_done">Done</string>
@@ -38,7 +38,7 @@
     <string name="action_add">Add</string>
     <string name="action_edit_course">Edit Course</string>
     <string name="action_edit">Edit</string>
-    <string name="action_goto_date">Goto Date...</string>
+    <string name="action_goto_date">Goto Date&#8230;</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="prompt_note_text">Add note</string>
     <string name="action_goto_today">Today</string>

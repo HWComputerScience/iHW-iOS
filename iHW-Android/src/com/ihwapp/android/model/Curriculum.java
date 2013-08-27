@@ -29,6 +29,11 @@ public class Curriculum {
 		return getCurriculum(getCurrentCampus(), getCurrentYear());
 	}
 	
+	public static Curriculum reloadCurrentCurriculum() {
+		currentCurriculum = null;
+		return getCurrentCurriculum();
+	}
+	
 	/*
 	 * Returns the curriculum specified by campus and year. If that curriculum is not ready yet,
 	 * attempts to load it immediately. If it cannot be loaded immediately, returns null.
@@ -175,7 +180,7 @@ public class Curriculum {
 	public void removeOnFinishedLoadingListener(ModelLoadingListener ofll) { mlls.remove(ofll); }
 	
 	private void loadEverything(final Date startingDate) {
-		if (loadingProgress > 0) {
+		if (loadingProgress >= 0) {
 			Log.d("iHW", "Tried to load everything but loading has already started.");
 			return;
 		}
@@ -210,16 +215,29 @@ public class Curriculum {
 				this.publishProgress(0);
 				Log.d("iHW", "starting phase 1a");
 				boolean success = downloadParseScheduleJSON(scheduleJSON.equals(""));
-				if (!success) { Log.e("iHW", "FATAL ERROR downloading schedule JSON"); return null; }
+				if (!success) { 
+					Log.e("iHW", "FATAL ERROR downloading schedule JSON"); 
+					this.publishProgress(-1);
+					return null; 
+				}
 				this.publishProgress(1);
 				success = loadDayNumbers();
-				if (!success) { Log.e("iHW", "ERROR loading day numbers"); return null; }
+				if (!success) { 
+					Log.e("iHW", "ERROR loading day numbers"); 
+					this.publishProgress(-1);
+					return null; 
+				}
 				this.publishProgress(2);
 				Log.d("iHW", "finished phase 1a");
 				return null;
 			}
 			
 			protected void onProgressUpdate(Integer... values) {
+				if (values[0] == -1) {
+					for (ModelLoadingListener mll : mlls) {
+						mll.onLoadFailed(Curriculum.this);
+					}
+				}
 				loadingProgress++;
 				for (ModelLoadingListener mll : mlls) {
 					mll.onProgressUpdate(loadingProgress);
@@ -267,6 +285,10 @@ public class Curriculum {
 	
 	public boolean isLoaded(Date d) {
 		return loadedDays != null && loadedDays.containsKey(d) && loadedWeeks != null && loadedWeeks.containsKey(getWeekStart(year, d));
+	}
+	
+	public boolean isLoaded() {
+		return loadingProgress >= 4;
 	}
 	
 	private boolean downloadParseScheduleJSON(boolean important) {
@@ -570,6 +592,7 @@ public class Curriculum {
 	public interface ModelLoadingListener {
 		public void onProgressUpdate(int progress);
 		public void onFinishedLoading(Curriculum c);
+		public void onLoadFailed(Curriculum c);
 	}
 	
 	/***************************END LOADING STUFF****************************/

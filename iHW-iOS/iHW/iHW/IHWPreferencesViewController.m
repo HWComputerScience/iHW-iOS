@@ -31,7 +31,16 @@
 {
     [super viewDidLoad];
     self.yearField.text = [NSString stringWithFormat:@"%d", [IHWCurriculum currentYear]];
+    [self.yearField addTarget:self action:@selector(yearFieldChanged:) forControlEvents:UIControlEventAllEditingEvents];
+    [self yearFieldChanged:nil];
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)yearFieldChanged:(id)sender {
+    int year = self.yearField.text.intValue;
+    if (year != 0) {
+        self.yearHintField.text = [NSString stringWithFormat:@"- %02d", (year+1)%100];
+    }
 }
 
 - (IBAction)setYearButtonClicked:(id)sender {

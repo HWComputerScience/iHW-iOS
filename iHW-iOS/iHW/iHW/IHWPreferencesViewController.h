@@ -11,5 +11,6 @@
 @interface IHWPreferencesViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITextField *yearField;
+@property (weak, nonatomic) IBOutlet UILabel *yearHintField;
 
 @end

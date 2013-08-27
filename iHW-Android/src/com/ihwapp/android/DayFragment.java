@@ -6,7 +6,6 @@ import com.ihwapp.android.model.*;
 import com.ihwapp.android.model.Date;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -20,8 +19,8 @@ public class DayFragment extends Fragment {
 	private int initScrollPos;
 	private ArrayList<OnFragmentVisibilityChangedListener> ofvcls;
 	private Timer countdownTimer;
-	private View countdownView;
-	private ArrayList<ViewGroup> periodViews;
+	//private View countdownView;
+	private ArrayList<PeriodView> periodViews;
 	
 	/*****LIFECYCLE -- BEGINNINGS*****/
 	
@@ -31,46 +30,34 @@ public class DayFragment extends Fragment {
 	
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		day = Curriculum.getCurrentCurriculum().getDay(date);
-		Log.d("iHW-lc", "DayFragment onAttach: " + date);
-		if (date == null) ((FragmentActivity)activity).getSupportFragmentManager().beginTransaction().remove(this).commit();
+		Log.d("iHW-lc", "DayFragment onAttach");
 	}
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (date == null) return;
 		initScrollPos = 0;
 		ofvcls = new ArrayList<OnFragmentVisibilityChangedListener>();
 		if (savedInstanceState != null && savedInstanceState.containsKey("date")) {
-			setArguments(savedInstanceState);
+			date = new Date(savedInstanceState.getString("date"));
 			initScrollPos = savedInstanceState.getInt("scrollPos");
 		}
+		day = Curriculum.getCurrentCurriculum().getDay(date);
 		Log.d("iHW-lc", "DayFragment onCreate: " + date);
 	}
 
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		if (date==null) return null;
-		if (day==null) day = Curriculum.getCurrentCurriculum().getDay(date);
 		Log.d("iHW-lc", "DayFragment onCreateView: " + date);
 		final View v = inflater.inflate(R.layout.fragment_day, null);
-		//Typeface georgiaBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Georgia Bold.ttf");
-		/*Date d = day.getDate();
-		String weekdayName = d.getDisplayName(GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SHORT, Locale.getDefault());
-		String title = weekdayName + ", " + d.toString();
-		if (day instanceof NormalDay && ((NormalDay)day).getDayNumber() > 0) title += " (Day " + ((NormalDay)day).getDayNumber() + ")";
-		((TextView)v.findViewById(R.id.date_view)).setText(title);*/
 		TextView titleText = ((TextView)v.findViewById(R.id.date_view));
 		Log.d("iHW", "Day: " + day);
 		titleText.setText(day.getTitle());
 		titleText.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		
-		//if (day instanceof NormalDay) ((NormalDay)day).fillPeriods(Curriculum.getCurrentCurriculum(getActivity()));
 		ArrayList<Period> pds = day.getPeriods();
 		
 		LinearLayout pdsLayout = ((LinearLayout)v.findViewById(R.id.layout_periods));
-		periodViews = new ArrayList<ViewGroup>(pds.size());
+		periodViews = new ArrayList<PeriodView>(pds.size());
 		
-		//FragmentTransaction transaction = DayFragment.this.getChildFragmentManager().beginTransaction();
 		for (int i=0; i<pds.size(); i++) {
 			final Period p = pds.get(i);
 			final PeriodView periodView = new PeriodView(getActivity());
@@ -78,26 +65,10 @@ public class DayFragment extends Fragment {
 			periodView.setPeriod(p);
 			periodViews.add(periodView);
 			
-			/*FrameLayout fl = new FrameLayout(getActivity());
-			int id=day.getDate().getDay()*100+i;
-			fl.setId(id);
-			((LinearLayout)periodView.findViewById(R.id.layout_right)).addView(fl);
-			PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), p);
-			transaction.replace(id, f, day.getDate().toString() + ":" + i);*/
 			pdsLayout.addView(periodView);
 			pdsLayout.addView(new Separator(getActivity()));
 		}
-		//transaction.commit();
-		
-		/*TextView moreNotesLabel = new TextView(getActivity());
-		if (pds.size() > 0) moreNotesLabel.setText("Additional Notes");
-		else moreNotesLabel.setText("Notes");
-		pdsLayout.addView(moreNotesLabel);
-		PeriodNotesFragment f = PeriodNotesFragment.newInstance(day.getDate(), new Period("", date, new Time(0,0), new Time(0,0), 0, -1));
-		DayFragment.this.addOnFragmentVisibilityChangedListener(f);
-		DayFragment.this.getChildFragmentManager().beginTransaction().replace(R.id.layout_periods, f, day.getDate().toString() + ":-1").commit();
-		*/
-		
+				
 		PeriodView moreNotesView = new PeriodView(getActivity());
 		DayFragment.this.addOnFragmentVisibilityChangedListener(moreNotesView);
 		String moreNotesTitle;
@@ -114,12 +85,12 @@ public class DayFragment extends Fragment {
 		dayNameText.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		if (dayName.equals("")) dayNameText.setVisibility(View.GONE);
 		else dayNameText.setText(dayName);
+		
 		return v;
 	}
 	
 	public void onStart() {
 		super.onStart();
-		if (date==null) return;
 		Log.d("iHW-lc", "DayFragment onStart: " + date);
 	}
 	
@@ -133,6 +104,20 @@ public class DayFragment extends Fragment {
 				sv.scrollTo(0, initScrollPos);
 			} 
 		});
+		countdownTimer = new Timer();
+		countdownTimer.schedule(new TimerTask() {
+			public void run() {
+				if (getActivity() == null) return;
+				getActivity().runOnUiThread(new Runnable() {
+					public void run() {
+						if (periodViews == null) return;
+						for (PeriodView pv : periodViews) {
+							pv.addCountdownTimerIfNeeded();
+						}
+					}
+				});
+			}
+		}, 0, 60000);
 	}
 	
 	/*****LIFECYCLE -- ENDINGS*****/
@@ -149,25 +134,29 @@ public class DayFragment extends Fragment {
 		super.onPause();
 		Log.d("iHW-lc", "DayFragment (" + this + ") onPause: " + date);
 		initScrollPos = ((ScrollView)getView().findViewById(R.id.scroll_periods)).getScrollY();
+		countdownTimer.cancel();
+		countdownTimer = null;
 	}
 	
 	public void onStop() {
 		super.onStop();
 		Log.d("iHW-lc", "DayFragment onStop: " + date);
-		if (countdownTimer != null) countdownTimer.cancel();
-		countdownTimer = null;
-		if (countdownView != null) countdownView.setVisibility(View.GONE);
-		countdownView = null;
+		//if (countdownTimer != null) countdownTimer.cancel();
+		//if (countdownView != null) countdownView.setVisibility(View.GONE);
+		if (this.getUserVisibleHint() && ofvcls != null) {
+			for (OnFragmentVisibilityChangedListener l : ofvcls) {
+				l.onFragmentVisibilityChanged(this, false);
+			}
+		}
 	}
 	
 	public void onDestroyView() {
 		Log.d("iHW-lc", "DayFragment onDestroyView: " + date);
 		super.onDestroyView();
-		if (date == null) return;
 		periodViews.clear();
 		periodViews = null;
-		countdownTimer = null;
-		countdownView = null;
+		//countdownTimer = null;
+		//countdownView = null;
 		((ViewGroup)this.getView()).removeAllViews();
 	}
 	
@@ -188,7 +177,7 @@ public class DayFragment extends Fragment {
 	
 	/*****OTHER METHODS*****/
 	
-	public void resetCountdownTimer() {
+	/*public void resetCountdownTimer() {
 		countdownTimer.cancel();
 		countdownTimer = null;
 		countdownView.setVisibility(View.GONE);
@@ -197,7 +186,7 @@ public class DayFragment extends Fragment {
 		for (int i=0; i<pds.size(); i++) {
 			Period p = pds.get(i);
 			int minsUntil = new Time().minutesUntil(p.getStartTime());
-			//TODO fix criteria for timer being shown:
+			// fix criteria for timer being shown:
 			if (day.getDate().equals(new Date()) && minsUntil < p.getStartTime().minutesUntil(p.getEndTime()) && minsUntil > 0) {
 				this.addCountdownTimerToPeriod(p, periodViews.get(i));
 			}
@@ -230,7 +219,7 @@ public class DayFragment extends Fragment {
 				});
 			}
 		}, 0, 1000);
-	}
+	}*/
 	
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		Log.d("iHW-lc", "DayFragment setUserVisibleHint: " + isVisibleToUser + "(" + date + ")");

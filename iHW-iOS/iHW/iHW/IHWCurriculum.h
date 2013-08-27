@@ -17,6 +17,7 @@
 @interface IHWCurriculum : NSObject
 
 + (IHWCurriculum *)currentCurriculum;
++ (IHWCurriculum *)reloadCurrentCurriculum;
 + (IHWCurriculum *)curriculumWithCampus:(int)campus andYear:(int)year;
 + (int)currentYear;
 + (int)currentCampus;
