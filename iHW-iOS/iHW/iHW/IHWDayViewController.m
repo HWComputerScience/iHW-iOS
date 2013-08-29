@@ -61,6 +61,8 @@
     }
     
     [self loadTableViewCells];
+    
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(logViewAtPoint:)]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -68,11 +70,6 @@
     [self.view setNeedsLayout];
     [self.view setNeedsDisplay];
 }
-
-/*- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([[change objectForKey:NSKeyValueChangeNewKey] intValue] == 0)
-        [self loadTableView:YES];
-}*/
 
 - (void)loadTableViewCells {
     //NSLog(@"Loading table view");
@@ -134,16 +131,10 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"height at index %d was requested", indexPath.row);
-    /*if (indexPath.row >= self.cells.count || [self.cells objectAtIndex:indexPath.row] == [NSNull null]) {
-        UITableViewCell *cell = [self createNewCellForIndex:indexPath.row];
-        while (self.cells.count < indexPath.row) {
-            [self.cells addObject:[NSNull null]];
-        }
-        [self.cells setObject:cell atIndexedSubscript:indexPath.row];
-    }*/
     if (indexPath.row >= self.cells.count) return 72;
-    return [((IHWPeriodCellView *)[((UITableViewCell *)[self.cells objectAtIndex:indexPath.row]).contentView.subviews objectAtIndex:0]) neededHeight];
+    int result = [((IHWPeriodCellView *)[((UITableViewCell *)[self.cells objectAtIndex:indexPath.row]).contentView.subviews objectAtIndex:0]) neededHeight];
+    if (result != 0) return result;
+    else return 72;
 }
 
 - (UITableViewCell *)createNewCellForIndex:(int)index {
@@ -156,7 +147,6 @@
     cell.frame = CGRectMake(0, 0, self.view.bounds.size.width, [view neededHeight]);
     view.dayViewController = self;
     [view createCountdownViewIfNeeded];
-    //[self.rowHeights setObject:[NSNumber numberWithFloat:[view neededHeight]] atIndexedSubscript:index];
     [cell.contentView addSubview:view];
     return cell;
 }
@@ -169,6 +159,7 @@
     if (cell==nil) {
         cell = [self createNewCellForIndex:indexPath.row];
     }
+        
     return cell;
 }
 
@@ -178,8 +169,8 @@
 
 - (void)updateRowHeightAtIndex:(int)index toHeight:(int)height {
     [self.periodsTableView beginUpdates];
-    //[self.rowHeights setObject:[NSNumber numberWithInt:height] atIndexedSubscript:index];
-    //[self.periodsTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    UITableViewCell *cell = [self.cells objectAtIndex:index];
+    cell.frame = CGRectMake(0, 0, self.periodsTableView.bounds.size.width, height);
     [self.periodsTableView endUpdates];
 }
 
@@ -210,6 +201,48 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)logViewAtPoint:(UITapGestureRecognizer *)gestureRecognizer {
+    UIView *subview = [IHWDayViewController visibleViewAtPoint:[gestureRecognizer locationInView:[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]]];
+    int i=0;
+    while (subview.superview != nil) {
+        NSLog(@"%@%@", [@"" stringByPaddingToLength:i withString: @" " startingAtIndex:0], subview);
+        subview = subview.superview;
+        i++;
+    }
+}
+
+
++ (void) findView:(UIView**)visibleView atPoint:(CGPoint)pt fromParent:(UIView*)parentView
+{
+    UIView *applicationWindowView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
+
+    if(parentView == nil) {
+        parentView = applicationWindowView;
+    }
+    
+    for(UIView *view in parentView.subviews)
+    {
+        if((view.superview != nil) && (view.hidden == NO) && (view.alpha > 0))
+        {
+            CGPoint pointInView = [applicationWindowView convertPoint:pt toView:view];
+            
+            if([view pointInside:pointInView withEvent:nil]) {
+                *visibleView = view;
+            }
+            
+            [self findView:visibleView atPoint:pt fromParent:view];
+        }
+    }
+}
+
++ (UIView*) visibleViewAtPoint:(CGPoint)pt
+{
+    UIView *visibleView = nil;
+    [IHWDayViewController findView:&visibleView atPoint:pt fromParent:nil];
+    
+    return visibleView;
 }
 
 @end

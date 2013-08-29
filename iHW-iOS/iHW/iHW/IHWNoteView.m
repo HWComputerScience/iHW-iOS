@@ -14,7 +14,10 @@
 #define BUTTON_WIDTH 24
 #define IMPORTANT_NOTE_HEIGHT 30
 
-@implementation IHWNoteView
+@implementation IHWNoteView {
+    BOOL focused;
+}
+
 @synthesize note = _note;
 
 - (id)initWithNote:(IHWNote *)note index:(int)noteIndex cellView:(IHWPeriodCellView *)cellView
@@ -27,11 +30,13 @@
     }
     self = [super initWithFrame:frame];
     if (self) {
+        //self.backgroundColor = [UIColor yellowColor];
+        
         self.index = noteIndex;
         self.delegate = cellView;
+        focused = NO;
         
-        self.checkbox = [[UIButton alloc] initWithFrame:CGRectZero];
-        self.checkbox.translatesAutoresizingMaskIntoConstraints = NO;
+        self.checkbox = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, NOTE_HEIGHT)];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxUnchecked"] forState:UIControlStateNormal];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxUnchecked"] forState:UIControlStateSelected|UIControlStateHighlighted];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxChecked"] forState:UIControlStateSelected];
@@ -40,7 +45,6 @@
         [self.checkbox addTarget:self action:@selector(toggleChecked) forControlEvents:UIControlEventTouchUpInside];
         
         self.textField = [[UITextField alloc] initWithFrame:CGRectZero];
-        self.textField.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.textField];
         self.textField.adjustsFontSizeToFitWidth = YES;
         self.textField.minimumFontSize = 12;
@@ -48,11 +52,11 @@
         self.textField.borderStyle = UITextBorderStyleNone;
         self.textField.delegate = self;
         self.textField.returnKeyType = UIReturnKeyDone;
+        self.textField.userInteractionEnabled = YES;
         
         self.optionsButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [self.optionsButton setImage:[UIImage imageNamed:@"graygear"] forState:UIControlStateNormal];
         [self addSubview:self.optionsButton];
-        self.optionsButton.translatesAutoresizingMaskIntoConstraints = NO;
         self.optionsButton.hidden = YES;
         [self.optionsButton addTarget:self action:@selector(optionsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -61,17 +65,24 @@
     return self;
 }
 
-- (void)updateConstraints {
-    [super updateConstraints];
-    if (self.innerConstraints != nil) [self removeConstraints:self.innerConstraints];
-    int checkboxWidth = BUTTON_WIDTH;
-    int checkboxMargin = 4;
-    if (self.checkbox.hidden) { checkboxWidth = 0; checkboxMargin = 0; }
-    NSDictionary *metrics = @{@"noteHeight":[NSNumber numberWithInt:[self neededHeight]], @"checkboxWidth":[NSNumber numberWithInt:checkboxWidth], @"checkboxMargin":[NSNumber numberWithInt:checkboxMargin]};
-    NSDictionary *views = @{@"checkbox":self.checkbox, @"text": self.textField, @"button":self.optionsButton};
-    self.innerConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[checkbox(==checkboxWidth)]-checkboxMargin-[text][button(==noteHeight)]-4-|" options:NSLayoutFormatAlignAllTop metrics:metrics views:views];
-    self.innerConstraints = [self.innerConstraints arrayByAddingObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[text(==checkbox,==button,==noteHeight)]|" options:NSLayoutFormatAlignAllTop metrics:metrics views:views]];
-    [self addConstraints:self.innerConstraints];
+- (void)layoutSubviews {
+    if (focused && self.isToDo) {
+        self.checkbox.frame = CGRectMake(0, 0, BUTTON_WIDTH, NOTE_HEIGHT);
+        self.textField.frame = CGRectMake(BUTTON_WIDTH, 0, self.frame.size.width-(2*BUTTON_WIDTH), NOTE_HEIGHT);
+        self.optionsButton.frame = CGRectMake(self.bounds.size.width-BUTTON_WIDTH, 0, BUTTON_WIDTH, NOTE_HEIGHT);
+    } else if (self.isToDo) {
+        self.checkbox.frame = CGRectMake(0, 0, BUTTON_WIDTH, NOTE_HEIGHT);
+        self.textField.frame = CGRectMake(BUTTON_WIDTH, 0, self.frame.size.width-BUTTON_WIDTH, NOTE_HEIGHT);
+        self.optionsButton.frame = CGRectMake(self.bounds.size.width, 0, 0, NOTE_HEIGHT);
+    } else if (focused) {
+        self.checkbox.frame = CGRectMake(0, 0, 0, NOTE_HEIGHT);
+        self.textField.frame = CGRectMake(0, 0, self.frame.size.width-BUTTON_WIDTH, NOTE_HEIGHT);
+        self.optionsButton.frame = CGRectMake(self.bounds.size.width-BUTTON_WIDTH, 0, BUTTON_WIDTH, NOTE_HEIGHT);
+    } else {
+        self.checkbox.frame = CGRectMake(0, 0, 0, NOTE_HEIGHT);
+        self.textField.frame = CGRectMake(0, 0, self.frame.size.width, NOTE_HEIGHT);
+        self.optionsButton.frame = CGRectMake(self.bounds.size.width, 0, 0, NOTE_HEIGHT);
+    }
 }
 
 - (void)setNote:(IHWNote *)note {
@@ -86,6 +97,7 @@
         [self setChecked:NO];
         [self setImportant:NO];
     }
+    [self setNeedsLayout];
 }
 
 - (void)copyFieldsToNewNote {
@@ -95,7 +107,6 @@
 - (void)setToDo:(BOOL)isToDo {
     self.checkbox.hidden = !isToDo;
     if (self.note != nil) self.note.isToDo = isToDo;
-    [self setNeedsUpdateConstraints];
 }
 
 - (BOOL)isToDo {
@@ -105,6 +116,7 @@
 - (void)toggleToDo {
     [self setToDo:![self isToDo]];
     [self.delegate noteViewChangedAtIndex:self.index];
+    [self setNeedsLayout];
 }
 
 - (BOOL)isChecked {
@@ -134,18 +146,21 @@
         self.textField.textColor = [UIColor blackColor];
     }
     if (self.note != nil) self.note.isImportant = important;
+    self.textField.frame = CGRectMake(self.textField.frame.origin.x, self.textField.frame.origin.y, self.textField.frame.size.width, self.neededHeight);
 }
 
 - (void)toggleImportant {
     [self setImportant:![self isImportant]];
     [self.delegate noteViewChangedAtIndex:self.index];
-    [self setNeedsUpdateConstraints];
+    [self.delegate reLayoutViews:YES];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.optionsButton.hidden = NO;
     if (self.delegate.index == -1) self.delegate.dayViewController.scrollToIndex = self.delegate.dayViewController.cells.count-1;
     else self.delegate.dayViewController.scrollToIndex = self.delegate.index;
+    focused = YES;
+    [self setNeedsLayout];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -163,6 +178,8 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     self.optionsButton.hidden = YES;
+    focused = NO;
+    [self setNeedsLayout];
 }
 
 - (void)optionsButtonPressed:(UIButton *)button {
@@ -188,9 +205,5 @@
     if (self.isImportant) return IMPORTANT_NOTE_HEIGHT;
     else return NOTE_HEIGHT;
 }
-
-/*- (CGSize)intrinsicContentSize {
-    return CGSizeMake(UIViewNoIntrinsicMetric, self.neededHeight);
-}*/
 
 @end
