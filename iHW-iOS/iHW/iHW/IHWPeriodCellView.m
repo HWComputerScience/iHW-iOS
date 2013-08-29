@@ -19,7 +19,7 @@
 
 - (id)initWithPeriod:(IHWPeriod *)period atIndex:(int)index forTableViewCell:(UITableViewCell *)cell;
 {
-    self = [super initWithFrame:cell.contentView.bounds];
+    self = [super initWithFrame:CGRectMake(0, 0, cell.bounds.size.width, 1000)];
     if (self) {
         //self.backgroundColor = [UIColor redColor];
         
@@ -163,11 +163,12 @@
     }
     int neededHeight = self.neededHeight;
     self.frame = CGRectMake(0, 0, self.frame.size.width, neededHeight);
+    self.notesView.frame = CGRectMake(self.notesView.frame.origin.x, self.notesView.frame.origin.y, self.notesView.frame.size.width, neededHeight-self.notesView.frame.origin.y);
     [self setNeedsLayout];
     if (animated) [UIView animateWithDuration:0.3 animations:^{
         [self layoutIfNeeded];
     }];
-    else [self layoutIfNeeded];
+    else [self.dayViewController.periodsTableView layoutIfNeeded];
     if (self.dayViewController != nil) [self.dayViewController updateRowHeightAtIndex:self.index toHeight:neededHeight];
 }
 

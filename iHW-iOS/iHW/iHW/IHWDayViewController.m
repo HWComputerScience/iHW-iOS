@@ -133,7 +133,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row >= self.cells.count) return 72;
     int result = [((IHWPeriodCellView *)[((UITableViewCell *)[self.cells objectAtIndex:indexPath.row]).contentView.subviews objectAtIndex:0]) neededHeight];
-    if (result != 0) return result;
+    if (result != 0) {
+        NSLog(@"Returned %d", result);
+        return result;
+    }
     else return 72;
 }
 
@@ -159,7 +162,7 @@
     if (cell==nil) {
         cell = [self createNewCellForIndex:indexPath.row];
     }
-        
+    cell.frame = CGRectMake(0, 0, tableView.bounds.size.width, 1000);
     return cell;
 }
 
@@ -208,6 +211,7 @@
     int i=0;
     while (subview.superview != nil) {
         NSLog(@"%@%@", [@"" stringByPaddingToLength:i withString: @" " startingAtIndex:0], subview);
+        //if ([subview isKindOfClass:[UITextField class]]) [subview becomeFirstResponder];
         subview = subview.superview;
         i++;
     }
