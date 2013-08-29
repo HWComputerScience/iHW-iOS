@@ -52,12 +52,12 @@ public void setBackground(Drawable d) {
   /**
    * The stateful LayerDrawable used by this button.
    */
-  protected class SAutoBgButtonBackgroundDrawable extends LayerDrawable {
+  class SAutoBgButtonBackgroundDrawable extends LayerDrawable {
 
     // The color filter to apply when the button is pressed
-    protected ColorFilter _pressedFilter = new LightingColorFilter(Color.LTGRAY, 1);
+    final ColorFilter _pressedFilter = new LightingColorFilter(Color.LTGRAY, 1);
     // Alpha value when the button is disabled
-    protected int _disabledAlpha = 100;
+    final int _disabledAlpha = 100;
 
     public SAutoBgButtonBackgroundDrawable(Drawable d) {
       super(new Drawable[] { d });

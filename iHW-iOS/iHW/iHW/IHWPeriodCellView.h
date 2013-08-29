@@ -27,7 +27,7 @@
 - (id)initWithPeriod:(IHWPeriod *)period atIndex:(int)index forTableViewCell:(UITableViewCell *)cell;
 - (id)initWithAdditionalNotesOnDate:(IHWDate *)date withFrame:(CGRect)frame onHoliday:(BOOL)holiday;
 - (void)createCountdownViewIfNeeded;
-- (void)reLayoutViews:(BOOL)animated;
+//- (void)reLayoutViews:(BOOL)animated;
 - (void)noteViewChangedAtIndex:(int)index;
 - (void)saveNotes;
 - (int)neededHeight;

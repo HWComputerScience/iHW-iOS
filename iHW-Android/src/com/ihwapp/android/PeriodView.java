@@ -124,7 +124,7 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 	
 	private void makeImportant(int index) {
 		View row = notesLayout.getChildAt(index);
-		EditText et = (EditText)row.findViewById(R.id.text_note);
+        EditText et = (EditText)row.findViewById(R.id.text_note);
 		et.setTextSize(SIZE_LARGE);
 		et.setTextColor(getResources().getColor(R.drawable.dark_red));
 		et.setTypeface(Typeface.DEFAULT_BOLD);
@@ -218,7 +218,7 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 	protected void dispatchSaveInstanceState(SparseArray<Parcelable> container) { }
 	
 	private class NoteTextWatcher implements TextWatcher, EditText.OnEditorActionListener, View.OnFocusChangeListener {
-		private View noteRow;
+		private final View noteRow;
 		
 		public NoteTextWatcher(View v) {
 			noteRow = v;
@@ -283,7 +283,7 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 	}
 	
 	private class OptionsMenuListener implements OnClickListener, PopupMenu.OnMenuItemClickListener {
-		View noteRow;
+		final View noteRow;
 		
 		public OptionsMenuListener(View v) {
 			noteRow = v;
@@ -338,7 +338,7 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 	}
 	
 	private static String getOrdinal(int num) {
-		String suffix = "";
+		String suffix;
 		if (num%10==1) suffix="st";
 		else if (num%10==2) suffix="nd";
 		else if (num%10==3) suffix="rd";

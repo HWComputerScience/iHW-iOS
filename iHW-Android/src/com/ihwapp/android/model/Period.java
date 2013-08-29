@@ -35,7 +35,7 @@ public class Period implements Parcelable {
 			this.periodNum = obj.getInt("periodNum");
 			this.periodIndex = periodIndex;
 			loadNotesFromCurriculum();
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 	}
 	
 	public String getName() { return name; }
@@ -44,9 +44,9 @@ public class Period implements Parcelable {
 	public List<Note> getNotes() { return notes; }
 	public void setNotes(ArrayList<Note> notes) { this.notes = notes; }
 	public Date getDate() { return d; }
-	public void setDate(Date d) { this.d = d; }
+	//public void setDate(Date d) { this.d = d; }
 	public int getNum() { return periodNum; }
-	public void setNum(int periodNum) { this.periodNum = periodNum; }
+	//public void setNum(int periodNum) { this.periodNum = periodNum; }
 	public int getIndex() { return periodIndex; }
 	public void setIndex(int index) { this.periodIndex = index; }
 	
@@ -68,7 +68,7 @@ public class Period implements Parcelable {
 			obj.put("endTime", endTime);
 			obj.put("date", d);
 			obj.put("periodNum", periodNum);
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		return obj;
 	}
 

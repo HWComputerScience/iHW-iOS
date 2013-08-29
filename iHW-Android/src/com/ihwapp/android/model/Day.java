@@ -14,7 +14,7 @@ public abstract class Day {
 	public Day(JSONObject obj) {
 		try {
 			date = new Date(obj.getString("date"));
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 	}
 	
 	public com.ihwapp.android.model.Date getDate() { return date; }

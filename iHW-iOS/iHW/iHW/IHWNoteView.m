@@ -19,7 +19,7 @@
 
 - (id)initWithNote:(IHWNote *)note index:(int)noteIndex cellView:(IHWPeriodCellView *)cellView
 {
-    CGRect frame = CGRectZero;
+    CGRect frame = CGRectMake(0, 0, cellView.notesView.bounds.size.width, NOTE_HEIGHT);
     if (cellView.notesView.subviews.count > 0){
         IHWNoteView *previous = [cellView.notesView.subviews objectAtIndex:cellView.notesView.subviews.count-1];
         CGFloat yPos = previous.frame.origin.y+previous.neededHeight;
@@ -63,15 +63,15 @@
 
 - (void)updateConstraints {
     [super updateConstraints];
-    if (self.constraints != nil) [self removeConstraints:self.constraints];
+    if (self.innerConstraints != nil) [self removeConstraints:self.innerConstraints];
     int checkboxWidth = BUTTON_WIDTH;
     int checkboxMargin = 4;
     if (self.checkbox.hidden) { checkboxWidth = 0; checkboxMargin = 0; }
     NSDictionary *metrics = @{@"noteHeight":[NSNumber numberWithInt:[self neededHeight]], @"checkboxWidth":[NSNumber numberWithInt:checkboxWidth], @"checkboxMargin":[NSNumber numberWithInt:checkboxMargin]};
     NSDictionary *views = @{@"checkbox":self.checkbox, @"text": self.textField, @"button":self.optionsButton};
-    self.constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[checkbox(==checkboxWidth)]-checkboxMargin-[text][button(==noteHeight)]-4-|" options:NSLayoutFormatAlignAllTop metrics:metrics views:views];
-    self.constraints = [self.constraints arrayByAddingObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[text(==checkbox,==button,==noteHeight)]|" options:NSLayoutFormatAlignAllTop metrics:metrics views:views]];
-    [self addConstraints:self.constraints];
+    self.innerConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[checkbox(==checkboxWidth)]-checkboxMargin-[text][button(==noteHeight)]-4-|" options:NSLayoutFormatAlignAllTop metrics:metrics views:views];
+    self.innerConstraints = [self.innerConstraints arrayByAddingObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[text(==checkbox,==button,==noteHeight)]|" options:NSLayoutFormatAlignAllTop metrics:metrics views:views]];
+    [self addConstraints:self.innerConstraints];
 }
 
 - (void)setNote:(IHWNote *)note {
@@ -134,13 +134,12 @@
         self.textField.textColor = [UIColor blackColor];
     }
     if (self.note != nil) self.note.isImportant = important;
-    [self.delegate reLayoutViews:YES];
-    [self setNeedsUpdateConstraints];
 }
 
 - (void)toggleImportant {
     [self setImportant:![self isImportant]];
     [self.delegate noteViewChangedAtIndex:self.index];
+    [self setNeedsUpdateConstraints];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -189,5 +188,9 @@
     if (self.isImportant) return IMPORTANT_NOTE_HEIGHT;
     else return NOTE_HEIGHT;
 }
+
+/*- (CGSize)intrinsicContentSize {
+    return CGSizeMake(UIViewNoIntrinsicMetric, self.neededHeight);
+}*/
 
 @end

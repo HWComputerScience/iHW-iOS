@@ -19,51 +19,48 @@ import android.widget.*;
 import android.webkit.*;
 
 public class DownloadScheduleActivity extends Activity {
-	public static final String TAG = "iHW";
 	private boolean alreadyLoaded = false;
-	private WebView webview;
-	private final Activity thisActivity = this;
+    private final Activity thisActivity = this;
 
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_download);
-		webview = (WebView)this.findViewById(R.id.webView_download);
+        WebView webview = (WebView) this.findViewById(R.id.webView_download);
 		webview.getSettings().setJavaScriptEnabled(true);
 		webview.getSettings().setSupportZoom(true);
 		webview.getSettings().setBuiltInZoomControls(true);
 		webview.setWebViewClient(new WebViewClient() {
-			public boolean shouldOverrideUrlLoading(WebView view, String url)
-			{
-				if (url.equals("http://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx") ||
-						url.equals("https://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx") ||
-						url.equals("https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx")) {
-					//Log.d(TAG, "Loading URL: " + url);
-					return false;
-				}
-				//Log.d(TAG, "Preventing you from loading URL: " + url);
-				return true;
-			}
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.equals("http://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx") ||
+                        url.equals("https://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx") ||
+                        url.equals("https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx")) {
+                    //Log.d(TAG, "Loading URL: " + url);
+                    return false;
+                }
+                //Log.d(TAG, "Preventing you from loading URL: " + url);
+                return true;
+            }
 
-			public void onPageFinished (WebView view, String url) {
-				if (url.equals("https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx")) {
-					view.setVisibility(View.VISIBLE);
-					changeInfoText("Please log into HW.com below.");
-					((LinearLayout)findViewById(R.id.layout_notes)).setGravity(Gravity.TOP | Gravity.LEFT);
-				} else if (url.equals("http://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx")) {
-					//Log.d(TAG, "Loaded My Schedule and Events");
-					if (!alreadyLoaded) {
-						((LinearLayout)findViewById(R.id.layout_notes)).setGravity(Gravity.CENTER);
-						changeInfoText("Please wait, finding schedule...");
-						view.setVisibility(View.INVISIBLE);
-						view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0));
-						alreadyLoaded = true;
-						view.loadUrl("javascript:__doPostBack(\"dnn$ctr8420$InteractiveSchedule$lnkStudentScheduleHTML\", \"\");");
-					} else {						
-						view.loadUrl("javascript:console.log(\"SCHEDULE_URL=\"+document.getElementById(\"dnn_ctr8420_InteractiveSchedule_txtWindowPopupUrl\").value)");
-					}
-				}/* else {
+            public void onPageFinished(WebView view, String url) {
+                if (url.equals("https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx")) {
+                    view.setVisibility(View.VISIBLE);
+                    changeInfoText("Please log into HW.com below.");
+                    ((LinearLayout) findViewById(R.id.layout_notes)).setGravity(Gravity.TOP | Gravity.LEFT);
+                } else if (url.equals("http://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx")) {
+                    //Log.d(TAG, "Loaded My Schedule and Events");
+                    if (!alreadyLoaded) {
+                        ((LinearLayout) findViewById(R.id.layout_notes)).setGravity(Gravity.CENTER);
+                        changeInfoText("Please wait, finding schedule...");
+                        view.setVisibility(View.INVISIBLE);
+                        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0));
+                        alreadyLoaded = true;
+                        view.loadUrl("javascript:__doPostBack(\"dnn$ctr8420$InteractiveSchedule$lnkStudentScheduleHTML\", \"\");");
+                    } else {
+                        view.loadUrl("javascript:console.log(\"SCHEDULE_URL=\"+document.getElementById(\"dnn_ctr8420_InteractiveSchedule_txtWindowPopupUrl\").value)");
+                    }
+                }/* else {
 					new AlertDialog.Builder(DownloadScheduleActivity.this)
 						.setTitle("Schedule Unavailable")
 						.setMessage("Your schedule is not currently available on HW.com. You can still enter your courses manually, though:")
@@ -75,26 +72,28 @@ public class DownloadScheduleActivity extends Activity {
 						}
 					}).setCancelable(false).create().show();
 				}*/
-			}
-			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-				Log.e("iHW", errorCode + ": " + description);
-				showScheduleUnavailableError();
-			}
-		});
+            }
+
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                Log.e("iHW", errorCode + ": " + description);
+                showScheduleUnavailableError();
+            }
+        });
 		webview.setWebChromeClient(new WebChromeClient() {
-			public boolean onConsoleMessage (ConsoleMessage consoleMessage) {
-				if (consoleMessage.message().startsWith("SCHEDULE_URL=")) {
-					String url = consoleMessage.message().substring(13);
-					if (url.length() != 0) new DownloadParseScheduleTask().execute(url);
-					else {
-						showScheduleUnavailableError();
-					}
-				}
-				return false;
-			}
-		});
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                if (consoleMessage.message().startsWith("SCHEDULE_URL=")) {
+                    String url = consoleMessage.message().substring(13);
+                    if (url.length() != 0) new DownloadParseScheduleTask().execute(url);
+                    else {
+                        showScheduleUnavailableError();
+                    }
+                }
+                return false;
+            }
+        });
 		android.webkit.CookieManager.getInstance().removeAllCookie();
 		webview.loadUrl("https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx");
+        setupActionBar();
 	}
 	
 	/**
@@ -117,12 +116,12 @@ public class DownloadScheduleActivity extends Activity {
 			changeInfoText("Schedule found. Downloading...");
 		}
 		protected Document doInBackground(String...url) {
-			Log.d(TAG, "Downloading/parsing HTML");
+			Log.d("iHW", "Downloading/parsing HTML");
 			Document doc = null;
 			try {
 				doc = Jsoup.connect(url[0]).get();
 			} catch (Exception e) {
-				Log.e(TAG, e.getClass().getName() + " Downloading/parsing HTML");
+				Log.e("iHW", e.getClass().getName() + " Downloading/parsing HTML");
 				e.printStackTrace();
 			}
 			return doc;
@@ -142,17 +141,17 @@ public class DownloadScheduleActivity extends Activity {
 			
 			for (Element div : divs) {
 				if (div.attr("id").equals("nameStudentName1-0")) {
-					Log.d(TAG, "Name: " + div.getElementsByTag("span").first().text());
+					Log.d("iHW", "Name: " + div.getElementsByTag("span").first().text());
 				} else if (div.attr("id").equals("sectCode1")) {
 					lastCode = div.getElementsByTag("span").first().text();
 					if (lastCode.length() <= 4) shouldShowWarning = true;
-					Log.d(TAG, "Course code: " + lastCode);
+					Log.d("iHW", "Course code: " + lastCode);
 				} else if (div.attr("id").equals("sectTitle1")) {
 					lastName = div.getElementsByTag("span").first().text();
-					Log.d(TAG, "Course name: " + lastName);
+					Log.d("iHW", "Course name: " + lastName);
 				} else if (div.attr("id").equals("sectPeriodList1")) {
 					lastPeriodList = div.getElementsByTag("span").first().text();
-					Log.d(TAG, "Course meets: " + lastPeriodList);
+					Log.d("iHW", "Course meets: " + lastPeriodList);
 					String[] tokens = lastPeriodList.split("\\.");
 					Log.d("iHW", "Number of tokens: " + tokens.length);
 					if (tokens.length != Curriculum.getCurrentCampus()) {
@@ -224,7 +223,7 @@ public class DownloadScheduleActivity extends Activity {
 		}).setCancelable(false).create().show();
 	}
 	
-	public static Course parseCourse(String code, String name, String[] periodTokens) {
+	private static Course parseCourse(String code, String name, String[] periodTokens) {
 		//parse for term
 		int term = Constants.TERM_FULL_YEAR;
 		if (code.length() >= 6) term = Integer.parseInt(code.substring(5,6));
@@ -241,7 +240,7 @@ public class DownloadScheduleActivity extends Activity {
 			for (int i=0; i<token.length(); i++) {
 				int period = 0;
 				try { period = Integer.parseInt(token.substring(i,i+1)); }
-				catch (NumberFormatException e) {}
+				catch (NumberFormatException ignored) {}
 				if (period > 0) {
 					periods[day][period] = true;
 					minPeriod = Math.min(minPeriod, period);

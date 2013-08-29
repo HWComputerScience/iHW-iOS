@@ -48,7 +48,6 @@
 						<string key="NSFrame">{{0, 268}, {320, 280}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -59,14 +58,14 @@
 YXJkLVdlc3RsYWtlIFNjaG9vbCBhcyBhIHNlcnZpY2UuIFRoaXMgc2VydmljZSBtYXkgYmUgc3VzcGVu
 ZGVkIG9yIHRlcm1pbmF0ZWQgYXQgYW55IHRpbWUuIEFueSBkYXRhIHN0b3JlZCBpbiB0aGUgYXBwbGlj
 YXRpb24gaXMgbm90IGd1YXJhbnRlZWQgdG8gYmUgcGVycGV0dWFsbHkgYXZhaWxhYmxlLiBJbiBubyBl
-dmVudCBzaGFsbCB0aGUgZGV2ZWxvcGVyIG9mIHRoaXMgYXBwbGljYXRpb24gYmUgbGlhYmxlIGZvciBh
-bnkgZGlyZWN0LCBpbmRpcmVjdCwgaW5jaWRlbnRhbCwgc3BlY2lhbCwgZXhlbXBsYXJ5LCBvciBjb25z
-ZXF1ZW50aWFsIGRhbWFnZXMgKGluY2x1ZGluZyB0YXJkaW5lc3MgY2F1c2VkIGJ5IGluY29ycmVjdCBp
-bmZvcm1hdGlvbiBwcm92aWRlZCBpbiB0aGlzIGFwcGxpY2F0aW9uKS4KVGhlIGRldmVsb3BlciBvZiB0
-aGlzIGFwcGxpY2F0aW9uLCBhIHN0dWRlbnQgYXQgSGFydmFyZC1XZXN0bGFrZSBTY2hvb2wsIGlzIG5v
-dCBhbiBvZmZpY2lhbCByZXByZXNlbnRhdGl2ZSBvZiB0aGUgc2Nob29sLiBUaGlzIGFwcGxpY2F0aW9u
-IGFuZCB0aGUgaW5mb3JtYXRpb24gcHJvdmlkZWQgaGVyZWluIGFyZSBub3QgZW5kb3JzZWQsIHNwb25z
-b3JlZCwgb3IgYXBwcm92ZWQgYnkgSGFydmFyZC1XZXN0bGFrZSBTY2hvb2wuA</string>
+dmVudCBzaGFsbCBlaXRoZXIgdGhlIGRldmVsb3BlciBvZiB0aGlzIGFwcGxpY2F0aW9uIG9yIEhhcnZh
+cmQtV2VzdGxha2UgU2Nob29sIGJlIGxpYWJsZSBmb3IgYW55IGRpcmVjdCwgaW5kaXJlY3QsIGluY2lk
+ZW50YWwsIHNwZWNpYWwsIGV4ZW1wbGFyeSwgb3IgY29uc2VxdWVudGlhbCBkYW1hZ2VzIChpbmNsdWRp
+bmcgdGFyZGluZXNzIGNhdXNlZCBieSBpbmNvcnJlY3QgaW5mb3JtYXRpb24gcHJvdmlkZWQgaW4gdGhp
+cyBhcHBsaWNhdGlvbikuClRoZSBkZXZlbG9wZXIgb2YgdGhpcyBhcHBsaWNhdGlvbiwgYSBzdHVkZW50
+IGF0IEhhcnZhcmQtV2VzdGxha2UgU2Nob29sLCBpcyBub3QgYW4gb2ZmaWNpYWwgcmVwcmVzZW50YXRp
+dmUgb2YgdGhlIHNjaG9vbC4gVGhpcyBhcHBsaWNhdGlvbiBhbmQgdGhlIGluZm9ybWF0aW9uIHByb3Zp
+ZGVkIGhlcmVpbiBhcmUgcGVuZGluZyBhcHByb3ZhbCBieSBIYXJ2YXJkLVdlc3RsYWtlIFNjaG9vbC4</string>
 							<array class="NSMutableArray" key="NSAttributes">
 								<dictionary>
 									<object class="NSFont" key="NSFont">
@@ -95,7 +94,7 @@ b3JlZCwgb3IgYXBwcm92ZWQgYnkgSGFydmFyZC1XZXN0bGFrZSBTY2hvb2wuA</string>
 								</dictionary>
 							</array>
 							<object class="NSMutableData" key="NSAttributeInfo">
-								<bytes key="NS.bytes">CgABAbYFAg</bytes>
+								<bytes key="NS.bytes">CgABAcQFAg</bytes>
 							</object>
 						</object>
 						<object class="IBUITextInputTraits" key="IBUITextInputTraits">
@@ -1573,35 +1572,6 @@ b3JlZCwgb3IgYXBwcm92ZWQgYnkgSGFydmFyZC1XZXN0bGFrZSBTY2hvb2wuA</string>
 				<object class="IBPartialClassDescription">
 					<string key="className">IHWPreferencesViewController</string>
 					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="closeButtonClicked:">id</string>
-						<string key="middleSchoolClicked:">id</string>
-						<string key="redownloadButtonClicked:">id</string>
-						<string key="setYearButtonClicked:">id</string>
-						<string key="upperSchoolClicked:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="closeButtonClicked:">
-							<string key="name">closeButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="middleSchoolClicked:">
-							<string key="name">middleSchoolClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="redownloadButtonClicked:">
-							<string key="name">redownloadButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="setYearButtonClicked:">
-							<string key="name">setYearButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="upperSchoolClicked:">
-							<string key="name">upperSchoolClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="yearField">UITextField</string>
 						<string key="yearHintField">UILabel</string>

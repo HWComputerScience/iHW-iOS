@@ -56,9 +56,9 @@
         [self addSubview:self.notesView];
         
         for (IHWNote *note in self.period.notes) {
-            [self addNoteView:note animated:NO];
+            [self addNoteView:note animated:NO willAddMore:YES];
         }
-        [self addNoteView:nil animated:NO];
+        [self addNoteView:nil animated:NO willAddMore:NO];
     }
     return self;
 }
@@ -81,9 +81,9 @@
         [self addSubview:self.notesView];
         
         for (IHWNote *note in self.period.notes) {
-            [self addNoteView:note animated:NO];
+            [self addNoteView:note animated:NO willAddMore:YES];
         }
-        [self addNoteView:nil animated:NO];
+        [self addNoteView:nil animated:NO willAddMore:NO];
     }
     return self;
 }
@@ -143,23 +143,32 @@
     }
 }
 
-- (void)addNoteView:(IHWNote *)note animated:(BOOL)animated {
+- (void)addNoteView:(IHWNote *)note animated:(BOOL)animated willAddMore:(BOOL)willAddMore {
     int noteIndex = self.notesView.subviews.count;
     IHWNoteView *view = [[IHWNoteView alloc] initWithNote:note index:noteIndex cellView:self];
     [self.notesView addSubview:view];
+    //[self.notesView addConstraint:[NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[self.notesView.subviews objectAtIndex:self.notesView.subviews.count-1] attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
+    //[self.notesView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[view]|" options:NSLayoutFormatAlignAllLeft metrics:nil views:@{@"view": view}]];
     view.translatesAutoresizingMaskIntoConstraints = NO;
-    [self reLayoutViews:animated];
+    if (!willAddMore) [self reLayoutViews:animated];
+    
+    //[self invalidateIntrinsicContentSize];
+    //if (self.dayViewController != nil) [self.dayViewController updateRowHeightAtIndex:self.index toHeight:[self neededHeight]];
 }
 
 - (void)noteViewChangedAtIndex:(int)index {
     IHWNoteView *noteView = [self.notesView.subviews objectAtIndex:index];
     [self.period.notes setObject:noteView.note atIndexedSubscript:index];
     if (![noteView.textField.text isEqualToString:@""] && index == self.notesView.subviews.count-1) {
-        [self addNoteView:nil animated:YES];
+        [self addNoteView:nil animated:YES willAddMore:NO];
     } else if ([noteView.textField.text isEqualToString:@""] && index != self.notesView.subviews.count-1) {
         if (self.period.notes.count > index) [self.period.notes removeObjectAtIndex:index];
         [noteView removeFromSuperview];
         [self reLayoutViews:YES];
+        
+        //[self invalidateIntrinsicContentSize];
+        //if (self.dayViewController != nil) [self.dayViewController updateRowHeightAtIndex:self.index toHeight:[self neededHeight]];
+        
         IHWNoteView *nextFocus = [self.notesView.subviews objectAtIndex:index];
         [nextFocus.textField becomeFirstResponder];
         nextFocus.textField.selectedTextRange = [nextFocus.textField textRangeFromPosition:nextFocus.textField.beginningOfDocument toPosition:nextFocus.textField.beginningOfDocument];
@@ -168,13 +177,20 @@
 }
 
 - (void)reLayoutViews:(BOOL)animated {
+    NSLog(@"reLayoutViews: %@:%d", self.period.date, self.period.index);
+    NSLog(@"    Main thread: %d", [NSThread isMainThread]);
     [self.notesView removeConstraints:self.notesView.constraints];
     int yPos = 0;
     for (int index=0; index < self.notesView.subviews.count; index++) {
         IHWNoteView *view = [self.notesView.subviews objectAtIndex:index];
         view.index = index;
+        //view.frame = CGRectMake(0, yPos, self.notesView.bounds.size.width, view.neededHeight);
         [self.notesView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[view]|" options:NSLayoutFormatAlignAllLeft metrics:nil views:@{@"view": view}]];
-        [self.notesView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-yPos-[view]" options:NSLayoutFormatAlignAllLeft metrics:@{@"yPos": [NSNumber numberWithInt:yPos]} views:@{@"view": view}]];
+        if (view.yPosConstraint != nil) {
+            [self.notesView removeConstraint:view.yPosConstraint];
+        }
+        view.yPosConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.notesView attribute:NSLayoutAttributeTop multiplier:0 constant:yPos];
+        [self.notesView addConstraint:view.yPosConstraint];
         if (view.heightConstraint == nil) {
             view.heightConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:view.neededHeight];
             [self.notesView addConstraint:view.heightConstraint];
@@ -184,9 +200,9 @@
     }
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, [self neededHeight]);
     if (animated) [UIView animateWithDuration:0.3 animations:^{
-        [self layoutIfNeeded];
+        [self.notesView layoutIfNeeded];
     }];
-    else [self layoutIfNeeded];
+    else [self.notesView layoutIfNeeded];
     if (self.dayViewController != nil) [self.dayViewController updateRowHeightAtIndex:self.index toHeight:[self neededHeight]];
 }
 
@@ -204,8 +220,8 @@
     return MAX(72, noteHeight+3+19+2);
 }
 
-+ (BOOL)requiresConstraintBasedLayout {
-    return YES;
-}
+/*- (CGSize)intrinsicContentSize {
+    return CGSizeMake(UIViewNoIntrinsicMetric, self.neededHeight);
+}*/
 
 @end

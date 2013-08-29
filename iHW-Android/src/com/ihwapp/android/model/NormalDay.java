@@ -19,8 +19,7 @@ public class NormalDay extends Day {
 	 * Used to initialize a normal day that has an activities period or assembly.
 	 */
 	public NormalDay(Date d, 
-					 Curriculum c,
-					 int dayNum, 
+					 int dayNum,
 					 int periodsBeforeBreak, 
 					 int periodsAfterBreak, 
 					 int breakLength, 
@@ -29,6 +28,7 @@ public class NormalDay extends Day {
 		super(d);
 		this.periodsBeforeBreak = periodsBeforeBreak;
 		this.periodsAfterBreak = periodsAfterBreak;
+        this.numPeriods = periodsBeforeBreak+periodsAfterBreak;
 		this.breakLength=breakLength;
 		this.breakName=breakName;
 		this.dayNumber=dayNum;
@@ -42,16 +42,17 @@ public class NormalDay extends Day {
 	 * Used to initialize a normal day that does not have an activities period or assembly.
 	 */
 	public NormalDay(Date d, 
-					Curriculum c, 
 					int dayNum,
 					int numPeriods, 
 					int pLength) {
 		super(d);
 		hasBreak = false;
 		periodLength = pLength;
+        this.numPeriods = numPeriods;
+        this.periodsBeforeBreak = numPeriods;
+        this.periodsAfterBreak = 0;
 		dayNumber = dayNum;
 		periods = new ArrayList<Period>();
-		//if (c!= null) fillPeriods(c);
 	}
 	
 	public NormalDay(JSONObject obj) {
@@ -83,7 +84,7 @@ public class NormalDay extends Day {
 				periodsBeforeBreak = numPeriods;
 				periodsAfterBreak = 0;
 			}
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		periods = new ArrayList<Period>();
 	}
 	
@@ -98,16 +99,16 @@ public class NormalDay extends Day {
 			Course course = courseList[num];
 			int duration = periodLength;
 			if (periodLengths != null && periodLengths[num] >= 0) duration = periodLengths[num];
-			if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(0, duration), num, index));
-			else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, duration), num, index));
-			nextStart = nextStart.timeByAdding(0, duration+c.getPassingPeriodLength());
+			if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(duration), num, index));
+			else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(duration), num, index));
+			nextStart = nextStart.timeByAdding(duration+c.getPassingPeriodLength());
 			index++;
 		}
 		
 		if (hasBreak) {
 			//add break
-			periods.add(new Period(breakName, date, nextStart, nextStart.timeByAdding(0, breakLength), 0, index));
-			nextStart = nextStart.timeByAdding(0, breakLength+c.getPassingPeriodLength());
+			periods.add(new Period(breakName, date, nextStart, nextStart.timeByAdding(breakLength), 0, index));
+			nextStart = nextStart.timeByAdding(breakLength+c.getPassingPeriodLength());
 			index++;
 		}
 		
@@ -116,9 +117,9 @@ public class NormalDay extends Day {
 			Course course = courseList[num];
 			int duration = periodLength;
 			if (periodLengths != null && periodLengths[num] >= 0) duration = periodLengths[num];
-			if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(0, duration), num, index));
-			else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(0, duration), num, index));
-			nextStart = nextStart.timeByAdding(0, duration+c.getPassingPeriodLength());
+			if (course==null) periods.add(new Period("X", date, nextStart, nextStart.timeByAdding(duration), num, index));
+			else periods.add(new Period(course.getName(), date, nextStart, nextStart.timeByAdding(duration), num, index));
+			nextStart = nextStart.timeByAdding(duration+c.getPassingPeriodLength());
 			index++;
 		}
 	}
@@ -137,7 +138,7 @@ public class NormalDay extends Day {
 				obj.put("breakLength", breakLength);
 				obj.put("breakName", breakName);
 			}
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		return obj;
 	}
 	

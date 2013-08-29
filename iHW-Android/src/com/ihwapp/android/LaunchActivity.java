@@ -21,7 +21,7 @@ public class LaunchActivity extends Activity {
 			return;
 		}
 		shouldFinish = true;
-		Intent i = null;
+		Intent i;
 		if (Curriculum.isFirstRun()) {
 			i = new Intent(this, FirstRunActivity.class);
 		} else {

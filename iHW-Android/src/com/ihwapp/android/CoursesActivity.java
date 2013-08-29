@@ -90,9 +90,9 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = this.getLayoutInflater().inflate(R.layout.list_item_course, null);
-		}
-		((TextView)convertView.findViewById(R.id.text_course_name)).setText(courseNames[position]);
-		convertView.setBackgroundResource(R.drawable.list_item_selector);
+            ((TextView)convertView.findViewById(R.id.text_course_name)).setText(courseNames[position]);
+        }
+        convertView.setBackgroundResource(R.drawable.list_item_selector);
 		return convertView;
 	}
 
@@ -137,7 +137,7 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
 			int i=0;
-			View child = getListView().getChildAt(i);
+			View child = getListView().getChildAt(0);
 			while (child != null) {
 				child.setBackgroundColor(Color.TRANSPARENT);
 				i++;
@@ -160,9 +160,9 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 			} else if (item.getItemId() == R.id.action_delete) {
 				Curriculum c = Curriculum.getCurrentCurriculum();
 				long[] checked = getListView().getCheckedItemIds();
-				for (int i=0; i<checked.length; i++) {
-					c.removeCourse(c.getCourse(courseNames[(int)checked[i]]));
-				}
+                for (long id : checked) {
+                    c.removeCourse(c.getCourse(courseNames[(int)id]));
+                }
 				Curriculum.getCurrentCurriculum().saveCourses();
 				reloadData();
 				mode.finish();

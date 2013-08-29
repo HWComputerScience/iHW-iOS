@@ -17,7 +17,8 @@
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UIButton *optionsButton;
 @property (nonatomic, strong) NSLayoutConstraint *heightConstraint;
-@property (nonatomic, strong) NSArray *constraints;
+@property (nonatomic, strong) NSLayoutConstraint *yPosConstraint;
+@property (nonatomic, strong) NSArray *innerConstraints;
 @property (nonatomic, strong) IHWNote *note;
 @property (nonatomic, weak) IHWPeriodCellView *delegate;
 

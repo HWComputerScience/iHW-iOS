@@ -6,7 +6,7 @@ import android.support.v4.view.PagerTitleStrip;
 import android.util.AttributeSet;
 
 public class CustomFontPagerTitleStrip extends PagerTitleStrip {
-	Typeface typeface;
+	private Typeface typeface;
 	
 	public CustomFontPagerTitleStrip(Context context) {
 		super(context);

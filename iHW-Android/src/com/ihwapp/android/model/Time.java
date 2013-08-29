@@ -31,7 +31,7 @@ public class Time implements Parcelable {
 	public Time(int hour, int minute, boolean pm) {
 		if (hour<1 || hour>12 || minute<0 || minute>59) throw new IllegalArgumentException();
 		if (pm && hour != 12) this.hour = hour+12;
-		else if (!pm && hour == 12) this.hour = hour-12;
+		else if (!pm && hour == 12) this.hour = 0;
 		else this.hour = hour;
 		this.minute = minute;
 		this.second = 0;
@@ -114,10 +114,10 @@ public class Time implements Parcelable {
 	 * specified number of hours and minutes to this time.
 	 * Leaves this time unmodified.
 	 */
-	public Time timeByAdding(int hours, int minutes) {
-		int newHours = this.hour+hours;
+	public Time timeByAdding(int minutes) {
+		int newHours = this.hour;
 		int newMinutes = this.minute+minutes;
-		if (minutes>=0 && hours>=0) {
+		if (minutes>=0) {
 			while (newMinutes >= 60) {
 				newHours++;
 				newMinutes-=60;
@@ -126,7 +126,7 @@ public class Time implements Parcelable {
 			Time newTime = new Time(newHours, newMinutes);
 			newTime.second = this.second;
 			return newTime;
-		} else if (minutes<=0 && hours<=0) {
+		} else if (minutes<=0) {
 			while (newMinutes < 0) {
 				newHours--;
 				newMinutes+=60;
@@ -196,7 +196,7 @@ public class Time implements Parcelable {
 		}
 	};
 	
-	public Time(Parcel in) {
+	private Time(Parcel in) {
 		this(in.readInt(), in.readInt());
 		this.second = in.readInt();
 	}

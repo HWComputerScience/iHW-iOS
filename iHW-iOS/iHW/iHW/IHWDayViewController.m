@@ -20,11 +20,12 @@
     self = [super initWithNibName:@"IHWDayViewController" bundle:nil];
     if (self) {
         self.date = date;
-        //NSLog(@"init: %@", self.date.description);
+        NSLog(@"init: %@", self.date.description);
         self.day = [[IHWCurriculum currentCurriculum] dayWithDate:self.date];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:@"UIKeyboardWillShowNotification" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];
         self.scrollToIndex = -1;
+        self.cells = [NSMutableArray array];
     }
     return self;
 }
@@ -32,7 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //NSLog(@"viewDidLoad : %@", self.date.description);
+    NSLog(@"viewDidLoad : %@", self.date.description);
     CGRect frame = CGRectMake(0, 0, 320, 48);
     UIView *background = [[UIView alloc] initWithFrame:frame];
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
@@ -50,23 +51,6 @@
     [self.view insertSubview:background aboveSubview:self.periodsTableView];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[background]|" options:NSLayoutFormatAlignAllLeft metrics:nil views:@{@"background":background}]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[background(==height)]" options:NSLayoutFormatAlignAllTop metrics:@{@"height": [NSNumber numberWithFloat:frame.size.height]} views:@{@"background":background}]];
-    [self loadTableView:NO];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([[change objectForKey:NSKeyValueChangeNewKey] intValue] == 0)
-        [self loadTableView:YES];
-}
-
-- (void)loadTableView:(BOOL)animated {
-    //NSLog(@"Loading table view");
-    if (animated) self.periodsTableView.alpha = 0;
-    self.cells = [NSMutableArray array];
-    for (int index=0; index<self.day.periods.count; index++) {
-        UITableViewCell *cell = [self createNewCellForIndex:index];
-        [self.cells addObject:cell];
-    }
-    [self.cells addObject:[self createNewCellForIndex:-1]];
     
     self.weekdayLabel.text = [self.date dayOfWeek:NO];
     self.titleLabel.text = self.day.title;
@@ -75,14 +59,30 @@
     if ([self.day isKindOfClass:[IHWHoliday class]]) {
         self.periodsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
-    if (animated) [UIView animateWithDuration:0.25 animations:^{
-        self.periodsTableView.alpha = 1;
-    }];
+    
+    [self loadTableViewCells];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    //NSLog(@"viewWillAppear");
+    NSLog(@"ViewWillAppear");
+    [self.view setNeedsLayout];
     [self.view setNeedsDisplay];
+}
+
+/*- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([[change objectForKey:NSKeyValueChangeNewKey] intValue] == 0)
+        [self loadTableView:YES];
+}*/
+
+- (void)loadTableViewCells {
+    //NSLog(@"Loading table view");
+    NSMutableArray *cells = [NSMutableArray array];
+    for (int index=0; index<self.day.periods.count; index++) {
+        UITableViewCell *cell = [self createNewCellForIndex:index];
+        [cells addObject:cell];
+    }
+    [cells addObject:[self createNewCellForIndex:-1]];
+    [self.cells setArray:cells];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

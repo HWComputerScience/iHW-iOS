@@ -151,6 +151,7 @@ public final class R {
         public static final int action_goto_date=0x7f06001b;
         public static final int action_goto_today=0x7f06001e;
         public static final int action_options=0x7f060024;
+        public static final int action_refresh=0x7f06002f;
         public static final int action_settings=0x7f060026;
         public static final int app_name=0x7f060000;
         public static final int button_add_manually=0x7f060006;

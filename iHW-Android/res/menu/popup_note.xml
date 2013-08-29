@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/option_is_todo" android:checkable="false" android:showAsAction="always" android:title="@string/option_show_checkbox"></item>
-    <item android:id="@+id/option_is_important" android:showAsAction="always" android:title="@string/option_mark_important"></item>
+    <item android:id="@+id/option_is_todo" android:checkable="false" android:showAsAction="ifRoom" android:title="@string/option_show_checkbox"/>
+    <item android:id="@+id/option_is_important" android:showAsAction="always" android:title="@string/option_mark_important"/>
     
 
 </menu>

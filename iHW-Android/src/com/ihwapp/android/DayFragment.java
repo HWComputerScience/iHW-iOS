@@ -48,7 +48,8 @@ public class DayFragment extends Fragment {
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d("iHW-lc", "DayFragment onCreateView: " + date);
 		final View v = inflater.inflate(R.layout.fragment_day, null);
-		TextView titleText = ((TextView)v.findViewById(R.id.date_view));
+        assert v != null;
+        TextView titleText = ((TextView)v.findViewById(R.id.date_view));
 		Log.d("iHW", "Day: " + day);
 		titleText.setText(day.getTitle());
 		titleText.setTypeface(Typeface.SERIF, Typeface.BOLD);
@@ -57,17 +58,16 @@ public class DayFragment extends Fragment {
 		
 		LinearLayout pdsLayout = ((LinearLayout)v.findViewById(R.id.layout_periods));
 		periodViews = new ArrayList<PeriodView>(pds.size());
-		
-		for (int i=0; i<pds.size(); i++) {
-			final Period p = pds.get(i);
-			final PeriodView periodView = new PeriodView(getActivity());
-			DayFragment.this.addOnFragmentVisibilityChangedListener(periodView);
-			periodView.setPeriod(p);
-			periodViews.add(periodView);
-			
-			pdsLayout.addView(periodView);
-			pdsLayout.addView(new Separator(getActivity()));
-		}
+
+        for (final Period p : pds) {
+            final PeriodView periodView = new PeriodView(getActivity());
+            DayFragment.this.addOnFragmentVisibilityChangedListener(periodView);
+            periodView.setPeriod(p);
+            periodViews.add(periodView);
+
+            pdsLayout.addView(periodView);
+            pdsLayout.addView(new Separator(getActivity()));
+        }
 				
 		PeriodView moreNotesView = new PeriodView(getActivity());
 		DayFragment.this.addOnFragmentVisibilityChangedListener(moreNotesView);
@@ -127,13 +127,13 @@ public class DayFragment extends Fragment {
 		Log.d("iHW-lc", "DayFragment onSaveInstanceState: " + date);
 		//outState.putString("dayJSON", day.saveDay().toString());
 		outState.putString("date", date.toString());
-		outState.putInt("scrollPos", ((ScrollView)getView().findViewById(R.id.scroll_periods)).getScrollY());
+		outState.putInt("scrollPos", getView().findViewById(R.id.scroll_periods).getScrollY());
 	}
 	
 	public void onPause() {
 		super.onPause();
 		Log.d("iHW-lc", "DayFragment (" + this + ") onPause: " + date);
-		initScrollPos = ((ScrollView)getView().findViewById(R.id.scroll_periods)).getScrollY();
+		initScrollPos = getView().findViewById(R.id.scroll_periods).getScrollY();
 		countdownTimer.cancel();
 		countdownTimer = null;
 	}
@@ -232,7 +232,7 @@ public class DayFragment extends Fragment {
 	}
 	
 	public void addOnFragmentVisibilityChangedListener(OnFragmentVisibilityChangedListener l) { ofvcls.add(l); }
-	public void removeOnFragmentVisibilityChangedListener(OnFragmentVisibilityChangedListener l) { ofvcls.remove(l); }
+	//public void removeOnFragmentVisibilityChangedListener(OnFragmentVisibilityChangedListener l) { ofvcls.remove(l); }
 	
 	public interface OnFragmentVisibilityChangedListener {
 		public void onFragmentVisibilityChanged(Fragment f, boolean isVisible);

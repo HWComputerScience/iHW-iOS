@@ -64,7 +64,7 @@
         if (self.currentDate == nil) self.currentDate = [IHWDate today];
         [self.loadedViewControllers setObject:[[IHWDayViewController alloc] initWithDate:self.currentDate] forKey:self.currentDate];
         [self.pageViewController setViewControllers:[NSArray arrayWithObject:[self.loadedViewControllers objectForKey:self.currentDate]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-        [self cacheViewControllersAroundDate:self.currentDate];
+        if (self.queue.operationCount == 0) [self.queue addOperation:[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(cacheViewControllersAroundDate:) object:self.currentDate]];
     }
     [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
@@ -83,7 +83,7 @@
     }
     [self.loadedViewControllers setObject:[[IHWDayViewController alloc] initWithDate:self.currentDate] forKey:self.currentDate];
     [self.pageViewController setViewControllers:[NSArray arrayWithObject:[self.loadedViewControllers objectForKey:self.currentDate]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-    [self cacheViewControllersAroundDate:self.currentDate];
+    if (self.queue.operationCount == 0) [self.queue addOperation:[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(cacheViewControllersAroundDate:) object:self.currentDate]];
 }
 
 - (void)curriculumFailedToLoad:(IHWCurriculum *)curriculum {
@@ -111,29 +111,23 @@
 - (void)cacheViewControllersAroundDate:(IHWDate *)aroundDate {
     if (![[IHWCurriculum currentCurriculum] isLoaded]) return;
     NSMutableDictionary *VCs = [NSMutableDictionary dictionary];
-    [self.queue addOperationWithBlock:^{
-        [self.queue setSuspended:YES];
-        for (IHWDate *date = [aroundDate dateByAddingDays:-2]; [date compare:[aroundDate dateByAddingDays:2]] != NSOrderedDescending; date = [date dateByAddingDays:1]) {
-            if (![[IHWCurriculum currentCurriculum] dateInBounds:date]) continue;
-            if ([self.loadedViewControllers objectForKey:date] == nil && [self.operations objectForKey:date] == nil) {
-                NSOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-                    IHWDayViewController *vc = [[IHWDayViewController alloc] initWithDate:date];
-                    [self performSelectorOnMainThread:@selector(addLoadedDayViewController:) withObject:vc waitUntilDone:YES];
-                }];
-                [self.operations setObject:operation forKey:date];
-                [self.queue addOperation:operation];
-            } else if ([self.loadedViewControllers objectForKey:date] != nil) {
-                [VCs setObject:[self.loadedViewControllers objectForKey:date] forKey:date];
-            }
+    NSDictionary *oldVCs;
+    @synchronized(self) {
+        oldVCs = [self.loadedViewControllers copy];
+    }
+    for (IHWDate *date = [aroundDate dateByAddingDays:-2]; [date compare:[aroundDate dateByAddingDays:2]] != NSOrderedDescending; date = [date dateByAddingDays:1]) {
+        if (![[IHWCurriculum currentCurriculum] dateInBounds:date]) continue;
+        if ([oldVCs objectForKey:date] == nil) {
+            IHWDayViewController *vc = [[IHWDayViewController alloc] initWithDate:date];
+            [VCs setObject:vc forKey:date];
+        } else {
+            [VCs setObject:[oldVCs objectForKey:date] forKey:date];
         }
+    }
+    @synchronized(self) {
         [self.loadedViewControllers setDictionary:VCs];
-        [self.queue setSuspended:NO];
-    }];
-    //NSLog(@"Number of loaded VCs: %d", self.loadedViewControllers.count);
-}
-
-- (void)addLoadedDayViewController:(IHWDayViewController *)vc {
-    [self.loadedViewControllers setObject:vc forKey:vc.date];
+        NSLog(@"Number of loaded VCs: %d", self.loadedViewControllers.count);
+    }
 }
 
 - (void)showCourses {
@@ -156,26 +150,41 @@
     IHWDate *d = nil;
     if ([viewController isMemberOfClass:[IHWDayViewController class]]) d = [((IHWDayViewController *)viewController).date dateByAddingDays:-1];
     else d = [IHWDate today];
-    if ([self.loadedViewControllers objectForKey:d] == nil && [[IHWCurriculum currentCurriculum] dateInBounds:d]) {
-        return [[IHWDayViewController alloc] initWithDate:d];
-    } else return [self.loadedViewControllers objectForKey:d];
+    @synchronized(self) {
+        if ([self.loadedViewControllers objectForKey:d] == nil && [[IHWCurriculum currentCurriculum] dateInBounds:d]) {
+            return [[IHWDayViewController alloc] initWithDate:d];
+        } else {
+            return [self.loadedViewControllers objectForKey:d];
+        }
+    }
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
-    if (![[IHWCurriculum currentCurriculum] isLoaded]) return nil;
+    if (![[IHWCurriculum currentCurriculum] isLoaded]) {
+        NSLog(@"VC: nil");
+        return nil;
+    }
     IHWDate *d = nil;
     if ([viewController isMemberOfClass:[IHWDayViewController class]]) d = [((IHWDayViewController *)viewController).date dateByAddingDays:1];
     else d = [IHWDate today];
-    if ([self.loadedViewControllers objectForKey:d] == nil && [[IHWCurriculum currentCurriculum] dateInBounds:d]) {
-        return [[IHWDayViewController alloc] initWithDate:d];
-    } else return [self.loadedViewControllers objectForKey:d];
+    @synchronized(self) {
+        if ([self.loadedViewControllers objectForKey:d] == nil && [[IHWCurriculum currentCurriculum] dateInBounds:d]) {
+            UIViewController *result = [[IHWDayViewController alloc] initWithDate:d];
+            NSLog(@"VC (just made): %@", result);
+            return result;
+        } else {
+            UIViewController *result = [self.loadedViewControllers objectForKey:d];
+            NSLog(@"VC (from cache): %@", result);
+            return result;
+        }
+    }
 }
 
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
     if ([[pageViewController.viewControllers objectAtIndex:0] isKindOfClass:[IHWDayViewController class]]) {
         self.currentDate = ((IHWDayViewController *)[pageViewController.viewControllers objectAtIndex:0]).date;
-        [self cacheViewControllersAroundDate:self.currentDate];
-        //NSLog(@"Finished displaying date:%@", self.currentDate.description);
+        if (self.queue.operationCount == 0) [self.queue addOperation:[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(cacheViewControllersAroundDate:) object:self.currentDate]];
+        NSLog(@"Finished displaying date:%@", self.currentDate.description);
     }
 }
 
@@ -214,9 +223,11 @@
     else if ([self.currentDate daysUntilDate:date] < 0) dir = UIPageViewControllerNavigationDirectionReverse;
     else return;
     IHWDayViewController *toDisplay;
-    if ([self.loadedViewControllers objectForKey:date] == nil && [[IHWCurriculum currentCurriculum] dateInBounds:date]) {
-        toDisplay = [[IHWDayViewController alloc] initWithDate:date];
-    } else toDisplay = [self.loadedViewControllers objectForKey:date];
+    @synchronized(self) {
+        if ([self.loadedViewControllers objectForKey:date] == nil && [[IHWCurriculum currentCurriculum] dateInBounds:date]) {
+            toDisplay = [[IHWDayViewController alloc] initWithDate:date];
+        } else toDisplay = [self.loadedViewControllers objectForKey:date];
+    }
     if (toDisplay == nil) return;
     __block IHWScheduleViewController *blocksafeSelf = self;
     [self.pageViewController setViewControllers:[NSArray arrayWithObject:toDisplay] direction:dir animated:YES completion:^(BOOL finished) {

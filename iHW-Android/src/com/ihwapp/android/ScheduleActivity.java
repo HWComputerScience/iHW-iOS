@@ -19,8 +19,7 @@ import android.widget.*;
 
 public class ScheduleActivity extends FragmentActivity implements Curriculum.ModelLoadingListener{
 	private ViewPager pager;
-	private CustomFontPagerTitleStrip pts;
-	private DayPagerAdapter adapter;
+    private DayPagerAdapter adapter;
 	private Date currentDate;
 	private int[] newDate;
 	private int lastIndex;
@@ -39,7 +38,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		if (pager == null) pager = ((ViewPager)this.findViewById(R.id.scheduleViewPager));
 		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 		if (pager.findViewById("pager_title_strip".hashCode()) == null) {
-			pts = new CustomFontPagerTitleStrip(this);
+            CustomFontPagerTitleStrip pts = new CustomFontPagerTitleStrip(this);
 			pts.setId("pager_title_strip".hashCode());
 			pts.setTypeface(Typeface.SERIF);
 			pts.setBackgroundDrawable(getResources().getDrawable(R.drawable.dark_tan));
@@ -188,15 +187,15 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		super.onDestroy();
 	}
 	
-	public void onBackPressed() {
+	/*public void onBackPressed() {
 		super.onBackPressed();
 		/*InputMethodManager ims = ((InputMethodManager)this.getSystemService(INPUT_METHOD_SERVICE));
-		Log.d("iHW", ims.isAcceptingText() + " " + ims.isActive());*/
-	}
+		Log.d("iHW", ims.isAcceptingText() + " " + ims.isActive());
+	}*/
 	
 	private class DayPagerAdapter extends FragmentStatePagerAdapter {
 		public boolean enabled = false;
-		private int count = new Date(7,1,Curriculum.getCurrentYear())
+		private final int count = new Date(7,1,Curriculum.getCurrentYear())
 		.getDaysUntil(new Date(7,1,Curriculum.getCurrentYear()+1));
 		
 		public DayPagerAdapter(FragmentManager fm) {

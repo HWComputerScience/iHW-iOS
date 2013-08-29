@@ -2,6 +2,7 @@ package com.ihwapp.android.model;
 
 import org.json.*;
 
+@SuppressWarnings("ALL")
 public class Course {
 	private String name;
 	private int period;
@@ -25,7 +26,7 @@ public class Course {
 			for (int i=0; i<meetingsArr.length(); i++) {
 				meetings[i]=meetingsArr.getInt(i);
 			}
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 	}
 	
 	public JSONObject saveCourse() {

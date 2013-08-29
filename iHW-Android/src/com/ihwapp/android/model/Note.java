@@ -24,7 +24,7 @@ public class Note implements Parcelable {
 			this.isToDo = obj.getBoolean("isToDo");
 			this.checked = obj.getBoolean("isChecked");
 			this.isImportant = obj.getBoolean("isImportant");
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 	}
 	
 	public JSONObject saveNote() {
@@ -34,20 +34,19 @@ public class Note implements Parcelable {
 			obj.put("isToDo", isToDo);
 			obj.put("isChecked", checked);
 			obj.put("isImportant", isImportant);
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		return obj;
 	}
 	
 	public boolean equals(Object other) {
-		if (other instanceof Note && this.text.equals(((Note)other).text)) return true;
-		return false;
+		return (other instanceof Note && this.text.equals(((Note)other).text));
 	}
 	
 	public String toString() {
 		return text;
 	}
 	
-	public void setText(String newText) { this.text = newText; }
+	//public void setText(String newText) { this.text = newText; }
 	public String getText() { return text; }
 	public boolean isToDo() { return isToDo; }
 	public boolean isChecked() { return checked; }
@@ -76,7 +75,7 @@ public class Note implements Parcelable {
 		}
 	};
 	
-	public Note(Parcel in) {
+	private Note(Parcel in) {
 		this(in.readString(), (in.readInt()==1), (in.readInt()==1), (in.readInt()==1));
 	}
 	

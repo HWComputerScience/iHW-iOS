@@ -20,8 +20,7 @@ public class EditCourseActivity extends Activity {
 	private EditText nameBox;
 	private EditText periodBox;
 	private Spinner termSpinner;
-	private TableLayout meetingsLayout;
-	private CheckBox[][] meetingBoxes;
+    private CheckBox[][] meetingBoxes;
 	private TextView[] periodHeaders;
 	private String existingCourseName = null;
 	
@@ -51,7 +50,7 @@ public class EditCourseActivity extends Activity {
 		cbParams.rightMargin = -4;
 		
 		//setup class meetings UI
-		meetingsLayout = (TableLayout)this.findViewById(R.id.courseMeetingsLayout);
+        TableLayout meetingsLayout = (TableLayout) this.findViewById(R.id.courseMeetingsLayout);
 		meetingsLayout.setPadding(10, 0, 10, 0);
 		
 		//setup header rows of meetings UI
@@ -91,7 +90,7 @@ public class EditCourseActivity extends Activity {
 			row.addView(periodHeader);
 			//setup checkboxes
 			for (int c=0; c<numDays; c++) {
-				if (r==0) meetingsLayout.setColumnStretchable(c+1, true);
+				if (r==0) meetingsLayout.setColumnStretchable(c + 1, true);
 				CheckBox cb = new CheckBox(this);
 				int cbid = Resources.getSystem().getIdentifier("btn_check_holo_light", "drawable", "android");
 				cb.setButtonDrawable(cbid);
@@ -169,7 +168,7 @@ public class EditCourseActivity extends Activity {
 	}
 	
 	private static String getOrdinal(int num) {
-		String suffix = "";
+		String suffix;
 		if (num%10==1) suffix="st";
 		else if (num%10==2) suffix="nd";
 		else if (num%10==3) suffix="rd";

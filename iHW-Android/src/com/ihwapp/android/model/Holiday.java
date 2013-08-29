@@ -19,7 +19,7 @@ public class Holiday extends Day {
 		this.periods = new ArrayList<Period>(0);
 		try {
 			name = obj.getString("name");
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 	}
 	
 	public JSONObject saveDay() {
@@ -27,7 +27,7 @@ public class Holiday extends Day {
 		try {
 			obj.put("name", name);
 			obj.put("type", "holiday");
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		return obj;
 	}
 	

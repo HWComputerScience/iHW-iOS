@@ -19,7 +19,7 @@ public class TestDay extends Day {
 			for (int i=0; i<tests.length(); i++) {
 				periods.add(new Period(tests.getJSONObject(i), i));
 			}
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 	}
 	
 	public JSONObject saveDay() {
@@ -31,7 +31,7 @@ public class TestDay extends Day {
 				tests.put(p.savePeriod());
 			}
 			obj.put("tests", tests);
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		return obj;
 	}
 	

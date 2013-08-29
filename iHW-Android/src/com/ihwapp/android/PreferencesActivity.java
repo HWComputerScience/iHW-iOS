@@ -53,7 +53,7 @@ public class PreferencesActivity extends Activity {
 				int year = Curriculum.getCurrentYear();
 				try {
 					year = Integer.parseInt(((EditText)findViewById(R.id.text_year)).getText().toString());
-				} catch (NumberFormatException e) {}
+				} catch (NumberFormatException ignored) {}
 				Curriculum.setCurrentYear(year);
 				Intent i = new Intent(PreferencesActivity.this, ScheduleActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

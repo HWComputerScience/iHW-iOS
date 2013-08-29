@@ -38,7 +38,7 @@ public class Curriculum {
 	 * Returns the curriculum specified by campus and year. If that curriculum is not ready yet,
 	 * attempts to load it immediately. If it cannot be loaded immediately, returns null.
 	 */
-	public static Curriculum getCurriculum(int campus, int year) {
+	private static Curriculum getCurriculum(int campus, int year) {
 		if (currentCurriculum == null || currentCurriculum.getCampus() != campus || currentCurriculum.getYear() != year)
 			currentCurriculum = new Curriculum(campus, year, new Date());
 		return currentCurriculum;
@@ -68,34 +68,33 @@ public class Curriculum {
 			String campusChar = getCampusChar(getCurrentCampus());
 			SharedPreferences prefs = ctx.getSharedPreferences(getCurrentYear() + campusChar, Context.MODE_PRIVATE);
 			String yearJSON = prefs.getString("yearJSON", "");
-			if (yearJSON.equals("")) return true;
-			return new JSONObject(yearJSON).getJSONArray("courses").length() == 0;
-		} catch (JSONException e) {}
+            return yearJSON.equals("") || new JSONObject(yearJSON).getJSONArray("courses").length() == 0;
+        } catch (JSONException ignored) {}
 		return false;
 	}
 	
-	public static String getCampusChar(int campus) {
+	private static String getCampusChar(int campus) {
 		String campusChar = null;
 		if (campus==Constants.CAMPUS_MIDDLE) campusChar="m";
 		else if (campus==Constants.CAMPUS_UPPER) campusChar = "u";
 		return campusChar;
 	}
 	
-	public static int getWeekNumber(int year, Date d) {
+	private static int getWeekNumber(int year, Date d) {
 		Date firstDate = new Date(7,1,year).dateOfNextSunday();
 		if (d.compareTo(firstDate) < 0 && d.compareTo(new Date(7,1,year)) >= 0) return 0;
 		else if (d.compareTo(new Date(7,1,year+1)) < 0) return (firstDate.getDaysUntil(d)/7)+1;
 		else return -1;
 	}
 	
-	public static Date getWeekStart(int year, Date d) {
+	private static Date getWeekStart(int year, Date d) {
 		Date weekStart = d.dateOfPreviousSunday();
 		Date july1 = new Date(7,1,year);
 		if (weekStart.compareTo(july1) < 0) weekStart = july1;
 		return weekStart;
 	}
 	
-	public static String generateBlankYearJSON(int campus, int year) {
+	private static String generateBlankYearJSON(int campus, int year) {
 		try {
 			JSONObject obj = new JSONObject();
 			obj.put("year", year);
@@ -105,7 +104,7 @@ public class Curriculum {
 		} catch (JSONException e) {return null;}
 	}
 	
-	public static String generateBlankWeekJSON(Date startingDate) {
+	private static String generateBlankWeekJSON(Date startingDate) {
 		try {
 			JSONObject obj = new JSONObject();
 			obj.put("startingDate", startingDate.toString());
@@ -142,7 +141,7 @@ public class Curriculum {
 	
 	/*******************************BEGIN INSTANCE STUFF********************************/
 	
-	private int campus;
+	private final int campus;
 	private HashSet<Course> courses;
 	private JSONObject normalDayTemplate;
 	private JSONObject normalMondayTemplate;
@@ -151,7 +150,7 @@ public class Curriculum {
 	private SortedMap<Date, JSONObject> loadedWeeks; //contains week JSON by first day
 	private SortedMap<Date, Day> loadedDays; //will contain days from loadedEndDates[0] to loadedEndDates[1], inclusive
 	private SortedMap<Date, Integer> dayNumbers;
-	private int year; //2012 for the 2012-2013 school year, for example
+	private final int year; //2012 for the 2012-2013 school year, for example
 	private Date[] semesterEndDates; //3 values: the first day of the first semester and the last days of both semesters
 	private Date[] trimesterEndDates; //4 values: the first day of the first trimester and the last days of all trimesters
 	private int loadingProgress;
@@ -159,7 +158,7 @@ public class Curriculum {
 	private boolean currentlyCaching = false;
 	private HashSet<ModelLoadingListener> mlls;
 	
-	public Curriculum(int campus, int year, Date startingDate) {
+	private Curriculum(int campus, int year, Date startingDate) {
 		this.campus = campus;
 		this.year = year;
 		loadingProgress = -1;
@@ -177,7 +176,7 @@ public class Curriculum {
 	/*********************************BEGIN LOADING STUFF**************************************/
 	
 	public void addModelLoadingListener(ModelLoadingListener ofll) { mlls.add(ofll); }
-	public void removeOnFinishedLoadingListener(ModelLoadingListener ofll) { mlls.remove(ofll); }
+	//public void removeOnFinishedLoadingListener(ModelLoadingListener ofll) { mlls.remove(ofll); }
 	
 	private void loadEverything(final Date startingDate) {
 		if (loadingProgress >= 0) {
@@ -393,13 +392,13 @@ public class Curriculum {
 			specialDayTemplates = sdts;
 			Log.d("iHW", "finished parsing schedule JSON");
 			return true;
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		return false;
 	}
 	
 	private boolean loadCourses() {
 		Log.d("iHW", "starting to load courses");
-		HashSet<Course> coursesSet = null;
+		HashSet<Course> coursesSet;
 		try {
 			String campusChar = getCampusChar(campus);
 			SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
@@ -415,14 +414,14 @@ public class Curriculum {
 			courses = coursesSet;
 			Log.d("iHW", "finished loading courses");
 			return true;
-		} catch (JSONException e) { }
+		} catch (JSONException ignored) { }
 		return false;
 	}
 	
 	private boolean loadDayNumbers() {
 		Log.d("iHW", "starting to load day numbers");
 		if (specialDayTemplates == null || semesterEndDates == null) return false;
-		SortedMap<Date, Integer> dayNums = null;
+		SortedMap<Date, Integer> dayNums;
 		try {
 			dayNums = Collections.synchronizedSortedMap(new TreeMap<Date, Integer>());
 			Date d = semesterEndDates[0];
@@ -451,7 +450,7 @@ public class Curriculum {
 			dayNumbers = dayNums;
 			Log.d("iHW", "finished loading day numbers");
 			return true;
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		return false;
 	}
 	
@@ -507,7 +506,7 @@ public class Curriculum {
 			loadedWeeks.put(new Date(weekStart.toString()), weekJSONObj);
 			Log.d("iHW", "finished loading week");
 			return true;
-		} catch (JSONException e) {}
+		} catch (JSONException ignored) {}
 		return false;
 	}
 	
@@ -518,7 +517,7 @@ public class Curriculum {
 			//Date weekStart = getWeekStart(year, d);
 			if (loadedDays == null) loadedDays = Collections.synchronizedSortedMap(new TreeMap<Date, Day>());
 			//if (!loadedWeeks.containsKey(weekStart)) return false;
-			JSONObject template = null;
+			JSONObject template;
 			if (specialDayTemplates.containsKey(d)) {
 				template = specialDayTemplates.get(d);
 			} else if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) {
@@ -552,7 +551,7 @@ public class Curriculum {
 			else return false;
 			Log.d("iHW", "finished loading day");
 			return true;
-		} catch (JSONException e) { }
+		} catch (JSONException ignored) { }
 		return false;
 	}
 	
@@ -569,9 +568,8 @@ public class Curriculum {
 		}
 		if (!isLoaded(d)) return null;
 		else {
-			Day toReturn = loadedDays.get(d);
+			return loadedDays.get(d);
 			//cacheNeededWeeksDays(d);
-			return toReturn;
 		}
 	}
 	
@@ -809,15 +807,14 @@ public class Curriculum {
 			if (!loadedDays.containsKey(d)) success = loadDay(d);
 			if (!success) Log.e("iHW", "ERROR loading day");
 		}
-		if (!isLoaded(d)) return;
-		else {
+		if (isLoaded(d)) {
 			try {
 				String key = d.toString() + "." + period;
 				JSONObject weekJSON = loadedWeeks.get(weekStart);
 				JSONArray notesArr = new JSONArray();
 				for (Note note : notes) notesArr.put(note.saveNote());
 				weekJSON.getJSONObject("notes").put(key, notesArr);
-			} catch (JSONException e) { }
+			} catch (JSONException ignored) { }
 		}
 	}
 	
@@ -847,7 +844,7 @@ public class Curriculum {
 			String yearJSON = yearObj.toString();
 			prefs.edit().putString("yearJSON", yearJSON).apply();
 			
-		} catch (JSONException e) { }
+		} catch (JSONException ignored) { }
 	}
 	
 	/**********************************END SAVING STUFF**************************************/
