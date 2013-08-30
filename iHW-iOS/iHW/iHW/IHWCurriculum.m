@@ -191,7 +191,7 @@ static IHWCurriculum *currentCurriculum;
     //NSLog(@">downloading schedule JSON");
     NSError *error = nil;
     NSURLResponse *response = nil;
-    NSString *urlStr = [NSString stringWithFormat:@"http://www.burnsfamily.info/curriculum%d%@.hws", self.year, getCampusChar(self.campus)];
+    NSString *urlStr = [NSString stringWithFormat:@"http://www.ihwapp.com/curriculum/%d%@.hws", self.year, getCampusChar(self.campus)];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:5];
     [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(showNetworkIcon) withObject:nil waitUntilDone:NO];
     NSData *scheduleJSON = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
