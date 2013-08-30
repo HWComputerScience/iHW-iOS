@@ -59,6 +59,7 @@
         
         NSDictionary *views = @{@"start":self.startLabel, @"period":self.periodLabel, @"end":self.endLabel};
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-3-[start(==19)][period(>=24)][end(==19)]-2-|" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[start(==period,==end,==76)]" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
         
         for (IHWNote *note in self.period.notes) {
             [self addNoteView:note animated:NO willAddMore:YES];

@@ -44,8 +44,6 @@
 		CB25B9DA17C542A20085B9E2 /* IHWNoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25B9D917C542A00085B9E2 /* IHWNoteView.m */; };
 		CB4262E017C9E21B008EE2D7 /* icon_ios_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */; };
 		CB4262E417C9E265008EE2D7 /* icon_ios_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */; };
-		CB4262EE17C9E5FD008EE2D7 /* icon2_ios_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = CB4262ED17C9E5FD008EE2D7 /* icon2_ios_iphone.png */; };
-		CB4262F017C9E600008EE2D7 /* icon2_ios_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB4262EF17C9E600008EE2D7 /* icon2_ios_iphone@2x.png */; };
 		CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB44277817BB0DC00068D543 /* IHWDayViewController.m */; };
 		CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB44277917BB0DC00068D543 /* IHWDayViewController.xib */; };
 		CB5DF79117BD415300D5651C /* IHWCheckboxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79017BD415200D5651C /* IHWCheckboxCell.m */; };
@@ -153,8 +151,6 @@
 		CB25B9D917C542A00085B9E2 /* IHWNoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWNoteView.m; sourceTree = "<group>"; };
 		CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_ios_iphone.png; sourceTree = "<group>"; };
 		CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_ios_iphone@2x.png"; sourceTree = "<group>"; };
-		CB4262ED17C9E5FD008EE2D7 /* icon2_ios_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon2_ios_iphone.png; sourceTree = "<group>"; };
-		CB4262EF17C9E600008EE2D7 /* icon2_ios_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon2_ios_iphone@2x.png"; sourceTree = "<group>"; };
 		CB44277717BB0DC00068D543 /* IHWDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDayViewController.h; sourceTree = "<group>"; };
 		CB44277817BB0DC00068D543 /* IHWDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDayViewController.m; sourceTree = "<group>"; };
 		CB44277917BB0DC00068D543 /* IHWDayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWDayViewController.xib; sourceTree = "<group>"; };
@@ -241,8 +237,6 @@
 				CB8D773E17CB2F8A00688D3D /* Default-568h@2x.png */,
 				CB8D773C17CB2F8800688D3D /* Default@2x.png */,
 				CB8D773A17CB2F8700688D3D /* Default.png */,
-				CB4262EF17C9E600008EE2D7 /* icon2_ios_iphone@2x.png */,
-				CB4262ED17C9E5FD008EE2D7 /* icon2_ios_iphone.png */,
 				CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */,
 				CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */,
 				491CCB37178E590B00736453 /* iHW */,
@@ -528,8 +522,6 @@
 				CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */,
 				CB4262E017C9E21B008EE2D7 /* icon_ios_iphone.png in Resources */,
 				CB4262E417C9E265008EE2D7 /* icon_ios_iphone@2x.png in Resources */,
-				CB4262EE17C9E5FD008EE2D7 /* icon2_ios_iphone.png in Resources */,
-				CB4262F017C9E600008EE2D7 /* icon2_ios_iphone@2x.png in Resources */,
 				CB8D773B17CB2F8700688D3D /* Default.png in Resources */,
 				CB8D773D17CB2F8800688D3D /* Default@2x.png in Resources */,
 				CB8D773F17CB2F8A00688D3D /* Default-568h@2x.png in Resources */,

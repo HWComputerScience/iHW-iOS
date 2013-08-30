@@ -18,7 +18,7 @@ static NSCalendar *cal;
 
 - (id)initToday
 {
-    NSDateComponents *components = [cal components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:[self init]];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:[self init]];
     self = [cal dateFromComponents:components];
     return self;
 }

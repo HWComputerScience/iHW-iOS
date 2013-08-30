@@ -36,7 +36,7 @@
         self.delegate = cellView;
         focused = NO;
         
-        self.checkbox = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, NOTE_HEIGHT)];
+        self.checkbox = [[UIButton alloc] initWithFrame:CGRectZero];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxUnchecked"] forState:UIControlStateNormal];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxUnchecked"] forState:UIControlStateSelected|UIControlStateHighlighted];
         [self.checkbox setImage:[UIImage imageNamed:@"checkboxChecked"] forState:UIControlStateSelected];
@@ -68,16 +68,16 @@
 - (void)layoutSubviews {
     if (focused && self.isToDo) {
         self.checkbox.frame = CGRectMake(0, 0, BUTTON_WIDTH, NOTE_HEIGHT);
-        self.textField.frame = CGRectMake(BUTTON_WIDTH, 0, self.frame.size.width-(2*BUTTON_WIDTH), NOTE_HEIGHT);
-        self.optionsButton.frame = CGRectMake(self.bounds.size.width-BUTTON_WIDTH, 0, BUTTON_WIDTH, NOTE_HEIGHT);
+        self.textField.frame = CGRectMake(BUTTON_WIDTH+4, 0, self.frame.size.width-(2*BUTTON_WIDTH)-2*4, NOTE_HEIGHT);
+        self.optionsButton.frame = CGRectMake(self.bounds.size.width-BUTTON_WIDTH-4, 0, BUTTON_WIDTH, NOTE_HEIGHT);
     } else if (self.isToDo) {
         self.checkbox.frame = CGRectMake(0, 0, BUTTON_WIDTH, NOTE_HEIGHT);
-        self.textField.frame = CGRectMake(BUTTON_WIDTH, 0, self.frame.size.width-BUTTON_WIDTH, NOTE_HEIGHT);
+        self.textField.frame = CGRectMake(BUTTON_WIDTH+4, 0, self.frame.size.width-BUTTON_WIDTH-4, NOTE_HEIGHT);
         self.optionsButton.frame = CGRectMake(self.bounds.size.width, 0, 0, NOTE_HEIGHT);
     } else if (focused) {
         self.checkbox.frame = CGRectMake(0, 0, 0, NOTE_HEIGHT);
-        self.textField.frame = CGRectMake(0, 0, self.frame.size.width-BUTTON_WIDTH, NOTE_HEIGHT);
-        self.optionsButton.frame = CGRectMake(self.bounds.size.width-BUTTON_WIDTH, 0, BUTTON_WIDTH, NOTE_HEIGHT);
+        self.textField.frame = CGRectMake(0, 0, self.frame.size.width-BUTTON_WIDTH-4, NOTE_HEIGHT);
+        self.optionsButton.frame = CGRectMake(self.bounds.size.width-BUTTON_WIDTH-4, 0, BUTTON_WIDTH, NOTE_HEIGHT);
     } else {
         self.checkbox.frame = CGRectMake(0, 0, 0, NOTE_HEIGHT);
         self.textField.frame = CGRectMake(0, 0, self.frame.size.width, NOTE_HEIGHT);

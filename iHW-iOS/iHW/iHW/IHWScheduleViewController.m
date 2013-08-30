@@ -126,7 +126,7 @@
     }
     @synchronized(self) {
         [self.loadedViewControllers setDictionary:VCs];
-        NSLog(@"Number of loaded VCs: %d", self.loadedViewControllers.count);
+        //NSLog(@"Number of loaded VCs: %d", self.loadedViewControllers.count);
     }
 }
 
@@ -161,7 +161,7 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     if (![[IHWCurriculum currentCurriculum] isLoaded]) {
-        NSLog(@"VC: nil");
+        NSLog(@"ERROR: Curriculum not loaded");
         return nil;
     }
     IHWDate *d = nil;
@@ -170,11 +170,11 @@
     @synchronized(self) {
         if ([self.loadedViewControllers objectForKey:d] == nil && [[IHWCurriculum currentCurriculum] dateInBounds:d]) {
             UIViewController *result = [[IHWDayViewController alloc] initWithDate:d];
-            NSLog(@"VC (just made): %@", result);
+            //NSLog(@"VC (just made): %@", result);
             return result;
         } else {
             UIViewController *result = [self.loadedViewControllers objectForKey:d];
-            NSLog(@"VC (from cache): %@", result);
+            //NSLog(@"VC (from cache): %@", result);
             return result;
         }
     }
@@ -184,7 +184,7 @@
     if ([[pageViewController.viewControllers objectAtIndex:0] isKindOfClass:[IHWDayViewController class]]) {
         self.currentDate = ((IHWDayViewController *)[pageViewController.viewControllers objectAtIndex:0]).date;
         if (self.queue.operationCount == 0) [self.queue addOperation:[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(cacheViewControllersAroundDate:) object:self.currentDate]];
-        NSLog(@"Finished displaying date:%@", self.currentDate.description);
+        //NSLog(@"Finished displaying date:%@", self.currentDate.description);
     }
 }
 

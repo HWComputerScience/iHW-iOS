@@ -20,7 +20,7 @@
     self = [super initWithNibName:@"IHWDayViewController" bundle:nil];
     if (self) {
         self.date = date;
-        NSLog(@"init: %@", self.date.description);
+        //NSLog(@"init: %@", self.date.description);
         self.day = [[IHWCurriculum currentCurriculum] dayWithDate:self.date];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:@"UIKeyboardWillShowNotification" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];
@@ -33,7 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"viewDidLoad : %@", self.date.description);
+    //NSLog(@"viewDidLoad : %@", self.date.description);
     CGRect frame = CGRectMake(0, 0, 320, 48);
     UIView *background = [[UIView alloc] initWithFrame:frame];
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
@@ -61,12 +61,10 @@
     }
     
     [self loadTableViewCells];
-    
-    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(logViewAtPoint:)]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"ViewWillAppear");
+    //NSLog(@"ViewWillAppear");
     [self.view setNeedsLayout];
     [self.view setNeedsDisplay];
 }
@@ -134,7 +132,7 @@
     if (indexPath.row >= self.cells.count) return 72;
     int result = [((IHWPeriodCellView *)[((UITableViewCell *)[self.cells objectAtIndex:indexPath.row]).contentView.subviews objectAtIndex:0]) neededHeight];
     if (result != 0) {
-        NSLog(@"Returned %d", result);
+        //NSLog(@"Returned %d", result);
         return result;
     }
     else return 72;
@@ -172,6 +170,7 @@
 
 - (void)updateRowHeightAtIndex:(int)index toHeight:(int)height {
     [self.periodsTableView beginUpdates];
+    if (index==-1) index = self.cells.count-1;
     UITableViewCell *cell = [self.cells objectAtIndex:index];
     cell.frame = CGRectMake(0, 0, self.periodsTableView.bounds.size.width, height);
     [self.periodsTableView endUpdates];
@@ -205,48 +204,4 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-- (void)logViewAtPoint:(UITapGestureRecognizer *)gestureRecognizer {
-    UIView *subview = [IHWDayViewController visibleViewAtPoint:[gestureRecognizer locationInView:[[[[UIApplication sharedApplication] keyWindow] rootViewController] view]]];
-    int i=0;
-    while (subview.superview != nil) {
-        NSLog(@"%@%@", [@"" stringByPaddingToLength:i withString: @" " startingAtIndex:0], subview);
-        //if ([subview isKindOfClass:[UITextField class]]) [subview becomeFirstResponder];
-        subview = subview.superview;
-        i++;
-    }
-}
-
-
-+ (void) findView:(UIView**)visibleView atPoint:(CGPoint)pt fromParent:(UIView*)parentView
-{
-    UIView *applicationWindowView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
-
-    if(parentView == nil) {
-        parentView = applicationWindowView;
-    }
-    
-    for(UIView *view in parentView.subviews)
-    {
-        if((view.superview != nil) && (view.hidden == NO) && (view.alpha > 0))
-        {
-            CGPoint pointInView = [applicationWindowView convertPoint:pt toView:view];
-            
-            if([view pointInside:pointInView withEvent:nil]) {
-                *visibleView = view;
-            }
-            
-            [self findView:visibleView atPoint:pt fromParent:view];
-        }
-    }
-}
-
-+ (UIView*) visibleViewAtPoint:(CGPoint)pt
-{
-    UIView *visibleView = nil;
-    [IHWDayViewController findView:&visibleView atPoint:pt fromParent:nil];
-    
-    return visibleView;
-}
-
 @end
