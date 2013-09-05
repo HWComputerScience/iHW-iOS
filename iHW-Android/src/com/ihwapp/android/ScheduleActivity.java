@@ -29,14 +29,14 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d("iHW-lc", "ScheduleActivity onCreate");
+		Curriculum.ctx = this.getApplicationContext();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schedule);
 		this.setTitle("View Schedule");
 		if (savedInstanceState != null) lastIndex = savedInstanceState.getInt("lastIndex");
 		else lastIndex = -1;
-		
 		if (pager == null) pager = ((ViewPager)this.findViewById(R.id.scheduleViewPager));
-		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
+		pager.setAdapter(null);
 		if (pager.findViewById("pager_title_strip".hashCode()) == null) {
             CustomFontPagerTitleStrip pts = new CustomFontPagerTitleStrip(this);
 			pts.setId("pager_title_strip".hashCode());
@@ -68,8 +68,8 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
 		if (Curriculum.getCurrentCurriculum().isLoaded()) {
 			Log.d("iHW", "Setting adapter");
+			if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 			pager.setAdapter(adapter);
-			adapter.enabled = true;
 			if (lastIndex >= 0) pager.setCurrentItem(lastIndex, false);
 			else gotoDate(new Date());
 		} else {
@@ -89,10 +89,10 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 
 	@Override
 	public void onFinishedLoading(Curriculum c) {
-		Log.d("iHW", "## onFinishedLoading");
 		Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
+		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 		pager.setAdapter(adapter);
-		adapter.enabled = true;
+		adapter.notifyDataSetChanged();
 		if (lastIndex >= 0) pager.setCurrentItem(lastIndex, false);
 		else gotoDate(new Date());
 		if (progressDialog != null) progressDialog.dismiss();
@@ -167,9 +167,10 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	}
 	
 	public void onSaveInstanceState(Bundle outState) {
+		this.pager.setAdapter(null);
 		super.onSaveInstanceState(outState);
 		Log.d("iHW-lc", "ScheduleActivity onSaveInstanceState");
-		outState.putInt("lastIndex", pager.getCurrentItem());
+		outState.putInt("lastIndex", lastIndex);
 	}
 	
 	public void onPause() {
@@ -179,6 +180,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	
 	public void onStop() {
 		Log.d("iHW-lc", "ScheduleActivity onStop");
+		pager.setAdapter(null);
 		super.onStop();
 	}
 	
@@ -194,7 +196,6 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	}*/
 	
 	private class DayPagerAdapter extends FragmentStatePagerAdapter {
-		public boolean enabled = false;
 		private final int count = new Date(7,1,Curriculum.getCurrentYear())
 		.getDaysUntil(new Date(7,1,Curriculum.getCurrentYear()+1));
 		
@@ -203,7 +204,6 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		}
 		
 		public String getPageTitle(int position) {
-			if (!enabled) return "";
 			Date date = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
 			//Day d = Curriculum.getCurrentCurriculum(ScheduleActivity.this).getDay(date);
 			return date.getDayOfWeek(false).toUpperCase(Locale.getDefault());
@@ -211,7 +211,6 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 
 		@Override
 		public Fragment getItem(int position) {
-			if (!enabled) return new Fragment();
 			Date date = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
 			DayFragment f = new DayFragment();
 			Bundle b = new Bundle();
@@ -220,7 +219,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 			f.setArguments(b);
 			return f;
 		}
-
+		
 		@Override
 		public int getCount() {
 			return count;

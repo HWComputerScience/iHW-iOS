@@ -3,7 +3,6 @@ package com.ihwapp.android;
 import com.ihwapp.android.model.Course;
 import com.ihwapp.android.model.Curriculum;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -12,7 +11,7 @@ import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
-public class EditCourseActivity extends Activity {
+public class EditCourseActivity extends IHWActivity {
 	private int numPeriods;
 	private int numDays;
 	private int period = -1;
@@ -192,8 +191,7 @@ public class EditCourseActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.action_delete) {
 			if (existingCourseName != null) {
-				Curriculum c = Curriculum.getCurrentCurriculum();
-				c.removeCourse(c.getCourse(existingCourseName));
+				Curriculum.getCurrentCurriculum().removeCourse(Curriculum.getCurrentCurriculum().getCourse(existingCourseName));
 				Curriculum.getCurrentCurriculum().saveCourses();
 			}
 			finish();
@@ -201,7 +199,6 @@ public class EditCourseActivity extends Activity {
 		} else if (item.getItemId() == R.id.action_done || item.getItemId() == android.R.id.home) {
 			if (numMeetings>0 && !nameBox.getText().toString().equals("")) {
 				//valid course information entered
-				Curriculum c = Curriculum.getCurrentCurriculum();
 				//generate meetings array
 				int[] meetings = new int[numDays];
 				for (int i=0; i<numDays; i++) {
@@ -213,8 +210,8 @@ public class EditCourseActivity extends Activity {
 				boolean success;
 				//create the course object and add it
 				Course toAdd = new Course(nameBox.getText().toString(), period, termSpinner.getSelectedItemPosition(), meetings);
-				if (existingCourseName != null) success = c.replaceCourse(existingCourseName, toAdd);
-				else success = c.addCourse(toAdd);
+				if (existingCourseName != null) success = Curriculum.getCurrentCurriculum().replaceCourse(existingCourseName, toAdd);
+				else success = Curriculum.getCurrentCurriculum().addCourse(toAdd);
 				if (!success) {
 					//Curriculum rejected the course
 					Toast.makeText(this, "The course meetings you selected conflict with one or more of your other courses. Please change them and try again.", Toast.LENGTH_LONG).show();

@@ -18,7 +18,7 @@ import android.view.*;
 import android.widget.*;
 import android.webkit.*;
 
-public class DownloadScheduleActivity extends Activity {
+public class DownloadScheduleActivity extends IHWActivity {
 	private boolean alreadyLoaded = false;
     private final Activity thisActivity = this;
 

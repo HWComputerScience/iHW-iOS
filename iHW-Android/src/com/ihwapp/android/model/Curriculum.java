@@ -39,8 +39,11 @@ public class Curriculum {
 	 * attempts to load it immediately. If it cannot be loaded immediately, returns null.
 	 */
 	private static Curriculum getCurriculum(int campus, int year) {
-		if (currentCurriculum == null || currentCurriculum.getCampus() != campus || currentCurriculum.getYear() != year)
+		if (currentCurriculum == null || currentCurriculum.getCampus() != campus || currentCurriculum.getYear() != year) {
+			Log.d("iHW", "Recreating curriculum object");
 			currentCurriculum = new Curriculum(campus, year, new Date());
+		}
+		Log.d("iHW", "Returning existing curriculum object");
 		return currentCurriculum;
 	}
 	
@@ -558,7 +561,7 @@ public class Curriculum {
 	public Day getDay(Date d) {
 		if (!isInBounds(d)) { Log.d("iHW", "Date out of bounds: " + d); return null; }
 		Log.d("iHW", "getting " + d.toString());
-		Log.d("iHW", "weeks loaded: " + loadedWeeks.keySet().toString());
+		//Log.d("iHW", "weeks loaded: " + loadedWeeks.keySet().toString());
 		if (!isLoaded(d)) {
 			boolean success = true;
 			if (loadedWeeks == null || !loadedWeeks.containsKey(getWeekStart(year, d))) success = loadWeek(d);

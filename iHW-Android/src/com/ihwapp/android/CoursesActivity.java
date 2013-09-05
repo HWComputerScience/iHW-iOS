@@ -18,6 +18,7 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Curriculum.ctx = this.getApplicationContext();
 		setContentView(R.layout.activity_courses);
 	}
 	
@@ -158,10 +159,9 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 				i.putExtra("courseName", courseNames[(int)getListView().getCheckedItemIds()[0]]);
 				startActivity(i);
 			} else if (item.getItemId() == R.id.action_delete) {
-				Curriculum c = Curriculum.getCurrentCurriculum();
 				long[] checked = getListView().getCheckedItemIds();
                 for (long id : checked) {
-                    c.removeCourse(c.getCourse(courseNames[(int)id]));
+                	Curriculum.getCurrentCurriculum().removeCourse(Curriculum.getCurrentCurriculum().getCourse(courseNames[(int)id]));
                 }
 				Curriculum.getCurrentCurriculum().saveCourses();
 				reloadData();

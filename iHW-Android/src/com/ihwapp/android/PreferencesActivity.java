@@ -3,7 +3,6 @@ package com.ihwapp.android;
 import com.ihwapp.android.model.Curriculum;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 
-public class PreferencesActivity extends Activity {
+public class PreferencesActivity extends IHWActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

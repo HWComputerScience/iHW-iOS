@@ -10,14 +10,13 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
-public class FirstRunActivity extends Activity implements Curriculum.ModelLoadingListener {
+public class FirstRunActivity extends IHWActivity implements Curriculum.ModelLoadingListener {
 	private LinearLayout campusLayout;
 	private LinearLayout coursesLayout;
 	private ProgressDialog progressDialog;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		Date d = new Date();
 		d.add(Date.MONTH, -6);
 		Curriculum.setCurrentYear(d.get(Date.YEAR));

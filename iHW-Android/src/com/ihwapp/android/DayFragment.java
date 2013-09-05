@@ -35,6 +35,7 @@ public class DayFragment extends Fragment {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (!Curriculum.getCurrentCurriculum().isLoaded()) return;
 		initScrollPos = 0;
 		ofvcls = new ArrayList<OnFragmentVisibilityChangedListener>();
 		if (savedInstanceState != null && savedInstanceState.containsKey("date")) {
@@ -48,6 +49,7 @@ public class DayFragment extends Fragment {
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d("iHW-lc", "DayFragment onCreateView: " + date);
 		final View v = inflater.inflate(R.layout.fragment_day, null);
+		if (!Curriculum.getCurrentCurriculum().isLoaded()) return v;
         assert v != null;
         TextView titleText = ((TextView)v.findViewById(R.id.date_view));
 		Log.d("iHW", "Day: " + day);
@@ -88,6 +90,8 @@ public class DayFragment extends Fragment {
 		
 		return v;
 	}
+	
+	public Date getDate() { return date; }
 	
 	public void onStart() {
 		super.onStart();

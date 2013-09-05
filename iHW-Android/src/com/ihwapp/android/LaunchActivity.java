@@ -2,16 +2,14 @@ package com.ihwapp.android;
 
 import com.ihwapp.android.model.Curriculum;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class LaunchActivity extends Activity {
+public class LaunchActivity extends IHWActivity {
 	private boolean shouldFinish = false;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Curriculum.ctx = this.getApplicationContext();
 	}
 	
 	protected void onStart() {
