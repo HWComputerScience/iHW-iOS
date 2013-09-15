@@ -18,7 +18,8 @@ import android.graphics.*;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.text.*;
-import android.util.*;
+import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
@@ -155,7 +156,7 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 	
 	private void saveNotes() {
 		if (changesSaved) return;
-		Log.d("iHW", "Saving notes for period at: " + this.period.getDate() + ":" + this.period.getIndex());
+		//Log.d("iHW", "Saving notes for period at: " + this.period.getDate() + ":" + this.period.getIndex());
 		ArrayList<Note> notes = new ArrayList<Note>(notesLayout.getChildCount());
 		for (int i=0; i<notesLayout.getChildCount(); i++) {
 			View v = notesLayout.getChildAt(i);

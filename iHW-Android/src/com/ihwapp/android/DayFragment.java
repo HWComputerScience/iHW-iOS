@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -30,7 +29,7 @@ public class DayFragment extends Fragment {
 	
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		Log.d("iHW-lc", "DayFragment onAttach");
+		//Log.d("iHW-lc", "DayFragment onAttach");
 	}
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,16 +42,16 @@ public class DayFragment extends Fragment {
 			initScrollPos = savedInstanceState.getInt("scrollPos");
 		}
 		day = Curriculum.getCurrentCurriculum().getDay(date);
-		Log.d("iHW-lc", "DayFragment onCreate: " + date);
+		//Log.d("iHW-lc", "DayFragment onCreate: " + date);
 	}
 
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.d("iHW-lc", "DayFragment onCreateView: " + date);
+		//Log.d("iHW-lc", "DayFragment onCreateView: " + date);
 		final View v = inflater.inflate(R.layout.fragment_day, null);
 		if (!Curriculum.getCurrentCurriculum().isLoaded()) return v;
         assert v != null;
         TextView titleText = ((TextView)v.findViewById(R.id.date_view));
-		Log.d("iHW", "Day: " + day);
+		//Log.d("iHW", "Day: " + day);
 		titleText.setText(day.getTitle());
 		titleText.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		
@@ -95,12 +94,12 @@ public class DayFragment extends Fragment {
 	
 	public void onStart() {
 		super.onStart();
-		Log.d("iHW-lc", "DayFragment onStart: " + date);
+		//Log.d("iHW-lc", "DayFragment onStart: " + date);
 	}
 	
 	public void onResume() {
 		super.onResume();
-		Log.d("iHW-lc", "DayFragment onResume: " + date);
+		//Log.d("iHW-lc", "DayFragment onResume: " + date);
 		final ScrollView sv = (ScrollView)getView().findViewById(R.id.scroll_periods);
 		sv.setFocusableInTouchMode(true);
 		sv.post(new Runnable() { 
@@ -128,7 +127,7 @@ public class DayFragment extends Fragment {
 	
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		Log.d("iHW-lc", "DayFragment onSaveInstanceState: " + date);
+		//Log.d("iHW-lc", "DayFragment onSaveInstanceState: " + date);
 		//outState.putString("dayJSON", day.saveDay().toString());
 		outState.putString("date", date.toString());
 		outState.putInt("scrollPos", getView().findViewById(R.id.scroll_periods).getScrollY());
@@ -136,7 +135,7 @@ public class DayFragment extends Fragment {
 	
 	public void onPause() {
 		super.onPause();
-		Log.d("iHW-lc", "DayFragment (" + this + ") onPause: " + date);
+		//Log.d("iHW-lc", "DayFragment (" + this + ") onPause: " + date);
 		initScrollPos = getView().findViewById(R.id.scroll_periods).getScrollY();
 		countdownTimer.cancel();
 		countdownTimer = null;
@@ -144,7 +143,7 @@ public class DayFragment extends Fragment {
 	
 	public void onStop() {
 		super.onStop();
-		Log.d("iHW-lc", "DayFragment onStop: " + date);
+		//Log.d("iHW-lc", "DayFragment onStop: " + date);
 		//if (countdownTimer != null) countdownTimer.cancel();
 		//if (countdownView != null) countdownView.setVisibility(View.GONE);
 		if (this.getUserVisibleHint() && ofvcls != null) {
@@ -155,7 +154,7 @@ public class DayFragment extends Fragment {
 	}
 	
 	public void onDestroyView() {
-		Log.d("iHW-lc", "DayFragment onDestroyView: " + date);
+		//Log.d("iHW-lc", "DayFragment onDestroyView: " + date);
 		super.onDestroyView();
 		periodViews.clear();
 		periodViews = null;
@@ -165,12 +164,12 @@ public class DayFragment extends Fragment {
 	}
 	
 	public void onDestroy() {
-		Log.d("iHW-lc", "DayFragment onDestroy: " + date);
+		//Log.d("iHW-lc", "DayFragment onDestroy: " + date);
 		super.onDestroy();
 	}
 	
 	public void onDetach() {
-		Log.d("iHW-lc", "DayFragment " + this + " onDetach from " + this.getActivity() + ": " + date);
+		//Log.d("iHW-lc", "DayFragment " + this + " onDetach from " + this.getActivity() + ": " + date);
 		super.onDetach();
 		if (date==null) return;
 		this.ofvcls.clear();
@@ -226,7 +225,7 @@ public class DayFragment extends Fragment {
 	}*/
 	
 	public void setUserVisibleHint(boolean isVisibleToUser) {
-		Log.d("iHW-lc", "DayFragment setUserVisibleHint: " + isVisibleToUser + "(" + date + ")");
+		//Log.d("iHW-lc", "DayFragment setUserVisibleHint: " + isVisibleToUser + "(" + date + ")");
 		if (this.getUserVisibleHint() != isVisibleToUser && (this.isVisible() || isVisibleToUser) && ofvcls != null) {
 			for (OnFragmentVisibilityChangedListener l : ofvcls) {
 				l.onFragmentVisibilityChanged(this, isVisibleToUser);

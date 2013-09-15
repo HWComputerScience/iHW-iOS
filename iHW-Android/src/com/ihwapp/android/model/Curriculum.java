@@ -19,7 +19,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class Curriculum {
 	private static Curriculum currentCurriculum;
@@ -40,10 +39,10 @@ public class Curriculum {
 	 */
 	private static Curriculum getCurriculum(int campus, int year) {
 		if (currentCurriculum == null || currentCurriculum.getCampus() != campus || currentCurriculum.getYear() != year) {
-			Log.d("iHW", "Recreating curriculum object");
+			//Log.d("iHW", "Recreating curriculum object");
 			currentCurriculum = new Curriculum(campus, year, new Date());
 		}
-		Log.d("iHW", "Returning existing curriculum object");
+		//Log.d("iHW", "Returning existing curriculum object");
 		return currentCurriculum;
 	}
 	
@@ -136,10 +135,6 @@ public class Curriculum {
 		return true;
 	}
 	
-	public static void save() {
-		Log.e("iHW", "SAVE static method was called -- this is not correct!");
-	}
-	
 	/********************************END STATIC STUFF***********************************/
 	
 	/*******************************BEGIN INSTANCE STUFF********************************/
@@ -183,7 +178,7 @@ public class Curriculum {
 	
 	private void loadEverything(final Date startingDate) {
 		if (loadingProgress >= 0) {
-			Log.d("iHW", "Tried to load everything but loading has already started.");
+			//Log.d("iHW", "Tried to load everything but loading has already started.");
 			return;
 		}
 		String campusChar = getCampusChar(this.campus);
@@ -192,13 +187,16 @@ public class Curriculum {
 		
 		final AsyncTask<Void, Integer, Void> phase2 = new AsyncTask<Void, Integer, Void>() {
 			protected Void doInBackground(Void... params) {
-				Log.d("iHW", "starting phase 2");
+				//Log.d("iHW", "starting phase 2");
 				boolean success = loadThisWeekAndDay(startingDate);
-				if (!success) { Log.e("iHW", "ERROR loading first week and day"); return null; }
+				if (!success) { 
+					//Log.e("iHW", "ERROR loading first week and day"); 
+					return null; 
+				}
 				this.publishProgress(4);
 				cacheNeededWeeksDays(startingDate);
 				this.publishProgress(5);
-				Log.d("iHW", "finished phase 2");
+				//Log.d("iHW", "finished phase 2");
 				return null;
 			}
 			
@@ -215,22 +213,22 @@ public class Curriculum {
 			
 			protected Void doInBackground(Void... params) {
 				this.publishProgress(0);
-				Log.d("iHW", "starting phase 1a");
+				//Log.d("iHW", "starting phase 1a");
 				boolean success = downloadParseScheduleJSON(scheduleJSON.equals(""));
 				if (!success) { 
-					Log.e("iHW", "FATAL ERROR downloading schedule JSON"); 
+					//Log.e("iHW", "FATAL ERROR downloading schedule JSON"); 
 					this.publishProgress(-1);
 					return null; 
 				}
 				this.publishProgress(1);
 				success = loadDayNumbers();
 				if (!success) { 
-					Log.e("iHW", "ERROR loading day numbers"); 
+					//Log.e("iHW", "ERROR loading day numbers"); 
 					this.publishProgress(-1);
 					return null; 
 				}
 				this.publishProgress(2);
-				Log.d("iHW", "finished phase 1a");
+				//Log.d("iHW", "finished phase 1a");
 				return null;
 			}
 			
@@ -252,11 +250,14 @@ public class Curriculum {
 		
 		final AsyncTask<Void, Integer, Void> phase1b = new AsyncTask<Void, Integer, Void>() {
 			protected Void doInBackground(Void... params) {
-				Log.d("iHW", "starting phase 1b");
+				//Log.d("iHW", "starting phase 1b");
 				boolean success = loadCourses();
-				if (!success) { Log.e("iHW", "ERROR loading courses"); return null; }
+				if (!success) { 
+					//Log.e("iHW", "ERROR loading courses");
+					return null; 
+				}
 				this.publishProgress(3);
-				Log.d("iHW", "finished phase 1b");
+				//Log.d("iHW", "finished phase 1b");
 				return null;
 			}
 			
@@ -294,7 +295,7 @@ public class Curriculum {
 	}
 	
 	private boolean downloadParseScheduleJSON(boolean important) {
-		Log.d("iHW", "Starting schedule JSON download (if able)");
+		//Log.d("iHW", "Starting schedule JSON download (if able)");
 		ConnectivityManager connMgr = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 	    if (networkInfo == null || !networkInfo.isConnected()) { //no Internet connection
@@ -304,12 +305,12 @@ public class Curriculum {
 	    } else { //Internet is available; should update
 	    	DownloadTask downloadTask = new DownloadTask();
 	    	if (important) {
-	    		Log.d("iHW", "downloading on MAIN THREAD");
+	    		//Log.d("iHW", "downloading on MAIN THREAD");
 	    		String result = downloadTask.doInBackground();
 	    		downloadTask.onPostExecute(result);
 	    		return (!result.equals(""));
 	    	} else {
-	    		Log.d("iHW", "downloading in BACKGROUND");
+	    		//Log.d("iHW", "downloading in BACKGROUND");
 	    		parseScheduleJSON();
 	    		downloadTask.execute();
 	    		return true;
@@ -319,11 +320,11 @@ public class Curriculum {
 	
 	private class DownloadTask extends AsyncTask<Void, Void, String> {
 		public String doInBackground(Void... params) {
-			Log.d("iHW", "internet is available - will download schedule JSON");
+			//Log.d("iHW", "internet is available - will download schedule JSON");
 	    	HttpURLConnection urlConnection = null;
 			String result = null;
 			String campusChar = getCampusChar(campus);
-			String urlStr = "http://www.burnsfamily.info/curriculum" + year + campusChar + ".hws";
+			String urlStr = "http://www.ihwapp.com/curriculum/" + year + campusChar + ".hws";
 			try {
 				URL url = new URL(urlStr);
 				urlConnection = (HttpURLConnection) url.openConnection();
@@ -348,18 +349,18 @@ public class Curriculum {
 		public void onPostExecute(String result) {
 			if (result != null && !result.equals("")) {
 				String campusChar = getCampusChar(campus);
-				Log.d("iHW", "downloaded schedule JSON successfully");
+				//Log.d("iHW", "downloaded schedule JSON successfully");
 				SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
 				prefs.edit().putString("scheduleJSON", result).commit();
 				boolean success = parseScheduleJSON();
-				if (!success) Log.e("iHW", "ERROR parsing schedule JSON");
+				//if (!success) Log.e("iHW", "ERROR parsing schedule JSON");
 			}
 		}
 	}
 	
 	private boolean parseScheduleJSON() {
 		try {
-			Log.d("iHW", "Starting to parse schedule JSON");
+			//Log.d("iHW", "Starting to parse schedule JSON");
 			String campusChar = getCampusChar(this.campus);
 			SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
 			String scheduleJSON =  prefs.getString("scheduleJSON", "");
@@ -393,14 +394,14 @@ public class Curriculum {
 				sdts.put(d, specialDaysObj.getJSONObject(key));
 			}
 			specialDayTemplates = sdts;
-			Log.d("iHW", "finished parsing schedule JSON");
+			//Log.d("iHW", "finished parsing schedule JSON");
 			return true;
 		} catch (JSONException ignored) {}
 		return false;
 	}
 	
 	private boolean loadCourses() {
-		Log.d("iHW", "starting to load courses");
+		//Log.d("iHW", "starting to load courses");
 		HashSet<Course> coursesSet;
 		try {
 			String campusChar = getCampusChar(campus);
@@ -415,14 +416,14 @@ public class Curriculum {
 				coursesSet.add(new Course(coursesArr.getJSONObject(i)));
 			}
 			courses = coursesSet;
-			Log.d("iHW", "finished loading courses");
+			//Log.d("iHW", "finished loading courses");
 			return true;
 		} catch (JSONException ignored) { }
 		return false;
 	}
 	
 	private boolean loadDayNumbers() {
-		Log.d("iHW", "starting to load day numbers");
+		//Log.d("iHW", "starting to load day numbers");
 		if (specialDayTemplates == null || semesterEndDates == null) return false;
 		SortedMap<Date, Integer> dayNums;
 		try {
@@ -451,7 +452,7 @@ public class Curriculum {
 				d=d.dateByAdding(1);
 			}
 			dayNumbers = dayNums;
-			Log.d("iHW", "finished loading day numbers");
+			//Log.d("iHW", "finished loading day numbers");
 			return true;
 		} catch (JSONException ignored) {}
 		return false;
@@ -459,9 +460,15 @@ public class Curriculum {
 	
 	private boolean loadThisWeekAndDay(Date date) {
 		boolean success = loadWeek(date);
-		if (!success) { Log.e("iHW", "ERROR loading week"); return false; }
+		if (!success) { 
+			//Log.e("iHW", "ERROR loading week"); 
+			return false; 
+		}
 		success = loadDay(date);
-		if (!success) { Log.e("iHW", "ERROR loading day"); return false; }
+		if (!success) { 
+			//Log.e("iHW", "ERROR loading day"); 
+			return false; 
+		}
 		return true;
 	}
 	
@@ -470,7 +477,7 @@ public class Curriculum {
 		currentlyCaching = true;
 		new AsyncTask<Void, Void, Void>() {
 			protected Void doInBackground(Void... params) {
-				Log.d("iHW", "starting to cache needed weeks and days");
+				//Log.d("iHW", "starting to cache needed weeks and days");
 				Date currentWeekStart = getWeekStart(year, currentDate);
 				ArrayList<Date> weeksNeeded = new ArrayList<Date>(3);
 				for (int i=-7; i<=7; i+=7) weeksNeeded.add(currentWeekStart.dateByAdding(i));
@@ -484,7 +491,7 @@ public class Curriculum {
 				for (Date d : daysNeeded) if (isInBounds(d) && !loadedDays.containsKey(d)) {
 					loadDay(d);
 				}
-				Log.d("iHW", "finished caching weeks and days");
+				//Log.d("iHW", "finished caching weeks and days");
 				currentlyCaching = false;
 				return null;
 			}
@@ -493,7 +500,7 @@ public class Curriculum {
 	
 	private boolean loadWeek(Date date) {
 		try {
-			Log.d("iHW", "starting to load week containing " + date);
+			//Log.d("iHW", "starting to load week containing " + date);
 			int weekNumber = getWeekNumber(year, date);
 			Date weekStart = getWeekStart(year, date);
 			if (loadedWeeks != null && loadedWeeks.containsKey(new Date(weekStart.toString()))) return true;
@@ -507,7 +514,7 @@ public class Curriculum {
 			weekJSONObj = new JSONObject(weekJSON);
 			if (loadedWeeks == null) loadedWeeks = Collections.synchronizedSortedMap(new TreeMap<Date, JSONObject>());
 			loadedWeeks.put(new Date(weekStart.toString()), weekJSONObj);
-			Log.d("iHW", "finished loading week");
+			//Log.d("iHW", "finished loading week");
 			return true;
 		} catch (JSONException ignored) {}
 		return false;
@@ -516,7 +523,7 @@ public class Curriculum {
 	private boolean loadDay(Date d) {
 		if (!isInBounds(d)) return false;
 		try {
-			Log.d("iHW", "starting to load day: " + d);
+			//Log.d("iHW", "starting to load day: " + d);
 			//Date weekStart = getWeekStart(year, d);
 			if (loadedDays == null) loadedDays = Collections.synchronizedSortedMap(new TreeMap<Date, Day>());
 			//if (!loadedWeeks.containsKey(weekStart)) return false;
@@ -552,22 +559,25 @@ public class Curriculum {
 			} else if (type.equals("test")) loadedDays.put(d, new TestDay(template));
 			else if (type.equals("holiday")) loadedDays.put(d, new Holiday(template));
 			else return false;
-			Log.d("iHW", "finished loading day");
+			//Log.d("iHW", "finished loading day");
 			return true;
 		} catch (JSONException ignored) { }
 		return false;
 	}
 	
 	public Day getDay(Date d) {
-		if (!isInBounds(d)) { Log.d("iHW", "Date out of bounds: " + d); return null; }
-		Log.d("iHW", "getting " + d.toString());
+		if (!isInBounds(d)) { 
+			//Log.d("iHW", "Date out of bounds: " + d); 
+			return null; 
+		}
+		//Log.d("iHW", "getting " + d.toString());
 		//Log.d("iHW", "weeks loaded: " + loadedWeeks.keySet().toString());
 		if (!isLoaded(d)) {
 			boolean success = true;
 			if (loadedWeeks == null || !loadedWeeks.containsKey(getWeekStart(year, d))) success = loadWeek(d);
-			if (!success) Log.e("iHW", "ERROR loading week");
+			//if (!success) Log.e("iHW", "ERROR loading week");
 			if (loadedDays == null || !loadedDays.containsKey(d)) success = loadDay(d);
-			if (!success) Log.e("iHW", "ERROR loading day");
+			//if (!success) Log.e("iHW", "ERROR loading day");
 		}
 		if (!isLoaded(d)) return null;
 		else {
@@ -778,7 +788,10 @@ public class Curriculum {
 		Date weekStart = getWeekStart(year, d);
 		boolean success = true;
 		if (!loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
-		if (!success) { Log.e("iHW", "ERROR loading week"); return null; }
+		if (!success) { 
+			//Log.e("iHW", "ERROR loading week"); 
+			return null; 
+		}
 		else {
 			try {
 				String key = d.toString() + "." + period;
@@ -795,7 +808,7 @@ public class Curriculum {
 					return new ArrayList<Note>(6);
 				}
 			} catch (JSONException e) { 
-				Log.e("iHW", "JSONException!", e);
+				//Log.e("iHW", "JSONException!", e);
 			}
 			return null;
 		}
@@ -806,9 +819,9 @@ public class Curriculum {
 		if (!isLoaded(d)) {
 			boolean success = true;
 			if (!loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
-			if (!success) Log.e("iHW", "ERROR loading week");
+			//if (!success) Log.e("iHW", "ERROR loading week");
 			if (!loadedDays.containsKey(d)) success = loadDay(d);
-			if (!success) Log.e("iHW", "ERROR loading day");
+			//if (!success) Log.e("iHW", "ERROR loading day");
 		}
 		if (isLoaded(d)) {
 			try {

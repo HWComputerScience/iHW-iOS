@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">iHW Beta</string>
+    <string name="app_name">iHW</string>
     <string name="hello_world">Hello world!</string>
-    <string name="prompt_welcome">Welcome to iHW for Android! (Beta)</string>
+    <string name="prompt_welcome">Welcome to iHW for Android!</string>
     <string name="title_activity_schedule">View Schedule</string>
     <string name="title_activity_edit_courses">Edit Courses</string>
     <string name="button_download">Download from HW.com</string>
@@ -57,6 +57,6 @@
     <string name="button_campus_upper">Upper</string>
     <string name="button_redownload">Redownload schedule from HW.com</string>
     <string name="prompt_courses_deleted">(All current courses will be deleted)</string>
-    <string name="disclaimer">DISCLAIMER\nThis application is provided for students of Harvard-Westlake School as a service. This service may be suspended or terminated at any time. Any data stored in the application is not guaranteed to be perpetually available. In no event shall either the developer of this application or Harvard-Westlake School be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including tardiness caused by incorrect information provided in this application).\nThe developer of this application, a student at Harvard-Westlake School, is not an official representative of the school. This application and the information provided herein are pending approval by Harvard-Westlake School.</string>
+    <string name="disclaimer">DISCLAIMER\nThis application is provided for students of Harvard-Westlake School as a service. This service may be suspended or terminated at any time. Any data stored in the application is not guaranteed to be perpetually available. In no event shall either the developer of this application or Harvard-Westlake School be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including tardiness caused by incorrect information provided in this application).\nThe developer of this application, a student at Harvard-Westlake School, is not an official representative of the school. This application and the information provided herein are approved by Harvard-Westlake School.</string>
     <string name="action_refresh">Refresh</string>
 </resources>

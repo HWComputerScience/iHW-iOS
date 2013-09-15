@@ -26,7 +26,7 @@ public class GuidedCoursesActivity extends CoursesActivity {
 			.setNegativeButton("Go Back", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					Curriculum.getCurrentCurriculum().removeAllCourses();
-					Curriculum.save();
+					Curriculum.getCurrentCurriculum().saveCourses();
 					GuidedCoursesActivity.this.finish();
 				}
 			}).setPositiveButton("Keep Editing", null).show();

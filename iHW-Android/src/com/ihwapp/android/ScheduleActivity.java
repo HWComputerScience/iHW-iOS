@@ -12,7 +12,6 @@ import android.app.ProgressDialog;
 import android.content.*;
 import android.support.v4.app.*;
 import android.support.v4.view.*;
-import android.util.Log;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
@@ -28,7 +27,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d("iHW-lc", "ScheduleActivity onCreate");
+		//Log.d("iHW-lc", "ScheduleActivity onCreate");
 		Curriculum.ctx = this.getApplicationContext();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schedule);
@@ -64,10 +63,10 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	
 	protected void onStart() {
 		super.onStart();
-		Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
+		//Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
 		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
 		if (Curriculum.getCurrentCurriculum().isLoaded()) {
-			Log.d("iHW", "Setting adapter");
+			//Log.d("iHW", "Setting adapter");
 			if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 			pager.setAdapter(adapter);
 			if (lastIndex >= 0) pager.setCurrentItem(lastIndex, false);
@@ -89,7 +88,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 
 	@Override
 	public void onFinishedLoading(Curriculum c) {
-		Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
+		//Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
 		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 		pager.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -169,23 +168,23 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	public void onSaveInstanceState(Bundle outState) {
 		this.pager.setAdapter(null);
 		super.onSaveInstanceState(outState);
-		Log.d("iHW-lc", "ScheduleActivity onSaveInstanceState");
+		//Log.d("iHW-lc", "ScheduleActivity onSaveInstanceState");
 		outState.putInt("lastIndex", lastIndex);
 	}
 	
 	public void onPause() {
 		super.onPause();
-		Log.d("iHW-lc", "ScheduleActivity onPause");
+		//Log.d("iHW-lc", "ScheduleActivity onPause");
 	}
 	
 	public void onStop() {
-		Log.d("iHW-lc", "ScheduleActivity onStop");
+		//Log.d("iHW-lc", "ScheduleActivity onStop");
 		pager.setAdapter(null);
 		super.onStop();
 	}
 	
 	public void onDestroy() {
-		Log.d("iHW-lc", "ScheduleActivity onDestroy");
+		//Log.d("iHW-lc", "ScheduleActivity onDestroy");
 		super.onDestroy();
 	}
 	
@@ -214,7 +213,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 			Date date = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
 			DayFragment f = new DayFragment();
 			Bundle b = new Bundle();
-			Log.d("iHW", "pager: " + pager + " asked for " + date.toString());
+			//Log.d("iHW", "pager: " + pager + " asked for " + date.toString());
 			b.putString("date", date.toString());
 			f.setArguments(b);
 			return f;

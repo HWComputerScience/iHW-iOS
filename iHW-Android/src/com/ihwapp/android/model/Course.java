@@ -2,7 +2,6 @@ package com.ihwapp.android.model;
 
 import org.json.*;
 
-@SuppressWarnings("ALL")
 public class Course {
 	private String name;
 	private int period;

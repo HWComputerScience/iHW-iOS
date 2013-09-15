@@ -13,7 +13,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import android.webkit.*;
@@ -75,7 +74,7 @@ public class DownloadScheduleActivity extends IHWActivity {
             }
 
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                Log.e("iHW", errorCode + ": " + description);
+                //Log.e("iHW", errorCode + ": " + description);
                 showScheduleUnavailableError();
             }
         });
@@ -116,12 +115,12 @@ public class DownloadScheduleActivity extends IHWActivity {
 			changeInfoText("Schedule found. Downloading...");
 		}
 		protected Document doInBackground(String...url) {
-			Log.d("iHW", "Downloading/parsing HTML");
+			//Log.d("iHW", "Downloading/parsing HTML");
 			Document doc = null;
 			try {
 				doc = Jsoup.connect(url[0]).get();
 			} catch (Exception e) {
-				Log.e("iHW", e.getClass().getName() + " Downloading/parsing HTML");
+				//Log.e("iHW", e.getClass().getName() + " Downloading/parsing HTML");
 				e.printStackTrace();
 			}
 			return doc;
@@ -141,19 +140,19 @@ public class DownloadScheduleActivity extends IHWActivity {
 			
 			for (Element div : divs) {
 				if (div.attr("id").equals("nameStudentName1-0")) {
-					Log.d("iHW", "Name: " + div.getElementsByTag("span").first().text());
+					//Log.d("iHW", "Name: " + div.getElementsByTag("span").first().text());
 				} else if (div.attr("id").equals("sectCode1")) {
 					lastCode = div.getElementsByTag("span").first().text();
 					if (lastCode.length() <= 4) shouldShowWarning = true;
-					Log.d("iHW", "Course code: " + lastCode);
+					//Log.d("iHW", "Course code: " + lastCode);
 				} else if (div.attr("id").equals("sectTitle1")) {
 					lastName = div.getElementsByTag("span").first().text();
-					Log.d("iHW", "Course name: " + lastName);
+					//Log.d("iHW", "Course name: " + lastName);
 				} else if (div.attr("id").equals("sectPeriodList1")) {
 					lastPeriodList = div.getElementsByTag("span").first().text();
-					Log.d("iHW", "Course meets: " + lastPeriodList);
+					//Log.d("iHW", "Course meets: " + lastPeriodList);
 					String[] tokens = lastPeriodList.split("\\.");
-					Log.d("iHW", "Number of tokens: " + tokens.length);
+					//Log.d("iHW", "Number of tokens: " + tokens.length);
 					if (tokens.length != Curriculum.getCurrentCampus()) {
 						new AlertDialog.Builder(DownloadScheduleActivity.this, R.style.PopupTheme).setTitle("Wrong Campus!")
 						.setMessage("You chose the wrong campus during the setup. Please start again.")
