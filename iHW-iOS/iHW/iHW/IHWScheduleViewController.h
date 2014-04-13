@@ -23,4 +23,12 @@
 @property (strong, nonatomic) IHWDate *currentDate;
 @property (strong, nonatomic) UIAlertView *unavailableAlert;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topSpaceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomSpaceConstraint;
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *todayItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *gotoDateItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *backItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *forwardItem;
+
 @end

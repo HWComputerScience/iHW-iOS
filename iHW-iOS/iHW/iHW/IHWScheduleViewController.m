@@ -30,17 +30,21 @@
     [super viewDidLoad];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Courses" style:UIBarButtonItemStyleBordered target:self action:@selector(showCourses)];
-    
-    UIToolbar *tools = [[UIToolbar alloc]
-                        initWithFrame:CGRectMake(0,0,64,44)];
-    tools.clipsToBounds = NO;
-    tools.barStyle = -1;
-    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"whitegear"] style:UIBarButtonItemStylePlain target:self action:@selector(optionsButtonClicked)];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh)];
-    NSArray *buttons = @[item2, item1];
-    [tools setItems:buttons animated:NO];
-    UIBarButtonItem *rightButtons = [[UIBarButtonItem alloc] initWithCustomView:tools];
-    self.navigationItem.rightBarButtonItem = rightButtons;
+    
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"whitegear_old"] style:UIBarButtonItemStylePlain target:self action:@selector(optionsButtonClicked)];
+        NSArray *buttons = @[item2, item1];
+        UIToolbar *tools = [[UIToolbar alloc] initWithFrame:CGRectMake(0,0,64,44)];
+        tools.clipsToBounds = NO;
+        tools.barStyle = -1;
+        [tools setItems:buttons animated:NO];
+        UIBarButtonItem *rightButtons = [[UIBarButtonItem alloc] initWithCustomView:tools];
+        self.navigationItem.rightBarButtonItem = rightButtons;
+    } else {
+        UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"whitegear"] style:UIBarButtonItemStylePlain target:self action:@selector(optionsButtonClicked)];
+        self.navigationItem.rightBarButtonItems = @[item1, item2];
+    }
     
     self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     self.pageViewController.dataSource = self;
@@ -53,6 +57,17 @@
     
     self.pageViewController.view.frame = self.pageContainerView.bounds;
     [self.pageContainerView addSubview:self.pageViewController.view];
+    
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        self.topSpaceConstraint.constant = 0;
+        self.toolbar.tintColor = [UIColor colorWithRed:.6 green:0 blue:0 alpha:1];
+        self.backItem.image = [UIImage imageNamed:@"backbutton_old"];
+        self.forwardItem.image = [UIImage imageNamed:@"forwardbutton_old"];
+        self.gotoDateItem.image = nil;
+        self.gotoDateItem.title = @"Goto Date...";
+        self.todayItem.image = nil;
+        self.todayItem.title = @"Today";
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -104,7 +119,8 @@
         [[IHWCurriculum currentCurriculum] loadEverythingWithStartingDate:[IHWDate today]];
         self.loadingView = [[IHWLoadingView alloc] initWithText:@"Loading..."];
     } else if (buttonIndex == 1) {
-        [self presentViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil] animated:YES completion:nil];
+        UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil]];
+        [self presentViewController:navc animated:YES completion:nil];
     }
 }
 
@@ -136,7 +152,8 @@
 }
 
 - (void)optionsButtonClicked {
-    [self presentViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil] animated:YES completion:nil];
+    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil]];
+    [self presentViewController:navc animated:YES completion:nil];
 }
 
 - (void)refresh {
@@ -212,7 +229,7 @@
 }
 
 - (IBAction)gotoDate:(id)sender {
-    ActionSheetDatePicker *picker = [[ActionSheetDatePicker alloc] initWithTitle:@"Choose a date:" datePickerMode:UIDatePickerModeDate selectedDate:self.currentDate target:self action:@selector(showDayWithDate:) origin:self.toolbar];
+    ActionSheetDatePicker *picker = [[ActionSheetDatePicker alloc] initWithTitle:@"Go to which date?" datePickerMode:UIDatePickerModeDate selectedDate:self.currentDate target:self action:@selector(showDayWithDate:) origin:self.toolbar];
     picker.doneButtonText = @"Go";
     [picker showActionSheetPicker];
 }

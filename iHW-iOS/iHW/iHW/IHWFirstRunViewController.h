@@ -16,5 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *methodPromptLabel;
 @property (weak, nonatomic) IBOutlet UIButton *downloadButton;
 @property (weak, nonatomic) IBOutlet UIButton *manualButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topSpaceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topSpaceConstraint2;
 
 @end

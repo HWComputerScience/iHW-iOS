@@ -35,7 +35,7 @@
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelCourse)];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(saveCourse)];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:@"UIKeyboardDidShowNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:@"UIKeyboardWillShowNotification" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];
     }
     return self;
@@ -47,13 +47,20 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.originalInsetTop = 0;
     
     if (self.course != nil) {
         self.nameField.text = self.course.name;
         self.periodField.text = [NSString stringWithFormat:@"%d", self.course.period];
-        
-        self.deleteButton = [[GradientButton alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
-        [self.deleteButton useRedDeleteStyle];
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            self.deleteButton = [[GradientButton alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
+            [(GradientButton *)self.deleteButton useRedDeleteStyle];
+        } else {
+            self.deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 0, 300, 44)];
+            [self.deleteButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            [self.deleteButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+            [self.deleteButton setTitleColor:[UIColor redColor] forState:UIControlStateDisabled];
+        }
         [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateNormal];
         [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateHighlighted];
         [self.deleteButton setTitle:@"Delete Course" forState:UIControlStateDisabled];
@@ -64,7 +71,14 @@
     self.termField.text = stringForTerm(self.term);
     
     UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    toolbar.barStyle = UIBarStyleBlackTranslucent;
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        toolbar.barStyle = UIBarStyleBlackTranslucent;
+    } else {
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+        self.originalInsetTop = 64;
+        toolbar.barTintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+        toolbar.tintColor = [UIColor whiteColor];
+    }
     [toolbar setItems:@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil], [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(resignPeriodField)]] animated:YES];
     self.periodField.inputAccessoryView = toolbar;
     
@@ -106,6 +120,9 @@
         return [self.cells objectAtIndex:2];
     } else if (indexPath.section == 2) {
         UITableViewCell *cell = [self.cells objectAtIndex:3];
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            cell.backgroundColor = [UIColor clearColor];
+        }
         [cell.contentView addSubview:self.deleteButton];
         return cell;
     }
@@ -153,19 +170,27 @@
     [[[UIActionSheet alloc] initWithTitle:@"Are you sure you want to delete this course?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete Course" otherButtonTitles:nil] showInView:self.view];
 }
 
-- (void)keyboardDidShow:(NSNotification *)notification {
+- (void)keyboardWillShow:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
     NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [self.view convertRect:[aValue CGRectValue] fromView:nil];
     CGRect intersection = CGRectIntersection(keyboardRect, self.tableView.frame);
-    int offset = 0;
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        self.tableView.contentInset = UIEdgeInsetsMake(self.originalInsetTop, 0, intersection.size.height, 0);
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.originalInsetTop, 0, intersection.size.height, 0);
+    }];
+    /*int offset = 0;
     if (self.periodField.isFirstResponder) offset = self.periodField.inputAccessoryView.frame.size.height;
-    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-intersection.size.height+offset);
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y, self.tableView.frame.size.width, self.tableView.frame.size.height-intersection.size.height+offset);*/
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    self.tableView.frame = self.view.bounds;
-
+    [UIView animateWithDuration:0.25 animations:^{
+        self.tableView.contentInset = UIEdgeInsetsMake(self.originalInsetTop, 0, 0, 0);
+        self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.originalInsetTop, 0, 0, 0);
+    }];
+    //self.tableView.frame = self.view.bounds;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

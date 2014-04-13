@@ -179,6 +179,7 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     self.optionsButton.hidden = YES;
     focused = NO;
+    if (self.isImportant) self.textField.textColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
     [self setNeedsLayout];
 }
 

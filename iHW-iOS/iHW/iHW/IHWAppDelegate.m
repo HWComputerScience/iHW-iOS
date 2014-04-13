@@ -35,7 +35,14 @@
             rootVC = [[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil]; //ADD IPAD VERSIONS HERE
     }
     self.navController = [[UINavigationController alloc] initWithRootViewController:rootVC];
-    self.navController.navigationBar.tintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        self.navController.navigationBar.tintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+    } else {
+        self.navController.navigationBar.barTintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+        self.navController.navigationBar.tintColor = [UIColor whiteColor];
+        self.navController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+        self.navController.navigationBar.barStyle = UIBarStyleBlack;
+    }
     self.window.rootViewController = self.navController;
     [self.window makeKeyAndVisible];
     return YES;

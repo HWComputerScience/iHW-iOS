@@ -22,10 +22,9 @@
         self.date = date;
         //NSLog(@"init: %@", self.date.description);
         self.day = [[IHWCurriculum currentCurriculum] dayWithDate:self.date];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:@"UIKeyboardWillShowNotification" object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];
         self.scrollToIndex = -1;
         self.cells = [NSMutableArray array];
+        self.originalInsets = UIEdgeInsetsMake(0, 0, 44, 0);
     }
     return self;
 }
@@ -36,16 +35,23 @@
     //NSLog(@"viewDidLoad : %@", self.date.description);
     CGRect frame = CGRectMake(0, 0, 320, 48);
     UIView *background = [[UIView alloc] initWithFrame:frame];
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor colorWithRed:0.87 green:0.84 blue:0.74 alpha:1].CGColor, (id)[UIColor colorWithRed:0.87 green:0.86 blue:0.80 alpha:1].CGColor, nil];
-    gradientLayer.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0], [NSNumber numberWithFloat:1], nil];
-    gradientLayer.frame = CGRectMake(0, 0, 5000, 45);
-    [background.layer addSublayer:gradientLayer];
+    CALayer *solidLayer = [CALayer layer];
+    solidLayer.backgroundColor = [UIColor colorWithRed:0.87 green:0.85 blue:0.77 alpha:1].CGColor;
+    solidLayer.frame = CGRectMake(0, 0, 5000, 45);
+    [background.layer addSublayer:solidLayer];
     
-    CAGradientLayer *topShadow = [CAGradientLayer layer];
-    topShadow.frame = CGRectMake(0, 45, 5000, 3);
-    topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.25f] CGColor], (id)[[UIColor clearColor] CGColor], nil];
-    [background.layer insertSublayer:topShadow atIndex:0];
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+        gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor colorWithRed:0.87 green:0.84 blue:0.74 alpha:1].CGColor, (id)[UIColor colorWithRed:0.87 green:0.86 blue:0.80 alpha:1].CGColor, nil];
+        gradientLayer.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0], [NSNumber numberWithFloat:1], nil];
+        gradientLayer.frame = CGRectMake(0, 0, 5000, 45);
+        [background.layer addSublayer:gradientLayer];
+        
+        CAGradientLayer *topShadow = [CAGradientLayer layer];
+        topShadow.frame = CGRectMake(0, 45, 5000, 3);
+        topShadow.colors = [NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0.0 alpha:0.25f] CGColor], (id)[[UIColor clearColor] CGColor], nil];
+        [background.layer insertSublayer:topShadow atIndex:0];
+    }
     
     background.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view insertSubview:background aboveSubview:self.periodsTableView];
@@ -56,6 +62,12 @@
     self.titleLabel.text = self.day.title;
     self.periodsTableView.delegate = self;
     self.periodsTableView.dataSource = self;
+    
+    self.periodsTableView.contentInset = self.originalInsets;
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        self.periodsTableView.separatorInset = UIEdgeInsetsZero;
+    }
+    
     if ([self.day isKindOfClass:[IHWHoliday class]]) {
         self.periodsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
@@ -63,8 +75,19 @@
     [self loadTableViewCells];
 }
 
+- (void)registerKeyboardObservers {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:@"UIKeyboardWillShowNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:@"UIKeyboardWillHideNotification" object:nil];
+}
+
+- (void)unregisterKeyboardObservers {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIKeyboardWillShowNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UIKeyboardWillHideNotification" object:nil];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     //NSLog(@"ViewWillAppear");
+    [self registerKeyboardObservers];
     [self.view setNeedsLayout];
     [self.view setNeedsDisplay];
 }
@@ -90,7 +113,8 @@
     CGRect keyboardRect = [self.view convertRect:[aValue CGRectValue] fromView:nil];
     CGRect intersection = CGRectIntersection(keyboardRect, self.periodsTableView.frame);
     [UIView animateWithDuration:0.2 animations:^{
-    self.periodsTableView.contentInset = UIEdgeInsetsMake(0, 0, intersection.size.height, 0);
+        self.periodsTableView.contentInset = UIEdgeInsetsMake(0, 0, intersection.size.height, 0);
+        self.periodsTableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, intersection.size.height, 0);
         [self.periodsTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollToIndex inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
         self.scrollToIndex = -1;
     }];
@@ -98,7 +122,8 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification {
     [UIView animateWithDuration:0.25 animations:^{
-        self.periodsTableView.contentInset = UIEdgeInsetsZero;
+        self.periodsTableView.contentInset = self.originalInsets;
+        self.periodsTableView.scrollIndicatorInsets = self.originalInsets;
     }];    
 }
 
@@ -153,12 +178,12 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"period%@.%d", self.date.description, indexPath.row]];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"period%@.%d", self.date.description, (int)indexPath.row]];
     if (cell==nil && indexPath.row < self.cells.count && [self.cells objectAtIndex:indexPath.row] != [NSNull null]) {
         cell = [self.cells objectAtIndex:indexPath.row];
     }
     if (cell==nil) {
-        cell = [self createNewCellForIndex:indexPath.row];
+        cell = [self createNewCellForIndex:(int)indexPath.row];
     }
     cell.frame = CGRectMake(0, 0, tableView.bounds.size.width, 1000);
     return cell;
@@ -170,7 +195,7 @@
 
 - (void)updateRowHeightAtIndex:(int)index toHeight:(int)height {
     [self.periodsTableView beginUpdates];
-    if (index==-1) index = self.cells.count-1;
+    if (index==-1) index = (int)self.cells.count-1;
     UITableViewCell *cell = [self.cells objectAtIndex:index];
     cell.frame = CGRectMake(0, 0, self.periodsTableView.bounds.size.width, height);
     [self.periodsTableView endUpdates];
@@ -183,6 +208,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [self unregisterKeyboardObservers];
     if (self.hasUnsavedChanges) {
         //NSLog(@"Committing changes");
         [[IHWCurriculum currentCurriculum] saveWeekWithDate:self.date];

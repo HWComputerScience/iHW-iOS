@@ -28,22 +28,30 @@
         int leftColumnWidth = 76;
         int rightColumnWidth = self.frame.size.width-leftColumnWidth-8;
         
+        //Create labels
         self.startLabel = [[UILabel alloc] initWithFrame:CGRectMake(4, 3, leftColumnWidth, 19)];
         self.periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(4, 22, leftColumnWidth, 30)];
         self.endLabel = [[UILabel alloc] initWithFrame:CGRectMake(4, 52, leftColumnWidth, 19)];
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftColumnWidth+8, 3, rightColumnWidth, 19)];
         self.notesView = [[UIView alloc] initWithFrame:CGRectMake(leftColumnWidth+8, 22, rightColumnWidth, 49)];
         
+        //Setup constraints
         self.clipsToBounds = YES;
         self.startLabel.translatesAutoresizingMaskIntoConstraints = NO;
         self.periodLabel.translatesAutoresizingMaskIntoConstraints = NO;
         self.endLabel.translatesAutoresizingMaskIntoConstraints = NO;
-                
+        
+        NSDictionary *views = @{@"start":self.startLabel, @"period":self.periodLabel, @"end":self.endLabel};
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-3-[start(==19)][period(>=24)][end(==19)]-2-|" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[start(==period,==end,==76)]" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
+        
+        //Setup fonts
         self.startLabel.font = [UIFont systemFontOfSize:17];
         self.periodLabel.font = [UIFont boldSystemFontOfSize:25];
         self.endLabel.font = [UIFont systemFontOfSize:17];
         self.titleLabel.font = [UIFont boldSystemFontOfSize:17];
         
+        //Add text to labels
         self.startLabel.text = self.period.startTime.description12;
         if (self.period.periodNum != 0)
             self.periodLabel.text = getOrdinal(self.period.periodNum);
@@ -51,16 +59,14 @@
         self.endLabel.text = self.period.endTime.description12;
         self.titleLabel.text = self.period.name;
         
+        //Add labels to view
         [self addSubview:self.startLabel];
         [self addSubview:self.periodLabel];
         [self addSubview:self.endLabel];
         [self addSubview:self.titleLabel];
         [self addSubview:self.notesView];
         
-        NSDictionary *views = @{@"start":self.startLabel, @"period":self.periodLabel, @"end":self.endLabel};
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-3-[start(==19)][period(>=24)][end(==19)]-2-|" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[start(==period,==end,==76)]" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
-        
+        //Add notes to noteView
         for (IHWNote *note in self.period.notes) {
             [self addNoteView:note animated:NO willAddMore:YES];
         }
@@ -110,14 +116,17 @@
                 [self.countdownView addSubview:label];
                 [self addSubview:self.countdownView];
                 self.countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateCountdownView) userInfo:nil repeats:YES];
+                [self updateCountdownView];
             }
     }
 }
 
 - (void)updateCountdownView {
     int secondsUntil = [[IHWTime now] secondsUntilTime:self.period.startTime];
-    if (secondsUntil >= 0) {
-        UILabel *label = [self.countdownView.subviews objectAtIndex:0];
+    UILabel *label = [self.countdownView.subviews objectAtIndex:0];
+    if (secondsUntil >= 60*60) {
+        label.text = [NSString stringWithFormat:@"Starts in %d:%02d:%02d", secondsUntil/3600,(secondsUntil%3600)/60, secondsUntil%60];
+    } else if (secondsUntil >= 0) {
         label.text = [NSString stringWithFormat:@"Starts in %d:%02d", secondsUntil/60, secondsUntil%60];
     } else {
         [self.countdownTimer invalidate];

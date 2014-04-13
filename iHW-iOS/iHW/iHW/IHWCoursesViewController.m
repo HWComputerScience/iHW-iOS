@@ -27,6 +27,14 @@
     [super viewDidLoad];
 	self.coursesTable.delegate = self;
     self.coursesTable.dataSource = self;
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+    } else {
+        self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+        self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

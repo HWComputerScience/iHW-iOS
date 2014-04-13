@@ -33,15 +33,22 @@
 		CB048C4917B573EC00E3F76E /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C4717B573EC00E3F76E /* NSDictionary_JSONExtensions.m */; };
 		CB25B9BC17C303E00085B9E2 /* UIViewController+IHW.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25B9BB17C303E00085B9E2 /* UIViewController+IHW.m */; };
 		CB25B9BF17C535910085B9E2 /* ActionSheetDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25B9BE17C534AF0085B9E2 /* ActionSheetDatePicker.m */; };
-		CB25B9CC17C53D520085B9E2 /* backbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9C817C53D520085B9E2 /* backbutton.png */; };
-		CB25B9CD17C53D520085B9E2 /* backbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9C917C53D520085B9E2 /* backbutton@2x.png */; };
-		CB25B9CE17C53D520085B9E2 /* forwardbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9CA17C53D520085B9E2 /* forwardbutton.png */; };
-		CB25B9CF17C53D520085B9E2 /* forwardbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9CB17C53D520085B9E2 /* forwardbutton@2x.png */; };
+		CB25B9CC17C53D520085B9E2 /* backbutton_old.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9C817C53D520085B9E2 /* backbutton_old.png */; };
+		CB25B9CD17C53D520085B9E2 /* backbutton_old@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9C917C53D520085B9E2 /* backbutton_old@2x.png */; };
+		CB25B9CE17C53D520085B9E2 /* forwardbutton_old.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9CA17C53D520085B9E2 /* forwardbutton_old.png */; };
+		CB25B9CF17C53D520085B9E2 /* forwardbutton_old@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9CB17C53D520085B9E2 /* forwardbutton_old@2x.png */; };
 		CB25B9D417C541690085B9E2 /* graygear.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D017C541680085B9E2 /* graygear.png */; };
 		CB25B9D517C541690085B9E2 /* graygear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D117C541680085B9E2 /* graygear@2x.png */; };
-		CB25B9D617C541690085B9E2 /* whitegear.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D217C541680085B9E2 /* whitegear.png */; };
-		CB25B9D717C541690085B9E2 /* whitegear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D317C541680085B9E2 /* whitegear@2x.png */; };
+		CB25B9D617C541690085B9E2 /* whitegear_old.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D217C541680085B9E2 /* whitegear_old.png */; };
+		CB25B9D717C541690085B9E2 /* whitegear_old@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB25B9D317C541680085B9E2 /* whitegear_old@2x.png */; };
 		CB25B9DA17C542A20085B9E2 /* IHWNoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB25B9D917C542A00085B9E2 /* IHWNoteView.m */; };
+		CB3E0DB1189EB0D200A17B9C /* gotodate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DAF189EB0D200A17B9C /* gotodate@2x.png */; };
+		CB3E0DB4189EB46800A17B9C /* backbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DB3189EB46800A17B9C /* backbutton@2x.png */; };
+		CB3E0DB6189EB4A500A17B9C /* forwardbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DB5189EB4A500A17B9C /* forwardbutton@2x.png */; };
+		CB3E0DB8189EB50D00A17B9C /* today@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DB7189EB50D00A17B9C /* today@2x.png */; };
+		CB3E0DBB189EBA6400A17B9C /* checkboxChecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DB9189EBA6400A17B9C /* checkboxChecked@2x.png */; };
+		CB3E0DBC189EBA6400A17B9C /* checkboxUnchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DBA189EBA6400A17B9C /* checkboxUnchecked@2x.png */; };
+		CB3E0DBE189EBE0C00A17B9C /* whitegear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DBD189EBE0C00A17B9C /* whitegear@2x.png */; };
 		CB4262E017C9E21B008EE2D7 /* icon_ios_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */; };
 		CB4262E417C9E265008EE2D7 /* icon_ios_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */; };
 		CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB44277817BB0DC00068D543 /* IHWDayViewController.m */; };
@@ -50,10 +57,10 @@
 		CB5DF79417BD424F00D5651C /* IHWPeriodsChooserLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79317BD424F00D5651C /* IHWPeriodsChooserLayout.m */; };
 		CB5DF79717BD4B1900D5651C /* IHWLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79617BD4B1800D5651C /* IHWLabelCell.m */; };
 		CB5DF79917BDF41500D5651C /* IHWUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79817BDF41500D5651C /* IHWUtils.m */; };
-		CB5DF7A317BDFA5400D5651C /* checkboxChecked.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF79F17BDFA5400D5651C /* checkboxChecked.png */; };
-		CB5DF7A417BDFA5400D5651C /* checkboxChecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */; };
-		CB5DF7A517BDFA5400D5651C /* checkboxUnchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */; };
-		CB5DF7A617BDFA5400D5651C /* checkboxUnchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */; };
+		CB5DF7A317BDFA5400D5651C /* checkboxChecked_old.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF79F17BDFA5400D5651C /* checkboxChecked_old.png */; };
+		CB5DF7A417BDFA5400D5651C /* checkboxChecked_old@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A017BDFA5400D5651C /* checkboxChecked_old@2x.png */; };
+		CB5DF7A517BDFA5400D5651C /* checkboxUnchecked_old.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A117BDFA5400D5651C /* checkboxUnchecked_old.png */; };
+		CB5DF7A617BDFA5400D5651C /* checkboxUnchecked_old@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7A217BDFA5400D5651C /* checkboxUnchecked_old@2x.png */; };
 		CB5DF7AA17BF018F00D5651C /* GradientButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF7A817BEFFB500D5651C /* GradientButton.m */; };
 		CB5DF7AC17BF3A5600D5651C /* IHWEditCourseCells.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB5DF7AB17BF3A5300D5651C /* IHWEditCourseCells.xib */; };
 		CB5DF7AE17BFDDF400D5651C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB5DF7AD17BFDDF300D5651C /* QuartzCore.framework */; };
@@ -139,16 +146,23 @@
 		CB25B9BB17C303E00085B9E2 /* UIViewController+IHW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+IHW.m"; sourceTree = "<group>"; };
 		CB25B9BD17C534AF0085B9E2 /* ActionSheetDatePicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionSheetDatePicker.h; sourceTree = "<group>"; };
 		CB25B9BE17C534AF0085B9E2 /* ActionSheetDatePicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionSheetDatePicker.m; sourceTree = "<group>"; };
-		CB25B9C817C53D520085B9E2 /* backbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backbutton.png; sourceTree = "<group>"; };
-		CB25B9C917C53D520085B9E2 /* backbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbutton@2x.png"; sourceTree = "<group>"; };
-		CB25B9CA17C53D520085B9E2 /* forwardbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forwardbutton.png; sourceTree = "<group>"; };
-		CB25B9CB17C53D520085B9E2 /* forwardbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "forwardbutton@2x.png"; sourceTree = "<group>"; };
+		CB25B9C817C53D520085B9E2 /* backbutton_old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backbutton_old.png; sourceTree = "<group>"; };
+		CB25B9C917C53D520085B9E2 /* backbutton_old@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbutton_old@2x.png"; sourceTree = "<group>"; };
+		CB25B9CA17C53D520085B9E2 /* forwardbutton_old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forwardbutton_old.png; sourceTree = "<group>"; };
+		CB25B9CB17C53D520085B9E2 /* forwardbutton_old@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "forwardbutton_old@2x.png"; sourceTree = "<group>"; };
 		CB25B9D017C541680085B9E2 /* graygear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = graygear.png; sourceTree = "<group>"; };
 		CB25B9D117C541680085B9E2 /* graygear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graygear@2x.png"; sourceTree = "<group>"; };
-		CB25B9D217C541680085B9E2 /* whitegear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whitegear.png; sourceTree = "<group>"; };
-		CB25B9D317C541680085B9E2 /* whitegear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitegear@2x.png"; sourceTree = "<group>"; };
+		CB25B9D217C541680085B9E2 /* whitegear_old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whitegear_old.png; sourceTree = "<group>"; };
+		CB25B9D317C541680085B9E2 /* whitegear_old@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitegear_old@2x.png"; sourceTree = "<group>"; };
 		CB25B9D817C5429F0085B9E2 /* IHWNoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWNoteView.h; sourceTree = "<group>"; };
 		CB25B9D917C542A00085B9E2 /* IHWNoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWNoteView.m; sourceTree = "<group>"; };
+		CB3E0DAF189EB0D200A17B9C /* gotodate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gotodate@2x.png"; sourceTree = "<group>"; };
+		CB3E0DB3189EB46800A17B9C /* backbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbutton@2x.png"; sourceTree = "<group>"; };
+		CB3E0DB5189EB4A500A17B9C /* forwardbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "forwardbutton@2x.png"; sourceTree = "<group>"; };
+		CB3E0DB7189EB50D00A17B9C /* today@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today@2x.png"; sourceTree = "<group>"; };
+		CB3E0DB9189EBA6400A17B9C /* checkboxChecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxChecked@2x.png"; sourceTree = "<group>"; };
+		CB3E0DBA189EBA6400A17B9C /* checkboxUnchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxUnchecked@2x.png"; sourceTree = "<group>"; };
+		CB3E0DBD189EBE0C00A17B9C /* whitegear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitegear@2x.png"; sourceTree = "<group>"; };
 		CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_ios_iphone.png; sourceTree = "<group>"; };
 		CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_ios_iphone@2x.png"; sourceTree = "<group>"; };
 		CB44277717BB0DC00068D543 /* IHWDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDayViewController.h; sourceTree = "<group>"; };
@@ -162,10 +176,10 @@
 		CB5DF79617BD4B1800D5651C /* IHWLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWLabelCell.m; sourceTree = "<group>"; };
 		CB5DF79817BDF41500D5651C /* IHWUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWUtils.m; sourceTree = "<group>"; };
 		CB5DF79A17BDF60C00D5651C /* IHWUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IHWUtils.h; sourceTree = "<group>"; };
-		CB5DF79F17BDFA5400D5651C /* checkboxChecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxChecked.png; sourceTree = "<group>"; };
-		CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxChecked@2x.png"; sourceTree = "<group>"; };
-		CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxUnchecked.png; sourceTree = "<group>"; };
-		CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxUnchecked@2x.png"; sourceTree = "<group>"; };
+		CB5DF79F17BDFA5400D5651C /* checkboxChecked_old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxChecked_old.png; sourceTree = "<group>"; };
+		CB5DF7A017BDFA5400D5651C /* checkboxChecked_old@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxChecked_old@2x.png"; sourceTree = "<group>"; };
+		CB5DF7A117BDFA5400D5651C /* checkboxUnchecked_old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxUnchecked_old.png; sourceTree = "<group>"; };
+		CB5DF7A217BDFA5400D5651C /* checkboxUnchecked_old@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxUnchecked_old@2x.png"; sourceTree = "<group>"; };
 		CB5DF7A717BEFFB500D5651C /* GradientButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GradientButton.h; sourceTree = "<group>"; };
 		CB5DF7A817BEFFB500D5651C /* GradientButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GradientButton.m; sourceTree = "<group>"; };
 		CB5DF7AB17BF3A5300D5651C /* IHWEditCourseCells.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWEditCourseCells.xib; sourceTree = "<group>"; };
@@ -415,18 +429,25 @@
 			children = (
 				CB7E454517C5D73B00E1621F /* mscampus.jpg */,
 				CB61049E17B8952600D3FD75 /* uscampus.jpg */,
-				CB5DF79F17BDFA5400D5651C /* checkboxChecked.png */,
-				CB5DF7A017BDFA5400D5651C /* checkboxChecked@2x.png */,
-				CB5DF7A117BDFA5400D5651C /* checkboxUnchecked.png */,
-				CB5DF7A217BDFA5400D5651C /* checkboxUnchecked@2x.png */,
-				CB25B9C817C53D520085B9E2 /* backbutton.png */,
-				CB25B9C917C53D520085B9E2 /* backbutton@2x.png */,
-				CB25B9CA17C53D520085B9E2 /* forwardbutton.png */,
-				CB25B9CB17C53D520085B9E2 /* forwardbutton@2x.png */,
+				CB5DF79F17BDFA5400D5651C /* checkboxChecked_old.png */,
+				CB5DF7A017BDFA5400D5651C /* checkboxChecked_old@2x.png */,
+				CB5DF7A117BDFA5400D5651C /* checkboxUnchecked_old.png */,
+				CB5DF7A217BDFA5400D5651C /* checkboxUnchecked_old@2x.png */,
+				CB25B9C817C53D520085B9E2 /* backbutton_old.png */,
+				CB25B9C917C53D520085B9E2 /* backbutton_old@2x.png */,
+				CB25B9CA17C53D520085B9E2 /* forwardbutton_old.png */,
+				CB25B9CB17C53D520085B9E2 /* forwardbutton_old@2x.png */,
 				CB25B9D017C541680085B9E2 /* graygear.png */,
 				CB25B9D117C541680085B9E2 /* graygear@2x.png */,
-				CB25B9D217C541680085B9E2 /* whitegear.png */,
-				CB25B9D317C541680085B9E2 /* whitegear@2x.png */,
+				CB25B9D217C541680085B9E2 /* whitegear_old.png */,
+				CB25B9D317C541680085B9E2 /* whitegear_old@2x.png */,
+				CB3E0DAF189EB0D200A17B9C /* gotodate@2x.png */,
+				CB3E0DB3189EB46800A17B9C /* backbutton@2x.png */,
+				CB3E0DB5189EB4A500A17B9C /* forwardbutton@2x.png */,
+				CB3E0DB7189EB50D00A17B9C /* today@2x.png */,
+				CB3E0DB9189EBA6400A17B9C /* checkboxChecked@2x.png */,
+				CB3E0DBA189EBA6400A17B9C /* checkboxUnchecked@2x.png */,
+				CB3E0DBD189EBE0C00A17B9C /* whitegear@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -498,6 +519,7 @@
 				491CCB3C178E590B00736453 /* InfoPlist.strings in Resources */,
 				CB61049C17B8945C00D3FD75 /* IHWFirstRunViewController.xib in Resources */,
 				CB6104A017B8952600D3FD75 /* uscampus.jpg in Resources */,
+				CB3E0DBB189EBA6400A17B9C /* checkboxChecked@2x.png in Resources */,
 				CB6104A917B9457500D3FD75 /* IHWDownloadScheduleViewController.xib in Resources */,
 				CB6104CE17B9689600D3FD75 /* README.md in Resources */,
 				CB6104D617B96C2600D3FD75 /* IHWGuidedCoursesViewController.xib in Resources */,
@@ -505,23 +527,29 @@
 				CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */,
 				CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */,
 				CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */,
-				CB5DF7A317BDFA5400D5651C /* checkboxChecked.png in Resources */,
-				CB5DF7A417BDFA5400D5651C /* checkboxChecked@2x.png in Resources */,
-				CB5DF7A517BDFA5400D5651C /* checkboxUnchecked.png in Resources */,
-				CB5DF7A617BDFA5400D5651C /* checkboxUnchecked@2x.png in Resources */,
+				CB5DF7A317BDFA5400D5651C /* checkboxChecked_old.png in Resources */,
+				CB3E0DB1189EB0D200A17B9C /* gotodate@2x.png in Resources */,
+				CB5DF7A417BDFA5400D5651C /* checkboxChecked_old@2x.png in Resources */,
+				CB5DF7A517BDFA5400D5651C /* checkboxUnchecked_old.png in Resources */,
+				CB5DF7A617BDFA5400D5651C /* checkboxUnchecked_old@2x.png in Resources */,
+				CB3E0DB6189EB4A500A17B9C /* forwardbutton@2x.png in Resources */,
 				CB5DF7AC17BF3A5600D5651C /* IHWEditCourseCells.xib in Resources */,
-				CB25B9CC17C53D520085B9E2 /* backbutton.png in Resources */,
-				CB25B9CD17C53D520085B9E2 /* backbutton@2x.png in Resources */,
-				CB25B9CE17C53D520085B9E2 /* forwardbutton.png in Resources */,
-				CB25B9CF17C53D520085B9E2 /* forwardbutton@2x.png in Resources */,
+				CB25B9CC17C53D520085B9E2 /* backbutton_old.png in Resources */,
+				CB25B9CD17C53D520085B9E2 /* backbutton_old@2x.png in Resources */,
+				CB25B9CE17C53D520085B9E2 /* forwardbutton_old.png in Resources */,
+				CB25B9CF17C53D520085B9E2 /* forwardbutton_old@2x.png in Resources */,
 				CB25B9D417C541690085B9E2 /* graygear.png in Resources */,
 				CB25B9D517C541690085B9E2 /* graygear@2x.png in Resources */,
-				CB25B9D617C541690085B9E2 /* whitegear.png in Resources */,
-				CB25B9D717C541690085B9E2 /* whitegear@2x.png in Resources */,
+				CB25B9D617C541690085B9E2 /* whitegear_old.png in Resources */,
+				CB25B9D717C541690085B9E2 /* whitegear_old@2x.png in Resources */,
+				CB3E0DBC189EBA6400A17B9C /* checkboxUnchecked@2x.png in Resources */,
+				CB3E0DBE189EBE0C00A17B9C /* whitegear@2x.png in Resources */,
 				CB7E454417C5CE7800E1621F /* IHWPreferencesViewController.xib in Resources */,
 				CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */,
 				CB4262E017C9E21B008EE2D7 /* icon_ios_iphone.png in Resources */,
+				CB3E0DB4189EB46800A17B9C /* backbutton@2x.png in Resources */,
 				CB4262E417C9E265008EE2D7 /* icon_ios_iphone@2x.png in Resources */,
+				CB3E0DB8189EB50D00A17B9C /* today@2x.png in Resources */,
 				CB8D773B17CB2F8700688D3D /* Default.png in Resources */,
 				CB8D773D17CB2F8800688D3D /* Default@2x.png in Resources */,
 				CB8D773F17CB2F8A00688D3D /* Default-568h@2x.png in Resources */,

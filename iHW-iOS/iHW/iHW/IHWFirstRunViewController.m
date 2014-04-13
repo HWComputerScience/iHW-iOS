@@ -34,6 +34,10 @@
     self.methodPromptLabel.alpha = 0;
     self.downloadButton.alpha = 0;
     self.manualButton.alpha = 0;
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        self.topSpaceConstraint.constant = 20;
+        self.topSpaceConstraint2.constant = 5;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

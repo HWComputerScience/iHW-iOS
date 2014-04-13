@@ -134,7 +134,12 @@
     UIToolbar *pickerToolbar = [self createPickerToolbarWithTitle:self.title];
     pickerToolbar.opaque = NO;
     pickerToolbar.translucent = YES;
-    [pickerToolbar setBarStyle:UIBarStyleBlackTranslucent];
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        [pickerToolbar setBarStyle:UIBarStyleBlackTranslucent];
+    } else {
+        pickerToolbar.barTintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+        pickerToolbar.tintColor = [UIColor whiteColor];
+    }
     [masterView addSubview:pickerToolbar];
     self.pickerView = [self configuredPickerView];
     NSAssert(_pickerView != NULL, @"Picker view failed to instantiate, perhaps you have invalid component data.");

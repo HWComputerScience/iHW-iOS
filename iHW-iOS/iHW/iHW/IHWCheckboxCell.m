@@ -18,10 +18,12 @@
     if (self) {
         self.checkboxButton = [[UIButton alloc] initWithFrame:self.contentView.bounds];
         [self.checkboxButton addTarget:self action:@selector(toggleChecked) forControlEvents:UIControlEventTouchUpInside];
-        [self.checkboxButton setImage:[UIImage imageNamed:@"checkboxUnchecked"] forState:UIControlStateNormal];
-        [self.checkboxButton setImage:[UIImage imageNamed:@"checkboxUnchecked"] forState:UIControlStateSelected|UIControlStateHighlighted];
-        [self.checkboxButton setImage:[UIImage imageNamed:@"checkboxChecked"] forState:UIControlStateSelected];
-        [self.checkboxButton setImage:[UIImage imageNamed:@"checkboxChecked"] forState:UIControlStateHighlighted];
+        NSString *suffix = @"";
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) suffix = @"_old";
+        [self.checkboxButton setImage:[UIImage imageNamed:[NSString stringWithFormat:@"checkboxUnchecked%@", suffix]] forState:UIControlStateNormal];
+        [self.checkboxButton setImage:[UIImage imageNamed:[NSString stringWithFormat:@"checkboxUnchecked%@", suffix]] forState:UIControlStateSelected|UIControlStateHighlighted];
+        [self.checkboxButton setImage:[UIImage imageNamed:[NSString stringWithFormat:@"checkboxChecked%@", suffix]] forState:UIControlStateSelected];
+        [self.checkboxButton setImage:[UIImage imageNamed:[NSString stringWithFormat:@"checkboxChecked%@", suffix]] forState:UIControlStateHighlighted];
         [self.contentView addSubview:self.checkboxButton];
         //self.checked = NO;
     }

@@ -19,9 +19,10 @@
 @property (weak, nonatomic) IBOutlet UITextField *periodField;
 @property (weak, nonatomic) IBOutlet UITextField *termField;
 @property (weak, nonatomic) IBOutlet UICollectionView *meetingsChooserView;
+@property int originalInsetTop;
 
 @property (strong, nonatomic) UITapGestureRecognizer *periodLabelGestureRecognizer;
-@property (strong, nonatomic) GradientButton *deleteButton;
+@property (strong, nonatomic) UIButton *deleteButton;
 @property (strong, nonatomic) NSArray *cells;
 
 @property (nonatomic) int period;

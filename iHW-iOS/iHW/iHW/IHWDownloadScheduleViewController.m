@@ -38,6 +38,9 @@
         [storage deleteCookie:cookie];
     }
     self.webView.delegate = self;
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        self.topSpaceConstraint.constant = 0;
+    }
     [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]];
 }
 

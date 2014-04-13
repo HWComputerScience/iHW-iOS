@@ -14,5 +14,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *loginPromptLabel;
 @property (weak, nonatomic) IBOutlet UILabel *loadingText;
 @property (strong, nonatomic) NSMutableData *resultData;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topSpaceConstraint;
 
 @end

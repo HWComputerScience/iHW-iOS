@@ -19,11 +19,13 @@
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic) BOOL hasUnsavedChanges;
 @property int scrollToIndex;
+@property UIEdgeInsets originalInsets;
 
 @property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *periodsTableView;
 
+- (void)registerKeyboardObservers;
 - (id)initWithDate:(IHWDate *)date;
 - (void)updateRowHeightAtIndex:(int)index toHeight:(int)height;
 - (void)moveCountdownToPeriodAfterPeriodAtIndex:(int)index;

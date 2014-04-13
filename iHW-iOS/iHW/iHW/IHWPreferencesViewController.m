@@ -12,17 +12,20 @@
 #import "IHWDownloadScheduleViewController.h"
 #import "IHWScheduleViewController.h"
 
-@interface IHWPreferencesViewController ()
-
-@end
-
-@implementation IHWPreferencesViewController
+@implementation IHWPreferencesViewController {
+    NSCharacterSet *nonnumericSet;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        
+        self.navigationItem.title = @"iHW Options";
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(closeOptions)];
+        self.navigationItem.leftBarButtonItem.tintColor = nil;
+        nonnumericSet = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
+
     }
     return self;
 }
@@ -30,10 +33,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.yearField.delegate = self;
     self.yearField.text = [NSString stringWithFormat:@"%d", [IHWCurriculum currentYear]];
     [self.yearField addTarget:self action:@selector(yearFieldChanged:) forControlEvents:UIControlEventAllEditingEvents];
     [self yearFieldChanged:nil];
+    self.disclaimerView.contentInset = UIEdgeInsetsZero;
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+    } else {
+        self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+        self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    }
     // Do any additional setup after loading the view from its nib.
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *result = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if (result.length > 4) return NO;
+    if ([result rangeOfCharacterFromSet:nonnumericSet].location != NSNotFound) return NO;
+    return YES;
 }
 
 - (void)yearFieldChanged:(id)sender {
@@ -68,8 +88,8 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)closeButtonClicked:(id)sender {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+- (void)closeOptions {
+    [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
