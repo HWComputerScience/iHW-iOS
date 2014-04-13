@@ -35,16 +35,6 @@
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(leftColumnWidth+8, 3, rightColumnWidth, 19)];
         self.notesView = [[UIView alloc] initWithFrame:CGRectMake(leftColumnWidth+8, 22, rightColumnWidth, 49)];
         
-        //Setup constraints
-        self.clipsToBounds = YES;
-        self.startLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        self.periodLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        self.endLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        NSDictionary *views = @{@"start":self.startLabel, @"period":self.periodLabel, @"end":self.endLabel};
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-3-[start(==19)][period(>=24)][end(==19)]-2-|" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[start(==period,==end,==76)]" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
-        
         //Setup fonts
         self.startLabel.font = [UIFont systemFontOfSize:17];
         self.periodLabel.font = [UIFont boldSystemFontOfSize:25];
@@ -65,6 +55,16 @@
         [self addSubview:self.endLabel];
         [self addSubview:self.titleLabel];
         [self addSubview:self.notesView];
+        
+        //Setup constraints
+        self.clipsToBounds = YES;
+        self.startLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        self.periodLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        self.endLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        NSDictionary *views = @{@"start":self.startLabel, @"period":self.periodLabel, @"end":self.endLabel};
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-3-[start(==19)][period(>=24)][end(==19)]-2-|" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[start(==period,==end,==76)]" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
         
         //Add notes to noteView
         for (IHWNote *note in self.period.notes) {
