@@ -50,11 +50,11 @@ static IHWCurriculum *currentCurriculum;
 }
 
 + (int)currentYear {
-    return [[NSUserDefaults standardUserDefaults] integerForKey:@"currentYear"];
+    return (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"currentYear"];
 }
 
 + (int)currentCampus {
-    return [[NSUserDefaults standardUserDefaults] integerForKey:@"currentCampus"];
+    return (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"currentCampus"];
 }
 
 + (void)setCurrentYear:(int)year {

@@ -221,8 +221,8 @@
         [self.nameField resignFirstResponder];
         [self.periodField resignFirstResponder];
         [ActionSheetStringPicker showPickerWithTitle:@"Select Term" rows:@[@"Full Year", @"First Semester", @"Second Semester", @"First Trimester", @"Second Trimester", @"Third Trimester"] initialSelection:self.term doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-            self.termField.text = stringForTerm(selectedIndex);
-            self.term = selectedIndex;
+            self.termField.text = stringForTerm((int)selectedIndex);
+            self.term = (int)selectedIndex;
         } cancelBlock:nil origin:self.view];
         return NO;
     }
@@ -277,10 +277,10 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section != 0 && indexPath.row != 0) {
         IHWCheckboxCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"checkbox" forIndexPath:indexPath];
-        int thisPeriod = self.period+indexPath.section-2;
+       long thisPeriod = self.period+indexPath.section-2;
         if (thisPeriod < 1 || thisPeriod > [IHWCurriculum currentCampus]+3) cell.shouldHideOnAppear = YES;
         else {
-            int meeting = [self.course meetingOn:indexPath.row];
+            int meeting = [self.course meetingOn:(int)indexPath.row];
             if (meeting != MEETING_X_DAY) {
                 if (thisPeriod == self.period) cell.checked = YES;
             }
@@ -295,13 +295,13 @@
     } else {
         IHWLabelCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"label" forIndexPath:indexPath];
         if ((indexPath.section == 0 && indexPath.row > 0)) { //day headings
-            cell.textLabel.text = [NSString stringWithFormat:@"%d", indexPath.row];
+            cell.textLabel.text = [NSString stringWithFormat:@"%d", (int)indexPath.row];
         } else if (indexPath.section != 0) { //period headings
-            int thisPeriod = self.period+indexPath.section-2;
+            long thisPeriod = self.period+indexPath.section-2;
             if (thisPeriod < 1 || thisPeriod > [IHWCurriculum currentCampus]+3) {
                 cell.shouldHideOnAppear = YES;
             } else {
-                cell.textLabel.text = [NSString stringWithFormat:@"%@", getOrdinal(self.period+indexPath.section-2)];
+                cell.textLabel.text = [NSString stringWithFormat:@"%@", getOrdinal(self.period+(int)indexPath.section-2)];
             }
         }
         return cell;

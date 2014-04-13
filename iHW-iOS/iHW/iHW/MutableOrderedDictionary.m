@@ -114,7 +114,7 @@ NSString *DescriptionForObject(NSObject *object, id locale, NSUInteger indent)
 }
 
 - (void)insertObject:(id)anObject forKey:(id)aKey sortedUsingComparator:(NSComparator)comparator {
-    int index = [array indexOfObject:aKey inSortedRange:NSMakeRange(0, array.count) options:NSBinarySearchingInsertionIndex usingComparator:comparator];
+    long index = [array indexOfObject:aKey inSortedRange:NSMakeRange(0, array.count) options:NSBinarySearchingInsertionIndex usingComparator:comparator];
     [self insertObject:anObject forKey:aKey atIndex:index];
 }
 

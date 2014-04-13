@@ -138,7 +138,7 @@
 }
 
 - (void)addNoteView:(IHWNote *)note animated:(BOOL)animated willAddMore:(BOOL)willAddMore {
-    int noteIndex = self.notesView.subviews.count;
+    int noteIndex = (int)self.notesView.subviews.count;
     IHWNoteView *view = [[IHWNoteView alloc] initWithNote:note index:noteIndex cellView:self];
     [self.notesView addSubview:view];
     if (!willAddMore) [self reLayoutViews:animated];

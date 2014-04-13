@@ -41,24 +41,24 @@ static NSCalendar *cal;
 }
 
 -(int)month {
-    return [cal components:NSMonthCalendarUnit fromDate:self].month;
+    return (int)[cal components:NSMonthCalendarUnit fromDate:self].month;
 }
 
 -(int)day {
-    return [cal components:NSDayCalendarUnit fromDate:self].day;
+    return (int)[cal components:NSDayCalendarUnit fromDate:self].day;
 }
 
 -(int)year {
-    return [cal components:NSYearCalendarUnit fromDate:self].year;
+    return (int)[cal components:NSYearCalendarUnit fromDate:self].year;
 }
 
 - (BOOL)isMonday {
-    int weekday = [cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int weekday = (int)[cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
     return weekday==2;
 }
 
 - (BOOL)isWeekend {
-    int weekday = [cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int weekday = (int)[cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
     return weekday==1 || weekday == 7;
 }
 
@@ -67,13 +67,13 @@ static NSCalendar *cal;
 }
 
 - (NSDate *)dateOfNextSunday {
-    int weekday = [cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int weekday = (int)[cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
     int daysBehind = 8-weekday;
     return [self dateByAddingDays:daysBehind];
 }
 
 - (NSDate *)dateOfPreviousSunday {
-    int weekday = [cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
+    int weekday = (int)[cal components:NSWeekdayCalendarUnit fromDate:self].weekday;
     int daysAhead = weekday-1;
     return [self dateByAddingDays:-daysAhead];
 }

@@ -19,9 +19,9 @@
     self = [super init];
     if (self) {
         NSDateComponents *comps = [[NSCalendar currentCalendar] components:NSHourCalendarUnit|NSMinuteCalendarUnit|NSSecondCalendarUnit fromDate:[NSDate date]];
-        self.hour = comps.hour;
-        self.minute = comps.minute;
-        self.second = comps.second;
+        self.hour = (int)comps.hour;
+        self.minute = (int)comps.minute;
+        self.second = (int)comps.second;
     }
     return self;
 }

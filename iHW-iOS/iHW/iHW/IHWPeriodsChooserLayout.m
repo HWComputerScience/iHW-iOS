@@ -28,8 +28,8 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
     NSMutableArray *result = [NSMutableArray array];
-    int numRows = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
-    int numCols = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:0];
+    long numRows = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
+    long numCols = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:0];
     for (int i=0; i<numRows*numCols; i++) {
         [result addObject:[self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForRow:i%numCols inSection:i/numCols]]];
     }
@@ -38,8 +38,8 @@
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (CGSizeEqualToSize(self.cellSize, CGSizeZero)) {
-        int numRows = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
-        int numCols = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:0];
+        long numRows = [self.collectionView.dataSource numberOfSectionsInCollectionView:self.collectionView];
+        long numCols = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:0];
         int usableSpaceX = [self collectionViewContentSize].width-self.marginSize.width*(numCols-2);
         int usableSpaceY = [self collectionViewContentSize].height-self.marginSize.height*(numRows-2);
         self.cellSize = CGSizeMake(usableSpaceX/numCols, usableSpaceY/numRows);

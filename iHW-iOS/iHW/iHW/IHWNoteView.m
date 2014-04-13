@@ -157,7 +157,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.optionsButton.hidden = NO;
-    if (self.delegate.index == -1) self.delegate.dayViewController.scrollToIndex = self.delegate.dayViewController.cells.count-1;
+    if (self.delegate.index == -1) self.delegate.dayViewController.scrollToIndex = (int)self.delegate.dayViewController.cells.count-1;
     else self.delegate.dayViewController.scrollToIndex = self.delegate.index;
     focused = YES;
     [self setNeedsLayout];
