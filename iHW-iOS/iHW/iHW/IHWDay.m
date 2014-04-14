@@ -24,6 +24,7 @@
     self = [super init];
     if (self) {
         self.date = [[IHWDate alloc] initFromString:[dictionary objectForKey:@"date"]];
+        self.caption = [dictionary objectForKey:@"caption"];
     }
     return self;
 }
@@ -31,6 +32,7 @@
 - (NSDictionary *)saveDay {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:self.date.description forKey:@"date"];
+    [dict setObject:self.caption forKey:@"caption"];
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 

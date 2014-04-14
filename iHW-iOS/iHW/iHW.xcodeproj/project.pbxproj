@@ -92,6 +92,7 @@
 		CB8D773D17CB2F8800688D3D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8D773C17CB2F8800688D3D /* Default@2x.png */; };
 		CB8D773F17CB2F8A00688D3D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8D773E17CB2F8A00688D3D /* Default-568h@2x.png */; };
 		CBA2977917BBEB430087104A /* IHWPeriodCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = CBA2977817BBEB430087104A /* IHWPeriodCellView.m */; };
+		CBE0DE2E18FB752700565950 /* UILabelPadding.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE0DE2D18FB752700565950 /* UILabelPadding.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -227,6 +228,8 @@
 		CB8D773E17CB2F8A00688D3D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		CBA2977717BBEB430087104A /* IHWPeriodCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPeriodCellView.h; sourceTree = "<group>"; };
 		CBA2977817BBEB430087104A /* IHWPeriodCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPeriodCellView.m; sourceTree = "<group>"; };
+		CBE0DE2C18FB752700565950 /* UILabelPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelPadding.h; sourceTree = "<group>"; };
+		CBE0DE2D18FB752700565950 /* UILabelPadding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabelPadding.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -348,6 +351,8 @@
 				CB5DF7B217C12B9E00D5651C /* ActionSheetStringPicker.m */,
 				CB25B9BD17C534AF0085B9E2 /* ActionSheetDatePicker.h */,
 				CB25B9BE17C534AF0085B9E2 /* ActionSheetDatePicker.m */,
+				CBE0DE2C18FB752700565950 /* UILabelPadding.h */,
+				CBE0DE2D18FB752700565950 /* UILabelPadding.m */,
 				CB6104C617B9689600D3FD75 /* HTML-Parser */,
 				CB048C1A17B409DA00E3F76E /* TouchJSON */,
 				491CCB39178E590B00736453 /* iHW-Info.plist */,
@@ -595,6 +600,7 @@
 				CB6104D517B96C2600D3FD75 /* IHWGuidedCoursesViewController.m in Sources */,
 				CB6104DA17B96C3200D3FD75 /* IHWNormalCoursesViewController.m in Sources */,
 				CB6104DF17B9747E00D3FD75 /* IHWScheduleViewController.m in Sources */,
+				CBE0DE2E18FB752700565950 /* UILabelPadding.m in Sources */,
 				CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */,
 				CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */,
 				CBA2977917BBEB430087104A /* IHWPeriodCellView.m in Sources */,

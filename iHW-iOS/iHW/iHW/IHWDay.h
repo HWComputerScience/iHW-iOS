@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) IHWDate *date;
 @property (strong, nonatomic) NSMutableArray *periods;
+@property (strong, nonatomic) NSString *caption;
 
 - (id)initWithDate:(IHWDate *)date;
 - (id)initWithJSONDictionary:(NSDictionary *)dictionary;

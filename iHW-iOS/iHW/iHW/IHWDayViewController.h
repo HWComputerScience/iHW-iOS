@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "IHWDate.h"
 #import "IHWDay.h"
+#import "UILabelPadding.h"
 
 @interface IHWDayViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) UILabel *dayNameLabel;
+@property int headerHeight;
+@property (strong, nonatomic) UILabelPadding *dayNameLabel;
+@property (strong, nonatomic) UILabelPadding *dayCaptionLabel;
 @property (nonatomic, strong) IHWDate *date;
 @property (nonatomic, strong) IHWDay *day;
 @property (nonatomic, strong) NSMutableArray *cells;

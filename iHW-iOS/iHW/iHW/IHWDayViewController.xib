@@ -19,14 +19,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="57">
-                    <rect key="frame" x="0.0" y="46" width="320" height="434"/>
+                    <rect key="frame" x="0.0" y="45" width="320" height="435"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="44"/>
                 </tableView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="9/1/13 (Day 2)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4">
-                    <rect key="frame" x="0.0" y="20" width="320" height="23"/>
+                    <rect key="frame" x="0.0" y="20" width="320" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="5Xn-pv-LrW"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="19"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -35,7 +38,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="20" id="16"/>
+                        <constraint firstAttribute="height" constant="20" id="fmO-Kb-N9i"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -44,16 +47,16 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="12"/>
-                <constraint firstItem="4" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="13"/>
-                <constraint firstItem="15" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="20"/>
-                <constraint firstItem="15" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="22"/>
-                <constraint firstItem="4" firstAttribute="top" secondItem="15" secondAttribute="bottom" id="23"/>
-                <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="20" symbolic="YES" id="29"/>
-                <constraint firstItem="57" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="62"/>
-                <constraint firstItem="57" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="3" id="69"/>
-                <constraint firstItem="57" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="70"/>
-                <constraint firstItem="57" firstAttribute="bottom" secondItem="1" secondAttribute="bottom" id="71"/>
+                <constraint firstItem="57" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="0VD-UP-66U"/>
+                <constraint firstAttribute="trailing" secondItem="15" secondAttribute="trailing" id="1vw-yK-I3C"/>
+                <constraint firstItem="57" firstAttribute="leading" secondItem="4" secondAttribute="leading" id="Lrb-E0-bCr"/>
+                <constraint firstItem="4" firstAttribute="top" secondItem="15" secondAttribute="bottom" id="ehn-zY-AtY"/>
+                <constraint firstItem="4" firstAttribute="trailing" secondItem="15" secondAttribute="trailing" id="j1m-7M-yR5"/>
+                <constraint firstAttribute="bottom" secondItem="57" secondAttribute="bottom" id="kiI-Rp-gQE"/>
+                <constraint firstItem="15" firstAttribute="top" secondItem="1" secondAttribute="top" id="lBT-5g-63K"/>
+                <constraint firstItem="4" firstAttribute="leading" secondItem="15" secondAttribute="leading" id="oW3-lZ-2ws"/>
+                <constraint firstItem="4" firstAttribute="trailing" secondItem="57" secondAttribute="trailing" id="pgp-mI-JkP"/>
+                <constraint firstItem="57" firstAttribute="top" secondItem="4" secondAttribute="bottom" id="vHG-OP-hS0"/>
             </constraints>
             <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
