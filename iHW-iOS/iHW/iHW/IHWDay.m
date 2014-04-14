@@ -25,6 +25,7 @@
     if (self) {
         self.date = [[IHWDate alloc] initFromString:[dictionary objectForKey:@"date"]];
         self.caption = [dictionary objectForKey:@"caption"];
+        self.captionLink = [dictionary objectForKey:@"captionLink"];
     }
     return self;
 }
@@ -33,6 +34,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:self.date.description forKey:@"date"];
     [dict setObject:self.caption forKey:@"caption"];
+    [dict setObject:self.captionLink forKey:@"captionLink"];
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 

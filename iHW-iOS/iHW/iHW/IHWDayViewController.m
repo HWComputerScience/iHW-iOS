@@ -192,8 +192,23 @@
     }
     if (self.dayCaptionLabel != nil) {
         [headerView addSubview:self.dayCaptionLabel];
+        
+        if (self.day.captionLink != nil) {
+            [headerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(captionTapped)]];
+            CALayer *imageLayer = [CALayer layer];
+            imageLayer.frame = CGRectMake(self.dayCaptionLabel.bounds.size.width-20, self.dayCaptionLabel.bounds.size.height-20, 16, 16);
+            UIImage *img = [UIImage imageNamed:@"link"];
+            imageLayer.contents = (id)img.CGImage;
+            [self.dayCaptionLabel.layer addSublayer:imageLayer];
+        }
     }
     return headerView;
+}
+
+- (void)captionTapped {
+    if (self.day.captionLink != nil) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.day.captionLink]];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

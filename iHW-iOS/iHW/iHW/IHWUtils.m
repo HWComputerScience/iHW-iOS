@@ -17,9 +17,16 @@ NSString *getCampusChar(int campus) {
 
 int getWeekNumber(int year, IHWDate *d) {
     IHWDate *firstDate = [[[IHWDate alloc] initWithMonth:7 day:1 year:year] dateOfNextSunday];
-    if ([d compare:firstDate] == NSOrderedAscending && [d compare:[[IHWDate alloc] initWithMonth:7 day:1 year:year]] != NSOrderedAscending) return 0;
-    else if ([d compare:[[IHWDate alloc] initWithMonth:7 day:1 year:year+1]] == NSOrderedAscending) return ([firstDate daysUntilDate:d]/7)+1;
-    else return -1;
+    if ([d compare:firstDate] == NSOrderedAscending && [d compare:[[IHWDate alloc] initWithMonth:7 day:1 year:year]] != NSOrderedAscending) {
+        //Week zero starts on 7/1 and goes until the Sunday after 7/1
+        return 0;
+    } else if ([d compare:[[IHWDate alloc] initWithMonth:7 day:1 year:year+1]] == NSOrderedAscending) {
+        //Count weeks: the week starting with firstDate is one, increments every 7 days
+        return ([firstDate daysUntilDate:d]/7)+1;
+    } else {
+        //Week is out of bounds
+        return -1;
+    }
 }
 
 IHWDate *getWeekStart(int year, IHWDate *d) {

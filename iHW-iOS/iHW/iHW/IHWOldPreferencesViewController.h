@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IHWPreferencesViewController : UIViewController <UITextFieldDelegate>
+@interface IHWOldPreferencesViewController : UIViewController <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *yearField;
 @property (weak, nonatomic) IBOutlet UILabel *yearHintField;

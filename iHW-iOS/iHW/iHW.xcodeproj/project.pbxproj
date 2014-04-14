@@ -84,8 +84,10 @@
 		CB6104DB17B96C3200D3FD75 /* IHWNormalCoursesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104D917B96C3100D3FD75 /* IHWNormalCoursesViewController.xib */; };
 		CB6104DF17B9747E00D3FD75 /* IHWScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */; };
 		CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */; };
-		CB7E454317C5CE7800E1621F /* IHWPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7E454117C5CE7800E1621F /* IHWPreferencesViewController.m */; };
-		CB7E454417C5CE7800E1621F /* IHWPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454217C5CE7800E1621F /* IHWPreferencesViewController.xib */; };
+		CB65E2E018FC8BE000336357 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = CB65E2DE18FC8BE000336357 /* link.png */; };
+		CB65E2E118FC8BE000336357 /* link@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB65E2DF18FC8BE000336357 /* link@2x.png */; };
+		CB7E454317C5CE7800E1621F /* IHWOldPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */; };
+		CB7E454417C5CE7800E1621F /* IHWOldPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */; };
 		CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454517C5D73B00E1621F /* mscampus.jpg */; };
 		CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB88339117BAF720002BC200 /* IHWLoadingView.m */; };
 		CB8D773B17CB2F8700688D3D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8D773A17CB2F8700688D3D /* Default.png */; };
@@ -217,9 +219,11 @@
 		CB6104DC17B9747C00D3FD75 /* IHWScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWScheduleViewController.h; sourceTree = "<group>"; };
 		CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWScheduleViewController.m; sourceTree = "<group>"; };
 		CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWScheduleViewController.xib; sourceTree = "<group>"; };
-		CB7E454017C5CE7800E1621F /* IHWPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPreferencesViewController.h; sourceTree = "<group>"; };
-		CB7E454117C5CE7800E1621F /* IHWPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPreferencesViewController.m; sourceTree = "<group>"; };
-		CB7E454217C5CE7800E1621F /* IHWPreferencesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWPreferencesViewController.xib; sourceTree = "<group>"; };
+		CB65E2DE18FC8BE000336357 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = link.png; path = ../../../images/link.png; sourceTree = "<group>"; };
+		CB65E2DF18FC8BE000336357 /* link@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "link@2x.png"; path = "../../../images/link@2x.png"; sourceTree = "<group>"; };
+		CB7E454017C5CE7800E1621F /* IHWOldPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWOldPreferencesViewController.h; sourceTree = "<group>"; };
+		CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWOldPreferencesViewController.m; sourceTree = "<group>"; };
+		CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWOldPreferencesViewController.xib; sourceTree = "<group>"; };
 		CB7E454517C5D73B00E1621F /* mscampus.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mscampus.jpg; sourceTree = "<group>"; };
 		CB88339017BAF71D002BC200 /* IHWLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWLoadingView.h; sourceTree = "<group>"; };
 		CB88339117BAF720002BC200 /* IHWLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWLoadingView.m; sourceTree = "<group>"; };
@@ -329,9 +333,9 @@
 				CBA2977817BBEB430087104A /* IHWPeriodCellView.m */,
 				CB25B9D817C5429F0085B9E2 /* IHWNoteView.h */,
 				CB25B9D917C542A00085B9E2 /* IHWNoteView.m */,
-				CB7E454017C5CE7800E1621F /* IHWPreferencesViewController.h */,
-				CB7E454117C5CE7800E1621F /* IHWPreferencesViewController.m */,
-				CB7E454217C5CE7800E1621F /* IHWPreferencesViewController.xib */,
+				CB7E454017C5CE7800E1621F /* IHWOldPreferencesViewController.h */,
+				CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */,
+				CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */,
 				CB6104A117B8952A00D3FD75 /* Images */,
 				491CCB38178E590B00736453 /* Supporting Files */,
 			);
@@ -453,6 +457,8 @@
 				CB3E0DB9189EBA6400A17B9C /* checkboxChecked@2x.png */,
 				CB3E0DBA189EBA6400A17B9C /* checkboxUnchecked@2x.png */,
 				CB3E0DBD189EBE0C00A17B9C /* whitegear@2x.png */,
+				CB65E2DE18FC8BE000336357 /* link.png */,
+				CB65E2DF18FC8BE000336357 /* link@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -549,9 +555,11 @@
 				CB25B9D717C541690085B9E2 /* whitegear_old@2x.png in Resources */,
 				CB3E0DBC189EBA6400A17B9C /* checkboxUnchecked@2x.png in Resources */,
 				CB3E0DBE189EBE0C00A17B9C /* whitegear@2x.png in Resources */,
-				CB7E454417C5CE7800E1621F /* IHWPreferencesViewController.xib in Resources */,
+				CB7E454417C5CE7800E1621F /* IHWOldPreferencesViewController.xib in Resources */,
 				CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */,
+				CB65E2E118FC8BE000336357 /* link@2x.png in Resources */,
 				CB4262E017C9E21B008EE2D7 /* icon_ios_iphone.png in Resources */,
+				CB65E2E018FC8BE000336357 /* link.png in Resources */,
 				CB3E0DB4189EB46800A17B9C /* backbutton@2x.png in Resources */,
 				CB4262E417C9E265008EE2D7 /* icon_ios_iphone@2x.png in Resources */,
 				CB3E0DB8189EB50D00A17B9C /* today@2x.png in Resources */,
@@ -611,7 +619,7 @@
 				CB5DF79917BDF41500D5651C /* IHWUtils.m in Sources */,
 				CB25B9BC17C303E00085B9E2 /* UIViewController+IHW.m in Sources */,
 				CB25B9DA17C542A20085B9E2 /* IHWNoteView.m in Sources */,
-				CB7E454317C5CE7800E1621F /* IHWPreferencesViewController.m in Sources */,
+				CB7E454317C5CE7800E1621F /* IHWOldPreferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

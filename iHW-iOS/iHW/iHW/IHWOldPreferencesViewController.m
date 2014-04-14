@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 Jonathan Burns. All rights reserved.
 //
 
-#import "IHWPreferencesViewController.h"
+#import "IHWOldPreferencesViewController.h"
 #import "IHWCurriculum.h"
 #import "IHWAppDelegate.h"
 #import "IHWDownloadScheduleViewController.h"
 #import "IHWScheduleViewController.h"
 
-@implementation IHWPreferencesViewController {
+@implementation IHWOldPreferencesViewController {
     NSCharacterSet *nonnumericSet;
 }
 

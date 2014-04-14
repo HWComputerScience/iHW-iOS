@@ -11,7 +11,7 @@
 #import "IHWDayViewController.h"
 #import "IHWNormalCoursesViewController.h"
 #import "ActionSheetDatePicker.h"
-#import "IHWPreferencesViewController.h"
+#import "IHWOldPreferencesViewController.h"
 #import "IHWAppDelegate.h"
 
 @implementation IHWScheduleViewController
@@ -119,7 +119,7 @@
         [[IHWCurriculum currentCurriculum] loadEverythingWithStartingDate:[IHWDate today]];
         self.loadingView = [[IHWLoadingView alloc] initWithText:@"Loading..."];
     } else if (buttonIndex == 1) {
-        UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil]];
+        UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWOldPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil]];
         [self presentViewController:navc animated:YES completion:nil];
     }
 }
@@ -152,7 +152,7 @@
 }
 
 - (void)optionsButtonClicked {
-    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil]];
+    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWOldPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil]];
     [self presentViewController:navc animated:YES completion:nil];
 }
 
