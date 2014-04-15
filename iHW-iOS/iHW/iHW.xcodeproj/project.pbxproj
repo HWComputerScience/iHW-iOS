@@ -86,6 +86,7 @@
 		CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */; };
 		CB65E2E018FC8BE000336357 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = CB65E2DE18FC8BE000336357 /* link.png */; };
 		CB65E2E118FC8BE000336357 /* link@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB65E2DF18FC8BE000336357 /* link@2x.png */; };
+		CB65E2E418FC8D6E00336357 /* IHWPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */; };
 		CB7E454317C5CE7800E1621F /* IHWOldPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */; };
 		CB7E454417C5CE7800E1621F /* IHWOldPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */; };
 		CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454517C5D73B00E1621F /* mscampus.jpg */; };
@@ -94,6 +95,8 @@
 		CB8D773D17CB2F8800688D3D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8D773C17CB2F8800688D3D /* Default@2x.png */; };
 		CB8D773F17CB2F8A00688D3D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8D773E17CB2F8A00688D3D /* Default-568h@2x.png */; };
 		CBA2977917BBEB430087104A /* IHWPeriodCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = CBA2977817BBEB430087104A /* IHWPeriodCellView.m */; };
+		CBD8F81C18FDA6490067BC71 /* disclaimer.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CBD8F81B18FDA6490067BC71 /* disclaimer.rtf */; };
+		CBD8F82218FDBC130067BC71 /* IHWChangeYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */; };
 		CBE0DE2E18FB752700565950 /* UILabelPadding.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE0DE2D18FB752700565950 /* UILabelPadding.m */; };
 /* End PBXBuildFile section */
 
@@ -221,6 +224,8 @@
 		CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWScheduleViewController.xib; sourceTree = "<group>"; };
 		CB65E2DE18FC8BE000336357 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = link.png; path = ../../../images/link.png; sourceTree = "<group>"; };
 		CB65E2DF18FC8BE000336357 /* link@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "link@2x.png"; path = "../../../images/link@2x.png"; sourceTree = "<group>"; };
+		CB65E2E218FC8D6E00336357 /* IHWPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPreferencesViewController.h; sourceTree = "<group>"; };
+		CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPreferencesViewController.m; sourceTree = "<group>"; };
 		CB7E454017C5CE7800E1621F /* IHWOldPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWOldPreferencesViewController.h; sourceTree = "<group>"; };
 		CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWOldPreferencesViewController.m; sourceTree = "<group>"; };
 		CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWOldPreferencesViewController.xib; sourceTree = "<group>"; };
@@ -232,6 +237,9 @@
 		CB8D773E17CB2F8A00688D3D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		CBA2977717BBEB430087104A /* IHWPeriodCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPeriodCellView.h; sourceTree = "<group>"; };
 		CBA2977817BBEB430087104A /* IHWPeriodCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPeriodCellView.m; sourceTree = "<group>"; };
+		CBD8F81B18FDA6490067BC71 /* disclaimer.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; name = disclaimer.rtf; path = iHW/disclaimer.rtf; sourceTree = "<group>"; };
+		CBD8F82018FDBC130067BC71 /* IHWChangeYearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWChangeYearViewController.h; sourceTree = "<group>"; };
+		CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWChangeYearViewController.m; sourceTree = "<group>"; };
 		CBE0DE2C18FB752700565950 /* UILabelPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelPadding.h; sourceTree = "<group>"; };
 		CBE0DE2D18FB752700565950 /* UILabelPadding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabelPadding.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -260,6 +268,7 @@
 				CB8D773A17CB2F8700688D3D /* Default.png */,
 				CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */,
 				CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */,
+				CBD8F81B18FDA6490067BC71 /* disclaimer.rtf */,
 				491CCB37178E590B00736453 /* iHW */,
 				491CCB30178E590B00736453 /* Frameworks */,
 				491CCB2F178E590B00736453 /* Products */,
@@ -333,6 +342,10 @@
 				CBA2977817BBEB430087104A /* IHWPeriodCellView.m */,
 				CB25B9D817C5429F0085B9E2 /* IHWNoteView.h */,
 				CB25B9D917C542A00085B9E2 /* IHWNoteView.m */,
+				CB65E2E218FC8D6E00336357 /* IHWPreferencesViewController.h */,
+				CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */,
+				CBD8F82018FDBC130067BC71 /* IHWChangeYearViewController.h */,
+				CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */,
 				CB7E454017C5CE7800E1621F /* IHWOldPreferencesViewController.h */,
 				CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */,
 				CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */,
@@ -540,6 +553,7 @@
 				CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */,
 				CB5DF7A317BDFA5400D5651C /* checkboxChecked_old.png in Resources */,
 				CB3E0DB1189EB0D200A17B9C /* gotodate@2x.png in Resources */,
+				CBD8F81C18FDA6490067BC71 /* disclaimer.rtf in Resources */,
 				CB5DF7A417BDFA5400D5651C /* checkboxChecked_old@2x.png in Resources */,
 				CB5DF7A517BDFA5400D5651C /* checkboxUnchecked_old.png in Resources */,
 				CB5DF7A617BDFA5400D5651C /* checkboxUnchecked_old@2x.png in Resources */,
@@ -584,6 +598,7 @@
 				491CCB3E178E590B00736453 /* main.m in Sources */,
 				491CCB42178E590B00736453 /* IHWAppDelegate.m in Sources */,
 				491CCB59178E63D800736453 /* IHWCurriculum.m in Sources */,
+				CBD8F82218FDBC130067BC71 /* IHWChangeYearViewController.m in Sources */,
 				491CCB5D178E640700736453 /* IHWPeriod.m in Sources */,
 				491CCB60178E641300736453 /* IHWCourse.m in Sources */,
 				491CCB63178E642600736453 /* IHWDay.m in Sources */,
@@ -611,6 +626,7 @@
 				CBE0DE2E18FB752700565950 /* UILabelPadding.m in Sources */,
 				CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */,
 				CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */,
+				CB65E2E418FC8D6E00336357 /* IHWPreferencesViewController.m in Sources */,
 				CBA2977917BBEB430087104A /* IHWPeriodCellView.m in Sources */,
 				CB5F682717BC48D000A583D6 /* IHWEditCourseViewController.m in Sources */,
 				CB5DF79117BD415300D5651C /* IHWCheckboxCell.m in Sources */,

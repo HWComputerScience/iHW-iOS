@@ -11,7 +11,9 @@
 #import "IHWDayViewController.h"
 #import "IHWNormalCoursesViewController.h"
 #import "ActionSheetDatePicker.h"
-#import "IHWOldPreferencesViewController.h"
+#import "IHWPreferencesViewController.h"
+#import "IHWChangeYearViewController.h"
+//#import "IHWOldPreferencesViewController.h"
 #import "IHWAppDelegate.h"
 
 @implementation IHWScheduleViewController
@@ -119,7 +121,17 @@
         [[IHWCurriculum currentCurriculum] loadEverythingWithStartingDate:[IHWDate today]];
         self.loadingView = [[IHWLoadingView alloc] initWithText:@"Loading..."];
     } else if (buttonIndex == 1) {
-        UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWOldPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil]];
+        //UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWOldPreferencesViewController alloc] initWithNibName:@"IHWOldPreferencesViewController" bundle:nil]];
+        UINavigationController *navc = [[UINavigationController alloc] init];
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            navc.navigationBar.tintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+        } else {
+            navc.navigationBar.barTintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+            navc.navigationBar.tintColor = [UIColor whiteColor];
+            navc.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+            navc.navigationBar.barStyle = UIBarStyleBlack;
+        }
+        navc.viewControllers = @[[[IHWPreferencesViewController alloc] initWithStyle:UITableViewStyleGrouped], [[IHWChangeYearViewController alloc] initWithStyle:UITableViewStyleGrouped]];
         [self presentViewController:navc animated:YES completion:nil];
     }
 }
@@ -152,7 +164,17 @@
 }
 
 - (void)optionsButtonClicked {
-    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWOldPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil]];
+    //IHWOldPreferencesViewController *prefsc = [[IHWOldPreferencesViewController alloc] initWithNibName:@"IHWPreferencesViewController" bundle:nil];
+    IHWPreferencesViewController *prefsc = [[IHWPreferencesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:prefsc];
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        navc.navigationBar.tintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+    } else {
+        navc.navigationBar.barTintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+        navc.navigationBar.tintColor = [UIColor whiteColor];
+        navc.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+        navc.navigationBar.barStyle = UIBarStyleBlack;
+    }
     [self presentViewController:navc animated:YES completion:nil];
 }
 
