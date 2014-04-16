@@ -17,10 +17,11 @@
 @property (strong, nonatomic) IHWTime *endTime;
 @property (strong, nonatomic) IHWDate *date;
 @property (strong, nonatomic) NSMutableArray *notes;
+@property BOOL isFreePeriod;
 @property int periodNum;
 @property int index;
 
-- (id)initWithName:(NSString *)name date:(IHWDate *)date start:(IHWTime *)start end:(IHWTime *)end number:(int)periodNum index:(int)periodIndex;
+- (id)initWithName:(NSString *)name date:(IHWDate *)date start:(IHWTime *)start end:(IHWTime *)end number:(int)periodNum index:(int)periodIndex isFreePeriod:(BOOL)isFreePeriod;
 - (id)initWithJSONDictionary:(NSDictionary *)dictionary atIndex:(int)periodIndex;
 - (void)loadNotesFromCurriculum;
 - (void)saveNotes;

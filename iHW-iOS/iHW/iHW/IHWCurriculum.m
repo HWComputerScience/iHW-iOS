@@ -16,6 +16,7 @@
 #import "IHWCustomDay.h"
 #import "IHWUtils.h"
 #import "IHWNote.h"
+#import "IHWPeriod.h"
 
 static IHWCurriculum *currentCurriculum;
 
@@ -128,6 +129,9 @@ static IHWCurriculum *currentCurriculum;
     NSBlockOperation *loadWeekAndDay = [NSBlockOperation blockOperationWithBlock:^{
         if (![self loadWeekAndDay:date]) [self performSelectorOnMainThread:@selector(loadingFailed) withObject:nil waitUntilDone:NO];
     }];
+    NSBlockOperation *constructNotifications = [NSBlockOperation blockOperationWithBlock:^{
+        [self constructNotifications];
+    }];
     
     //Need schedule before computing day numbers
     [loadDayNumbers addDependency:loadSchedule];
@@ -135,12 +139,14 @@ static IHWCurriculum *currentCurriculum;
     [loadWeekAndDay addDependency:loadSchedule];
     [loadWeekAndDay addDependency:loadDayNumbers];
     [loadWeekAndDay addDependency:loadCourses];
+    [constructNotifications addDependency:loadWeekAndDay];
     
     //Add all operations to queue
     [self.loadingQueue addOperation:loadSchedule];
     [self.loadingQueue addOperation:loadCourses];
     [self.loadingQueue addOperation:loadDayNumbers];
     [self.loadingQueue addOperation:loadWeekAndDay];
+    [self.loadingQueue addOperation:constructNotifications];
     [self.loadingQueue addObserver:self forKeyPath:@"operationCount" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
@@ -624,6 +630,42 @@ static IHWCurriculum *currentCurriculum;
             [array addObject:[NSNumber numberWithInt:TERM_THIRD_TRIMESTER]];
     }
     return [NSArray arrayWithArray:array];
+}
+
+- (void)constructNotifications {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"allNotifications"]) {
+        NSLog(@"Deleting notifications");
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        return;
+    }
+    NSLog(@"Constructing notifications");
+    NSMutableArray *notifications = [NSMutableArray array];
+    IHWDate *startDate = [IHWDate today];
+    IHWDate *endDate = [startDate dateByAddingDays:7];
+    BOOL isToday = true;
+    for (IHWDate *d = startDate; [d compare:endDate] == NSOrderedAscending; d = [d dateByAddingDays:1]) {
+        IHWDay *day = [[IHWCurriculum currentCurriculum] dayWithDate:d];
+        if (![day isKindOfClass:[IHWNormalDay class]]) {
+            isToday = false;
+            continue;
+        }
+        for (int i=0; i<day.periods.count; i++) {
+            IHWPeriod *thisPeriod = ((IHWPeriod *)[day.periods objectAtIndex:i]);
+            if (thisPeriod.isFreePeriod &&
+                (!isToday || [thisPeriod.endTime secondsUntilTime:[IHWTime now]] < 0)) {
+                if (i < day.periods.count-1 &&
+                    !((IHWPeriod *)[day.periods objectAtIndex:i+1]).isFreePeriod) {
+                    UILocalNotification *n = [[UILocalNotification alloc] init];
+                    n.alertBody = [NSString stringWithFormat:@"%@ starts in %d minutes",((IHWPeriod *)[day.periods objectAtIndex:i+1]).name, [IHWCurriculum currentCurriculum].passingPeriodLength];
+                    n.fireDate = [d NSDateWithTime:thisPeriod.endTime];
+                    [notifications addObject:n];
+                }
+            }
+        }
+        isToday = false;
+    }
+    NSLog(@"Notifications: %@", notifications);
+    [UIApplication sharedApplication].scheduledLocalNotifications = notifications;
 }
 
 #pragma mark -

@@ -14,6 +14,8 @@
 #import "IHWScheduleViewController.h"
 #import "IHWConstants.h"
 #import "UIViewController+IHW.h"
+#import "IHWNormalDay.h"
+#import "IHWPeriod.h"
 
 @implementation IHWAppDelegate
 
@@ -54,6 +56,26 @@
 
 - (void)hideNetworkIcon {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
+    [[IHWCurriculum reloadCurrentCurriculum].curriculumLoadingListeners addObject:self];
+    self.fetchCallback = completionHandler;
+    NSLog(@"Fetching...");
+}
+
+- (void)curriculumFinishedLoading:(IHWCurriculum *)curriculum {
+    [curriculum.curriculumLoadingListeners removeObject:self];
+    BackgroundFetchCallback callback = self.fetchCallback;
+    self.fetchCallback = NULL;
+    if (self.fetchCallback != NULL) callback(UIBackgroundFetchResultNewData);
+}
+
+- (void)curriculumFailedToLoad:(IHWCurriculum *)curriculum {
+    [curriculum.curriculumLoadingListeners removeObject:self];
+    BackgroundFetchCallback callback = self.fetchCallback;
+    self.fetchCallback = NULL;
+    if (self.fetchCallback != NULL) callback(UIBackgroundFetchResultFailed);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

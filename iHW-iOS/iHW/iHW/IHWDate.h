@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "IHWTime.h"
 typedef NSDate IHWDate;
 
 @interface NSDate (IHW)
@@ -30,6 +31,7 @@ typedef NSDate IHWDate;
 - (int)daysUntilDate:(NSDate *)other;
 - (NSString *)dayOfWeek:(BOOL)shortVersion;
 - (BOOL)isEqualToDate:(NSDate *)otherDate;
+- (NSDate *)NSDateWithTime:(IHWTime *)time;
 
 + (NSComparator)comparator;
 

@@ -12,7 +12,7 @@
 
 @implementation IHWPeriod
 
-- (id)initWithName:(NSString *)name date:(IHWDate *)date start:(IHWTime *)start end:(IHWTime *)end number:(int)periodNum index:(int)periodIndex
+- (id)initWithName:(NSString *)name date:(IHWDate *)date start:(IHWTime *)start end:(IHWTime *)end number:(int)periodNum index:(int)periodIndex isFreePeriod:(BOOL)isFreePeriod
 {
     self = [super init];
     if (self) {
@@ -20,6 +20,7 @@
         self.date = date;
         self.startTime = start;
         self.endTime = end;
+        self.isFreePeriod = isFreePeriod;
         self.periodNum = periodNum;
         self.index = periodIndex;
         [self loadNotesFromCurriculum];
@@ -35,6 +36,7 @@
         self.date = [[IHWDate alloc] initFromString:[dictionary objectForKey:@"date"]];
         self.startTime = [[IHWTime alloc] initFromString:[dictionary objectForKey:@"startTime"]];
         self.endTime = [[IHWTime alloc] initFromString:[dictionary objectForKey:@"endTime"]];
+        self.isFreePeriod = [[dictionary objectForKey:@"isFreePeriod"] boolValue];
         self.periodNum = [[dictionary objectForKey:@"periodNum"] intValue];
         self.index = periodIndex;
         [self loadNotesFromCurriculum];

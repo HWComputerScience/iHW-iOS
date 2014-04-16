@@ -12,6 +12,7 @@
 #import "IHWScheduleViewController.h"
 #import "IHWDownloadScheduleViewController.h"
 #import "IHWChangeYearViewController.h"
+#import "IHWNotificationOptionsViewController.h"
 
 @implementation IHWPreferencesViewController
 
@@ -32,7 +33,7 @@
                       @[@"Disclaimer", @"Don't blame us if you are late to class!"],
                       nil];
         self.actions = [NSArray arrayWithObjects:
-                        [NSValue valueWithPointer:NULL],
+                        [NSValue valueWithPointer:@selector(showNotifications:)],
                         [NSValue valueWithPointer:@selector(changeYear:)],
                         [NSValue valueWithPointer:@selector(redownload:)],
                         [NSValue valueWithPointer:@selector(showDisclaimer:)],
@@ -74,6 +75,10 @@
         [self performSelectorOnMainThread:action withObject:indexPath waitUntilDone:YES];
     }
     [[tableView cellForRowAtIndexPath:indexPath] setSelected:NO];
+}
+
+- (void)showNotifications:(NSIndexPath *)indexPath {
+    [self.navigationController pushViewController:[[IHWNotificationOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped] animated:YES];
 }
 
 - (void)changeYear:(NSIndexPath *)indexPath {

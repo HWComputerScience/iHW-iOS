@@ -91,7 +91,7 @@
     
     if (self.hasBreak) {
         //add break
-        [self.periods addObject:[[IHWPeriod alloc] initWithName:self.breakName date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.breakLength] number:0 index:index]];
+        [self.periods addObject:[[IHWPeriod alloc] initWithName:self.breakName date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.breakLength] number:0 index:index isFreePeriod:YES]];
         index++;
         nextStart = [nextStart timeByAddingHours:0 andMinutes:(self.breakLength+c.passingPeriodLength)];
     }
@@ -110,10 +110,10 @@
     }
     if ([courseList objectAtIndex:num] != [NSNull null]) {
         IHWCourse *course = [courseList objectAtIndex:num];
-        IHWPeriod *period = [[IHWPeriod alloc] initWithName:course.name date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index];
+        IHWPeriod *period = [[IHWPeriod alloc] initWithName:course.name date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index isFreePeriod:NO];
         [self.periods addObject:period];
     } else {
-        [self.periods addObject:[[IHWPeriod alloc] initWithName:@"X" date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index]];
+        [self.periods addObject:[[IHWPeriod alloc] initWithName:@"X" date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index isFreePeriod:YES]];
     }
     return [startTime timeByAddingHours:0 andMinutes:duration];
 }

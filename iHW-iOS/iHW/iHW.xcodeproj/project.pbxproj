@@ -98,6 +98,7 @@
 		CBD8F81C18FDA6490067BC71 /* disclaimer.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CBD8F81B18FDA6490067BC71 /* disclaimer.rtf */; };
 		CBD8F82218FDBC130067BC71 /* IHWChangeYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */; };
 		CBE0DE2E18FB752700565950 /* UILabelPadding.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE0DE2D18FB752700565950 /* UILabelPadding.m */; };
+		CBF9D99118FDDD3D00DBED37 /* IHWNotificationOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF9D99018FDDD3D00DBED37 /* IHWNotificationOptionsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -242,6 +243,8 @@
 		CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWChangeYearViewController.m; sourceTree = "<group>"; };
 		CBE0DE2C18FB752700565950 /* UILabelPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabelPadding.h; sourceTree = "<group>"; };
 		CBE0DE2D18FB752700565950 /* UILabelPadding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UILabelPadding.m; sourceTree = "<group>"; };
+		CBF9D98F18FDDD3D00DBED37 /* IHWNotificationOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWNotificationOptionsViewController.h; sourceTree = "<group>"; };
+		CBF9D99018FDDD3D00DBED37 /* IHWNotificationOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWNotificationOptionsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,6 +349,8 @@
 				CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */,
 				CBD8F82018FDBC130067BC71 /* IHWChangeYearViewController.h */,
 				CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */,
+				CBF9D98F18FDDD3D00DBED37 /* IHWNotificationOptionsViewController.h */,
+				CBF9D99018FDDD3D00DBED37 /* IHWNotificationOptionsViewController.m */,
 				CB7E454017C5CE7800E1621F /* IHWOldPreferencesViewController.h */,
 				CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */,
 				CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */,
@@ -517,6 +522,15 @@
 				CLASSPREFIX = IHW;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Jonathan Burns";
+				TargetAttributes = {
+					491CCB2D178E590B00736453 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = 491CCB29178E590B00736453 /* Build configuration list for PBXProject "iHW" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -621,6 +635,7 @@
 				CB6104CD17B9689600D3FD75 /* HTMLParser.m in Sources */,
 				CB6104D117B96C1400D3FD75 /* IHWCoursesViewController.m in Sources */,
 				CB6104D517B96C2600D3FD75 /* IHWGuidedCoursesViewController.m in Sources */,
+				CBF9D99118FDDD3D00DBED37 /* IHWNotificationOptionsViewController.m in Sources */,
 				CB6104DA17B96C3200D3FD75 /* IHWNormalCoursesViewController.m in Sources */,
 				CB6104DF17B9747E00D3FD75 /* IHWScheduleViewController.m in Sources */,
 				CBE0DE2E18FB752700565950 /* UILabelPadding.m in Sources */,

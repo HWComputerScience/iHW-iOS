@@ -109,6 +109,15 @@ static NSCalendar *cal;
     return self.description.hash;
 }
 
+- (NSDate *)NSDateWithTime:(IHWTime *)time {
+    NSDateComponents *components = [cal components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:self];
+    components.hour = time.hour;
+    components.minute = time.minute;
+    components.second = time.second;
+    components.timeZone = [NSTimeZone localTimeZone];
+    return [cal dateFromComponents:components];
+}
+
 + (NSComparator)comparator {
     return ^(NSDate *obj1, NSDate *obj2) {
         return [obj1 compare:obj2];
