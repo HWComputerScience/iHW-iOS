@@ -18,6 +18,7 @@
  periodsBeforeBreak:(int)pbb
          afterBreak:(int)pab
         breakLength:(int)blength
+        breakIsFree:(BOOL)breakIsFree
        periodLength:(int)plength
 {
     self = [super initWithDate:date];
@@ -30,6 +31,7 @@
         self.breakName = breakName;
         self.periodLength = plength;
         self.hasBreak = YES;
+        self.breakIsFree = breakIsFree;
         self.periods = [NSMutableArray array];
     }
     return self;
@@ -67,6 +69,7 @@
             self.periodsAfterBreak = [[dictionary objectForKey:@"periodsAfterBreak"] intValue];
             self.breakLength = [[dictionary objectForKey:@"breakLength"] intValue];
             self.breakName = [dictionary objectForKey:@"breakName"];
+            self.breakIsFree = [[dictionary objectForKey:@"breakIsFree"] boolValue];
         } else {
             self.periodsBeforeBreak = self.numPeriods;
             self.periodsAfterBreak = 0;
@@ -91,7 +94,7 @@
     
     if (self.hasBreak) {
         //add break
-        [self.periods addObject:[[IHWPeriod alloc] initWithName:self.breakName date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.breakLength] number:0 index:index isFreePeriod:YES]];
+        [self.periods addObject:[[IHWPeriod alloc] initWithName:self.breakName date:self.date start:nextStart end:[nextStart timeByAddingHours:0 andMinutes:self.breakLength] number:0 index:index isFreePeriod:self.breakIsFree]];
         index++;
         nextStart = [nextStart timeByAddingHours:0 andMinutes:(self.breakLength+c.passingPeriodLength)];
     }

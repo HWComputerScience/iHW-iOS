@@ -14,6 +14,7 @@
 #import "IHWPreferencesViewController.h"
 #import "IHWChangeYearViewController.h"
 //#import "IHWOldPreferencesViewController.h"
+#import "IHWNotificationOptionsViewController.h"
 #import "IHWAppDelegate.h"
 
 @implementation IHWScheduleViewController
@@ -70,6 +71,11 @@
         self.todayItem.image = nil;
         self.todayItem.title = @"Today";
     }
+    
+    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"seenNotifications"];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"seenNotifications"] != YES) {
+        [[[UIAlertView alloc] initWithTitle:@"Want Notifications?" message:@"iHW can notify you at the end of your free periods when you have class next period." delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"More Info...", @"Ask Later", nil] show];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -116,11 +122,11 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     self.unavailableAlert = nil;
-    if (buttonIndex == 0) {
+    if (alertView == self.unavailableAlert && buttonIndex == 0) {
         [[IHWCurriculum currentCurriculum].curriculumLoadingListeners addObject:self];
         [[IHWCurriculum currentCurriculum] loadEverythingWithStartingDate:[IHWDate today]];
         self.loadingView = [[IHWLoadingView alloc] initWithText:@"Loading..."];
-    } else if (buttonIndex == 1) {
+    } else if (alertView == self.unavailableAlert && buttonIndex == 1) {
         //UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[IHWOldPreferencesViewController alloc] initWithNibName:@"IHWOldPreferencesViewController" bundle:nil]];
         UINavigationController *navc = [[UINavigationController alloc] init];
         if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
@@ -133,6 +139,21 @@
         }
         navc.viewControllers = @[[[IHWPreferencesViewController alloc] initWithStyle:UITableViewStyleGrouped], [[IHWChangeYearViewController alloc] initWithStyle:UITableViewStyleGrouped]];
         [self presentViewController:navc animated:YES completion:nil];
+    } else if (buttonIndex == 0) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"seenNotifications"];
+    } else if (buttonIndex == 1) {
+        UINavigationController *navc = [[UINavigationController alloc] init];
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            navc.navigationBar.tintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+        } else {
+            navc.navigationBar.barTintColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
+            navc.navigationBar.tintColor = [UIColor whiteColor];
+            navc.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+            navc.navigationBar.barStyle = UIBarStyleBlack;
+        }
+        navc.viewControllers = @[[[IHWPreferencesViewController alloc] initWithStyle:UITableViewStyleGrouped], [[IHWNotificationOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped]];
+        [self presentViewController:navc animated:YES completion:nil];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"seenNotifications"];
     }
 }
 

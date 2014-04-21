@@ -1,6 +1,12 @@
 # iHW Project Design Specifications
 
-*In order to make the iHW project more coordinated, unified, and better overall, I think that it’s a good idea for us to write up exactly how we are going about creating the two phone apps and web app. If we use this document to communicate our goals and ideas for the project, we can more effectively create a unified experience for the app across platforms. Please add or edit anything you want in any of the sections below, or even add new sections—this is our space to share ideas. Thanks!*
+*In order to make the iHW project more coordinated, unified, and better
+overall, I think that it’s a good idea for us to write up exactly how we
+are going about creating the two phone apps and web app. If we use this
+document to communicate our goals and ideas for the project, we can more
+effectively create a unified experience for the app across platforms.
+Please add or edit anything you want in any of the sections below, or
+even add new sections—this is our space to share ideas. Thanks!*
 
 ## Required Features - View
 
@@ -14,21 +20,28 @@
 
 ### Schedule View
 
--   Shows one day at a time, with the ability to swipe left and right to see different days.
+-   Shows one day at a time, with the ability to swipe left and right to
+    see different days.
 
 -   Shows date, day of week, and day number (if applicable).
 
 -   Shows a list of periods in the day.
 
--   For each period, shows course name (or "X"), start and end times, and period number (if applicable).
+-   For each period, shows course name (or "X"), start and end times,
+    and period number (if applicable).
 
--   For each period, lists the notes the user has added to the period and always has an empty box to add an additional note.
+-   For each period, lists the notes the user has added to the period
+    and always has an empty box to add an additional note.
 
--   Ability to show/hide a checkbox for any note or mark it as important (makes it bigger/bolder and moves it to the top) or unimportant (restores font and moves it to the bottom)
+-   Ability to show/hide a checkbox for any note or mark it as important
+    (makes it bigger/bolder and moves it to the top) or unimportant
+    (restores font and moves it to the bottom)
 
--   Shows a countdown timer next to the period title if the period will start soon.
+-   Shows a countdown timer next to the period title if the period will
+    start soon.
 
--   Has a button to jump to the current day and a button to choose a date to show.
+-   Has a button to jump to the current day and a button to choose a
+    date to show.
 
 ### Courses Editor
 
@@ -42,29 +55,37 @@
 
 -   Has text boxes for course name and period.
 
--   Validates the period text box as you type (doesn't let you type anything besides valid period numbers)
+-   Validates the period text box as you type (doesn't let you type
+    anything besides valid period numbers)
 
 -   Has a drop-down field to choose the term.
 
--   Has a grid of checkboxes with three rows (period before, this period, period after) to select class meetings.
+-   Has a grid of checkboxes with three rows (period before, this
+    period, period after) to select class meetings.
 
 -   Has buttons to delete this course or save it.
 
--   Rejects courses that do not have a name or at least one class meeting.
+-   Rejects courses that do not have a name or at least one class
+    meeting.
 
 ## Required Features - Model
 
 -   Loads curriculum JSON when user selects a campus during first-run
 
--   Reloads curriculum JSON on app launch every time there's an internet connection available
+-   Reloads curriculum JSON on app launch every time there's an internet
+    connection available
 
 -   Loads year JSON and cycle 0 on app launch
 
--   Loads cycle JSON files as needed (preloading at least one day before and after the currently selected day)
+-   Loads cycle JSON files as needed (preloading at least one day before
+    and after the currently selected day)
 
--   Loads the currently selected day, then preloads day(s) before and after it in the background
+-   Loads the currently selected day, then preloads day(s) before and
+    after it in the background
 
--   Saves notes when the user is done editing a note, when a note option is changed, and when the user leaves the day where the notes are written.
+-   Saves notes when the user is done editing a note, when a note option
+    is changed, and when the user leaves the day where the notes are
+    written.
 
 -   Saves courses whenever the user leaves the edit course view.
 
@@ -84,7 +105,8 @@
 
 ## Communications / JSON / Saving / etc.
 
--   Schedule JSON: contains all of the data (one year, one campus) that is not specific to any one particular user
+-   Schedule JSON: contains all of the data (one year, one campus) that
+    is not specific to any one particular user
 
     -   Format:
 
@@ -101,7 +123,8 @@
         “specialDays”: {...} //maps dates to day objects
     }
 
--   Year JSON (badly named): contains course information and other general information specific to the user
+-   Year JSON (badly named): contains course information and other
+    general information specific to the user
 
     -   Format:
 
@@ -117,9 +140,12 @@
 
     -   Week numbers are as follows:
 
-        -   The partial week between July 1 and the first Sunday after July 1 has week number 0.
+        -   The partial week between July 1 and the first Sunday after
+            July 1 has week number 0.
 
-        -   On and after the first Sunday after July 1, the week number is: (number of days since the first Sunday after July 1 / 7)+1.
+        -   On and after the first Sunday after July 1, the week number
+            is: (number of days since the first Sunday after July 1 /
+            7)+1.
 
     -   Format:
 
@@ -127,12 +153,13 @@
 
     {
         “number”: 1,
-        “notes”: {...} //maps "date.period" to arrays of notes
+        “notes”: {...} //maps “<date>.<period>" to arrays of notes
     }
 
 -   Date Format for JSON: `“M/D/YYYY”` e.g. `“9/16/2012”`
 
--   Time Format for JSON: `“H:M”`  e.g. `“8:0”` or `“14:30”` (use 24 hour time)
+-   Time Format for JSON: `“H:M”`  e.g. `“8:0”` or `“14:30”` (use 24
+    hour time)
 
 -   Course Format for JSON:
 
@@ -145,19 +172,23 @@
         “meetings”: [1,1,1,1,0]
     }
 
--   Note Format for JSON: (IMPORTANT: period is NOT the same as “periodNum” in the Period JSON! periodNum can be any number, but period is the index of the period within the day [-1 for additional notes at the bottom of every day])
+-   Note Format for JSON: (IMPORTANT: period is NOT the same as
+    “periodNum” in the Period JSON! “periodNum" can be any number, but
+    “period" is the INDEX of the period within the day [-1 for
+    additional notes at the bottom of every day])
 
 <!-- -->
 
     {
-        “text”: “Hello, World!”,
-        “isChecked”: false,
-        “isImportant”: false,
-        “isToDo”: false
+        "text": "Hello, World!",
+        "isChecked": false,
+        "isImportant": false,
+        "isToDo": false
         "period": 1
     }
 
--   Normal Day (with break) Format for JSON (day number 0 for no day number):
+-   Normal Day (with break) Format for JSON (day number 0 for no day
+    number):
 
 <!-- -->
 
@@ -171,10 +202,14 @@
         "periodsBeforeBreak": 2,
         "type": "normal",
         "date": "9/12/2012",
-        "hasBreak": true
+        "hasBreak": true,
+        "breakIsFree": true,
+        "caption": "A.P. English Exam today 8:00-10:30",
+        "captionLink": "http://www.google.com/"
     }
 
--   Normal Day (without break) Format for JSON (day number 0 for no day number):
+-   Normal Day (without break) Format for JSON (day number 0 for no day
+    number):
 
 <!-- -->
 
@@ -184,17 +219,22 @@
         "numPeriods": 8,
         "type": "normal",
         "date": "9/12/2012",
-        "hasBreak": false
+        "hasBreak": false,
+        "caption": "A.P. English Exam today 8:00-10:30",
+        "captionLink": "http://www.google.com/"
     }
 
--   Test Day (i.e. Custom Day) Format for JSON:
+-   Test Day (aka Custom Day) Format for JSON (“tests” refers to an
+    array of “period” objects):
 
 <!-- -->
 
     {
         "date": "10/6/2012",
         "tests": [...],
-        "type": "test"
+        "type": "test",
+        "caption": "A.P. English Exam today 8:00-10:30",
+        "captionLink": "http://www.google.com/"
     }
 
 -   Holiday Format for JSON:
@@ -204,10 +244,14 @@
     {
         "date": "10/22/2012",
         "name": "Mid-Semester Break",
-        "type": "holiday"
+        "type": "holiday",
+        "caption": "A.P. English Exam today 8:00-10:30",
+        "captionLink": "http://www.google.com/"
     }
 
--   Period format for JSON: (IMPORTANT: periodNum is NOT the same as “period” in the Note JSON! periodNum can be any number, but period is the index of the period within the day.)
+-   Period format for JSON: (IMPORTANT: periodNum is NOT the same as
+    “period” in the Note JSON! periodNum can be any number, but period
+    is the index of the period within the day.)
 
 <!-- -->
 
@@ -216,7 +260,8 @@
         "startTime": "8:0",  
         "name": "Period Name",  
         "date": "11/3/2012",  
-        "endTime": "14:30"  
+        "endTime": "14:30”,
+        “isFreePeriod”: false,
     }
 
 -   Constants:

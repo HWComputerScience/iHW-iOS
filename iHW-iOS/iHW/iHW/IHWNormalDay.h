@@ -18,6 +18,7 @@
 @property int periodsAfterBreak;
 @property int periodLength;
 @property int breakLength;
+@property BOOL breakIsFree;
 @property (strong, nonatomic) NSDictionary *periodLengths;
 @property (strong, nonatomic) NSString *breakName;
 
@@ -26,6 +27,7 @@
  periodsBeforeBreak:(int)pbb
          afterBreak:(int)pab
         breakLength:(int)blength
+        breakIsFree:(BOOL)breakIsFree
        periodLength:(int)plength;
 
 - (id)initWithDate:(IHWDate *)date

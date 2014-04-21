@@ -157,6 +157,10 @@
 
 - (void)viewDidAppear:(BOOL)animated {
    //NSLog(@"viewDidAppear");
+    if (self.scrollToIndex != -1) {
+        [self.periodsTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.scrollToIndex inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+        self.scrollToIndex = -1;
+    }
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -241,7 +245,7 @@
     
     cell.frame = CGRectMake(0, 0, self.view.bounds.size.width, [view neededHeight]);
     view.dayViewController = self;
-    [view createCountdownViewIfNeeded];
+    if ([view createCountdownViewIfNeeded]) self.scrollToIndex = index;
     [cell.contentView addSubview:view];
     return cell;
 }

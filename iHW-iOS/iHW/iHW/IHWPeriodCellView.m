@@ -98,8 +98,8 @@
     return self;
 }
 
-- (void)createCountdownViewIfNeeded {
-    if (self.index == -1) return;
+- (BOOL)createCountdownViewIfNeeded {
+    if (self.index == -1) return NO;
     if ([self.period.date isEqualToDate:[IHWDate today]]) {
         int secondsUntil = [[IHWTime now] secondsUntilTime:self.period.startTime];
         if (secondsUntil > 0 &&
@@ -117,8 +117,10 @@
                 [self addSubview:self.countdownView];
                 self.countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateCountdownView) userInfo:nil repeats:YES];
                 [self updateCountdownView];
+                return YES;
             }
     }
+    return NO;
 }
 
 - (void)updateCountdownView {

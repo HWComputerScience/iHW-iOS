@@ -18,6 +18,7 @@
 #import "IHWNote.h"
 #import "IHWPeriod.h"
 
+static NSString *curriculumDirectory = @"http://beta.ihwapp.com/curriculum/";
 static IHWCurriculum *currentCurriculum;
 
 #pragma mark ****************PRIVATE INSTANCE VARS*****************
@@ -215,7 +216,7 @@ static IHWCurriculum *currentCurriculum;
     //NSLog(@">downloading schedule JSON");
     NSError *error = nil;
     NSURLResponse *response = nil;
-    NSString *urlStr = [NSString stringWithFormat:@"http://beta.ihwapp.com/curriculum/%d%@.hws", self.year, getCampusChar(self.campus)];
+    NSString *urlStr = [NSString stringWithFormat:@"%@%d%@.hws", curriculumDirectory, self.year, getCampusChar(self.campus)];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10];
     [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(showNetworkIcon) withObject:nil waitUntilDone:NO];
     NSData *scheduleJSON = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
@@ -270,6 +271,14 @@ static IHWCurriculum *currentCurriculum;
         [specialDays setObject:[specialDaysJSON objectForKey:dateStr] forKey:[[IHWDate alloc] initFromString:dateStr]];
     }
     self.specialDayTemplates = [NSDictionary dictionaryWithDictionary:specialDays];
+    
+    //Load day captions into curriculum
+    NSMutableDictionary *captions = [[NSMutableDictionary alloc] init];
+    NSDictionary *captionsJSON = [scheduleDict objectForKey:@"dayCaptions"];
+    for (NSString *dateStr in [captionsJSON allKeys]) {
+        [captions setObject:[captionsJSON objectForKey:dateStr] forKey:[[IHWDate alloc] initFromString:dateStr]];
+    }
+    self.dayCaptions = [NSDictionary dictionaryWithDictionary:captions];
     return YES;
 }
 
@@ -412,6 +421,15 @@ static IHWCurriculum *currentCurriculum;
     } else if ([type isEqualToString:@"holiday"]) {
         day = [[IHWHoliday alloc] initWithJSONDictionary:template];
     } else return NO;
+    
+    //Add caption if necessary
+    NSDictionary *captionDict = [self.dayCaptions objectForKey:date];
+    if (captionDict != nil && day.caption == nil) {
+        day.caption = [captionDict objectForKey:@"text"];
+        if ([captionDict objectForKey:@"link"] != nil) {
+            day.captionLink = [captionDict objectForKey:@"link"];
+        }
+    }
     //[self.loadedDays insertObject:day forKey:date sortedUsingComparator:[IHWDate comparator]];
     [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:day waitUntilDone:YES];
     return YES;
@@ -467,12 +485,17 @@ static IHWCurriculum *currentCurriculum;
 
 - (BOOL)addCourse:(IHWCourse *)c {
     for (IHWCourse *check in self.courses) {
+        //Make sure no courses conflict with the new course
         if (!termsCompatible(check.term, c.term)) {
+            //There could be a problem if the terms overlap
             if (check.period == c.period) {
+                //There could be a problem if the periods are the same
                 for (int i=1; i<=self.campus; i++) {
+                    //There's a problem if the two courses meet on the same day
                     if ([c meetingOn:i] != MEETING_X_DAY && [check meetingOn:i] != MEETING_X_DAY) return NO;
                 }
             } else {
+                //Check for double periods
                 IHWCourse *later;
                 IHWCourse *earlier;
                 if (c.period > check.period) {
@@ -483,11 +506,13 @@ static IHWCurriculum *currentCurriculum;
                     earlier = c;
                 }
                 if (ABS(c.period-check.period) == 1) {
+                    //Double periods could be a problem when the courses are in consecutive periods
                     for (int i=1; i<=self.campus; i++) {
                         if ([earlier meetingOn:i] == MEETING_DOUBLE_AFTER && [later meetingOn:i] != MEETING_X_DAY) return NO;
                         if ([later meetingOn:i] == MEETING_DOUBLE_BEFORE && [earlier meetingOn:i] != MEETING_X_DAY) return NO;
                     }
                 } else if (ABS(c.period-check.period) == 2) {
+                    //Double periods could also be a problem when the courses are two periods apart
                     for (int i=1; i<=self.campus; i++) {
                         if ([earlier meetingOn:i] == MEETING_DOUBLE_AFTER && [later meetingOn:i] == MEETING_DOUBLE_BEFORE) return NO;
                     }
@@ -495,6 +520,7 @@ static IHWCurriculum *currentCurriculum;
             }
         }
     }
+    //No problems found
     [self.courses addObject:c];
     [self.loadedDays removeAllObjects];
     return YES;
@@ -509,6 +535,8 @@ static IHWCurriculum *currentCurriculum;
     [self.courses removeAllObjects];
     [self.loadedDays removeAllObjects];
 }
+
+//Unnecessary methods
 
 /*
 - (BOOL)replaceCourseWithName:(NSString *)oldName withCourse:(IHWCourse *)c {
@@ -546,8 +574,10 @@ static IHWCurriculum *currentCurriculum;
     int dayNum = [[self.dayNumbers objectForKey:d] intValue];
     NSArray *terms = [self termsFromDate:d];
     if (dayNum == 0) {
+        //For "No X Periods" days, choose the course that meets the most
         IHWCourse *maxMeetings = nil;
         int max = 1;
+        //If the course only meets once per cycle, it doesn't meet on "No X Periods" days
         for (IHWCourse *c in self.courses) {
             BOOL termFound = NO;
             for (NSNumber *term in terms) if ([term intValue] == c.term) {

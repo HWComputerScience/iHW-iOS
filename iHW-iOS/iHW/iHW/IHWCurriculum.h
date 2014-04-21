@@ -36,6 +36,7 @@
 @property (strong, nonatomic) NSDictionary *normalDayTemplate;
 @property (strong, nonatomic) NSDictionary *normalMondayTemplate;
 @property (strong, nonatomic) NSDictionary *specialDayTemplates;
+@property (strong, nonatomic) NSDictionary *dayCaptions;
 @property (strong) NSMutableDictionary *loadedWeeks;
 @property (strong) NSMutableDictionary *loadedDays;
 @property (strong, nonatomic) NSMutableDictionary *dayNumbers;

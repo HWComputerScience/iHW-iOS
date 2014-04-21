@@ -52,6 +52,9 @@
         cell.textLabel.text = @"All Notifications";
         if (self.masterSwitch == nil) self.masterSwitch = [[UISwitch alloc] init];
         self.masterSwitch.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"allNotifications"];
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            self.masterSwitch.enabled = NO;
+        }
         [self.masterSwitch addTarget:self action:@selector(allNotificationsChanged:) forControlEvents:UIControlEventValueChanged];
         cell.accessoryView = self.masterSwitch;
     }
@@ -59,58 +62,31 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 64;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UITableViewHeaderFooterView *v = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"notificationHFV"];
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        v.textLabel.text = @"Notifications are not supported in iOS 6.";
+    } else {
+        v.textLabel.text = @"When enabled, you will receive notifications at the end of your free periods if you have class next period.";
+    }
+    v.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    return v;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    return nil;
+}
+
 - (void)allNotificationsChanged:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:self.masterSwitch.isOn forKey:@"allNotifications"];
+    if (self.masterSwitch.isOn) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"seenNotifications"];
+    }
     [IHWCurriculum reloadCurrentCurriculum];
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
