@@ -18,7 +18,7 @@
 #import "IHWNote.h"
 #import "IHWPeriod.h"
 
-static NSString *curriculumDirectory = @"http://beta.ihwapp.com/curriculum/";
+static NSString *curriculumDirectory = @"http://www.ihwapp.com/curriculum/";
 static IHWCurriculum *currentCurriculum;
 
 #pragma mark ****************PRIVATE INSTANCE VARS*****************
