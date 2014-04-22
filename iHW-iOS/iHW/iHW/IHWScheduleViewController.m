@@ -70,11 +70,11 @@
         self.gotoDateItem.title = @"Goto Date...";
         self.todayItem.image = nil;
         self.todayItem.title = @"Today";
-    }
-    
-    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"seenNotifications"];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"seenNotifications"] != YES) {
-        [[[UIAlertView alloc] initWithTitle:@"Want Notifications?" message:@"iHW can notify you at the end of your free periods when you have class next period." delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"More Info...", @"Ask Later", nil] show];
+    } else {
+        //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"seenNotifications"];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"seenNotifications"] != YES) {
+            [[[UIAlertView alloc] initWithTitle:@"Want Notifications?" message:@"iHW can notify you at the end of your free periods when you have class next period." delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"More Info...", @"Ask Later", nil] show];
+        }
     }
 }
 

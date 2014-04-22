@@ -304,6 +304,7 @@
     _actionSheet = [[UIActionSheet alloc] initWithTitle:paddedSheetTitle delegate:nil cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
     [_actionSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
     [_actionSheet addSubview:aView];
+    _actionSheet.backgroundColor = [UIColor colorWithRed:0.97 green:0.97 blue:0.97 alpha:1];
     [self presentActionSheet:_actionSheet];
     _actionSheet.bounds = CGRectMake(0, 0, self.viewSize.width, sheetHeight);
 }

@@ -38,6 +38,7 @@
         [storage deleteCookie:cookie];
     }
     self.webView.delegate = self;
+    self.webView.keyboardDisplayRequiresUserAction = NO;
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
         self.topSpaceConstraint.constant = 0;
     }

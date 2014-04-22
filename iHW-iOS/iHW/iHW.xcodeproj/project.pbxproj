@@ -87,6 +87,9 @@
 		CB65E2E018FC8BE000336357 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = CB65E2DE18FC8BE000336357 /* link.png */; };
 		CB65E2E118FC8BE000336357 /* link@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB65E2DF18FC8BE000336357 /* link@2x.png */; };
 		CB65E2E418FC8D6E00336357 /* IHWPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */; };
+		CB75CDCA19062CF200CDA1FD /* Default7-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB75CDC819062CF200CDA1FD /* Default7-568h@2x.png */; };
+		CB75CDCB19062CF200CDA1FD /* Default7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB75CDC919062CF200CDA1FD /* Default7@2x.png */; };
+		CB75CDCD19062D8900CDA1FD /* icon_ios_iphone7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB75CDCC19062D8900CDA1FD /* icon_ios_iphone7@2x.png */; };
 		CB7E454317C5CE7800E1621F /* IHWOldPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */; };
 		CB7E454417C5CE7800E1621F /* IHWOldPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */; };
 		CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454517C5D73B00E1621F /* mscampus.jpg */; };
@@ -227,6 +230,9 @@
 		CB65E2DF18FC8BE000336357 /* link@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "link@2x.png"; path = "../../../images/link@2x.png"; sourceTree = "<group>"; };
 		CB65E2E218FC8D6E00336357 /* IHWPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPreferencesViewController.h; sourceTree = "<group>"; };
 		CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPreferencesViewController.m; sourceTree = "<group>"; };
+		CB75CDC819062CF200CDA1FD /* Default7-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default7-568h@2x.png"; sourceTree = "<group>"; };
+		CB75CDC919062CF200CDA1FD /* Default7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default7@2x.png"; sourceTree = "<group>"; };
+		CB75CDCC19062D8900CDA1FD /* icon_ios_iphone7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_ios_iphone7@2x.png"; sourceTree = "<group>"; };
 		CB7E454017C5CE7800E1621F /* IHWOldPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWOldPreferencesViewController.h; sourceTree = "<group>"; };
 		CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWOldPreferencesViewController.m; sourceTree = "<group>"; };
 		CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWOldPreferencesViewController.xib; sourceTree = "<group>"; };
@@ -269,6 +275,9 @@
 				CB8D773E17CB2F8A00688D3D /* Default-568h@2x.png */,
 				CB8D773C17CB2F8800688D3D /* Default@2x.png */,
 				CB8D773A17CB2F8700688D3D /* Default.png */,
+				CB75CDC819062CF200CDA1FD /* Default7-568h@2x.png */,
+				CB75CDC919062CF200CDA1FD /* Default7@2x.png */,
+				CB75CDCC19062D8900CDA1FD /* icon_ios_iphone7@2x.png */,
 				CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */,
 				CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */,
 				CBD8F81B18FDA6490067BC71 /* disclaimer.rtf */,
@@ -556,6 +565,7 @@
 			files = (
 				491CCB3C178E590B00736453 /* InfoPlist.strings in Resources */,
 				CB61049C17B8945C00D3FD75 /* IHWFirstRunViewController.xib in Resources */,
+				CB75CDCB19062CF200CDA1FD /* Default7@2x.png in Resources */,
 				CB6104A017B8952600D3FD75 /* uscampus.jpg in Resources */,
 				CB3E0DBB189EBA6400A17B9C /* checkboxChecked@2x.png in Resources */,
 				CB6104A917B9457500D3FD75 /* IHWDownloadScheduleViewController.xib in Resources */,
@@ -566,6 +576,8 @@
 				CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */,
 				CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */,
 				CB5DF7A317BDFA5400D5651C /* checkboxChecked_old.png in Resources */,
+				CB75CDCD19062D8900CDA1FD /* icon_ios_iphone7@2x.png in Resources */,
+				CB75CDCA19062CF200CDA1FD /* Default7-568h@2x.png in Resources */,
 				CB3E0DB1189EB0D200A17B9C /* gotodate@2x.png in Resources */,
 				CBD8F81C18FDA6490067BC71 /* disclaimer.rtf in Resources */,
 				CB5DF7A417BDFA5400D5651C /* checkboxChecked_old@2x.png in Resources */,
