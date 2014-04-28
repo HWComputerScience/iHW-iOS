@@ -11,6 +11,7 @@
 static NSCalendar *cal;
 
 @implementation NSDate (IHW)
+//IHWDay is NOT a subclass of NSDate! It is a CATEGORY of NSDate which adds new methods. ALL NSDate objects in this project have the IHWDate methods.
 
 + (IHWDate *)today {
     return [[IHWDate alloc] initToday];
@@ -110,6 +111,7 @@ static NSCalendar *cal;
 }
 
 - (NSDate *)NSDateWithTime:(IHWTime *)time {
+    //Adds a time to this date and returns the combined datetime.
     NSDateComponents *components = [cal components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit fromDate:self];
     components.hour = time.hour;
     components.minute = time.minute;

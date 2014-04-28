@@ -45,6 +45,7 @@
 }
 
 - (int)totalMeetings {
+    //Count this course's meetings
     int sum = 0;
     for (int index = 0; index <self.meetings.count; index++) {
         if ([[self.meetings objectAtIndex:index] intValue] == MEETING_SINGLE_PERIOD) {

@@ -352,7 +352,7 @@ public class Curriculum {
 				//Log.d("iHW", "downloaded schedule JSON successfully");
 				SharedPreferences prefs = ctx.getSharedPreferences(year + campusChar, Context.MODE_PRIVATE);
 				prefs.edit().putString("scheduleJSON", result).commit();
-				boolean success = parseScheduleJSON();
+				/*boolean success =*/ parseScheduleJSON();
 				//if (!success) Log.e("iHW", "ERROR parsing schedule JSON");
 			}
 		}
@@ -573,10 +573,10 @@ public class Curriculum {
 		//Log.d("iHW", "getting " + d.toString());
 		//Log.d("iHW", "weeks loaded: " + loadedWeeks.keySet().toString());
 		if (!isLoaded(d)) {
-			boolean success = true;
-			if (loadedWeeks == null || !loadedWeeks.containsKey(getWeekStart(year, d))) success = loadWeek(d);
+			//boolean success = true;
+			if (loadedWeeks == null || !loadedWeeks.containsKey(getWeekStart(year, d))) /*success =*/ loadWeek(d);
 			//if (!success) Log.e("iHW", "ERROR loading week");
-			if (loadedDays == null || !loadedDays.containsKey(d)) success = loadDay(d);
+			if (loadedDays == null || !loadedDays.containsKey(d)) /*success =*/ loadDay(d);
 			//if (!success) Log.e("iHW", "ERROR loading day");
 		}
 		if (!isLoaded(d)) return null;
@@ -817,10 +817,10 @@ public class Curriculum {
 	public void setNotes(Date d, int period, ArrayList<Note> notes) {
 		Date weekStart = getWeekStart(year, d);
 		if (!isLoaded(d)) {
-			boolean success = true;
-			if (!loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
+			//boolean success = true;
+			if (!loadedWeeks.containsKey(weekStart)) /*success =*/ loadWeek(d);
 			//if (!success) Log.e("iHW", "ERROR loading week");
-			if (!loadedDays.containsKey(d)) success = loadDay(d);
+			if (!loadedDays.containsKey(d)) /*success =*/ loadDay(d);
 			//if (!success) Log.e("iHW", "ERROR loading day");
 		}
 		if (isLoaded(d)) {

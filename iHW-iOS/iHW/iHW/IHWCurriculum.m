@@ -386,12 +386,30 @@ static IHWCurriculum *currentCurriculum;
             //[self.loadedDays insertObject:[[IHWHoliday alloc] initWithName:@"Summer" onDate:date] forKey:date sortedUsingComparator:[IHWDate comparator]];
             IHWHoliday *holiday = [[IHWHoliday alloc] initWithName:@"Summer" onDate:date];
             [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:holiday waitUntilDone:YES];
+            
+            //Add caption if necessary
+            NSDictionary *captionDict = [self.dayCaptions objectForKey:date];
+            if (captionDict != nil && holiday.caption == nil) {
+                holiday.caption = [captionDict objectForKey:@"text"];
+                if ([captionDict objectForKey:@"link"] != nil) {
+                    holiday.captionLink = [captionDict objectForKey:@"link"];
+                }
+            }
             return YES;
         } else if (date.isWeekend) {
             //Weekends get a blank holiday
             //[self.loadedDays insertObject:[[IHWHoliday alloc] initWithName:@"" onDate:date] forKey:date sortedUsingComparator:[IHWDate comparator]];
             IHWHoliday *holiday = [[IHWHoliday alloc] initWithName:@"" onDate:date];
             [self performSelectorOnMainThread:@selector(addLoadedDay:) withObject:holiday waitUntilDone:YES];
+            
+            //Add caption if necessary
+            NSDictionary *captionDict = [self.dayCaptions objectForKey:date];
+            if (captionDict != nil && holiday.caption == nil) {
+                holiday.caption = [captionDict objectForKey:@"text"];
+                if ([captionDict objectForKey:@"link"] != nil) {
+                    holiday.captionLink = [captionDict objectForKey:@"link"];
+                }
+            }
             return YES;
         }
     }
@@ -581,6 +599,7 @@ static IHWCurriculum *currentCurriculum;
         for (IHWCourse *c in self.courses) {
             BOOL termFound = NO;
             for (NSNumber *term in terms) if ([term intValue] == c.term) {
+                //Course meets during the current term
                 termFound = YES;
                 break;
             }
@@ -592,18 +611,23 @@ static IHWCurriculum *currentCurriculum;
         }
         return maxMeetings;
     }
+    //Normal numbered days
     for (IHWCourse *c in self.courses) {
         BOOL termFound = NO;
         for (NSNumber *term in terms) if ([term intValue] == c.term) {
+            //course meets during the current term
             termFound = YES;
             break;
         }
         if (!termFound) continue;
         if (c.period == period) {
+            //As long as the course doesn't X, it meets (obviously)
             if ([c meetingOn:dayNum] != MEETING_X_DAY) return c;
         } else if (period == c.period-1) {
+            //The course doubles up into this period
             if ([c meetingOn:dayNum] == MEETING_DOUBLE_BEFORE) return c;
         } else if (period == c.period+1) {
+            //The course doubles down into this period
             if ([c meetingOn:dayNum] == MEETING_DOUBLE_AFTER) return c;
         }
     }
@@ -616,14 +640,17 @@ static IHWCurriculum *currentCurriculum;
     int dayNum = [[self.dayNumbers objectForKey:d] intValue];
     NSArray *terms = [self termsFromDate:d];
     NSMutableArray *courseList = [NSMutableArray arrayWithCapacity:self.campus+4];
+    //Must find course that meets the most
     NSMutableArray *maxMeetings = [NSMutableArray arrayWithCapacity:self.campus+4];
     for (int i=0; i<self.campus+4; i++) {
         [courseList setObject:[NSNull null] atIndexedSubscript:i];
+        //[NSNull null] represents an "X" period
         [maxMeetings setObject:[NSNumber numberWithInt:0] atIndexedSubscript:i];
     }
     for (IHWCourse *c in self.courses) {
+        //For each course, add it to the courselist at its period index
         if (![terms containsObject:[NSNumber numberWithInt:c.term]]) continue;
-        if (dayNum == 0) {
+        if (dayNum == 0) { //"No X Periods" day
             int meetings = c.totalMeetings;
             if (meetings > [[maxMeetings objectAtIndex:c.period] intValue]) {
                 [courseList setObject:c atIndexedSubscript:c.period];
@@ -631,6 +658,7 @@ static IHWCurriculum *currentCurriculum;
             }
         } else if ([c meetingOn:dayNum] != MEETING_X_DAY) {
             [courseList setObject:c atIndexedSubscript:c.period];
+            //And if it's a double period, add it for those period indices also
             if ([c meetingOn:dayNum] == MEETING_DOUBLE_BEFORE)
                 [courseList setObject:c atIndexedSubscript:c.period-1];
             else if ([c meetingOn:dayNum] == MEETING_DOUBLE_AFTER)
@@ -643,20 +671,27 @@ static IHWCurriculum *currentCurriculum;
 - (NSArray *)termsFromDate:(IHWDate *)d {
     NSMutableArray *array = [NSMutableArray array];
     if ([d compare:[self.semesterEndDates objectAtIndex:0]] != NSOrderedAscending) {
+        //After the beginning of first semester
         if ([d compare:[self.semesterEndDates objectAtIndex:1]] != NSOrderedDescending) {
+            //Before the end of first semester
             [array addObject:[NSNumber numberWithInt:TERM_FULL_YEAR]];
             [array addObject:[NSNumber numberWithInt:TERM_FIRST_SEMESTER]];
         } else if ([d compare:[self.semesterEndDates objectAtIndex:2]] != NSOrderedDescending) {
+            //After the end of first semester, before the end of second semester
             [array addObject:[NSNumber numberWithInt:TERM_FULL_YEAR]];
             [array addObject:[NSNumber numberWithInt:TERM_SECOND_SEMESTER]];
         }
     }
     if ([d compare:[self.trimesterEndDates objectAtIndex:0]] != NSOrderedAscending) {
+        //After the beginning of first trimester
         if ([d compare:[self.trimesterEndDates objectAtIndex:1]] != NSOrderedDescending)
+            //Before the end of first trimester
             [array addObject:[NSNumber numberWithInt:TERM_FIRST_TRIMESTER]];
         else if ([d compare:[self.trimesterEndDates objectAtIndex:2]] != NSOrderedDescending)
+            //After the end of first trimester, before the end of second trimester
             [array addObject:[NSNumber numberWithInt:TERM_SECOND_TRIMESTER]];
         else if ([d compare:[self.trimesterEndDates objectAtIndex:1]] != NSOrderedDescending)
+            //After the end of second trimester, before the end of third trimester
             [array addObject:[NSNumber numberWithInt:TERM_THIRD_TRIMESTER]];
     }
     return [NSArray arrayWithArray:array];
@@ -664,27 +699,35 @@ static IHWCurriculum *currentCurriculum;
 
 - (void)constructNotifications {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"allNotifications"]) {
+        //User hasn't enabled notifications
         NSLog(@"Deleting notifications");
         [[UIApplication sharedApplication] cancelAllLocalNotifications];
         return;
     }
     NSLog(@"Constructing notifications");
     NSMutableArray *notifications = [NSMutableArray array];
+    //Only add notifications for the next 7 days
     IHWDate *startDate = [IHWDate today];
     IHWDate *endDate = [startDate dateByAddingDays:7];
     BOOL isToday = true;
     for (IHWDate *d = startDate; [d compare:endDate] == NSOrderedAscending; d = [d dateByAddingDays:1]) {
+        //For each day...
         IHWDay *day = [[IHWCurriculum currentCurriculum] dayWithDate:d];
         if (![day isKindOfClass:[IHWNormalDay class]]) {
+            //No notifications on holidays or custom days
             isToday = false;
             continue;
         }
         for (int i=0; i<day.periods.count; i++) {
+            //For each period...
             IHWPeriod *thisPeriod = ((IHWPeriod *)[day.periods objectAtIndex:i]);
             if (thisPeriod.isFreePeriod &&
                 (!isToday || [thisPeriod.endTime secondsUntilTime:[IHWTime now]] < 0)) {
+                //If period is a free period and ends sometime in the future...
                 if (i < day.periods.count-1 &&
                     !((IHWPeriod *)[day.periods objectAtIndex:i+1]).isFreePeriod) {
+                    //...and next period is not a free period...
+                    //add the notification.
                     UILocalNotification *n = [[UILocalNotification alloc] init];
                     n.alertBody = [NSString stringWithFormat:@"%@ starts in %d minutes",((IHWPeriod *)[day.periods objectAtIndex:i+1]).name, [IHWCurriculum currentCurriculum].passingPeriodLength];
                     n.fireDate = [d NSDateWithTime:thisPeriod.endTime];
@@ -695,6 +738,7 @@ static IHWCurriculum *currentCurriculum;
         isToday = false;
     }
     NSLog(@"Notifications: %@", notifications);
+    //Schedule the notifications
     [UIApplication sharedApplication].scheduledLocalNotifications = notifications;
 }
 
@@ -703,6 +747,7 @@ static IHWCurriculum *currentCurriculum;
 
 - (NSArray *)notesOnDate:(IHWDate *)date period:(int)period {
     IHWDate *weekStart = getWeekStart(self.year, date);
+    //Load week
     BOOL success = true;
     if ([self.loadedWeeks objectForKey:weekStart] == nil) success = [self loadWeek:date];
     if (!success) { NSLog(@"ERROR loading week"); return nil; }
@@ -711,6 +756,7 @@ static IHWCurriculum *currentCurriculum;
         NSDictionary *weekJSON = [self.loadedWeeks objectForKey:weekStart];
         NSArray *notesArr = [[weekJSON objectForKey:@"notes"] objectForKey:key];
         if (notesArr != nil) {
+            //Create an array of IHWNote objects from the notes JSON dictionaries
             NSMutableArray *notes = [NSMutableArray array];
             for (int i=0; i<notesArr.count; i++) {
                 [notes addObject:[[IHWNote alloc] initWithJSONDictionary:[notesArr objectAtIndex:i]]];
@@ -724,6 +770,7 @@ static IHWCurriculum *currentCurriculum;
 
 - (void)setNotes:(NSArray *)notes onDate:(IHWDate *)date period:(int)period {
     IHWDate *weekStart = getWeekStart(self.year, date);
+    //Make sure day and week are loaded
     if (![self dayIsLoaded:date]) {
         BOOL success = true;
         if ([self.loadedWeeks objectForKey:weekStart] == nil) success = [self loadWeek:date];
@@ -731,14 +778,18 @@ static IHWCurriculum *currentCurriculum;
         if ([self.loadedDays objectForKey:date] == nil) success = [self loadDay:date];
         if (!success) NSLog(@"ERROR loading day");
     }
+    //Make sure day and week are loaded (again)
     if ([self dayIsLoaded:date]) {
         NSString *key = [NSString stringWithFormat:@"%@.%d", date.description, period];
+        //Make a copy of everything
         NSMutableDictionary *weekJSON = [[self.loadedWeeks objectForKey:weekStart] mutableCopy];
         NSMutableDictionary *notesDict = [[weekJSON objectForKey:@"notes"] mutableCopy];
+        //Create an array of JSON dictionaries from the IHWNotes
         NSMutableArray *notesArr = [NSMutableArray array];
         for (IHWNote *note in notes) {
             [notesArr addObject:[note saveNote]];
         }
+        //Set the notes
         [notesDict setObject:notesArr forKey:key];
         [weekJSON setObject:notesDict forKey:@"notes"];
         [self.loadedWeeks setObject:weekJSON forKey:weekStart];
@@ -754,8 +805,10 @@ static IHWCurriculum *currentCurriculum;
     NSDictionary *weekObj = [self.loadedWeeks objectForKey:weekStart];
     int weekNumber = getWeekNumber(self.year, weekStart);
     NSError *error = nil;
+    //Serialize the week to JSON data
     NSData *data = [[CJSONSerializer serializer] serializeDictionary:weekObj error:&error];
     if (error != nil) { NSLog(@"ERROR saving week JSON"); return; }
+    //Save the JSON data
     [IHWFileManager saveWeekJSON:data forWeekNumber:weekNumber year:self.year campus:getCampusChar(self.campus)];
 }
 
@@ -765,11 +818,16 @@ static IHWCurriculum *currentCurriculum;
     [yearDict setObject:[NSNumber numberWithInt:self.year] forKey:@"year"];
     [yearDict setObject:[NSNumber numberWithInt:self.campus] forKey:@"campus"];
     NSMutableArray *courseDicts = [NSMutableArray array];
-    for (IHWCourse *c in self.courses) [courseDicts addObject:[c saveCourse]];
+    //Convert each course to a JSON dictionary and add it
+    for (IHWCourse *c in self.courses) {
+        [courseDicts addObject:[c saveCourse]];
+    }
     [yearDict setObject:courseDicts forKey:@"courses"];
+    //Serialize the year to JSON data
     NSError *error = nil;
     NSData *yearJSON = [[CJSONSerializer serializer] serializeDictionary:yearDict error:&error];
     if (error != nil) { NSLog(@"ERROR serializing courses: %@", error.debugDescription); return; }
+    //Save the JSON data
     [IHWFileManager saveYearJSON:yearJSON forYear:self.year campus:campusChar];
 }
 

@@ -41,22 +41,29 @@
 }
 
 + (BOOL)saveFile:(NSData *)data toPathInsideDocuments:(NSString *)pathInsideDocuments {
+    //Get path to documents
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
+    //Construct complete file path
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, pathInsideDocuments];
     NSError *error = nil;
+    //Make sure the folder exists
     [[NSFileManager defaultManager] createDirectoryAtPath:[filePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:&error];
     if (error != nil) { NSLog(@"ERROR saving file %@: %@", pathInsideDocuments, error.debugDescription); return NO; }
+    //Write the data
     [data writeToFile:filePath options:NSDataWritingAtomic error:&error];
     if (error != nil) { NSLog(@"ERROR saving file %@: %@", pathInsideDocuments, error.debugDescription); return NO; }
     return YES;
 }
 
 + (NSData *)loadFileFromPathInsideDocuments:(NSString *)pathInsideDocuments {
+    //Get path to documents
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
+    //Construct complete file path
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, pathInsideDocuments];
     NSError *error = nil;
+    //Get the data and return it
     NSData *result = [NSData dataWithContentsOfFile:filePath options:0 error:&error];
     if (error == nil) return result;
     else {

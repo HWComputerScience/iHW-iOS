@@ -10,6 +10,8 @@
 
 @implementation IHWDay
 
+//IHWDay contains variables that are common to ALL Days, regardless of type.
+
 - (id)initWithDate:(IHWDate *)date
 {
     self = [super init];
@@ -31,6 +33,7 @@
 }
 
 - (NSDictionary *)saveDay {
+    //Not really ever used...
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:self.date.description forKey:@"date"];
     [dict setObject:self.caption forKey:@"caption"];

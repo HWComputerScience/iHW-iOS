@@ -30,6 +30,7 @@
         self.periods = [NSMutableArray array];
         int i=0;
         for (NSDictionary *periodDict in dicts) {
+            //Create each period and add it
             [self.periods addObject:[[IHWPeriod alloc] initWithJSONDictionary:periodDict atIndex:i]];
             i++;
         }
@@ -43,6 +44,7 @@
     [dict setValue:@"test" forKey:@"type"];
     NSMutableArray *dicts = [NSMutableArray array];
     for (IHWPeriod *p in self.periods) {
+        //Save each period and add it
         [dicts addObject:[p savePeriod]];
     }
     [dict setValue:dicts forKey:@"tests"];

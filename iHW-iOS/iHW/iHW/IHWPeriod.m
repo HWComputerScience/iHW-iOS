@@ -54,6 +54,7 @@
 }
 
 - (NSDictionary *)savePeriod {
+    //Notes DO NOT SAVE when the period is saved! Must save them separately!
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:self.name forKey:@"name"];
     [dict setObject:self.date.description forKey:@"date"];

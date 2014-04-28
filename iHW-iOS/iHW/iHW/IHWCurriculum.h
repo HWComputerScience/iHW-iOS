@@ -16,16 +16,16 @@
 
 @interface IHWCurriculum : NSObject
 
+//Curriculum is a Singleton object
 + (IHWCurriculum *)currentCurriculum;
 + (IHWCurriculum *)reloadCurrentCurriculum;
 + (IHWCurriculum *)curriculumWithCampus:(int)campus andYear:(int)year;
+
 + (int)currentYear;
 + (int)currentCampus;
 + (void)setCurrentYear:(int)year;
 + (void)setCurrentCampus:(int)campus;
 + (BOOL)isFirstRun;
-
-
 
 @property int campus;
 @property int year;
@@ -37,15 +37,14 @@
 @property (strong, nonatomic) NSDictionary *normalMondayTemplate;
 @property (strong, nonatomic) NSDictionary *specialDayTemplates;
 @property (strong, nonatomic) NSDictionary *dayCaptions;
-@property (strong) NSMutableDictionary *loadedWeeks;
-@property (strong) NSMutableDictionary *loadedDays;
-@property (strong, nonatomic) NSMutableDictionary *dayNumbers;
-@property (strong, nonatomic) NSArray *semesterEndDates;
-@property (strong, nonatomic) NSArray *trimesterEndDates;
-@property (strong) NSMutableSet *curriculumLoadingListeners;
+@property (strong) NSMutableDictionary *loadedWeeks; //Keys: IHWDate / Values: NSDictionary
+@property (strong) NSMutableDictionary *loadedDays;  //Keys: IHWDate / Values: IHWDay
+@property (strong, nonatomic) NSMutableDictionary *dayNumbers; //Keys: IHWDate / Values: NSNumber
+@property (strong, nonatomic) NSArray *semesterEndDates; //Values: IHWDate
+@property (strong, nonatomic) NSArray *trimesterEndDates; //Values: IHWDate
+@property (strong) NSMutableSet *curriculumLoadingListeners; //Values: IHWCurriculumLoadingListener
 @property (strong, nonatomic) NSOperationQueue *loadingQueue;
 
-- (id)initWithCampus:(int)campus year:(int)year startingDate:(IHWDate *)date;
 - (void)loadEverythingWithStartingDate:(IHWDate *)date;
 - (BOOL)isLoading;
 - (BOOL)isLoaded;
@@ -53,7 +52,6 @@
 //- (IHWDate *)lastLoadedDate;
 - (BOOL)dayIsLoaded:(IHWDate *)date;
 - (IHWDay *)dayWithDate:(IHWDate *)date;
-- (void)clearUnneededItems:(IHWDate *)date;
 - (BOOL)dateInBounds:(IHWDate *)date;
 
 - (NSArray *)allCourseNames;
@@ -68,6 +66,8 @@
 - (NSArray *)courseListForDate:(IHWDate *)d;
 - (NSArray *)termsFromDate:(IHWDate *)d;
 
+- (void)constructNotifications;
+
 - (NSArray *)notesOnDate:(IHWDate *)date period:(int)period;
 - (void)setNotes:(NSArray *)notes onDate:(IHWDate *)date period:(int)period;
 
@@ -76,6 +76,7 @@
 
 @end
 
+//Any class can implement this protocol to get notified when the IHWCurriculum finishes loading or fails to load
 @protocol IHWCurriculumLoadingListener <NSObject>
 @optional
 - (void)curriculumFinishedLoading:(IHWCurriculum *)curriculum;

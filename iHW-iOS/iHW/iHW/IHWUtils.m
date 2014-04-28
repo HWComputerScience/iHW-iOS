@@ -73,10 +73,6 @@ BOOL termsCompatible(int a, int b) {
     return YES;
 }
 
-
-
-
-
 NSString *stringForTerm(int term) {
     if (term==0) return @"Full Year";
     else if (term==1) return @"First Semester";
@@ -97,16 +93,20 @@ NSString *getOrdinal(int num) {
 }
 
 IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents) {
+    //find term
     int term = TERM_FULL_YEAR;
     if (code.length >= 6) term = [[code substringWithRange:NSMakeRange(5, 1)] intValue];
     
     //parse period list
     int numDays = [IHWCurriculum currentCampus];
     int numPeriods = numDays+3;
-    BOOL periods[numDays][numPeriods+1];
+    
+    //parse class meetings into a 2-d C array
+    BOOL meetingsArr[numDays][numPeriods+1];
     for (int d=0; d<numDays; d++) for (int p=0; p<=numPeriods; p++) {
-        periods[d][p] = NO;
+        meetingsArr[d][p] = NO;
     }
+    //We have to find which period the course meets the most
     int periodFrequency[numPeriods+1];
     for (int p=0; p<=numPeriods; p++) {
         periodFrequency[p] = 0;
@@ -116,11 +116,15 @@ IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents
     int day = 0;
     for (NSString *component in periodComponents) {
         for (int i=0; i<component.length; i++) {
+            //For each day,
             int period = [[component substringWithRange:NSMakeRange(i, 1)] intValue];
             if (period > 0) {
-                periods[day][period] = YES;
+                //Add the periods it meets to the meetings array
+                meetingsArr[day][period] = YES;
+                //Update the min and max
                 minPeriod = MIN(minPeriod, period);
                 maxPeriod = MAX(maxPeriod, period);
+                //Update the frequency
                 periodFrequency[period]++;
             }
         }
@@ -128,19 +132,38 @@ IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents
     }
     //determine course period
     int coursePeriod;
-    if (minPeriod == maxPeriod) coursePeriod = minPeriod;
-    else if (maxPeriod-minPeriod == 2) coursePeriod = maxPeriod-1;
-    else if (maxPeriod-minPeriod == 1 && periodFrequency[maxPeriod] > periodFrequency[minPeriod]) coursePeriod = maxPeriod;
-    else if (maxPeriod-minPeriod == 1 && periodFrequency[maxPeriod] <= periodFrequency[minPeriod]) coursePeriod = minPeriod;
-    else return nil;
+    if (minPeriod == maxPeriod) {
+        //course has no double periods
+        coursePeriod = minPeriod;
+    } else if (maxPeriod-minPeriod == 2) {
+        //course doubles into the period before and the period after
+        coursePeriod = maxPeriod-1;
+    } else if (maxPeriod-minPeriod == 1 && periodFrequency[maxPeriod] > periodFrequency[minPeriod]) {
+        //course doubles only into the period before
+        coursePeriod = maxPeriod;
+    } else if (maxPeriod-minPeriod == 1 && periodFrequency[maxPeriod] <= periodFrequency[minPeriod]) {
+        //course doubles only into the period after
+        coursePeriod = minPeriod;
+    } else return nil;
+    
     //create meetings array
     NSMutableArray *meetings = [NSMutableArray array];
     for (int i=0; i<numDays; i++) {
-        if (!periods[i][coursePeriod]) [meetings setObject:[NSNumber numberWithInt:MEETING_X_DAY] atIndexedSubscript:i];
-        else if (coursePeriod-1 > 0 && periods[i][coursePeriod-1]) [meetings setObject:[NSNumber numberWithInt:MEETING_DOUBLE_BEFORE] atIndexedSubscript:i];
-        else if (coursePeriod+1 <= numPeriods && periods[i][coursePeriod+1]) [meetings setObject:[NSNumber numberWithInt:MEETING_DOUBLE_AFTER] atIndexedSubscript:i];
-        else [meetings setObject:[NSNumber numberWithInt:MEETING_SINGLE_PERIOD] atIndexedSubscript:i];
+        if (!meetingsArr[i][coursePeriod]) {
+            //no meeting today
+            [meetings setObject:[NSNumber numberWithInt:MEETING_X_DAY] atIndexedSubscript:i];
+        } else if (coursePeriod-1 > 0 && meetingsArr[i][coursePeriod-1]) {
+            //double meeting into the period before
+            [meetings setObject:[NSNumber numberWithInt:MEETING_DOUBLE_BEFORE] atIndexedSubscript:i];
+        } else if (coursePeriod+1 <= numPeriods && meetingsArr[i][coursePeriod+1]) {
+            //double period into the period after
+            [meetings setObject:[NSNumber numberWithInt:MEETING_DOUBLE_AFTER] atIndexedSubscript:i];
+        } else {
+            //single period
+            [meetings setObject:[NSNumber numberWithInt:MEETING_SINGLE_PERIOD] atIndexedSubscript:i];
+        }
     }
+    
     return [[IHWCourse alloc] initWithName:name period:coursePeriod term:term meetings:meetings];
 }
 

@@ -197,7 +197,7 @@
     if (self.dayCaptionLabel != nil) {
         [headerView addSubview:self.dayCaptionLabel];
         
-        if (self.day.captionLink != nil) {
+        if (self.day.captionLink != nil && ![self.day.captionLink isEqualToString:@""]) {
             [headerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(captionTapped)]];
             CALayer *imageLayer = [CALayer layer];
             imageLayer.frame = CGRectMake(self.dayCaptionLabel.bounds.size.width-20, self.dayCaptionLabel.bounds.size.height-20, 16, 16);
@@ -210,7 +210,7 @@
 }
 
 - (void)captionTapped {
-    if (self.day.captionLink != nil) {
+    if (self.day.captionLink != nil && ![self.day.captionLink isEqualToString:@""]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.day.captionLink]];
     }
 }

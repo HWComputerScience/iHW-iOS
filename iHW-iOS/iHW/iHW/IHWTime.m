@@ -10,6 +10,8 @@
 
 @implementation IHWTime
 
+//IHWTime is an Objective-C class that does NOT extend anything.
+
 + (IHWTime *)now {
     return [[self alloc] initNow];
 }

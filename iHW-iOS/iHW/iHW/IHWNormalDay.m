@@ -57,6 +57,7 @@
 
 - (id)initWithJSONDictionary:(NSDictionary *)dictionary
 {
+    //Populate IHWDay fields first, then populate IHWNormalDay fields
     self = [super initWithJSONDictionary:dictionary];
     if (self) {
         self.dayNum = [[dictionary objectForKey:@"dayNumber"] intValue];
@@ -107,21 +108,27 @@
 }
 
 - (IHWTime *)addPeriodWithNum:(int)num fromCourseList:(NSArray *)courseList atIndex:(int)index startTime:(IHWTime *)startTime {
+    //find period duration
     int duration = self.periodLength;
     if (self.periodLengths != nil && [self.periodLengths objectForKey:[[NSNumber numberWithInt:num] stringValue]] != nil) {
         duration = [[self.periodLengths objectForKey:[[NSNumber numberWithInt:num] stringValue]] intValue];
     }
     if ([courseList objectAtIndex:num] != [NSNull null]) {
+        //If course exists, create and add it
         IHWCourse *course = [courseList objectAtIndex:num];
         IHWPeriod *period = [[IHWPeriod alloc] initWithName:course.name date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index isFreePeriod:NO];
         [self.periods addObject:period];
     } else {
+        //Else add an "x" period
         [self.periods addObject:[[IHWPeriod alloc] initWithName:@"X" date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index isFreePeriod:YES]];
     }
+    //Return the period's end time
     return [startTime timeByAddingHours:0 andMinutes:duration];
 }
 
 - (NSDictionary *)saveDay {
+    //Save day as IHWDay first, then add fields specific to IHWNormalDay
+    //This is rarely, if ever, used.
     NSMutableDictionary *dict = [[super saveDay] mutableCopy];
     [dict setValue:@"normal" forKey:@"type"];
     [dict setValue:[NSNumber numberWithInt:self.dayNum] forKey:@"dayNumber"];
