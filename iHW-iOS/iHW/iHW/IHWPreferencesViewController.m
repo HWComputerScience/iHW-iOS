@@ -31,12 +31,14 @@
                       @[@"Change year or campus", @"Choose school year, and select MS or US"],
                       @[@"Redownload schedule", @"Download your schedule from HW.com"],
                       @[@"Disclaimer", @"Don't blame us if you are late to class!"],
+                      @[@"Credits / About iHW", @""],
                       nil];
         self.actions = [NSArray arrayWithObjects:
                         [NSValue valueWithPointer:@selector(showNotifications:)],
                         [NSValue valueWithPointer:@selector(changeYear:)],
                         [NSValue valueWithPointer:@selector(redownload:)],
                         [NSValue valueWithPointer:@selector(showDisclaimer:)],
+                        [NSValue valueWithPointer:@selector(showAbout:)],
                         nil];
     }
     return self;
@@ -47,30 +49,35 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.items.count;
+    if (section==0) return 3;
+    else return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identifier = @"preferencesCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    long index = indexPath.row;
+    if (indexPath.section == 1) index += 3;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
     }
-    cell.textLabel.text = [[self.items objectAtIndex:indexPath.row] objectAtIndex:0];
-    cell.detailTextLabel.text = [[self.items objectAtIndex:indexPath.row] objectAtIndex:1];
+    cell.textLabel.text = [[self.items objectAtIndex:index] objectAtIndex:0];
+    cell.detailTextLabel.text = [[self.items objectAtIndex:index] objectAtIndex:1];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    SEL action = [[self.actions objectAtIndex:indexPath.row] pointerValue];
+    long index = indexPath.row;
+    if (indexPath.section == 1) index += 3;
+    SEL action = [[self.actions objectAtIndex:index] pointerValue];
     if (action != NULL) {
         [self performSelectorOnMainThread:action withObject:indexPath waitUntilDone:YES];
     }
@@ -102,6 +109,20 @@
     UIWebView *wv = [[UIWebView alloc] initWithFrame:self.navigationController.view.bounds];
     wv.delegate = self;
     NSURL *rtfUrl = [[NSBundle mainBundle] URLForResource:@"disclaimer" withExtension:@".rtf"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:rtfUrl];
+    [wv loadRequest:request];
+    wv.scalesPageToFit = YES;
+    wv.backgroundColor = [UIColor whiteColor];
+    vc.view = wv;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)showAbout:(NSIndexPath *)indexPath {
+    UIViewController *vc = [[UIViewController alloc] init];
+    vc.navigationItem.title = @"Credits / About iHW";
+    UIWebView *wv = [[UIWebView alloc] initWithFrame:self.navigationController.view.bounds];
+    wv.delegate = self;
+    NSURL *rtfUrl = [[NSBundle mainBundle] URLForResource:@"about" withExtension:@".rtf"];
     NSURLRequest *request = [NSURLRequest requestWithURL:rtfUrl];
     [wv loadRequest:request];
     wv.scalesPageToFit = YES;

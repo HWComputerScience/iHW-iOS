@@ -49,8 +49,6 @@
 		CB3E0DBB189EBA6400A17B9C /* checkboxChecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DB9189EBA6400A17B9C /* checkboxChecked@2x.png */; };
 		CB3E0DBC189EBA6400A17B9C /* checkboxUnchecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DBA189EBA6400A17B9C /* checkboxUnchecked@2x.png */; };
 		CB3E0DBE189EBE0C00A17B9C /* whitegear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E0DBD189EBE0C00A17B9C /* whitegear@2x.png */; };
-		CB4262E017C9E21B008EE2D7 /* icon_ios_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */; };
-		CB4262E417C9E265008EE2D7 /* icon_ios_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */; };
 		CB44277A17BB0DC00068D543 /* IHWDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB44277817BB0DC00068D543 /* IHWDayViewController.m */; };
 		CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB44277917BB0DC00068D543 /* IHWDayViewController.xib */; };
 		CB5DF79117BD415300D5651C /* IHWCheckboxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5DF79017BD415200D5651C /* IHWCheckboxCell.m */; };
@@ -89,15 +87,16 @@
 		CB65E2E418FC8D6E00336357 /* IHWPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */; };
 		CB75CDCA19062CF200CDA1FD /* Default7-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB75CDC819062CF200CDA1FD /* Default7-568h@2x.png */; };
 		CB75CDCB19062CF200CDA1FD /* Default7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB75CDC919062CF200CDA1FD /* Default7@2x.png */; };
-		CB75CDCD19062D8900CDA1FD /* icon_ios_iphone7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB75CDCC19062D8900CDA1FD /* icon_ios_iphone7@2x.png */; };
-		CB7E454317C5CE7800E1621F /* IHWOldPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */; };
-		CB7E454417C5CE7800E1621F /* IHWOldPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */; };
 		CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CB7E454517C5D73B00E1621F /* mscampus.jpg */; };
 		CB88339217BAF722002BC200 /* IHWLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB88339117BAF720002BC200 /* IHWLoadingView.m */; };
 		CB8D773B17CB2F8700688D3D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8D773A17CB2F8700688D3D /* Default.png */; };
 		CB8D773D17CB2F8800688D3D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8D773C17CB2F8800688D3D /* Default@2x.png */; };
 		CB8D773F17CB2F8A00688D3D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8D773E17CB2F8A00688D3D /* Default-568h@2x.png */; };
 		CBA2977917BBEB430087104A /* IHWPeriodCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = CBA2977817BBEB430087104A /* IHWPeriodCellView.m */; };
+		CBBBB1B7190EB197002EE1AA /* icon_ios_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = CBBBB1B4190EB197002EE1AA /* icon_ios_iphone.png */; };
+		CBBBB1B8190EB197002EE1AA /* icon_ios_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBBBB1B5190EB197002EE1AA /* icon_ios_iphone@2x.png */; };
+		CBBBB1B9190EB197002EE1AA /* icon_ios_iphone7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBBBB1B6190EB197002EE1AA /* icon_ios_iphone7@2x.png */; };
+		CBBBB1BB190EB421002EE1AA /* about.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CBBBB1BA190EB421002EE1AA /* about.rtf */; };
 		CBD8F81C18FDA6490067BC71 /* disclaimer.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CBD8F81B18FDA6490067BC71 /* disclaimer.rtf */; };
 		CBD8F82218FDBC130067BC71 /* IHWChangeYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */; };
 		CBE0DE2E18FB752700565950 /* UILabelPadding.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE0DE2D18FB752700565950 /* UILabelPadding.m */; };
@@ -173,8 +172,6 @@
 		CB3E0DB9189EBA6400A17B9C /* checkboxChecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxChecked@2x.png"; sourceTree = "<group>"; };
 		CB3E0DBA189EBA6400A17B9C /* checkboxUnchecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxUnchecked@2x.png"; sourceTree = "<group>"; };
 		CB3E0DBD189EBE0C00A17B9C /* whitegear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whitegear@2x.png"; sourceTree = "<group>"; };
-		CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_ios_iphone.png; sourceTree = "<group>"; };
-		CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_ios_iphone@2x.png"; sourceTree = "<group>"; };
 		CB44277717BB0DC00068D543 /* IHWDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDayViewController.h; sourceTree = "<group>"; };
 		CB44277817BB0DC00068D543 /* IHWDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDayViewController.m; sourceTree = "<group>"; };
 		CB44277917BB0DC00068D543 /* IHWDayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWDayViewController.xib; sourceTree = "<group>"; };
@@ -232,10 +229,6 @@
 		CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPreferencesViewController.m; sourceTree = "<group>"; };
 		CB75CDC819062CF200CDA1FD /* Default7-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default7-568h@2x.png"; sourceTree = "<group>"; };
 		CB75CDC919062CF200CDA1FD /* Default7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default7@2x.png"; sourceTree = "<group>"; };
-		CB75CDCC19062D8900CDA1FD /* icon_ios_iphone7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_ios_iphone7@2x.png"; sourceTree = "<group>"; };
-		CB7E454017C5CE7800E1621F /* IHWOldPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWOldPreferencesViewController.h; sourceTree = "<group>"; };
-		CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWOldPreferencesViewController.m; sourceTree = "<group>"; };
-		CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWOldPreferencesViewController.xib; sourceTree = "<group>"; };
 		CB7E454517C5D73B00E1621F /* mscampus.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mscampus.jpg; sourceTree = "<group>"; };
 		CB88339017BAF71D002BC200 /* IHWLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWLoadingView.h; sourceTree = "<group>"; };
 		CB88339117BAF720002BC200 /* IHWLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWLoadingView.m; sourceTree = "<group>"; };
@@ -244,6 +237,10 @@
 		CB8D773E17CB2F8A00688D3D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		CBA2977717BBEB430087104A /* IHWPeriodCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPeriodCellView.h; sourceTree = "<group>"; };
 		CBA2977817BBEB430087104A /* IHWPeriodCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPeriodCellView.m; sourceTree = "<group>"; };
+		CBBBB1B4190EB197002EE1AA /* icon_ios_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_ios_iphone.png; sourceTree = "<group>"; };
+		CBBBB1B5190EB197002EE1AA /* icon_ios_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_ios_iphone@2x.png"; sourceTree = "<group>"; };
+		CBBBB1B6190EB197002EE1AA /* icon_ios_iphone7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_ios_iphone7@2x.png"; sourceTree = "<group>"; };
+		CBBBB1BA190EB421002EE1AA /* about.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = about.rtf; sourceTree = "<group>"; };
 		CBD8F81B18FDA6490067BC71 /* disclaimer.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; name = disclaimer.rtf; path = iHW/disclaimer.rtf; sourceTree = "<group>"; };
 		CBD8F82018FDBC130067BC71 /* IHWChangeYearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWChangeYearViewController.h; sourceTree = "<group>"; };
 		CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWChangeYearViewController.m; sourceTree = "<group>"; };
@@ -277,10 +274,11 @@
 				CB8D773A17CB2F8700688D3D /* Default.png */,
 				CB75CDC819062CF200CDA1FD /* Default7-568h@2x.png */,
 				CB75CDC919062CF200CDA1FD /* Default7@2x.png */,
-				CB75CDCC19062D8900CDA1FD /* icon_ios_iphone7@2x.png */,
-				CB4262E317C9E265008EE2D7 /* icon_ios_iphone@2x.png */,
-				CB4262DF17C9E21B008EE2D7 /* icon_ios_iphone.png */,
+				CBBBB1B4190EB197002EE1AA /* icon_ios_iphone.png */,
+				CBBBB1B5190EB197002EE1AA /* icon_ios_iphone@2x.png */,
+				CBBBB1B6190EB197002EE1AA /* icon_ios_iphone7@2x.png */,
 				CBD8F81B18FDA6490067BC71 /* disclaimer.rtf */,
+				CBBBB1BA190EB421002EE1AA /* about.rtf */,
 				491CCB37178E590B00736453 /* iHW */,
 				491CCB30178E590B00736453 /* Frameworks */,
 				491CCB2F178E590B00736453 /* Products */,
@@ -360,9 +358,6 @@
 				CBD8F82118FDBC130067BC71 /* IHWChangeYearViewController.m */,
 				CBF9D98F18FDDD3D00DBED37 /* IHWNotificationOptionsViewController.h */,
 				CBF9D99018FDDD3D00DBED37 /* IHWNotificationOptionsViewController.m */,
-				CB7E454017C5CE7800E1621F /* IHWOldPreferencesViewController.h */,
-				CB7E454117C5CE7800E1621F /* IHWOldPreferencesViewController.m */,
-				CB7E454217C5CE7800E1621F /* IHWOldPreferencesViewController.xib */,
 				CB6104A117B8952A00D3FD75 /* Images */,
 				491CCB38178E590B00736453 /* Supporting Files */,
 			);
@@ -565,6 +560,7 @@
 			files = (
 				491CCB3C178E590B00736453 /* InfoPlist.strings in Resources */,
 				CB61049C17B8945C00D3FD75 /* IHWFirstRunViewController.xib in Resources */,
+				CBBBB1B8190EB197002EE1AA /* icon_ios_iphone@2x.png in Resources */,
 				CB75CDCB19062CF200CDA1FD /* Default7@2x.png in Resources */,
 				CB6104A017B8952600D3FD75 /* uscampus.jpg in Resources */,
 				CB3E0DBB189EBA6400A17B9C /* checkboxChecked@2x.png in Resources */,
@@ -575,8 +571,8 @@
 				CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */,
 				CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */,
 				CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */,
+				CBBBB1B9190EB197002EE1AA /* icon_ios_iphone7@2x.png in Resources */,
 				CB5DF7A317BDFA5400D5651C /* checkboxChecked_old.png in Resources */,
-				CB75CDCD19062D8900CDA1FD /* icon_ios_iphone7@2x.png in Resources */,
 				CB75CDCA19062CF200CDA1FD /* Default7-568h@2x.png in Resources */,
 				CB3E0DB1189EB0D200A17B9C /* gotodate@2x.png in Resources */,
 				CBD8F81C18FDA6490067BC71 /* disclaimer.rtf in Resources */,
@@ -591,17 +587,16 @@
 				CB25B9CF17C53D520085B9E2 /* forwardbutton_old@2x.png in Resources */,
 				CB25B9D417C541690085B9E2 /* graygear.png in Resources */,
 				CB25B9D517C541690085B9E2 /* graygear@2x.png in Resources */,
+				CBBBB1B7190EB197002EE1AA /* icon_ios_iphone.png in Resources */,
 				CB25B9D617C541690085B9E2 /* whitegear_old.png in Resources */,
 				CB25B9D717C541690085B9E2 /* whitegear_old@2x.png in Resources */,
 				CB3E0DBC189EBA6400A17B9C /* checkboxUnchecked@2x.png in Resources */,
 				CB3E0DBE189EBE0C00A17B9C /* whitegear@2x.png in Resources */,
-				CB7E454417C5CE7800E1621F /* IHWOldPreferencesViewController.xib in Resources */,
+				CBBBB1BB190EB421002EE1AA /* about.rtf in Resources */,
 				CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */,
 				CB65E2E118FC8BE000336357 /* link@2x.png in Resources */,
-				CB4262E017C9E21B008EE2D7 /* icon_ios_iphone.png in Resources */,
 				CB65E2E018FC8BE000336357 /* link.png in Resources */,
 				CB3E0DB4189EB46800A17B9C /* backbutton@2x.png in Resources */,
-				CB4262E417C9E265008EE2D7 /* icon_ios_iphone@2x.png in Resources */,
 				CB3E0DB8189EB50D00A17B9C /* today@2x.png in Resources */,
 				CB8D773B17CB2F8700688D3D /* Default.png in Resources */,
 				CB8D773D17CB2F8800688D3D /* Default@2x.png in Resources */,
@@ -662,7 +657,6 @@
 				CB5DF79917BDF41500D5651C /* IHWUtils.m in Sources */,
 				CB25B9BC17C303E00085B9E2 /* UIViewController+IHW.m in Sources */,
 				CB25B9DA17C542A20085B9E2 /* IHWNoteView.m in Sources */,
-				CB7E454317C5CE7800E1621F /* IHWOldPreferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

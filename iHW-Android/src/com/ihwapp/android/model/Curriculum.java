@@ -144,6 +144,7 @@ public class Curriculum {
 	private JSONObject normalDayTemplate;
 	private JSONObject normalMondayTemplate;
 	private SortedMap<Date, JSONObject> specialDayTemplates;
+	private SortedMap<Date, JSONObject> dayCaptions;
 	private int passingPeriodLength;
 	private SortedMap<Date, JSONObject> loadedWeeks; //contains week JSON by first day
 	private SortedMap<Date, Day> loadedDays; //will contain days from loadedEndDates[0] to loadedEndDates[1], inclusive
@@ -394,6 +395,17 @@ public class Curriculum {
 				sdts.put(d, specialDaysObj.getJSONObject(key));
 			}
 			specialDayTemplates = sdts;
+			
+			JSONObject dayCaptionsObj = scheduleObj.getJSONObject("dayCaptions");
+			SortedMap<Date, JSONObject> dcs = Collections.synchronizedSortedMap(new TreeMap<Date, JSONObject>());
+			Iterator<?> iter2 = dayCaptionsObj.keys();
+			while (iter2.hasNext()) {
+				String key = (String)iter2.next();
+				Date d = new Date(key);
+				dcs.put(d, dayCaptionsObj.getJSONObject(key));
+			}
+			dayCaptions = dcs;
+			
 			//Log.d("iHW", "finished parsing schedule JSON");
 			return true;
 		} catch (JSONException ignored) {}
@@ -531,10 +543,26 @@ public class Curriculum {
 			if (specialDayTemplates.containsKey(d)) {
 				template = specialDayTemplates.get(d);
 			} else if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) {
-				loadedDays.put(d, new Holiday(d, "Summer"));
+				Day day = new Holiday(d, "Summer");
+				JSONObject captionObj = dayCaptions.get(d);
+				if (captionObj != null && day.getCaption() == null) {
+					day.setCaption(captionObj.getString("text"));
+					if (captionObj.getString("link") != null) {
+						day.setCaptionLink(captionObj.getString("link"));
+					}
+				}
+				loadedDays.put(d, day);
 				return true;
 			} else if (d.isWeekend()) {
-				loadedDays.put(d, new Holiday(d, ""));
+				Day day = new Holiday(d, "");
+				JSONObject captionObj = dayCaptions.get(d);
+				if (captionObj != null && day.getCaption() == null) {
+					day.setCaption(captionObj.getString("text"));
+					if (captionObj.getString("link") != null) {
+						day.setCaptionLink(captionObj.getString("link"));
+					}
+				}
+				loadedDays.put(d, day);
 				return true;
 			} else if (d.isMonday()) {
 				JSONArray namesArr = normalMondayTemplate.names();
@@ -552,13 +580,23 @@ public class Curriculum {
 				template.put("dayNumber", dayNumbers.get(d));
 			}
 			String type = template.getString("type");
+			Day day = null;
 			if (type.equals("normal")) {
-				NormalDay day = new NormalDay(template);
-				day.fillPeriods(this);
-				loadedDays.put(d, day);
-			} else if (type.equals("test")) loadedDays.put(d, new TestDay(template));
-			else if (type.equals("holiday")) loadedDays.put(d, new Holiday(template));
+				day = new NormalDay(template);
+				((NormalDay)day).fillPeriods(this);
+			} else if (type.equals("test")) day = new TestDay(template);
+			else if (type.equals("holiday")) day = new Holiday(template);
 			else return false;
+			
+			JSONObject captionObj = dayCaptions.get(d);
+			if (captionObj != null && day.getCaption() == null) {
+				day.setCaption(captionObj.getString("text"));
+				if (captionObj.getString("link") != null) {
+					day.setCaptionLink(captionObj.getString("link"));
+				}
+			}
+			
+			loadedDays.put(d, day);
 			//Log.d("iHW", "finished loading day");
 			return true;
 		} catch (JSONException ignored) { }

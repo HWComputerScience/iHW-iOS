@@ -72,10 +72,13 @@
 }
 
 - (void)notifyTarget:(id)target didSucceedWithAction:(SEL)action origin:(id)origin {
-    if ([target respondsToSelector:action])
-        objc_msgSend(target, action, self.selectedDate, origin);
-    else
+    if ([target respondsToSelector:action]) {
+        //NSLog(@"%@ %@", target, self.selectedDate);
+        [target performSelectorOnMainThread:action withObject:self.selectedDate waitUntilDone:NO];
+        //objc_msgSend(target, action, self.selectedDate, origin);
+    } else {
         NSAssert(NO, @"Invalid target/action ( %s / %s ) combination used for ActionSheetPicker", object_getClassName(target), sel_getName(action));
+    }
 }
 
 - (void)eventForDatePicker:(id)sender {
