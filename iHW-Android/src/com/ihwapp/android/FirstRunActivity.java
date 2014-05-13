@@ -15,6 +15,7 @@ public class FirstRunActivity extends IHWActivity implements Curriculum.ModelLoa
 	private LinearLayout campusLayout;
 	private LinearLayout coursesLayout;
 	private ProgressDialog progressDialog;
+	private AlertDialog alertDialog;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,7 +74,6 @@ public class FirstRunActivity extends IHWActivity implements Curriculum.ModelLoa
 	protected void onStart() {
 		super.onStart();
 		if (this.getIntent().getBooleanExtra("skipToCourses", false)) {
-			Log.d("iHW", "Year: " + Curriculum.getCurrentYear() + " / Campus: " + Curriculum.getCurrentCampus());
 			Curriculum.reloadCurrentCurriculum().addModelLoadingListener(FirstRunActivity.this);
 			campusLayout.setVisibility(View.GONE);
 			coursesLayout.setVisibility(View.VISIBLE);
@@ -101,7 +101,7 @@ public class FirstRunActivity extends IHWActivity implements Curriculum.ModelLoa
 
 	@Override
 	public void onFinishedLoading(Curriculum c) {
-		if (progressDialog != null) progressDialog.dismiss();
+		if (progressDialog != null && !this.isFinishing()) progressDialog.dismiss();
 		progressDialog = null;
 	}
 
@@ -109,19 +109,30 @@ public class FirstRunActivity extends IHWActivity implements Curriculum.ModelLoa
 	public void onLoadFailed(Curriculum c) {
 		if (progressDialog != null) progressDialog.dismiss();
 		progressDialog = null;
-		new AlertDialog.Builder(this, R.style.PopupTheme).setMessage("iHW requires internet access when running for the first time. Please try again later when you are connected to a Wi-Fi or cellular network.")
-		.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				Intent i = new Intent(FirstRunActivity.this, LaunchActivity.class);
-				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
-				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(i);
-			}
-		})
-		.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+		if (this.isFinishing()) return;
+		this.alertDialog = new AlertDialog.Builder(this, R.style.PopupTheme).setMessage("The schedule for the campus and year you selected is not available. Check your internet connection and try again, or choose a different campus or year.")
+		.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				Curriculum.reloadCurrentCurriculum().addModelLoadingListener(FirstRunActivity.this);
+				alertDialog = null;
 			}
-		}).show();
+		})
+		.setNegativeButton("Choose Year", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(FirstRunActivity.this, PreferencesActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(i);
+			}
+		}).setCancelable(false).create();
+		alertDialog.show();
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (progressDialog != null) progressDialog.dismiss();
+		progressDialog = null;
+		if (alertDialog != null) alertDialog.dismiss();
+		alertDialog = null;
 	}
 }

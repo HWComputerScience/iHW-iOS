@@ -12,6 +12,7 @@ import android.app.ProgressDialog;
 import android.content.*;
 import android.support.v4.app.*;
 import android.support.v4.view.*;
+import android.util.Log;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
@@ -28,7 +29,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//Log.d("iHW-lc", "ScheduleActivity onCreate");
+		Log.d("iHW-lc", "ScheduleActivity onCreate");
 		Curriculum.ctx = this.getApplicationContext();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schedule);
@@ -68,7 +69,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	
 	protected void onStart() {
 		super.onStart();
-		//Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
+		Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
 		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
 		if (Curriculum.getCurrentCurriculum().isLoaded()) {
 			//Log.d("iHW", "Setting adapter");
@@ -93,7 +94,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 
 	@Override
 	public void onFinishedLoading(Curriculum c) {
-		//Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
+		Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
 		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 		pager.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -106,10 +107,18 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	public void onLoadFailed(Curriculum c) {
 		if (progressDialog != null) progressDialog.dismiss();
 		progressDialog = null;
-		new AlertDialog.Builder(this, R.style.PopupTheme).setMessage("iHW requires internet access when running for the first time. Please try again later when you are connected to a Wi-Fi or cellular network.")
+		if (this.isFinishing()) return;
+		new AlertDialog.Builder(this, R.style.PopupTheme).setMessage("The schedule for the campus and year you selected is not available. Check your internet connection and try again, or choose a different campus or year.")
 		.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				Intent i = new Intent(ScheduleActivity.this, LaunchActivity.class);
+				startActivity(i);
+			}
+		})
+		.setNeutralButton("Choose Year", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(ScheduleActivity.this, PreferencesActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(i);
 			}
 		})
@@ -117,7 +126,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 			public void onClick(DialogInterface dialog, int which) {
 				Curriculum.reloadCurrentCurriculum().addModelLoadingListener(ScheduleActivity.this);
 			}
-		}).show();
+		}).setCancelable(false).show();
 	}
 	
 	public void gotoDate(Date d) {
