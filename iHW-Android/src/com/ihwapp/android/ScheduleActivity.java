@@ -23,6 +23,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	private int[] newDate;
 	private int lastIndex;
 	private ProgressDialog progressDialog;
+	private Menu optionsMenu;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -39,7 +40,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		if (pager.findViewById("pager_title_strip".hashCode()) == null) {
             CustomFontPagerTitleStrip pts = new CustomFontPagerTitleStrip(this);
 			pts.setId("pager_title_strip".hashCode());
-			pts.setTypeface(Typeface.SERIF);
+			pts.setTypeface(Typeface.DEFAULT);
 			pts.setBackgroundDrawable(getResources().getDrawable(R.drawable.dark_tan));
 			pts.setTextColor(Color.BLACK);
 			ViewPager.LayoutParams params = new ViewPager.LayoutParams();
@@ -52,6 +53,10 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 			public void onPageSelected(int position) {
 				currentDate = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
 				lastIndex = position;
+				if (optionsMenu != null) {
+					optionsMenu.findItem(R.id.action_goto_today).setVisible(!currentDate.equals(new Date()));
+					optionsMenu.findItem(R.id.action_goto_today).setEnabled(!currentDate.equals(new Date()));
+				}
 				Curriculum.getCurrentCurriculum().clearUnnededItems(currentDate);
 			}
 			
@@ -78,7 +83,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	
 	@Override
 	public void onProgressUpdate(int progress) {
-		if (progress < 4 && progressDialog == null) {
+		if (progress < 4 && progressDialog == null && !this.isFinishing()) {
 			progressDialog = new ProgressDialog(this, R.style.PopupTheme);
 			progressDialog.setCancelable(false);
 			progressDialog.setMessage("Loading...");
@@ -120,12 +125,21 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		if (position < 0) Toast.makeText(ScheduleActivity.this, "Please select a previous year (if available) from the \"Options\" menu item to view that date.", Toast.LENGTH_LONG).show();
 		else if (position > adapter.getCount()) Toast.makeText(ScheduleActivity.this, "Please select a future year (if available) from the \"Options\" menu item to view that date.", Toast.LENGTH_LONG).show();
 		position = Math.max(0, Math.min(adapter.getCount()-1, position));
-		if (currentDate==null) pager.setCurrentItem(position, false);
-		else pager.setCurrentItem(position, true);
+		if (currentDate==null && optionsMenu != null) {
+			pager.setCurrentItem(position, false);
+			optionsMenu.findItem(R.id.action_goto_today).setVisible(false);
+			optionsMenu.findItem(R.id.action_goto_today).setEnabled(false);
+		}
+		else if (optionsMenu != null) {
+			pager.setCurrentItem(position, true);
+			optionsMenu.findItem(R.id.action_goto_today).setVisible(!currentDate.equals(new Date()));
+			optionsMenu.findItem(R.id.action_goto_today).setEnabled(!currentDate.equals(new Date()));
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		this.optionsMenu = menu;
 		getMenuInflater().inflate(R.menu.schedule, menu);
 		return true;
 	}
@@ -180,6 +194,8 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	public void onStop() {
 		//Log.d("iHW-lc", "ScheduleActivity onStop");
 		pager.setAdapter(null);
+		if (progressDialog != null) progressDialog.dismiss();
+		progressDialog = null;
 		super.onStop();
 	}
 	

@@ -7,6 +7,7 @@ import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -17,9 +18,11 @@ public class FirstRunActivity extends IHWActivity implements Curriculum.ModelLoa
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Date d = new Date();
-		d.add(Date.MONTH, -6);
-		Curriculum.setCurrentYear(d.get(Date.YEAR));
+		if (Curriculum.getCurrentYear() == 0) {
+			Date d = new Date();
+			d.add(Date.MONTH, -6);
+			Curriculum.setCurrentYear(d.get(Date.YEAR));
+		}
 		
 		this.setContentView(R.layout.activity_firstrun);
 		campusLayout = (LinearLayout)this.findViewById(R.id.layout_choose_campus);
@@ -64,6 +67,17 @@ public class FirstRunActivity extends IHWActivity implements Curriculum.ModelLoa
 				startActivity(i);
 			}
 		});
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (this.getIntent().getBooleanExtra("skipToCourses", false)) {
+			Log.d("iHW", "Year: " + Curriculum.getCurrentYear() + " / Campus: " + Curriculum.getCurrentCampus());
+			Curriculum.reloadCurrentCurriculum().addModelLoadingListener(FirstRunActivity.this);
+			campusLayout.setVisibility(View.GONE);
+			coursesLayout.setVisibility(View.VISIBLE);
+		}
 	}
 	
 	public void onBackPressed() {

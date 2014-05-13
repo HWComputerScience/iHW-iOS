@@ -55,7 +55,7 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 	private void initialize(Context context) {
 		this.setOrientation(LinearLayout.HORIZONTAL);
 		LayoutInflater.from(context).inflate(R.layout.view_period, this, true);
-		((TextView)this.findViewById(R.id.text_periodnum)).setTypeface(Typeface.SERIF, Typeface.BOLD);
+		((TextView)this.findViewById(R.id.text_periodnum)).setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		notesLayout = new LinearLayout(context);
 		notesLayout.setOrientation(LinearLayout.VERTICAL);
 		((LinearLayout)this.findViewById(R.id.layout_right)).addView(notesLayout);
@@ -241,7 +241,8 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 					((CheckBox)noteRow.findViewById(R.id.checkbox)).setVisibility(View.GONE);
 					noteRow.findViewById(R.id.text_bullet).setVisibility(View.VISIBLE);
 					((CheckBox)noteRow.findViewById(R.id.checkbox)).setChecked(false);
-				} else saveNotes();
+				}
+				saveNotes();
 			} else {
 				if (!((EditText)tv).getText().toString().equals("")) {
 					noteRow.findViewById(R.id.button_note_settings).setVisibility(View.VISIBLE);

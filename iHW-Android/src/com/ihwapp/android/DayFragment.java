@@ -7,9 +7,12 @@ import com.ihwapp.android.model.Date;
 
 import android.support.v4.app.Fragment;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
+import android.view.View.OnClickListener;
 import android.widget.*;
 
 public class DayFragment extends Fragment {
@@ -53,7 +56,7 @@ public class DayFragment extends Fragment {
         TextView titleText = ((TextView)v.findViewById(R.id.date_view));
 		//Log.d("iHW", "Day: " + day);
 		titleText.setText(day.getTitle());
-		titleText.setTypeface(Typeface.SERIF, Typeface.BOLD);
+		titleText.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		
 		ArrayList<Period> pds = day.getPeriods();
 		
@@ -83,9 +86,27 @@ public class DayFragment extends Fragment {
 			dayName = ((Holiday)day).getName();
 		}
 		TextView dayNameText = ((TextView)v.findViewById(R.id.text_day_title));
-		dayNameText.setTypeface(Typeface.SERIF, Typeface.BOLD);
+		dayNameText.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		if (dayName.equals("")) dayNameText.setVisibility(View.GONE);
 		else dayNameText.setText(dayName);
+		
+		TextView dayCaptionText = ((TextView)v.findViewById(R.id.text_day_caption));
+		if (day.getCaption() != null && day.getCaption() != "") {
+			dayCaptionText.setText(day.getCaption());
+			if (day.getCaptionLink() != null && day.getCaptionLink() != "") {
+				v.findViewById(R.id.layout_caption).setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						Intent i = new Intent(Intent.ACTION_VIEW);
+						i.setData(Uri.parse(day.getCaptionLink()));
+						startActivity(i);
+					}
+				});
+			} else {
+				v.findViewById(R.id.image_caption_link).setVisibility(View.GONE);
+			}
+		} else {
+			v.findViewById(R.id.layout_caption).setVisibility(View.GONE);
+		}
 		
 		return v;
 	}

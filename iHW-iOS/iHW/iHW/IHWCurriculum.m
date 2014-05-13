@@ -730,6 +730,7 @@ static IHWCurriculum *currentCurriculum;
                     //add the notification.
                     UILocalNotification *n = [[UILocalNotification alloc] init];
                     n.alertBody = [NSString stringWithFormat:@"%@ starts in %d minutes",((IHWPeriod *)[day.periods objectAtIndex:i+1]).name, [IHWCurriculum currentCurriculum].passingPeriodLength];
+                    n.soundName = UILocalNotificationDefaultSoundName;
                     n.fireDate = [d NSDateWithTime:thisPeriod.endTime];
                     [notifications addObject:n];
                 }

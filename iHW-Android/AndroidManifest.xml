@@ -61,13 +61,29 @@
             android:configChanges="orientation|screenSize" >
         </activity>
         <activity
-            android:name="com.ihwapp.android.PreferencesActivity"
+            android:name="com.ihwapp.android.OldPreferencesActivity"
             android:label="@string/title_activity_preferences"
             android:parentActivityName="com.ihwapp.android.ScheduleActivity"
             android:windowSoftInputMode="stateUnchanged" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ihwapp.android.ScheduleActivity" />
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.PreferencesActivity"
+            android:label="@string/title_activity_preferences"
+            android:parentActivityName="com.ihwapp.android.ScheduleActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ihwapp.android.ScheduleActivity" />
+        </activity>
+        <activity
+            android:name="com.ihwapp.android.WebViewActivity"
+            android:label="@string/title_activity_web_view"
+            android:parentActivityName="com.ihwapp.android.PreferencesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="PreferencesActivity" />
         </activity>
     </application>
 

@@ -65,8 +65,11 @@ public class Curriculum {
 	}
 	
 	public static boolean isFirstRun() {
-		if (getCurrentYear() == 0 || getCurrentCampus() == 0) return true;
-		else try {
+		return (getCurrentYear() == 0 || getCurrentCampus() == 0);
+	}
+	
+	public static boolean shouldPromptForCourses() {
+		try {
 			String campusChar = getCampusChar(getCurrentCampus());
 			SharedPreferences prefs = ctx.getSharedPreferences(getCurrentYear() + campusChar, Context.MODE_PRIVATE);
 			String yearJSON = prefs.getString("yearJSON", "");
@@ -396,16 +399,17 @@ public class Curriculum {
 			}
 			specialDayTemplates = sdts;
 			
-			JSONObject dayCaptionsObj = scheduleObj.getJSONObject("dayCaptions");
+			JSONObject dayCaptionsObj = scheduleObj.optJSONObject("dayCaptions");
 			SortedMap<Date, JSONObject> dcs = Collections.synchronizedSortedMap(new TreeMap<Date, JSONObject>());
-			Iterator<?> iter2 = dayCaptionsObj.keys();
-			while (iter2.hasNext()) {
-				String key = (String)iter2.next();
-				Date d = new Date(key);
-				dcs.put(d, dayCaptionsObj.getJSONObject(key));
+			if (dayCaptionsObj != null) {
+				Iterator<?> iter2 = dayCaptionsObj.keys();
+				while (iter2.hasNext()) {
+					String key = (String)iter2.next();
+					Date d = new Date(key);
+					dcs.put(d, dayCaptionsObj.getJSONObject(key));
+				}
 			}
 			dayCaptions = dcs;
-			
 			//Log.d("iHW", "finished parsing schedule JSON");
 			return true;
 		} catch (JSONException ignored) {}
@@ -546,9 +550,9 @@ public class Curriculum {
 				Day day = new Holiday(d, "Summer");
 				JSONObject captionObj = dayCaptions.get(d);
 				if (captionObj != null && day.getCaption() == null) {
-					day.setCaption(captionObj.getString("text"));
-					if (captionObj.getString("link") != null) {
-						day.setCaptionLink(captionObj.getString("link"));
+					day.setCaption(captionObj.optString("text"));
+					if (captionObj.optString("link") != "") {
+						day.setCaptionLink(captionObj.optString("link"));
 					}
 				}
 				loadedDays.put(d, day);
@@ -557,9 +561,9 @@ public class Curriculum {
 				Day day = new Holiday(d, "");
 				JSONObject captionObj = dayCaptions.get(d);
 				if (captionObj != null && day.getCaption() == null) {
-					day.setCaption(captionObj.getString("text"));
-					if (captionObj.getString("link") != null) {
-						day.setCaptionLink(captionObj.getString("link"));
+					day.setCaption(captionObj.optString("text"));
+					if (captionObj.optString("link") != null) {
+						day.setCaptionLink(captionObj.optString("link"));
 					}
 				}
 				loadedDays.put(d, day);
@@ -590,9 +594,9 @@ public class Curriculum {
 			
 			JSONObject captionObj = dayCaptions.get(d);
 			if (captionObj != null && day.getCaption() == null) {
-				day.setCaption(captionObj.getString("text"));
-				if (captionObj.getString("link") != null) {
-					day.setCaptionLink(captionObj.getString("link"));
+				day.setCaption(captionObj.optString("text"));
+				if (captionObj.optString("link") != null) {
+					day.setCaptionLink(captionObj.optString("link"));
 				}
 			}
 			
@@ -791,7 +795,7 @@ public class Curriculum {
 	}
 	
 	public Course[] getCourseList(Date d) {
-		if (d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) return null;
+		if (semesterEndDates == null || d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) return null;
 		int dayNum = dayNumbers.get(d);
 		List<Integer> terms = termsFromDate(d);
 		Course[] courseList = new Course[campus+4]; //campus+3 is numPeriods, add 1 to keep 0 index empty
@@ -825,7 +829,7 @@ public class Curriculum {
 	public ArrayList<Note> getNotes(Date d, int period) {
 		Date weekStart = getWeekStart(year, d);
 		boolean success = true;
-		if (!loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
+		if (loadedWeeks == null || !loadedWeeks.containsKey(weekStart)) success = loadWeek(d);
 		if (!success) { 
 			//Log.e("iHW", "ERROR loading week"); 
 			return null; 

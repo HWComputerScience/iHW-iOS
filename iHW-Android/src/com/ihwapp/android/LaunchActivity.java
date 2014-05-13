@@ -22,6 +22,10 @@ public class LaunchActivity extends IHWActivity {
 		Intent i;
 		if (Curriculum.isFirstRun()) {
 			i = new Intent(this, FirstRunActivity.class);
+			i.putExtra("skipToCourses", false);
+		} else if (Curriculum.shouldPromptForCourses()) {
+			i = new Intent(this, FirstRunActivity.class);
+			i.putExtra("skipToCourses", true);
 		} else {
 			Curriculum.reloadCurrentCurriculum();
 			i = new Intent(this, ScheduleActivity.class);

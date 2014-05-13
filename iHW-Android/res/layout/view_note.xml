@@ -36,7 +36,8 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:scrollHorizontally="false"
-        android:textColorHint="#FFCCCCCC" >
+        android:textColorHint="#FFCCCCCC"
+        android:textCursorDrawable="@drawable/cursor" >
 
         <requestFocus />
     </EditText>
