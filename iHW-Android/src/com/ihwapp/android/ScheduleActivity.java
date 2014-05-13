@@ -29,7 +29,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d("iHW-lc", "ScheduleActivity onCreate");
+		//Log.d("iHW-lc", "ScheduleActivity onCreate");
 		Curriculum.ctx = this.getApplicationContext();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schedule);
@@ -69,7 +69,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	
 	protected void onStart() {
 		super.onStart();
-		Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
+		//Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
 		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
 		if (Curriculum.getCurrentCurriculum().isLoaded()) {
 			//Log.d("iHW", "Setting adapter");
@@ -94,7 +94,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 
 	@Override
 	public void onFinishedLoading(Curriculum c) {
-		Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
+		//Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
 		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 		pager.setAdapter(adapter);
 		adapter.notifyDataSetChanged();

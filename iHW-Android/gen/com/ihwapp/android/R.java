@@ -143,7 +143,7 @@ public final class R {
         public static final int activity_download=0x7f030001;
         public static final int activity_edit_course=0x7f030002;
         public static final int activity_firstrun=0x7f030003;
-        public static final int activity_preferences=0x7f030004;
+        public static final int activity_old_preferences=0x7f030004;
         public static final int activity_schedule=0x7f030005;
         public static final int activity_web_view=0x7f030006;
         public static final int dialog_change_year=0x7f030007;

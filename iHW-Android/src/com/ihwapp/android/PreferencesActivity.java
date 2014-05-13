@@ -10,15 +10,17 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class PreferencesActivity extends IHWActivity implements ListAdapter {
@@ -28,6 +30,7 @@ public class PreferencesActivity extends IHWActivity implements ListAdapter {
 	private int newCampus;
 	private int newYear;
 	private TextView yearText;
+	private CheckBox notificationBox;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +89,23 @@ public class PreferencesActivity extends IHWActivity implements ListAdapter {
             titleView.setText(titles.get(position));
             subtitleView.setText(subtitles.get(position));
             if (subtitles.get(position).equals("")) subtitleView.setVisibility(View.GONE);
+            if (position == 0) {
+            	notificationBox = new CheckBox(this);
+            	notificationBox.setChecked(Curriculum.getNotificationsEnabled());
+            	notificationBox.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+            	notificationBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+						toggleNotifications(isChecked);
+					}
+				});
+            	((ViewGroup)convertView).addView(notificationBox);
+            }
         }
         convertView.setBackgroundResource(R.drawable.list_item_selector);
         convertView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				int i = mainList.indexOfChild(v);
-				     if (i == 0) { showNotificationOptions(); }
+				     if (i == 0) { toggleNotifications(!notificationBox.isChecked()); }
 				else if (i == 1) { showYearOptions(); }
 				else if (i == 2) { showRedownloadOptions(); }
 				else if (i == 3) { showDisclaimer(); }
@@ -118,8 +132,9 @@ public class PreferencesActivity extends IHWActivity implements ListAdapter {
 		return true;
 	}
 	
-	public void showNotificationOptions() {
-		
+	public void toggleNotifications(boolean enabled) {
+		notificationBox.setChecked(enabled);
+		Curriculum.setNotificationsEnabled(enabled);
 	}
 	
 	public void showYearOptions() {
@@ -136,8 +151,9 @@ public class PreferencesActivity extends IHWActivity implements ListAdapter {
 				public void onClick(DialogInterface dialog, int which) {
 					Curriculum.setCurrentCampus(newCampus);
 					Curriculum.setCurrentYear(newYear);
-					//Curriculum.reloadCurrentCurriculum();
-					PreferencesActivity.this.finish();
+					Intent i = new Intent(PreferencesActivity.this, LaunchActivity.class);
+					i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(i);
 				}
 			})
 			.setNegativeButton("Cancel", null)
@@ -147,9 +163,6 @@ public class PreferencesActivity extends IHWActivity implements ListAdapter {
 				public void onDismiss(DialogInterface arg0) {
 					newCampus = Curriculum.getCurrentCampus();
 					newYear = Curriculum.getCurrentYear();
-					Intent i = new Intent(PreferencesActivity.this, LaunchActivity.class);
-					i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(i);
 				}
 			});
 		d.show();

@@ -13,12 +13,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.ihwapp.android.Constants;
+import com.ihwapp.android.LaunchActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.SystemClock;
+import android.util.Log;
 
 public class Curriculum {
 	private static Curriculum currentCurriculum;
@@ -62,6 +69,15 @@ public class Curriculum {
 	
 	public static void setCurrentCampus(int campus) {
 		ctx.getSharedPreferences("iHW", Context.MODE_PRIVATE).edit().putInt("campus", campus).commit();
+	}
+	
+	public static boolean getNotificationsEnabled() {
+		SharedPreferences prefs = ctx.getSharedPreferences("iHW", Context.MODE_PRIVATE);
+		return prefs.getBoolean("allNotifications", false);
+	}
+	
+	public static void setNotificationsEnabled(boolean enabled) {
+		ctx.getSharedPreferences("iHW", Context.MODE_PRIVATE).edit().putBoolean("allNotifications", enabled).commit();
 	}
 	
 	public static boolean isFirstRun() {
@@ -191,7 +207,7 @@ public class Curriculum {
 		
 		final AsyncTask<Void, Integer, Void> phase2 = new AsyncTask<Void, Integer, Void>() {
 			protected Void doInBackground(Void... params) {
-				//Log.d("iHW", "starting phase 2");
+				Log.d("iHW", "starting phase 2");
 				boolean success = loadThisWeekAndDay(startingDate);
 				if (!success) { 
 					//Log.e("iHW", "ERROR loading first week and day"); 
@@ -200,7 +216,8 @@ public class Curriculum {
 				this.publishProgress(4);
 				cacheNeededWeeksDays(startingDate);
 				this.publishProgress(5);
-				//Log.d("iHW", "finished phase 2");
+				constructNotifications();
+				Log.d("iHW", "finished phase 2");
 				return null;
 			}
 			
@@ -291,7 +308,7 @@ public class Curriculum {
 	}
 	
 	public boolean isLoaded(Date d) {
-		return loadedDays != null && loadedDays.containsKey(d) && loadedWeeks != null && loadedWeeks.containsKey(getWeekStart(year, d));
+		return loadedDays != null && loadedDays.containsKey(d);
 	}
 	
 	public boolean isLoaded() {
@@ -609,17 +626,17 @@ public class Curriculum {
 	
 	public Day getDay(Date d) {
 		if (!isInBounds(d)) { 
-			//Log.d("iHW", "Date out of bounds: " + d); 
+			Log.d("iHW", "Date out of bounds: " + d); 
 			return null; 
 		}
 		//Log.d("iHW", "getting " + d.toString());
 		//Log.d("iHW", "weeks loaded: " + loadedWeeks.keySet().toString());
 		if (!isLoaded(d)) {
-			//boolean success = true;
-			if (loadedWeeks == null || !loadedWeeks.containsKey(getWeekStart(year, d))) /*success =*/ loadWeek(d);
-			//if (!success) Log.e("iHW", "ERROR loading week");
-			if (loadedDays == null || !loadedDays.containsKey(d)) /*success =*/ loadDay(d);
-			//if (!success) Log.e("iHW", "ERROR loading day");
+			boolean success = true;
+			if (loadedWeeks == null || !loadedWeeks.containsKey(getWeekStart(year, d))) success = loadWeek(d);
+			if (!success) Log.e("iHW", "ERROR loading week");
+			if (loadedDays == null || !loadedDays.containsKey(d)) success = loadDay(d);
+			if (!success) Log.e("iHW", "ERROR loading day");
 		}
 		if (!isLoaded(d)) return null;
 		else {
@@ -820,6 +837,52 @@ public class Curriculum {
 	public Course getCourse(String name) {
 		for (Course c : courses) if (c.getName().equals(name)) return c;
 		return null;
+	}
+	
+	public void constructNotifications() {
+		Log.d("iHW", "Constructing Notifications");
+		boolean create = Curriculum.getNotificationsEnabled();
+		AlarmManager mgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+		Date startDate = new Date();
+		startDate.set(Date.HOUR_OF_DAY, 0);
+		startDate.set(Date.MINUTE, 0);
+		startDate.set(Date.SECOND, 0);
+		startDate.set(Date.MILLISECOND, 0);
+		Date endDate = startDate.dateByAdding(7);
+		boolean isToday = true;
+		for (Date d = startDate; d.compareTo(endDate) < 0; d = d.dateByAdding(1)) {
+			Log.d("iHW", "Checking date: " + d.toString() + " (" + d.getTimeInMillis() + ")");
+			Day day = this.getDay(d);
+			if (!(day instanceof NormalDay)) {
+				Log.d("iHW", "Day isn't a normal day: " + day);
+				isToday = false;
+				continue;
+			}
+			for (int i=0; i<day.getPeriods().size(); i++) {
+				Period thisPeriod = day.getPeriods().get(i);
+				if (thisPeriod.isFreePeriod() &&
+						(!isToday || thisPeriod.getEndTime().secondsUntil(new Time()) < 0)) {
+					if (i < day.getPeriods().size()-1 &&
+							!day.getPeriods().get(i+1).isFreePeriod()) {
+						Period next = day.getPeriods().get(i+1);
+						Intent intent = new Intent(ctx, LaunchActivity.class);
+						intent.putExtra("notificationTitle", "Class in " + this.getPassingPeriodLength() + " minutes");
+						intent.putExtra("notificationText", next.getName() + " starts in " + this.getPassingPeriodLength() + " minutes");
+						intent.setData(Uri.parse("ihwnotification:" + d.getYear() + "-" + d.getMonth() + "-" + d.getDay() + "." + i));
+						PendingIntent pi = PendingIntent.getService(ctx, 0, intent, 0);
+						if (create) {
+							long time = thisPeriod.getEndTime().timeMillisWithDate(d);
+							Log.d("iHW", "Creating alarm for " + next.getName() + " on " + d.toString() + " at " + thisPeriod.getEndTime() + " (" + time + ")");
+							mgr.set(AlarmManager.RTC_WAKEUP, time, pi);
+						} else {
+							Log.d("iHW", "Canceling alarm for " + next.getName() + " on " + d.toString() + " at " + thisPeriod.getEndTime());
+							mgr.cancel(pi);
+						}
+					}
+				}
+			}
+			isToday = false;
+		}
 	}
 	
 	/**********************************END COURSES STUFF**************************************/

@@ -18,7 +18,7 @@ public class OldPreferencesActivity extends IHWActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_preferences);
+		setContentView(R.layout.activity_old_preferences);
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}

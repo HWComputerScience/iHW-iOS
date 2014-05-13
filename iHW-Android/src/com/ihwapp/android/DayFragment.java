@@ -78,7 +78,7 @@ public class DayFragment extends Fragment {
 		String moreNotesTitle;
 		if (pds.size() > 0) moreNotesTitle = "Additional Notes";
 		else moreNotesTitle = "Notes";
-		moreNotesView.setPeriod(new Period(moreNotesTitle, date, new Time(0,0), new Time(0,0), 0, -1));
+		moreNotesView.setPeriod(new Period(moreNotesTitle, date, new Time(0,0), new Time(0,0), 0, -1, false));
 		pdsLayout.addView(moreNotesView);
 		
 		String dayName = "";

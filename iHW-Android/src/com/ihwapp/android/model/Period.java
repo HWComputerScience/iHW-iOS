@@ -15,14 +15,16 @@ public class Period implements Parcelable {
 	private Date d;
 	private int periodNum;
 	private int periodIndex;
+	private boolean isFreePeriod;
 	
-	public Period(String name, Date d, Time start, Time end, int periodNum, int periodIndex) {
+	public Period(String name, Date d, Time start, Time end, int periodNum, int periodIndex, boolean isFreePeriod) {
 		this.name = name;
 		this.startTime = start;
 		this.endTime = end;
 		this.d = d;
 		this.periodNum = periodNum;
 		this.periodIndex = periodIndex;
+		this.isFreePeriod = isFreePeriod;
 		loadNotesFromCurriculum();
 	}
 	
@@ -33,6 +35,7 @@ public class Period implements Parcelable {
 			this.endTime = new Time(obj.getString("endTime"));
 			this.d = new Date(obj.getString("date"));
 			this.periodNum = obj.getInt("periodNum");
+			this.isFreePeriod = obj.getBoolean("isFreePeriod");
 			this.periodIndex = periodIndex;
 			loadNotesFromCurriculum();
 		} catch (JSONException ignored) {}
@@ -49,6 +52,8 @@ public class Period implements Parcelable {
 	//public void setNum(int periodNum) { this.periodNum = periodNum; }
 	public int getIndex() { return periodIndex; }
 	public void setIndex(int index) { this.periodIndex = index; }
+	public boolean isFreePeriod() { return isFreePeriod; }
+	public void setIsFreePeriod(boolean free) { this.isFreePeriod = free; }
 	
 	public void loadNotesFromCurriculum() {
 		this.notes = Curriculum.getCurrentCurriculum().getNotes(d, periodIndex);
@@ -68,6 +73,7 @@ public class Period implements Parcelable {
 			obj.put("endTime", endTime);
 			obj.put("date", d);
 			obj.put("periodNum", periodNum);
+			obj.put("isFreePeriod", isFreePeriod);
 		} catch (JSONException ignored) {}
 		return obj;
 	}

@@ -173,6 +173,10 @@ public class Time implements Parcelable {
 		if (minute.length() == 1) minute = "0" + minute;
 		return getHour12() + ":" + minute + " " + ampm;
 	}
+	
+	public long timeMillisWithDate(Date d) {
+		return d.getTimeInMillis() + 1000*(this.getHour()*3600 + this.getMinute()*60 + this.getSecond());
+	}
 
 	@Override
 	public int describeContents() {
