@@ -38,7 +38,7 @@ public class PreferencesActivity extends IHWActivity implements ListAdapter {
 		titles = new ArrayList<String>(5);
 		subtitles = new ArrayList<String>(5);
 		titles.add("Notifications");
-		subtitles.add("Get notified during frees before class.");
+		subtitles.add("Get notified during frees before class");
 		titles.add("Change year or campus");
 		subtitles.add("Choose school year, and select MS or US");
 		titles.add("Redownload schedule");

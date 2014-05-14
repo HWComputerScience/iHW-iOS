@@ -30,13 +30,14 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//Log.d("iHW-lc", "ScheduleActivity onCreate");
+		
 		Curriculum.ctx = this.getApplicationContext();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schedule);
 		this.setTitle("View Schedule");
 		if (savedInstanceState != null) lastIndex = savedInstanceState.getInt("lastIndex");
 		else lastIndex = -1;
+		Log.d("iHW-lc", "ScheduleActivity onCreate: " + lastIndex);
 		if (pager == null) pager = ((ViewPager)this.findViewById(R.id.scheduleViewPager));
 		pager.setAdapter(null);
 		if (pager.findViewById("pager_title_strip".hashCode()) == null) {
@@ -54,6 +55,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			public void onPageSelected(int position) {
 				currentDate = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
+				Log.d("iHW", "Page changed to " + currentDate.toString());
 				lastIndex = position;
 				if (optionsMenu != null) {
 					optionsMenu.findItem(R.id.action_goto_today).setVisible(!currentDate.equals(new Date()));
@@ -70,20 +72,26 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	
 	protected void onStart() {
 		super.onStart();
-		//Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
+		Log.d("iHW-lc", "ScheduleActivity onStart: first loaded date " + Curriculum.getCurrentCurriculum().getFirstLoadedDate());
 		//Typeface georgia = Typeface.createFromAsset(getAssets(), "fonts/Georgia.ttf");
 		if (Curriculum.getCurrentCurriculum().isLoaded()) {
-			//Log.d("iHW", "Setting adapter");
+			Log.d("iHW", "Setting adapter: " + lastIndex);
 			if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 			pager.setAdapter(adapter);
-			if (lastIndex >= 0) pager.setCurrentItem(lastIndex, false);
-			else gotoDate(new Date());
+			if (lastIndex >= 0) gotoPosition(lastIndex, false);
+			else gotoDate(new Date(), false);
 		} else {
 			Curriculum.getCurrentCurriculum().addModelLoadingListener(this);
 		}
 		NotificationManager mNotificationManager =
 			    (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancelAll();
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.d("iHW-lc", "ScheduleActivity onRestoreInstanceState: " + lastIndex);
+		//Disable restoring of instance state
 	}
 	
 	@Override
@@ -98,12 +106,12 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 
 	@Override
 	public void onFinishedLoading(Curriculum c) {
-		//Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
+		Log.d("iHW-lc", "ScheduleActivity onFinishedLoading");
 		if (adapter == null) adapter = new DayPagerAdapter(this.getSupportFragmentManager());
 		pager.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
-		if (lastIndex >= 0) pager.setCurrentItem(lastIndex, false);
-		else gotoDate(new Date());
+		if (lastIndex >= 0) gotoPosition(lastIndex, false);
+		else gotoDate(new Date(), false);
 		if (progressDialog != null) progressDialog.dismiss();
 		progressDialog = null;
 	}
@@ -133,27 +141,33 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		}).setCancelable(false).show();
 	}
 	
-	public void gotoDate(Date d) {
+	public void gotoDate(Date d, boolean animated) {
 		int position = new Date(7,1,Curriculum.getCurrentYear()).getDaysUntil(d);
 		if (position < 0) Toast.makeText(ScheduleActivity.this, "Please select a previous year (if available) from the \"Options\" menu item to view that date.", Toast.LENGTH_LONG).show();
 		else if (position > adapter.getCount()) Toast.makeText(ScheduleActivity.this, "Please select a future year (if available) from the \"Options\" menu item to view that date.", Toast.LENGTH_LONG).show();
 		position = Math.max(0, Math.min(adapter.getCount()-1, position));
-		if (currentDate==null && optionsMenu != null) {
-			pager.setCurrentItem(position, false);
-			optionsMenu.findItem(R.id.action_goto_today).setVisible(false);
-			optionsMenu.findItem(R.id.action_goto_today).setEnabled(false);
-		}
-		else if (optionsMenu != null) {
-			pager.setCurrentItem(position, true);
+		gotoPosition(position, animated);
+	}
+	
+	public void gotoPosition(int position, boolean animated) {
+		currentDate = new Date(7,1,Curriculum.getCurrentYear()).dateByAdding(position);
+		Log.d("iHW", "Going to position " + position + " -- " + currentDate);
+		pager.setCurrentItem(position, animated);
+		if (optionsMenu != null) {
 			optionsMenu.findItem(R.id.action_goto_today).setVisible(!currentDate.equals(new Date()));
 			optionsMenu.findItem(R.id.action_goto_today).setEnabled(!currentDate.equals(new Date()));
 		}
+		lastIndex = pager.getCurrentItem();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		this.optionsMenu = menu;
 		getMenuInflater().inflate(R.menu.schedule, menu);
+		if (currentDate != null) {
+			optionsMenu.findItem(R.id.action_goto_today).setVisible(!currentDate.equals(new Date()));
+			optionsMenu.findItem(R.id.action_goto_today).setEnabled(!currentDate.equals(new Date()));
+		}
 		return true;
 	}
 	
@@ -165,7 +179,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		} else if (item.getItemId() == R.id.action_goto_today) {
 			//int pos = Math.min(new Date(7,1,Curriculum.getCurrentYear(this)).getDaysUntil(new Date()), adapter.getCount()-1);
 			//pager.setCurrentItem(pos);
-			gotoDate(new Date());
+			gotoDate(new Date(), true);
 		} else if (item.getItemId() == R.id.action_goto_date) {
 			DatePickerDialog dpd = new DatePickerDialog(this, R.style.PopupTheme, null, currentDate.getYear(), currentDate.getMonth()-1, currentDate.getDay());
 			dpd.getDatePicker().init(currentDate.getYear(), currentDate.getMonth()-1, currentDate.getDay(), new DatePicker.OnDateChangedListener() {
@@ -178,7 +192,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 				public void onClick(DialogInterface dialog, int which) {
 					if (newDate==null) return;
 					Date d = new Date(newDate[1]+1, newDate[2], newDate[0]);
-					gotoDate(d);
+					gotoDate(d, true);
 				}
 			});
 			dpd.show();
@@ -195,17 +209,17 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	public void onSaveInstanceState(Bundle outState) {
 		this.pager.setAdapter(null);
 		super.onSaveInstanceState(outState);
-		//Log.d("iHW-lc", "ScheduleActivity onSaveInstanceState");
+		Log.d("iHW-lc", "ScheduleActivity onSaveInstanceState: " + lastIndex);
 		outState.putInt("lastIndex", lastIndex);
 	}
 	
 	public void onPause() {
 		super.onPause();
-		//Log.d("iHW-lc", "ScheduleActivity onPause");
+		Log.d("iHW-lc", "ScheduleActivity onPause");
 	}
 	
 	public void onStop() {
-		//Log.d("iHW-lc", "ScheduleActivity onStop");
+		Log.d("iHW-lc", "ScheduleActivity onStop");
 		pager.setAdapter(null);
 		if (progressDialog != null) progressDialog.dismiss();
 		progressDialog = null;
@@ -213,7 +227,7 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 	}
 	
 	public void onDestroy() {
-		//Log.d("iHW-lc", "ScheduleActivity onDestroy");
+		Log.d("iHW-lc", "ScheduleActivity onDestroy");
 		super.onDestroy();
 	}
 	
