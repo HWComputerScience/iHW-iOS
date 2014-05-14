@@ -8,6 +8,7 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.*;
 import android.support.v4.app.*;
@@ -80,6 +81,9 @@ public class ScheduleActivity extends FragmentActivity implements Curriculum.Mod
 		} else {
 			Curriculum.getCurrentCurriculum().addModelLoadingListener(this);
 		}
+		NotificationManager mNotificationManager =
+			    (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancelAll();
 	}
 	
 	@Override

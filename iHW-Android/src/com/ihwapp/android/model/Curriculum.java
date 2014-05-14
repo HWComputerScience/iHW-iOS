@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import com.ihwapp.android.Constants;
 import com.ihwapp.android.LaunchActivity;
+import com.ihwapp.android.NotificationService;
+import com.ihwapp.android.UpdateService;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -217,6 +219,15 @@ public class Curriculum {
 				cacheNeededWeeksDays(startingDate);
 				this.publishProgress(5);
 				constructNotifications();
+				AlarmManager mgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+				Intent intent = new Intent(ctx, UpdateService.class);
+				intent.setData(Uri.parse("ihwupdate:0"));
+				PendingIntent pi = PendingIntent.getService(ctx, 0, intent, 0);
+				if (getNotificationsEnabled()) {
+					mgr.setInexactRepeating(AlarmManager.RTC, new Date().getTimeInMillis()+24*3600*1000, 7*24*3600*1000, pi);
+				} else {
+					mgr.cancel(pi);
+				}
 				Log.d("iHW", "finished phase 2");
 				return null;
 			}
@@ -812,7 +823,9 @@ public class Curriculum {
 	}
 	
 	public Course[] getCourseList(Date d) {
-		if (semesterEndDates == null || d.compareTo(semesterEndDates[0]) < 0 || d.compareTo(semesterEndDates[2]) > 0) return null;
+		if (semesterEndDates == null ||
+				semesterEndDates[0] == null || d.compareTo(semesterEndDates[0]) < 0 || 
+				semesterEndDates[2] == null || d.compareTo(semesterEndDates[2]) > 0) return null;
 		int dayNum = dayNumbers.get(d);
 		List<Integer> terms = termsFromDate(d);
 		Course[] courseList = new Course[campus+4]; //campus+3 is numPeriods, add 1 to keep 0 index empty
@@ -848,7 +861,7 @@ public class Curriculum {
 		startDate.set(Date.MINUTE, 0);
 		startDate.set(Date.SECOND, 0);
 		startDate.set(Date.MILLISECOND, 0);
-		Date endDate = startDate.dateByAdding(7);
+		Date endDate = startDate.dateByAdding(8);
 		boolean isToday = true;
 		for (Date d = startDate; d.compareTo(endDate) < 0; d = d.dateByAdding(1)) {
 			Log.d("iHW", "Checking date: " + d.toString() + " (" + d.getTimeInMillis() + ")");
@@ -865,7 +878,7 @@ public class Curriculum {
 					if (i < day.getPeriods().size()-1 &&
 							!day.getPeriods().get(i+1).isFreePeriod()) {
 						Period next = day.getPeriods().get(i+1);
-						Intent intent = new Intent(ctx, LaunchActivity.class);
+						Intent intent = new Intent(ctx, NotificationService.class);
 						intent.putExtra("notificationTitle", "Class in " + this.getPassingPeriodLength() + " minutes");
 						intent.putExtra("notificationText", next.getName() + " starts in " + this.getPassingPeriodLength() + " minutes");
 						intent.setData(Uri.parse("ihwnotification:" + d.getYear() + "-" + d.getMonth() + "-" + d.getDay() + "." + i));

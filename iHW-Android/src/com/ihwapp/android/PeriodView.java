@@ -197,9 +197,11 @@ public class PeriodView extends LinearLayout implements DayFragment.OnFragmentVi
 									countdownView.setText("Starts in " + secsUntil/60 + ":" + secs);
 								} else {
 									PeriodView.this.findViewById(R.id.text_countdown).setVisibility(View.GONE);
-									countdownTimer.cancel();
-									countdownView.setVisibility(View.GONE);
-									countdownTimer = null;
+									if (countdownTimer != null) {
+										countdownTimer.cancel();
+										countdownView.setVisibility(View.GONE);
+										countdownTimer = null;
+									}
 								}
 							}
 						});
