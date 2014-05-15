@@ -35,7 +35,7 @@ public class Period implements Parcelable {
 			this.endTime = new Time(obj.getString("endTime"));
 			this.d = new Date(obj.getString("date"));
 			this.periodNum = obj.getInt("periodNum");
-			this.isFreePeriod = obj.getBoolean("isFreePeriod");
+			this.isFreePeriod = obj.optBoolean("isFreePeriod");
 			this.periodIndex = periodIndex;
 			loadNotesFromCurriculum();
 		} catch (JSONException ignored) {}

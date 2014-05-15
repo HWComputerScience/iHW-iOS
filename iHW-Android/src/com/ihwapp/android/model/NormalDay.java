@@ -83,7 +83,7 @@ public class NormalDay extends Day {
 				periodsAfterBreak = obj.getInt("periodsAfterBreak");
 				breakLength = obj.getInt("breakLength");
 				breakName = obj.getString("breakName");
-				breakIsFree = obj.getBoolean("breakIsFree");
+				breakIsFree = obj.optBoolean("breakIsFree");
 			} else {
 				periodsBeforeBreak = numPeriods;
 				periodsAfterBreak = 0;
