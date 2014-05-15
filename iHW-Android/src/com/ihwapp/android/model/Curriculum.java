@@ -879,6 +879,8 @@ public class Curriculum {
 							!day.getPeriods().get(i+1).isFreePeriod()) {
 						Period next = day.getPeriods().get(i+1);
 						Intent intent = new Intent(ctx, NotificationService.class);
+						intent.putExtra("date", d.toString());
+						intent.putExtra("period", i);
 						intent.putExtra("notificationTitle", "Class in " + this.getPassingPeriodLength() + " minutes");
 						intent.putExtra("notificationText", next.getName() + " starts in " + this.getPassingPeriodLength() + " minutes");
 						intent.setData(Uri.parse("ihwnotification:" + d.getYear() + "-" + d.getMonth() + "-" + d.getDay() + "." + i));

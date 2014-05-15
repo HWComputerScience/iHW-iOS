@@ -31,6 +31,12 @@ public abstract class CoursesActivity extends ListActivity implements ListAdapte
 		this.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 	}
 	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Curriculum.reloadCurrentCurriculum();
+	}
+	
 	private void reloadData() {
 		Object[] courseObjs = Curriculum.getCurrentCurriculum().getAllCourseNames().toArray();
 		courseNames = Arrays.copyOf(courseObjs, courseObjs.length, String[].class);
