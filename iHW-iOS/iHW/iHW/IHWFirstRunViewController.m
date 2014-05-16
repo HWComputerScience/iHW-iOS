@@ -18,6 +18,7 @@
 @end
 
 @implementation IHWFirstRunViewController
+//This class controls the campus selection and "download or add manually" screens that show when the user first starts using the app.
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

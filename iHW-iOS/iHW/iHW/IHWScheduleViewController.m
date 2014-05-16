@@ -13,7 +13,6 @@
 #import "ActionSheetDatePicker.h"
 #import "IHWPreferencesViewController.h"
 #import "IHWChangeYearViewController.h"
-//#import "IHWOldPreferencesViewController.h"
 #import "IHWNotificationOptionsViewController.h"
 #import "IHWAppDelegate.h"
 

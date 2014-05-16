@@ -10,16 +10,16 @@
 
 @implementation IHWCheckboxCell
 
-//@synthesize checked = _checked;
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        //Checkboxes are really just UIButtons with images
         self.checkboxButton = [[UIButton alloc] initWithFrame:self.contentView.bounds];
         [self.checkboxButton addTarget:self action:@selector(toggleChecked) forControlEvents:UIControlEventTouchUpInside];
         NSString *suffix = @"";
         if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) suffix = @"_old";
+        //Setup images
         [self.checkboxButton setImage:[UIImage imageNamed:[NSString stringWithFormat:@"checkboxUnchecked%@", suffix]] forState:UIControlStateNormal];
         [self.checkboxButton setImage:[UIImage imageNamed:[NSString stringWithFormat:@"checkboxUnchecked%@", suffix]] forState:UIControlStateSelected|UIControlStateHighlighted];
         [self.checkboxButton setImage:[UIImage imageNamed:[NSString stringWithFormat:@"checkboxChecked%@", suffix]] forState:UIControlStateSelected];
@@ -31,6 +31,7 @@
 }
 
 - (void)didMoveToSuperview {
+    //Hide this CheckboxCell if necessary when the cell is added to the collection view
     if (self.shouldHideOnAppear) self.hidden = YES;
 }
 
@@ -45,6 +46,7 @@
 - (void)setChecked:(BOOL)checked {
     BOOL changed = (self.checkboxButton.selected != checked);
     self.checkboxButton.selected = checked;
+    //Notify the delegate if this cell has changed state
     if (changed && [self.delegate respondsToSelector:@selector(checkboxCell:didChangeCheckedStateToState:)]) [self.delegate checkboxCell:self didChangeCheckedStateToState:checked];
 }
 

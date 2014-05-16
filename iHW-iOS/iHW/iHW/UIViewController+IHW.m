@@ -11,6 +11,7 @@
 @implementation UIViewController (IHW)
 
 - (void)applicationDidEnterBackground {
+    //So that all viewControllers in this project know when the app entered the background
     [self.childViewControllers makeObjectsPerformSelector:@selector(applicationDidEnterBackground)];
 }
 

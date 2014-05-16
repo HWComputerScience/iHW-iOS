@@ -11,6 +11,7 @@
 #import "IHWCurriculum.h"
 
 @implementation IHWGuidedCoursesViewController
+//The only difference in the GuidedCoursesViewController is in the navigation buttons.
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

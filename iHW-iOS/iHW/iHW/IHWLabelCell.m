@@ -23,6 +23,7 @@
 }
 
 - (void)didMoveToSuperview {
+    //Hide this LabelCell if necessary when the cell is added to the collection view
     if (self.shouldHideOnAppear) self.hidden = YES;
 }
 

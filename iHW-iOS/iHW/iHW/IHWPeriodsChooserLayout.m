@@ -8,6 +8,10 @@
 
 #import "IHWPeriodsChooserLayout.h"
 
+//This is necessary to set up the collection view
+//I don't remember how it works
+//Hopefully you won't ever need to look at this
+//Because I'm not going to comment it
 @implementation IHWPeriodsChooserLayout
 
 - (id)initWithNumDays:(int)numDays

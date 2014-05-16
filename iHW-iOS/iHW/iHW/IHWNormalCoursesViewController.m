@@ -9,6 +9,7 @@
 #import "IHWNormalCoursesViewController.h"
 
 @implementation IHWNormalCoursesViewController
+//The only difference in the NormalCoursesViewController is in the navigation buttons.
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

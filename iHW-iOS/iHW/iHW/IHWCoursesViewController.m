@@ -11,16 +11,8 @@
 #import "IHWEditCourseViewController.h"
 #import "IHWUtils.h"
 
+//Basic, run-of-the-mill TableViewController with editing.
 @implementation IHWCoursesViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
