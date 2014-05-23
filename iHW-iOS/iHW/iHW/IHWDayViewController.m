@@ -81,9 +81,10 @@
         self.periodsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     
+    //Preload all of the tableview cells
     [self loadTableViewCells];
     
-    //Set up holiday title
+    //Set up holiday title, keeping track of the header height
     if ([self.day isKindOfClass:[IHWHoliday class]] && ![((IHWHoliday*)self.day).name isEqualToString:@""]) {
         UIFont *font = [UIFont systemFontOfSize:30];
         CGSize textSize = [((IHWHoliday*)self.day).name sizeWithFont:font constrainedToSize:CGSizeMake(self.periodsTableView.bounds.size.width-4, self.periodsTableView.bounds.size.height)];
@@ -104,7 +105,7 @@
         self.headerHeight += textSize.height+4;
     }
     
-    //Set up day caption
+    //Set up day caption, keeping track of the header height
     if (self.day.caption != nil && ![self.day.caption isEqualToString:@""]) {
         UIFont *font = [UIFont systemFontOfSize:17];
         CGSize textSize = [self.day.caption sizeWithFont:font constrainedToSize:CGSizeMake(self.periodsTableView.bounds.size.width-4, self.periodsTableView.bounds.size.height)];
@@ -164,6 +165,7 @@
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+    //Do some fancy math to set the contentinsets of the tableview so that the keyboard doesn't overlap anything
     NSDictionary *userInfo = [notification userInfo];
     NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [self.view convertRect:[aValue CGRectValue] fromView:nil];
@@ -177,6 +179,7 @@
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
+    //Reset the contentinsets back to what they were originally
     [UIView animateWithDuration:0.25 animations:^{
         self.periodsTableView.contentInset = self.originalInsets;
         self.periodsTableView.scrollIndicatorInsets = self.originalInsets;
@@ -184,19 +187,18 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    /*if ([self.day isKindOfClass:[IHWHoliday class]] && ![((IHWHoliday*)self.day).name isEqualToString:@""]) return 64;
-    return 0;*/
     return self.headerHeight;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    //Build the header view
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.periodsTableView.bounds.size.width, self.headerHeight)];
     if (self.dayNameLabel != nil) {
         [headerView addSubview:self.dayNameLabel];
     }
     if (self.dayCaptionLabel != nil) {
         [headerView addSubview:self.dayCaptionLabel];
-        
+        //If the caption has a link, add a tap gesture recognizer to respond to it
         if (self.day.captionLink != nil && ![self.day.captionLink isEqualToString:@""]) {
             [headerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(captionTapped)]];
             CALayer *imageLayer = [CALayer layer];
@@ -210,6 +212,7 @@
 }
 
 - (void)captionTapped {
+    //Open the caption link in the browser
     if (self.day.captionLink != nil && ![self.day.captionLink isEqualToString:@""]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.day.captionLink]];
     }
@@ -220,12 +223,12 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row >= self.cells.count) return 72;
-    int result = [((IHWPeriodCellView *)[((UITableViewCell *)[self.cells objectAtIndex:indexPath.row]).contentView.subviews objectAtIndex:0]) neededHeight];
-    if (result != 0) {
-        //NSLog(@"Returned %d", result);
-        return result;
+    if (indexPath.row >= self.cells.count) {
+        return 72; //For blank lines that show on overflow
     }
+    //Ask the cell itself what height it needs
+    int result = [((IHWPeriodCellView *)[((UITableViewCell *)[self.cells objectAtIndex:indexPath.row]).contentView.subviews objectAtIndex:0]) neededHeight];
+    if (result != 0) return result;
     else return 72;
 }
 
@@ -245,15 +248,16 @@
     
     cell.frame = CGRectMake(0, 0, self.view.bounds.size.width, [view neededHeight]);
     view.dayViewController = self;
+    //Autoscroll to next period
     if ([view createCountdownViewIfNeeded]) self.scrollToIndex = index;
     [cell.contentView addSubview:view];
     return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //first try to reuse a cell
+    //first try to reuse a cell (each one has a unique identifier)
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"period%@.%d", self.date.description, (int)indexPath.row]];
-    //then try to find the cell is in the array
+    //then try to find the cell in the array
     if (cell==nil && indexPath.row < self.cells.count && [self.cells objectAtIndex:indexPath.row] != [NSNull null]) {
         cell = [self.cells objectAtIndex:indexPath.row];
     }
@@ -265,7 +269,7 @@
     return cell;
 }
 
-//disable selecting cells (disable turning blue)
+//disable selecting cells (disable turning blue on tap)
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     return nil;
 }

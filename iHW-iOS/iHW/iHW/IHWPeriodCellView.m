@@ -17,11 +17,11 @@
 
 @implementation IHWPeriodCellView
 
+//A regular period cell view for a period of the day
 - (id)initWithPeriod:(IHWPeriod *)period atIndex:(int)index forTableViewCell:(UITableViewCell *)cell;
 {
     self = [super initWithFrame:CGRectMake(0, 0, cell.bounds.size.width, 1000)];
     if (self) {
-        //self.backgroundColor = [UIColor redColor];
         
         self.period = period;
         self.index = index;
@@ -75,10 +75,11 @@
     return self;
 }
 
+//The "additional notes" cell view that is shown below the other periods
 - (id)initWithAdditionalNotesOnDate:(IHWDate *)date withFrame:(CGRect)frame onHoliday:(BOOL)holiday {
     self = [super initWithFrame:frame];
     if (self) {
-        self.index = -1;
+        self.index = -1; //Index -1 means "additional notes"
         self.period = [[IHWPeriod alloc] initWithName:@"Additional Notes" date:date start:[[IHWTime alloc] initWithHour:0 andMinute:0] end:[[IHWTime alloc] initWithHour:0 andMinute:0] number:0 index:self.index isFreePeriod:NO];
         
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(4, 3, self.bounds.size.width-8, 19)];
@@ -100,11 +101,15 @@
 
 - (BOOL)createCountdownViewIfNeeded {
     if (self.index == -1) return NO;
+    //Only create countdown view if this period is today...
     if ([self.period.date isEqualToDate:[IHWDate today]]) {
         int secondsUntil = [[IHWTime now] secondsUntilTime:self.period.startTime];
+        //...and the time is between last period's startTime and this period's startTime...
+        //...or this is the first period and it starts in less than an hour.
         if (secondsUntil > 0 &&
             ((self.index > 0 && [((IHWPeriod *)[self.dayViewController.day.periods objectAtIndex:self.index-1]).startTime secondsUntilTime:[IHWTime now]] > 0)
              || (self.index == 0 && secondsUntil < 60*60))) {
+                //Configure countdown view
                 self.countdownView = [[UIView alloc] initWithFrame:CGRectMake(self.bounds.size.width-124, -10, 124+10, 24+10)];
                 self.countdownView.backgroundColor = [UIColor colorWithRed:0.6 green:0 blue:0 alpha:1];
                 self.countdownView.layer.cornerRadius = 10;
@@ -114,7 +119,9 @@
                 label.textColor = [UIColor whiteColor];
                 label.font = [UIFont boldSystemFontOfSize:17];
                 [self.countdownView addSubview:label];
+                //add the countdown view to the period view
                 [self addSubview:self.countdownView];
+                //Set a timer to update the countdown
                 self.countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateCountdownView) userInfo:nil repeats:YES];
                 [self updateCountdownView];
                 return YES;
@@ -131,6 +138,7 @@
     } else if (secondsUntil >= 0) {
         label.text = [NSString stringWithFormat:@"Starts in %d:%02d", secondsUntil/60, secondsUntil%60];
     } else {
+        //The period is starting now -- remove the countdown view
         [self.countdownTimer invalidate];
         self.countdownTimer = nil;
         [self.countdownView removeFromSuperview];
@@ -140,6 +148,7 @@
 }
 
 - (void)addNoteView:(IHWNote *)note animated:(BOOL)animated willAddMore:(BOOL)willAddMore {
+    //Add a new IHWNoteView to the end of the notesView.
     int noteIndex = (int)self.notesView.subviews.count;
     IHWNoteView *view = [[IHWNoteView alloc] initWithNote:note index:noteIndex cellView:self];
     [self.notesView addSubview:view];
@@ -148,40 +157,53 @@
 
 - (void)noteViewChangedAtIndex:(int)index {
     IHWNoteView *noteView = [self.notesView.subviews objectAtIndex:index];
+    //Create an IHWNote object from the noteView
     if (noteView.note == nil) [noteView copyFieldsToNewNote];
     IHWNote *note = noteView.note;
     [self.period.notes setObject:note atIndexedSubscript:index];
     if (![noteView.textField.text isEqualToString:@""] && index == self.notesView.subviews.count-1) {
+        //Add another empty note view below this one if it's the last view and not empty
         [self addNoteView:nil animated:YES willAddMore:NO];
     } else if ([noteView.textField.text isEqualToString:@""] && index != self.notesView.subviews.count-1) {
+        //Delete empty note view if it's not the last view
         if (self.period.notes.count > index) [self.period.notes removeObjectAtIndex:index];
         [noteView removeFromSuperview];
         [self reLayoutViews:YES];
-                
+        //Move cursor to the beginning of the next view
         IHWNoteView *nextFocus = [self.notesView.subviews objectAtIndex:index];
         [nextFocus.textField becomeFirstResponder];
         nextFocus.textField.selectedTextRange = [nextFocus.textField textRangeFromPosition:nextFocus.textField.beginningOfDocument toPosition:nextFocus.textField.beginningOfDocument];
     }
+    //Save it
     [self saveNotes];
 }
 
 - (void)reLayoutViews:(BOOL)animated {
     int yPos = 0;
     for (int index=0; index < self.notesView.subviews.count; index++) {
+        //For each note view, set its index and position its frame in the right place
         IHWNoteView *view = [self.notesView.subviews objectAtIndex:index];
         view.index = index;
         view.frame = CGRectMake(0, yPos, self.notesView.bounds.size.width, view.neededHeight);
         yPos += view.neededHeight;
     }
-    int neededHeight = self.neededHeight;
+    int neededHeight = [self neededHeight];
+    //Set this view's frame
     self.frame = CGRectMake(0, 0, self.frame.size.width, neededHeight);
+    //Change the notes view's height to fill the rest of this period's height
     self.notesView.frame = CGRectMake(self.notesView.frame.origin.x, self.notesView.frame.origin.y, self.notesView.frame.size.width, neededHeight-self.notesView.frame.origin.y);
     [self setNeedsLayout];
+    //Animate if necessary
     if (animated) [UIView animateWithDuration:0.3 animations:^{
         [self layoutIfNeeded];
     }];
-    else [self.dayViewController.periodsTableView layoutIfNeeded];
-    if (self.dayViewController != nil) [self.dayViewController updateRowHeightAtIndex:self.index toHeight:neededHeight];
+    else {
+        [self.dayViewController.periodsTableView layoutIfNeeded];
+    }
+    if (self.dayViewController != nil) {
+        //Tell the day view to update the height allocated for this period
+        [self.dayViewController updateRowHeightAtIndex:self.index toHeight:neededHeight];
+    }
 }
 
 - (void)saveNotes {
@@ -191,6 +213,7 @@
 }
 
 - (int)neededHeight {
+    //Calculate the height needed to display this period
     int noteHeight = 0;
     for (IHWNoteView *view in self.notesView.subviews) {
         noteHeight += view.neededHeight;

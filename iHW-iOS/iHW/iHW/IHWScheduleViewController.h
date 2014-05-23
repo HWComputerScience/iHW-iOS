@@ -18,7 +18,6 @@
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (strong) NSMutableDictionary *loadedViewControllers;
 @property (strong, nonatomic) NSOperationQueue *queue;
-@property (strong, nonatomic) NSMutableDictionary *operations;
 @property (strong, nonatomic) IHWLoadingView *loadingView;
 @property (strong, nonatomic) IHWDate *currentDate;
 @property (strong, nonatomic) UIAlertView *unavailableAlert;

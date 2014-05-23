@@ -9,10 +9,6 @@
 #import "IHWNotificationOptionsViewController.h"
 #import "IHWCurriculum.h"
 
-@interface IHWNotificationOptionsViewController ()
-
-@end
-
 @implementation IHWNotificationOptionsViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -38,21 +34,23 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (section == 0) return 1;
-    else return 2;
+    return 1;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //Currently there's only one cell in this table
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"notifications"];
     if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notifications"];
     
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0) { //this doesn't matter
         cell.textLabel.text = @"All Notifications";
         if (self.masterSwitch == nil) self.masterSwitch = [[UISwitch alloc] init];
         self.masterSwitch.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"allNotifications"];
         if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+            //Don't allow iOS 6 users to turn on notifications because background fetch isn't supported
+            //Hypotheticaly, if the user doesn't open the iHW app for a week, notifications could stop appearing because iHW doesn't have a chance to schedule new notifications. Background fetch fixes this problem in iOS 7 because iOS allows us to periodically run some code in the background to schedule notifications.
             self.masterSwitch.enabled = NO;
         }
         [self.masterSwitch addTarget:self action:@selector(allNotificationsChanged:) forControlEvents:UIControlEventValueChanged];
@@ -67,7 +65,10 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    UITableViewHeaderFooterView *v = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"notificationHFV"];
+    UITableViewHeaderFooterView *v = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"notificationHFV"];
+    if (v==nil) {
+        v = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"notificationHFV"];
+    }
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
         v.textLabel.text = @"Notifications are not supported in iOS 6.";
     } else {
