@@ -645,7 +645,7 @@ static IHWCurriculum *currentCurriculum;
     for (int i=0; i<self.campus+4; i++) {
         [courseList setObject:[NSNull null] atIndexedSubscript:i];
         //[NSNull null] represents an "X" period
-        [maxMeetings setObject:[NSNumber numberWithInt:0] atIndexedSubscript:i];
+        [maxMeetings setObject:[NSNumber numberWithInt:1] atIndexedSubscript:i];
     }
     for (IHWCourse *c in self.courses) {
         //For each course, add it to the courselist at its period index
