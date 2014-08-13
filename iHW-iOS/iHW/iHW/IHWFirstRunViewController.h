@@ -18,5 +18,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *manualButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topSpaceConstraint2;
+@property BOOL goingToStep2;
+
+- (void)gotoStep2;
 
 @end

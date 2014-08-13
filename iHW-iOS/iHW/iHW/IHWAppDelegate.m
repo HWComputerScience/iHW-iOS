@@ -23,6 +23,8 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    if (![IHWCurriculum yearSetManually]) [IHWCurriculum updateCurrentYear];
+    
     // Override point for customization after application launch.
     UIViewController *rootVC = nil;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {

@@ -24,6 +24,8 @@
 + (int)currentYear;
 + (int)currentCampus;
 + (void)setCurrentYear:(int)year;
++ (void)updateCurrentYear;
++ (BOOL)yearSetManually;
 + (void)setCurrentCampus:(int)campus;
 + (BOOL)isFirstRun;
 

@@ -10,6 +10,7 @@
 #import "IHWCurriculum.h"
 #import "IHWAppDelegate.h"
 #import "IHWScheduleViewController.h"
+#import "IHWFirstRunViewController.h"
 
 @implementation IHWChangeYearViewController
 
@@ -145,7 +146,13 @@
         [IHWCurriculum setCurrentCampus:self.selectedCampus];
         //Create a new schedule view controller
         //(this is not shown immediately -- instead, it appears behind the preferences view controller when the preferences view controller is dismissed)
-        [((IHWAppDelegate *)[[UIApplication sharedApplication] delegate]).navController setViewControllers:@[[[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil]] animated:NO];
+        if ([IHWCurriculum isFirstRun]) {
+            IHWFirstRunViewController *frvc = [[IHWFirstRunViewController alloc] initWithNibName:@"IHWFirstRunViewController" bundle:nil];
+            frvc.goingToStep2 = YES;
+            [((IHWAppDelegate *)[[UIApplication sharedApplication] delegate]).navController setViewControllers:@[frvc] animated:NO];
+        } else {
+            [((IHWAppDelegate *)[[UIApplication sharedApplication] delegate]).navController setViewControllers:@[[[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil]] animated:NO];
+        }
     }
     [super viewWillDisappear:animated];
 }

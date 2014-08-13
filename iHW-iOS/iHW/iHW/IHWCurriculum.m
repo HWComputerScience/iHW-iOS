@@ -61,6 +61,16 @@ static IHWCurriculum *currentCurriculum;
 
 + (void)setCurrentYear:(int)year {
     [[NSUserDefaults standardUserDefaults] setInteger:year forKey:@"currentYear"];
+    [[NSUserDefaults standardUserDefaults] setInteger:[[IHWDate today] dateByAddingDays:-365/2].year forKey:@"manualYear"];
+}
+
++ (void)updateCurrentYear {
+    [[NSUserDefaults standardUserDefaults] setInteger:[[IHWDate today] dateByAddingDays:-365/2].year forKey:@"currentYear"];
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"manualYear"];
+}
+
++ (BOOL)yearSetManually {
+    return ([[NSUserDefaults standardUserDefaults] integerForKey:@"manualYear"] == [[IHWDate today] dateByAddingDays:-365/2].year);
 }
 
 + (void)setCurrentCampus:(int)campus {
