@@ -45,7 +45,7 @@
         self.topSpaceConstraint.constant = 0;
     }
     //Load the login page
-    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]];
+    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://www.hw.com/students/Login?returnurl=/students/SchoolResources/MyScheduleEvents.aspx"]]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -59,7 +59,8 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     //Make sure that the UIWebView can only access these three URLs
-    BOOL result = ([request.URL isEqual:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]
+    BOOL result = ([request.URL isEqual:[NSURL URLWithString:@"https://www.hw.com/students/Login?returnurl=/students/SchoolResources/MyScheduleEvents.aspx"]]
+            || [request.URL isEqual:[NSURL URLWithString:@"http://www.hw.com/students/School-Resources/My-Schedule-Events"]]
             || [request.URL isEqual:[NSURL URLWithString:@"http://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx"]]
             || [request.URL isEqual:[NSURL URLWithString:@"https://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx"]]);
     if (result)
@@ -71,11 +72,11 @@
     [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(hideNetworkIcon) withObject:nil waitUntilDone:NO];
     NSURL *url = webView.request.mainDocumentURL;
     //NSLog(@"URL did finish load: %@", url.description);
-    if ([url isEqual:[NSURL URLWithString:@"https://www.hw.com/students/Login/tabid/2279/Default.aspx?returnurl=%2fstudents%2fSchoolResources%2fMyScheduleEvents.aspx"]]) {
+    if ([url isEqual:[NSURL URLWithString:@"https://www.hw.com/students/Login?returnurl=/students/SchoolResources/MyScheduleEvents.aspx"]]) {
         //If the login page just loaded, show the UIWebView and prompt the user to log in.
         self.webView.hidden = NO;
         self.loginPromptLabel.hidden = NO;
-    } else if ([url isEqual:[NSURL URLWithString:@"http://www.hw.com/students/SchoolResources/MyScheduleEvents.aspx"]]) {
+    } else if ([url isEqual:[NSURL URLWithString:@"http://www.hw.com/students/School-Resources/My-Schedule-Events"]]) {
         //If the user just logged in and the "My Schedule" page just loaded, hide the UIWebView and prompt.
         self.webView.hidden = YES;
         self.loginPromptLabel.hidden = YES;
