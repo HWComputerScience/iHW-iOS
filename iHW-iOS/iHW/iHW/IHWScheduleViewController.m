@@ -15,6 +15,7 @@
 #import "IHWChangeYearViewController.h"
 #import "IHWNotificationOptionsViewController.h"
 #import "IHWAppDelegate.h"
+#import <PDTSimpleCalendar/PDTSimpleCalendar.h>
 
 @implementation IHWScheduleViewController
 
@@ -317,9 +318,15 @@
 }
 
 - (IBAction)gotoDate:(id)sender {
+    
+    PDTSimpleCalendarViewController *calendar = [[PDTSimpleCalendarViewController alloc]init];
+    [self showViewController:calendar sender:self];
+    
+    /*
     ActionSheetDatePicker *picker = [[ActionSheetDatePicker alloc] initWithTitle:@"Go to which date?" datePickerMode:UIDatePickerModeDate selectedDate:self.currentDate target:self action:@selector(showDayWithDate:) origin:self.toolbar];
     picker.doneButtonText = @"Go";
     [picker showActionSheetPicker];
+    */
 }
 
 - (void)showDayWithDate:(IHWDate *)date {
