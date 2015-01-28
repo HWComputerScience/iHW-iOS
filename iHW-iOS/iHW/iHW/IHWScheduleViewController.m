@@ -331,13 +331,6 @@
 - (IBAction)gotoDate:(id)sender {
     //Present Calendar View
     [self presentViewController:_calControl animated:YES completion:nil];
-    
-    /*
-    //Set Background Red View @ Top
-    _backView = [[BackView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
-    [_backView->done addTarget:self action:@selector(finishedSelection:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_backView];
-     */
 }
 
 - (void)showDayWithDate:(IHWDate *)date {

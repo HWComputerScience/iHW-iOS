@@ -11,7 +11,6 @@
 #import "IHWLoadingView.h"
 #import "IHWDate.h"
 #import <PDTSimpleCalendar/PDTSimpleCalendar.h>
-#import "BackView.h"
 
 @interface IHWScheduleViewController : UIViewController <IHWCurriculumLoadingListener, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIAlertViewDelegate, PDTSimpleCalendarViewDelegate>
 
@@ -34,7 +33,6 @@
 
 @property (strong, nonatomic) PDTSimpleCalendarViewController *calendar;
 @property (strong, nonatomic) IHWDate *selectedDate;
-@property (strong, nonatomic) BackView *backView;
 @property (strong, nonatomic) UINavigationController *calControl;
 
 /**
