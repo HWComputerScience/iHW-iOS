@@ -546,7 +546,7 @@
 				ORGANIZATIONNAME = "Jonathan Burns";
 				TargetAttributes = {
 					491CCB2D178E590B00736453 = {
-						DevelopmentTeam = 6QC5Z7U58J;
+						DevelopmentTeam = LJQREKL6RT;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
