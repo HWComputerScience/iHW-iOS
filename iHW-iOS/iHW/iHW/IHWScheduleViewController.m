@@ -15,6 +15,7 @@
 #import "IHWChangeYearViewController.h"
 #import "IHWNotificationOptionsViewController.h"
 #import "IHWAppDelegate.h"
+#import <PDTSimpleCalendar/PDTSimpleCalendar.h>
 
 @implementation IHWScheduleViewController
 
@@ -86,6 +87,17 @@
             [[[UIAlertView alloc] initWithTitle:@"Want Notifications?" message:@"iHW can notify you at the end of your free periods when you have class next period." delegate:self cancelButtonTitle:@"No Thanks" otherButtonTitles:@"More Info...", @"Ask Later", nil] show];
         }
     }
+    
+    //Initialize Calendar
+    _calendar = [[PDTSimpleCalendarViewController alloc]init];
+    _calendar.delegate = self;
+    
+    _calControl = [[UINavigationController alloc]initWithRootViewController:_calendar];
+    _calControl.navigationBar.barTintColor = [UIColor colorWithRed:.6 green:0 blue:0 alpha:1];
+    UIButton *done = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 60, 40)];
+    [done addTarget:self action:@selector(finishedSelection:) forControlEvents:UIControlEventTouchUpInside];
+    [done setTitle:@"Done" forState:UIControlStateNormal];
+    [_calControl.navigationBar addSubview:done];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -317,9 +329,8 @@
 }
 
 - (IBAction)gotoDate:(id)sender {
-    ActionSheetDatePicker *picker = [[ActionSheetDatePicker alloc] initWithTitle:@"Go to which date?" datePickerMode:UIDatePickerModeDate selectedDate:self.currentDate target:self action:@selector(showDayWithDate:) origin:self.toolbar];
-    picker.doneButtonText = @"Go";
-    [picker showActionSheetPicker];
+    //Present Calendar View
+    [self presentViewController:_calControl animated:YES completion:nil];
 }
 
 - (void)showDayWithDate:(IHWDate *)date {
@@ -364,6 +375,21 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)simpleCalendarViewController:(PDTSimpleCalendarViewController *)controller didSelectDate:(NSDate *)date {
+    //Dismiss the Calendar View Controller
+    [_calControl dismissViewControllerAnimated:YES completion:nil];
+
+    //Create IHWDate from Selected Date
+    _selectedDate = date;
+    
+    //Change iHW Schedule to new date
+    [self showDayWithDate:_selectedDate];
+}
+
+- (IBAction)finishedSelection:(id)sender {
+    [_calControl dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

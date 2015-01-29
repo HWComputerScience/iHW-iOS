@@ -10,8 +10,9 @@
 #import "IHWCurriculum.h"
 #import "IHWLoadingView.h"
 #import "IHWDate.h"
+#import <PDTSimpleCalendar/PDTSimpleCalendar.h>
 
-@interface IHWScheduleViewController : UIViewController <IHWCurriculumLoadingListener, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIAlertViewDelegate>
+@interface IHWScheduleViewController : UIViewController <IHWCurriculumLoadingListener, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIAlertViewDelegate, PDTSimpleCalendarViewDelegate>
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (weak, nonatomic) IBOutlet UIView *pageContainerView;
@@ -29,5 +30,17 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *gotoDateItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *forwardItem;
+
+@property (strong, nonatomic) PDTSimpleCalendarViewController *calendar;
+@property (strong, nonatomic) IHWDate *selectedDate;
+@property (strong, nonatomic) UINavigationController *calControl;
+
+/**
+ *  Tells the delegate that a date was selected by the user.
+ *
+ *  @param controller the calendarView Controller
+ *  @param date       the date being selected (Midnight GMT).
+ */
+- (void)simpleCalendarViewController:(PDTSimpleCalendarViewController *)controller didSelectDate:(NSDate *)date;
 
 @end

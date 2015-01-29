@@ -5,24 +5,20 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>67CE4F47-5D7D-4996-96A5-204162BC8583</string>
+	<string>C4FC1835-144B-4C96-85CB-9526E818B3DC</string>
 	<key>IDESourceControlProjectName</key>
 	<string>iHW</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>5565998DF04413847F03B2FC0A08FB6BA2627085</key>
-<<<<<<< HEAD
 		<string>https://github.com/bkim1/iHW-iOS.git</string>
-=======
-		<string>https://github.com/HWComputerScience/iHW-iOS.git</string>
->>>>>>> upstream/master
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>iHW-iOS/iHW/iHW.xcodeproj</string>
+	<string>iHW-iOS/iHW/iHW.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>5565998DF04413847F03B2FC0A08FB6BA2627085</key>
-		<string>../../../..</string>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/bkim1/iHW-iOS.git</string>
