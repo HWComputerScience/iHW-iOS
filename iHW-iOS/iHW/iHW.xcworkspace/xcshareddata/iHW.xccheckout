@@ -12,6 +12,8 @@
 	<dict>
 		<key>5565998DF04413847F03B2FC0A08FB6BA2627085</key>
 		<string>https://github.com/bkim1/iHW-iOS.git</string>
+		<key>D391785042AB890B57055225EF705F73AA830976</key>
+		<string>https://github.com/HWComputerScience/iHW-resources</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>iHW-iOS/iHW/iHW.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>5565998DF04413847F03B2FC0A08FB6BA2627085</key>
 		<string>../../..</string>
+		<key>D391785042AB890B57055225EF705F73AA830976</key>
+		<string>../../../iHW-resources/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/bkim1/iHW-iOS.git</string>
@@ -35,6 +39,14 @@
 			<string>5565998DF04413847F03B2FC0A08FB6BA2627085</string>
 			<key>IDESourceControlWCCName</key>
 			<string>iHW-iOS</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D391785042AB890B57055225EF705F73AA830976</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iHW-resources</string>
 		</dict>
 	</array>
 </dict>

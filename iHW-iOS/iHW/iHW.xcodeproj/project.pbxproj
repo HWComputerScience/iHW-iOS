@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		357F0BA21ABB439C00E28A79 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = 357F0BA01ABB439C00E28A79 /* link.png */; };
+		357F0BA31ABB439C00E28A79 /* link@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 357F0BA11ABB439C00E28A79 /* link@2x.png */; };
 		491CCB32178E590B00736453 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491CCB31178E590B00736453 /* UIKit.framework */; };
 		491CCB34178E590B00736453 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491CCB33178E590B00736453 /* Foundation.framework */; };
 		491CCB36178E590B00736453 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491CCB35178E590B00736453 /* CoreGraphics.framework */; };
@@ -83,8 +85,6 @@
 		CB6104DB17B96C3200D3FD75 /* IHWNormalCoursesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104D917B96C3100D3FD75 /* IHWNormalCoursesViewController.xib */; };
 		CB6104DF17B9747E00D3FD75 /* IHWScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */; };
 		CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */; };
-		CB65E2E018FC8BE000336357 /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = CB65E2DE18FC8BE000336357 /* link.png */; };
-		CB65E2E118FC8BE000336357 /* link@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB65E2DF18FC8BE000336357 /* link@2x.png */; };
 		CB65E2E418FC8D6E00336357 /* IHWPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */; };
 		CB75CDCA19062CF200CDA1FD /* Default7-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB75CDC819062CF200CDA1FD /* Default7-568h@2x.png */; };
 		CB75CDCB19062CF200CDA1FD /* Default7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB75CDC919062CF200CDA1FD /* Default7@2x.png */; };
@@ -106,6 +106,8 @@
 
 /* Begin PBXFileReference section */
 		0DF7FD4BE66EB12F98698ECE /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		357F0BA01ABB439C00E28A79 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = link.png; path = "../../../iHW-resources/iOS/link.png"; sourceTree = "<group>"; };
+		357F0BA11ABB439C00E28A79 /* link@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "link@2x.png"; path = "../../../iHW-resources/iOS/link@2x.png"; sourceTree = "<group>"; };
 		491CCB2E178E590B00736453 /* iHW.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iHW.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		491CCB31178E590B00736453 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		491CCB33178E590B00736453 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -226,8 +228,6 @@
 		CB6104DC17B9747C00D3FD75 /* IHWScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWScheduleViewController.h; sourceTree = "<group>"; };
 		CB6104DD17B9747C00D3FD75 /* IHWScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWScheduleViewController.m; sourceTree = "<group>"; };
 		CB6104DE17B9747D00D3FD75 /* IHWScheduleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IHWScheduleViewController.xib; sourceTree = "<group>"; };
-		CB65E2DE18FC8BE000336357 /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = link.png; path = ../../../images/link.png; sourceTree = "<group>"; };
-		CB65E2DF18FC8BE000336357 /* link@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "link@2x.png"; path = "../../../images/link@2x.png"; sourceTree = "<group>"; };
 		CB65E2E218FC8D6E00336357 /* IHWPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWPreferencesViewController.h; sourceTree = "<group>"; };
 		CB65E2E318FC8D6E00336357 /* IHWPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWPreferencesViewController.m; sourceTree = "<group>"; };
 		CB75CDC819062CF200CDA1FD /* Default7-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default7-568h@2x.png"; sourceTree = "<group>"; };
@@ -465,6 +465,8 @@
 		CB6104A117B8952A00D3FD75 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				357F0BA01ABB439C00E28A79 /* link.png */,
+				357F0BA11ABB439C00E28A79 /* link@2x.png */,
 				CB7E454517C5D73B00E1621F /* mscampus.jpg */,
 				CB61049E17B8952600D3FD75 /* uscampus.jpg */,
 				CB5DF79F17BDFA5400D5651C /* checkboxChecked_old.png */,
@@ -486,8 +488,6 @@
 				CB3E0DB9189EBA6400A17B9C /* checkboxChecked@2x.png */,
 				CB3E0DBA189EBA6400A17B9C /* checkboxUnchecked@2x.png */,
 				CB3E0DBD189EBE0C00A17B9C /* whitegear@2x.png */,
-				CB65E2DE18FC8BE000336357 /* link.png */,
-				CB65E2DF18FC8BE000336357 /* link@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -583,11 +583,13 @@
 				CB75CDCB19062CF200CDA1FD /* Default7@2x.png in Resources */,
 				CB6104A017B8952600D3FD75 /* uscampus.jpg in Resources */,
 				CB3E0DBB189EBA6400A17B9C /* checkboxChecked@2x.png in Resources */,
+				357F0BA31ABB439C00E28A79 /* link@2x.png in Resources */,
 				CB6104A917B9457500D3FD75 /* IHWDownloadScheduleViewController.xib in Resources */,
 				CB6104CE17B9689600D3FD75 /* README.md in Resources */,
 				CB6104D617B96C2600D3FD75 /* IHWGuidedCoursesViewController.xib in Resources */,
 				CB6104DB17B96C3200D3FD75 /* IHWNormalCoursesViewController.xib in Resources */,
 				CB6104E017B9747E00D3FD75 /* IHWScheduleViewController.xib in Resources */,
+				357F0BA21ABB439C00E28A79 /* link.png in Resources */,
 				CB44277B17BB0DC00068D543 /* IHWDayViewController.xib in Resources */,
 				CB5F682817BC48D000A583D6 /* IHWEditCourseViewController.xib in Resources */,
 				CBBBB1B9190EB197002EE1AA /* icon_ios_iphone7@2x.png in Resources */,
@@ -613,8 +615,6 @@
 				CB3E0DBE189EBE0C00A17B9C /* whitegear@2x.png in Resources */,
 				CBBBB1BB190EB421002EE1AA /* about.rtf in Resources */,
 				CB7E454617C5D73B00E1621F /* mscampus.jpg in Resources */,
-				CB65E2E118FC8BE000336357 /* link@2x.png in Resources */,
-				CB65E2E018FC8BE000336357 /* link.png in Resources */,
 				CB3E0DB4189EB46800A17B9C /* backbutton@2x.png in Resources */,
 				CB3E0DB8189EB50D00A17B9C /* today@2x.png in Resources */,
 				CB8D773B17CB2F8700688D3D /* Default.png in Resources */,
