@@ -172,6 +172,10 @@
         } else if ([[div getAttributeNamed:@"id"] isEqualToString:@"sectTitle1"]) {
             //Found a course name
             lastName = [[[div findChildTags:@"span"] objectAtIndex:0] contents];
+            if (lastName == nil) {
+                //For long class names like "French V: Contemporary Culture and Communication", the name is in a double nested span tag
+                lastName = [[[div findChildTags:@"span"] objectAtIndex:1] contents];
+            }
         } else if ([[div getAttributeNamed:@"id"] isEqualToString:@"sectPeriodList1"]) {
             //Found a course period list
             lastPeriodList = [[[div findChildTags:@"span"] objectAtIndex:0] contents];
