@@ -182,9 +182,15 @@
             //Break the list into components by day
             NSArray *lastPeriodComponents = [lastPeriodList componentsSeparatedByString:@"."];
             if (lastPeriodComponents.count != [IHWCurriculum currentCurriculum].campus) {
+                if([[lastPeriodComponents firstObject]  isEqual: @"A"]&&[lastPeriodComponents count]==5) {
+                        //Middle Schoolers who enroll in sports like football have a five day cycle for the sport. This is a workaround.
+                        lastPeriodComponents=[lastPeriodComponents arrayByAddingObject:@"A"];
+                    }
+                else{
                 //The course period list doesn't have the same number of days as the campus the user chose earlier.
                 [[[UIAlertView alloc] initWithTitle:@"Wrong Campus!" message:@"You chose the wrong campus during the setup. Please start again." delegate:self cancelButtonTitle:@"Back" otherButtonTitles:nil] show];
                 return;
+                }
             }
             //Create the course object once we have a course code, name, and period list
             IHWCourse *c = parseCourse(lastCode, lastName, lastPeriodComponents);
