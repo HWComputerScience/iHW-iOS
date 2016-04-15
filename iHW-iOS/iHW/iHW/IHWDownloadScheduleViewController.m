@@ -53,7 +53,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.accessToken=@"1~FIe4zybFqaqUX7vysUhzfCIv5LckEhrChukr89uQNgkAHtlHFqMznhCaUSKgy9DW";//some token in this format
+    self.accessToken=@"1~FIe4zybFqbqUX7vysUhzfCIv5LckEhrChukr81uQNgkAHtlHFqMznhCaUSKgy9DW";//some token in this format
     NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (NSHTTPCookie *cookie in [storage cookies]) {
         [storage deleteCookie:cookie];

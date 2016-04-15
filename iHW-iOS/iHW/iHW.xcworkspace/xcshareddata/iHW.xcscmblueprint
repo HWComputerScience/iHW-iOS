@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "CFA814FB945F6233539AA540A3F403EA95F930C3",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "CFA814FB945F6233539AA540A3F403EA95F930C3" : 0,
+    "5565998DF04413847F03B2FC0A08FB6BA2627085" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C4FC1835-144B-4C96-85CB-9526E818B3DC",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "CFA814FB945F6233539AA540A3F403EA95F930C3" : "iHW-iOS-master-22\/",
+    "5565998DF04413847F03B2FC0A08FB6BA2627085" : "iHW-iOS"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "iHW",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "iHW-iOS\/iHW\/iHW.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/bkim1\/iHW-iOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5565998DF04413847F03B2FC0A08FB6BA2627085"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/HWComputerScience\/iHW-iOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "CFA814FB945F6233539AA540A3F403EA95F930C3"
+    }
+  ]
+}
