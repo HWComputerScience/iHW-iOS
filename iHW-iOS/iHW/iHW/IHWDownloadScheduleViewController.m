@@ -54,7 +54,7 @@
 {
     [super viewDidLoad];
     [[IHWCurriculum currentCurriculum] removeAllCourses];//should start with no courses in case of redownloading
-    self.accessToken=@"1~m9UWyTZ1P4Qbesx9VMSqewCZZFLiCd7LRrcsETGiNUMSaTBc6mj9BNwrk5pvJRYo";//some token in this format
+    self.accessToken=@"1~m9UWyTZ1P4Qbesx9VMSqewCZZFLiCd7LRrcsETG234291j9BNwrk5pvJRYo";//some token in this format
     NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (NSHTTPCookie *cookie in [storage cookies]) {
         [storage deleteCookie:cookie];
