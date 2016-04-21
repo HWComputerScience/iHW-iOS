@@ -353,6 +353,7 @@
     if (toDisplay == nil) return;
     
     __block IHWScheduleViewController *blocksafeSelf = self;
+    
     [self.pageViewController setViewControllers:[NSArray arrayWithObject:toDisplay] direction:dir animated:YES completion:^(BOOL finished) {
         //Don't remember why this is necessary
         [blocksafeSelf performSelectorOnMainThread:@selector(displayDayViewController:) withObject:toDisplay waitUntilDone:NO];

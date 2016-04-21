@@ -106,30 +106,25 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     //Handle the "redownload schedule?" action sheet
     if (buttonIndex != 0) return;
-    NSLog(@"this statement is hit");
 
     IHWDownloadScheduleViewController* dsvc = [[IHWDownloadScheduleViewController alloc] initWithNibName:@"IHWDownloadScheduleViewController" bundle:nil];
     
-    NSMutableArray *allViewControllers = [NSMutableArray arrayWithArray: self.navigationController.viewControllers];
-  //  [allViewControllers removeObjectIdenticalTo: removedViewController];
-  //  navigationController.viewControllers = allViewControllers;
- /**   for(UIViewController *tempVC in allViewControllers)
-    {
-        if([tempVC isKindOfClass:[IHWDownloadScheduleViewController class]])
-        {
-            NSLog(@"this statement is hit");
-           [tempVC removeFromParentViewController];
-            [allViewControllers removeObjectIdenticalTo: tempVC];
-            self.navigationController.viewControllers = allViewControllers;
-            break;
-            
-
+    
+    if(![self.navigationController.topViewController isKindOfClass:[IHWDownloadScheduleViewController class]]) {
+        [self close];
+        @try {
+            [((IHWAppDelegate *)[[UIApplication sharedApplication] delegate]).navController setViewControllers:@[dsvc] animated:NO];
+        } @catch (NSException * e) {
+            NSLog(@"Exception: %@", e);
+        } @finally {
         }
-    }*/
-    //idk why it won't remove all view controllers and then just add this new one
-    [((IHWAppDelegate *)[[UIApplication sharedApplication] delegate]).navController setViewControllers:@[dsvc] animated:NO];
+
+
+
+    }
+
     //Close the preferences view
-    [self close];
+
 }
 
 - (void)showDisclaimer:(NSIndexPath *)indexPath {

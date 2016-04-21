@@ -53,7 +53,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.accessToken=@"1~FIe4zybFqbqUX7vysUhzfCIv5LckEhrChukr81uQNgkAHtlHFqMznhCaUSKgy9DW";//some token in this format
+    [[IHWCurriculum currentCurriculum] removeAllCourses];//should start with no courses in case of redownloading
+    self.accessToken=@"1~m9UWyTZ1P4Qbesx9VMSqewCZZFLiCd7LRrcsETGiNUMSaTBc6mj9BNwrk5pvJRYo";//some token in this format
     NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (NSHTTPCookie *cookie in [storage cookies]) {
         [storage deleteCookie:cookie];
@@ -210,7 +211,15 @@
 
 - (IBAction)backPressed:(id)sender {
     if ([IHWCurriculum isFirstRun]) [self.navigationController popViewControllerAnimated:YES];
-    else [self.navigationController setViewControllers:@[[[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil]] animated:YES];
+    else if(![self.navigationController.topViewController isKindOfClass:[IHWScheduleViewController class]]) {
+        @try {
+            [self.navigationController setViewControllers:@[[[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil]] animated:YES];
+        } @catch (NSException * e) {
+            NSLog(@"Exception: %@", e);
+        } @finally {
+            //NSLog(@"finally");
+        }
+}
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {//to redirect so parse token here
@@ -313,9 +322,18 @@
     } else {
         //Otherwise go directly to the main schedule page
         IHWScheduleViewController *svc = [[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil];
-        [self.navigationController pushViewController:svc animated:YES];
-        //Clear the ViewController stack
-        [self.navigationController setViewControllers:[NSArray arrayWithObject:svc]];
+        
+        if(![self.navigationController.topViewController isKindOfClass:[IHWScheduleViewController class]]) {
+            @try {
+                [self.navigationController pushViewController:svc animated:NO];
+                //Clear the ViewController stack
+                [self.navigationController setViewControllers:[NSArray arrayWithObject:svc]];
+            } @catch (NSException * e) {
+                NSLog(@"Exception: %@", e);
+            } @finally {
+                //NSLog(@"finally");
+            }
+                }
         
         
     }
@@ -341,9 +359,17 @@
     } else if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:@"Edit Courses"]){
         IHWNormalCoursesViewController *ncvc = [[IHWNormalCoursesViewController alloc] initWithNibName:@"IHWNormalCoursesViewController" bundle:nil];
         IHWScheduleViewController *svc = [[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil];
-        [self.navigationController pushViewController:svc animated:YES];
-        [svc presentViewController:ncvc animated:YES completion:nil];
-        [self.navigationController setViewControllers:[NSArray arrayWithObject:svc]];
+        if(![self.navigationController.topViewController isKindOfClass:[IHWScheduleViewController class]]) {
+            @try {
+                [self.navigationController pushViewController:svc animated:YES];
+                [svc presentViewController:ncvc animated:NO completion:nil];
+                [self.navigationController setViewControllers:[NSArray arrayWithObject:svc]];
+            } @catch (NSException * e) {
+                NSLog(@"Exception: %@", e);
+            } @finally {
+                //NSLog(@"finally");
+            }
+        }
     } else {
         self.navigationController.viewControllers = [NSArray arrayWithObjects:[[IHWFirstRunViewController alloc] initWithNibName:@"IHWFirstRunViewController" bundle:nil], self, nil];
         [self.navigationController popViewControllerAnimated:YES];
@@ -407,9 +433,17 @@
     } else {
         //Otherwise go directly to the main schedule page
         IHWScheduleViewController *svc = [[IHWScheduleViewController alloc] initWithNibName:@"IHWScheduleViewController" bundle:nil];
-        [self.navigationController pushViewController:svc animated:YES];
-        //Clear the ViewController stack
-        [self.navigationController setViewControllers:[NSArray arrayWithObject:svc]];
+        if(![self.navigationController.topViewController isKindOfClass:[IHWScheduleViewController class]]) {
+            @try {
+                [self.navigationController pushViewController:svc animated:NO];
+                //Clear the ViewController stack
+                [self.navigationController setViewControllers:[NSArray arrayWithObject:svc]];            } @catch (NSException * e) {
+                NSLog(@"Exception: %@", e);
+            } @finally {
+                //NSLog(@"finally");
+            }
+        
+        }
     }
 }
 
