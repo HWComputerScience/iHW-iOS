@@ -22,9 +22,6 @@
 		491CCB6F178E685800736453 /* IHWHoliday.m in Sources */ = {isa = PBXBuildFile; fileRef = 491CCB6E178E685800736453 /* IHWHoliday.m */; };
 		491CCB78178E691000736453 /* IHWNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 491CCB77178E691000736453 /* IHWNote.m */; };
 		491CCB7B178F3BCE00736453 /* IHWDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 491CCB7A178F3BCE00736453 /* IHWDate.m */; };
-		4F12E4961C822AED0071807B /* NSDictionary+iHW.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F12E4951C822AED0071807B /* NSDictionary+iHW.m */; };
-		4F58B3751CBB58D70042F3A1 /* NSDictionary+iHW_auth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F58B3741CBB58D70042F3A1 /* NSDictionary+iHW_auth.m */; };
-		4F8D17C01C83865500D839DD /* NSArray+iHW_data.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D17BF1C83865500D839DD /* NSArray+iHW_data.m */; };
 		4F8D17C31C9F225B00D839DD /* IHWJSONInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8D17C21C9F225B00D839DD /* IHWJSONInfo.m */; };
 		5F4558C9C04B0FAFC1FF8F81 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DF7FD4BE66EB12F98698ECE /* libPods.a */; };
 		CB048C3117B409DA00E3F76E /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = CB048C1C17B409DA00E3F76E /* CDataScanner.m */; };
@@ -138,12 +135,6 @@
 		491CCB77178E691000736453 /* IHWNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWNote.m; sourceTree = "<group>"; };
 		491CCB79178F3BCE00736453 /* IHWDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWDate.h; sourceTree = "<group>"; };
 		491CCB7A178F3BCE00736453 /* IHWDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWDate.m; sourceTree = "<group>"; };
-		4F12E4941C822AED0071807B /* NSDictionary+iHW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+iHW.h"; sourceTree = "<group>"; };
-		4F12E4951C822AED0071807B /* NSDictionary+iHW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+iHW.m"; sourceTree = "<group>"; };
-		4F58B3731CBB58D70042F3A1 /* NSDictionary+iHW_auth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+iHW_auth.h"; sourceTree = "<group>"; };
-		4F58B3741CBB58D70042F3A1 /* NSDictionary+iHW_auth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+iHW_auth.m"; sourceTree = "<group>"; };
-		4F8D17BE1C83865500D839DD /* NSArray+iHW_data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+iHW_data.h"; sourceTree = "<group>"; };
-		4F8D17BF1C83865500D839DD /* NSArray+iHW_data.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+iHW_data.m"; sourceTree = "<group>"; };
 		4F8D17C11C9F225B00D839DD /* IHWJSONInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IHWJSONInfo.h; sourceTree = "<group>"; };
 		4F8D17C21C9F225B00D839DD /* IHWJSONInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IHWJSONInfo.m; sourceTree = "<group>"; };
 		AF7881B63EC6300AEB8F4200 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -327,14 +318,8 @@
 		491CCB37178E590B00736453 /* iHW */ = {
 			isa = PBXGroup;
 			children = (
-				4F8D17BF1C83865500D839DD /* NSArray+iHW_data.m */,
-				4F8D17BE1C83865500D839DD /* NSArray+iHW_data.h */,
 				4F8D17C11C9F225B00D839DD /* IHWJSONInfo.h */,
 				4F8D17C21C9F225B00D839DD /* IHWJSONInfo.m */,
-				4F58B3731CBB58D70042F3A1 /* NSDictionary+iHW_auth.h */,
-				4F58B3741CBB58D70042F3A1 /* NSDictionary+iHW_auth.m */,
-				4F12E4951C822AED0071807B /* NSDictionary+iHW.m */,
-				4F12E4941C822AED0071807B /* NSDictionary+iHW.h */,
 				CB6104A417B8A43E00D3FD75 /* IHWConstants.h */,
 				CB5DF79A17BDF60C00D5651C /* IHWUtils.h */,
 				CB5DF79817BDF41500D5651C /* IHWUtils.m */,
@@ -348,6 +333,7 @@
 				CB61049A17B8945C00D3FD75 /* IHWFirstRunViewController.xib */,
 				CB6104A517B9457500D3FD75 /* IHWDownloadScheduleViewController.h */,
 				CB6104A617B9457500D3FD75 /* IHWDownloadScheduleViewController.m */,
+				CB6104D817B96C3100D3FD75 /* IHWNormalCoursesViewController.m */,
 				CB6104A717B9457500D3FD75 /* IHWDownloadScheduleViewController.xib */,
 				CB6104CF17B96C1300D3FD75 /* IHWCoursesViewController.h */,
 				CB6104D017B96C1400D3FD75 /* IHWCoursesViewController.m */,
@@ -355,7 +341,6 @@
 				CB6104D317B96C2500D3FD75 /* IHWGuidedCoursesViewController.m */,
 				CB6104D417B96C2500D3FD75 /* IHWGuidedCoursesViewController.xib */,
 				CB6104D717B96C3100D3FD75 /* IHWNormalCoursesViewController.h */,
-				CB6104D817B96C3100D3FD75 /* IHWNormalCoursesViewController.m */,
 				CB6104D917B96C3100D3FD75 /* IHWNormalCoursesViewController.xib */,
 				CB5F682417BC48CF00A583D6 /* IHWEditCourseViewController.h */,
 				CB5F682517BC48CF00A583D6 /* IHWEditCourseViewController.m */,
@@ -706,9 +691,7 @@
 				CB048C3F17B443DA00E3F76E /* MutableOrderedDictionary.m in Sources */,
 				491CCB3E178E590B00736453 /* main.m in Sources */,
 				491CCB42178E590B00736453 /* IHWAppDelegate.m in Sources */,
-				4F58B3751CBB58D70042F3A1 /* NSDictionary+iHW_auth.m in Sources */,
 				491CCB59178E63D800736453 /* IHWCurriculum.m in Sources */,
-				4F8D17C01C83865500D839DD /* NSArray+iHW_data.m in Sources */,
 				CBD8F82218FDBC130067BC71 /* IHWChangeYearViewController.m in Sources */,
 				491CCB5D178E640700736453 /* IHWPeriod.m in Sources */,
 				491CCB60178E641300736453 /* IHWCourse.m in Sources */,
@@ -724,7 +707,6 @@
 				CB048C3917B409DA00E3F76E /* CJSONSerializer.m in Sources */,
 				CB048C3C17B4131300E3F76E /* IHWTime.m in Sources */,
 				CB048C4217B45CFA00E3F76E /* IHWFileManager.m in Sources */,
-				4F12E4961C822AED0071807B /* NSDictionary+iHW.m in Sources */,
 				CB048C4817B573EC00E3F76E /* CDataScanner_Extensions.m in Sources */,
 				CB048C4917B573EC00E3F76E /* NSDictionary_JSONExtensions.m in Sources */,
 				CB61049B17B8945C00D3FD75 /* IHWFirstRunViewController.m in Sources */,

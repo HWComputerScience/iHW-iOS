@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IHWDownloadScheduleViewController : UIViewController <UIWebViewDelegate, NSURLConnectionDelegate, UIAlertViewDelegate>
+@interface IHWDownloadScheduleViewController : UIViewController <NSURLConnectionDelegate, UIAlertViewDelegate, UIWebViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
+//@property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) IBOutlet UILabel *loginPromptLabel;
 @property (weak, nonatomic) IBOutlet UILabel *loadingText;
 @property (strong, nonatomic) NSMutableData *resultData;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topSpaceConstraint;
+@property (strong, nonatomic) IBOutlet UIWebView *myNewWebView;
 
 @end

@@ -17,15 +17,14 @@
 #import "IHWScheduleViewController.h"
 #import "IHWUtils.h"
 #import "AFNetworking.h"
-#import "NSDictionary+iHW.h"
-#import "NSDictionary+iHW_auth.h"
-#import "NSArray+iHW_data.h"
+#import "CJSONDeserializer.h"
 #import "IHWJSONInfo.h"
 @interface IHWDownloadScheduleViewController()
 @property(strong) NSDictionary *iHW;
 @property(strong) NSArray *iHW2;
 @property(strong) NSArray *iHW3;
 @property(strong) NSString* accessToken;
+@property(strong) NSString* refreshToken;
 @property(strong) IHWJSONInfo* theData;
 @end
 
@@ -37,7 +36,7 @@
     NSMutableArray* courseNamesArray;
     NSMutableArray* conventionalScheduleArray;
     NSMutableArray* scheduleArray;
-
+    BOOL correctPage;
     int n;
 }
 
@@ -49,31 +48,50 @@
     }
     return self;
 }
-
+@synthesize myNewWebView;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [[IHWCurriculum currentCurriculum] removeAllCourses];//should start with no courses in case of redownloading
-    self.accessToken=@"1~m9UWyTZ1P4Qbesx9VMSqewCZZFLiCd7LRrcsETG234291j9BNwrk5pvJRYo";//some token in this format
-    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    
+
+    NSLog(@"hi from dispatch async");
+    self.myNewWebView.delegate=self;
+    NSString *url=@"https://hub.hw.com/login/oauth2/auth?client_id=10000000000502&response_type=code&redirect_uri=https://ihwoauth.hwtechcouncil.com";
+    NSURL *nsurl=[NSURL URLWithString:url];
+    NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
+    [myNewWebView loadRequest:nsrequest];//make user sign in, click captcha, and then we'll get the access key and make the requests for the schedule data, etc.
+
+/**    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //update UI here
+        });
+        
+        
+    });
+ */
+//self.accessToken=@"1~j0mghUA7Xlg5aFuGGrw2JM3Xzu6t3QgJlkOiCgyzZNDsTzgoNLZPzBGRYTA7CiGd";//some token in this format
+ 
+    
+    /**   NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (NSHTTPCookie *cookie in [storage cookies]) {
         [storage deleteCookie:cookie];
         //Make sure they actually have to log in each time
     }
-    self.webView.delegate = self;
-    self.webView.keyboardDisplayRequiresUserAction = NO;
+  */
+      //self.webView.keyboardDisplayRequiresUserAction = NO;
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
         self.topSpaceConstraint.constant = 0;
     }
-    //Load the login page
     
     
-   
-    //[self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://hub.hw.com/login/oauth2/auth?client_id=10000000000502&response_type=code&redirect_uri=https://ihwoauth.hwtechcouncil.com"]]];//to auth and get auth code
- //  [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://hub.hw.com/api/v1/courses?access_token=1~FIe4zybFqaqUX7vysUhzfCIv5LckEhrChukr89uQNgkAHtlHFqMznhCaUSKgy9DW"]]];
-   
-    //first synchronous request to courses page
+}
+
+-(void) loadScheduleInfo{
     _theData = [[IHWJSONInfo alloc] init];
+ //   NSLog(@"loadScheduleInfo was invoked");
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"https://hub.hw.com/api/v1/courses?access_token=%@",self.accessToken]];
     NSURLRequest* urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30];
     
@@ -85,35 +103,35 @@
     urlData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
     
     NSArray* courseObject = [NSJSONSerialization JSONObjectWithData:urlData options:0 error:&error];
- //   NSLog(@"it's working until this point %@", courseObject);
-
+  //  NSLog(@"access token is %@", self.accessToken);
+    //   NSLog(@"it's working until this point %@", courseObject);
+    
     for (int x = 0; x< courseObject.count; x++)
     {
         NSDictionary* dict = courseObject[x];
         NSString* b =dict[@"id"];
-        //NSLog(@"<<<<<<<<%@",b);
-
+     //   NSLog(@"<<<<<<<<%@",b);
+        
         NSString* d = dict[@"name"];
-      //  NSLog(@">>>>%@",d);
+        //  NSLog(@">>>>%@",d);
         //NSLog(@"number to check %lu", (unsigned long)courseObject.count);
-
+        
         if ([d characterAtIndex:1] == '5'){
-         //    NSString* a = [NSString stringWithFormat: @"%@\n%@",b,d];
-           [_theData.courseID addObject:b];
+            //    NSString* a = [NSString stringWithFormat: @"%@\n%@",b,d];
+            [_theData.courseID addObject:b];
             [_theData.courseName addObject:d];
         }
     }
     
     NSLog(@"%@",_theData.courseID);
     NSLog(@"%@",_theData.courseName);
-
+    
     
     
     //second synchronous request to enrollments page with auth header
-    NSURL* url2 = [NSURL URLWithString:@"https://hub.hw.com/api/v1/users/self/enrollments?per_page=500"];//if needed add header and add ?per_page =500
+    NSURL* url2 = [NSURL URLWithString:@"https://hub.hw.com/api/v1/users/self/enrollments?per_page=500"];
     NSMutableURLRequest* urlRequest2 = [NSMutableURLRequest requestWithURL:url2 cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30];
-    [urlRequest2 setValue:[NSString stringWithFormat:@"Bearer %@", self.accessToken] forHTTPHeaderField:@"Authorization"];//add header to request
-
+    [urlRequest2 setValue:[NSString stringWithFormat:@"Bearer %@", self.accessToken] forHTTPHeaderField:@"Authorization"];//header w/ key so we can add ?per_page =500
     NSData* urlData2;
     NSURLResponse* response2;
     NSError* error2;
@@ -122,11 +140,11 @@
     urlData2 = [NSURLConnection sendSynchronousRequest:urlRequest2 returningResponse:&response2 error:&error2];
     
     courseObject = [NSJSONSerialization JSONObjectWithData:urlData2 options:0 error:&error2];
-    NSLog(@"it's working until this point2 %@", courseObject);
-/**    _theData.courseSectionID=[[NSMutableArray alloc ]initWithCapacity:_theData.courseName.count];
-    _theData.courseCode=[[NSMutableArray alloc ]initWithCapacity:_theData.courseName.count];
-    _theData.courseSectionID=[[NSMutableArray alloc ]initWithCapacity:_theData.courseName.count];
-*/
+   // NSLog(@"it's working until this point2 %@", courseObject);
+    /**    _theData.courseSectionID=[[NSMutableArray alloc ]initWithCapacity:_theData.courseName.count];
+     _theData.courseCode=[[NSMutableArray alloc ]initWithCapacity:_theData.courseName.count];
+     _theData.courseSectionID=[[NSMutableArray alloc ]initWithCapacity:_theData.courseName.count];
+     */
     for (int x = 0; x<_theData.courseName.count; x++)
     {
         _theData.courseSectionID[x] = @" ";
@@ -136,13 +154,13 @@
     {
         NSDictionary* dict = courseObject[x];
         NSString* b =dict[@"course_id"];
-   //     NSLog(@"<<<<<<<<%@",b);
+        //     NSLog(@"<<<<<<<<%@",b);
         
         NSString* d = dict[@"course_section_id"];
-   //     NSLog(@">>>>%@",d);
+        //     NSLog(@">>>>%@",d);
         //NSLog(@"number to check %lu", (unsigned long)courseObject.count);
         BOOL inIt = false;
-      //  NSLog(@"size %lu", (unsigned long)_theData.courseID.count);
+        //  NSLog(@"size %lu", (unsigned long)_theData.courseID.count);
         int cou = 0;
         for (cou = 0; cou<_theData.courseID.count; cou++){
             if(_theData.courseID[cou] ==b)
@@ -158,15 +176,14 @@
     
     NSLog(@"%@",_theData.courseSectionID);
     
-  //  NSLog(@"we are done2 . . .");
+    //  NSLog(@"we are done2 . . .");
     
     
     //third request for actual section and course code -- this one is looped
     for (int counter = 0; counter<_theData.courseSectionID.count; counter++){
-        NSURL* url3 = [NSURL URLWithString:[NSString stringWithFormat:@"https://hub.hw.com/api/v1/sections/%@",_theData.courseSectionID[counter]]];//if needed add header and add ?per_page =500
+        NSURL* url3 = [NSURL URLWithString:[NSString stringWithFormat:@"https://hub.hw.com/api/v1/sections/%@",_theData.courseSectionID[counter]]];
         NSMutableURLRequest* urlRequest3 = [NSMutableURLRequest requestWithURL:url3 cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30];
-        [urlRequest3 setValue: [ NSString stringWithFormat:@"Bearer %@",self.accessToken] forHTTPHeaderField:@"Authorization"];//add header to request
-        
+        [urlRequest3 setValue: [ NSString stringWithFormat:@"Bearer %@",self.accessToken] forHTTPHeaderField:@"Authorization"];//auth header
         NSData* urlData3;
         NSURLResponse* response3;
         NSError* error3;
@@ -174,10 +191,10 @@
         //make the synchronous request
         urlData3 = [NSURLConnection sendSynchronousRequest:urlRequest3 returningResponse:&response3 error:&error3];
         NSDictionary* courseObject3 = [NSJSONSerialization JSONObjectWithData:urlData3 options:0 error:&error3];
-     //   NSLog(@"it's working until this point3 %@", courseObject3);
+        //   NSLog(@"it's working until this point3 %@", courseObject3);
         
         NSString* b = courseObject3[@"name"];
-            NSLog(@"<<<<<<<<%@",b);
+    //    NSLog(@"<<<<<<<<%@",b);
         NSArray* nameInTwoParts = [b componentsSeparatedByString:@", "];
         if (nameInTwoParts[0]!=nil)
             [_theData.courseCode addObject:nameInTwoParts[0]];
@@ -190,23 +207,20 @@
     
     NSLog(@"we are done3 . . .");
     /*dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //DATA Processing
-
-        dispatch_sync(dispatch_get_main_queue(), ^{
-           //update UI here
-        });
-        
-        
-    });*/
-   
-   [self saveStuff];
+     //DATA Processing
+     dispatch_sync(dispatch_get_main_queue(), ^{
+     //update UI here
+     });
+     
+     
+     });*/
     
-    //load page https://hub.hw.com/login/oauth2/auth?client_id=10000000000502&response_type=code&redirect_uri=https://ihwoauth.hwtechcouncil.com
-   // [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://hub.hw.com/login/oauth2/auth?client_id=10000000000502&response_type=code&redirect_uri=https://ihwoauth.hwtechcouncil.com"]]];
+    [self saveStuff];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+     self.myNewWebView.delegate=self;
 }
 
 - (IBAction)backPressed:(id)sender {
@@ -222,71 +236,93 @@
 }
 }
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {//to redirect so parse token here
-    //Make sure that the UIWebView can only access these three URLs
-   // NSLog(@"%@%@",@"jkljlkj",request.URL);
-    //    BOOL result = ([request.URL isEqual:[NSURL URLWithString:@"https://hub.hw.com/login/oauth2/confirm"]]
-    //                || [request.URL isEqual:[NSURL URLWithString:@"https://auth.hw.com/LoginFormIdentityProvider/Login.aspx?ReturnUrl=%2fLoginFormIdentityProvider%2fDefault.aspx"]]
-    //               || [request.URL isEqual:[NSURL URLWithString:@"https://hub.hw.com/login/oauth2/auth?client_id=10000000000502&response_type=code&redirect_uri=https://ihwoauth.ihwapp.com"]]
-    //  || [request.URL isEqual:[NSURL URLWithString:@"https://hub.hw.com/login/saml"]]
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager GET:request.URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);// 3
-        if ([request.URL.absoluteString rangeOfString:@"https://ihwoauth.hwtechcouncil.com/?code="].location !=NSNotFound){
-        self.iHW = (NSDictionary *)responseObject;//response object as an array of all of the courses
-        NSLog(@"json retreived!!!!");
-        n = 0;
-        //        NSLog(@"%@%@",@"ACCOUNT_ID IS ",[self.iHW2 accountID]);
-        NSString* accessKey = self.iHW [@"access_token"];
-        NSLog(@"%@%@",@"ACCESSKEY IS ",accessKey);
-        }
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+    {
+    
+ //   NSLog(@"from shouldStartLoad");
+   //    NSLog(@"entered shouldStart . . .");
+  //      NSLog(@"%@",request.URL.absoluteString);
+    if ([request.URL.absoluteString rangeOfString:@"https://ihwoauth.hwtechcouncil.com/?code="].location !=NSNotFound){
+     //   self.myNewWebView.hidden = YES;
+        correctPage = YES;
         
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        // 4
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Data"
-                                                            message:[error localizedDescription]
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-        [alertView show];
-    }];
-  
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);//this waits until async request is over before using the access key b/c otherwise access key would be nil
+        
+        //
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+            if (!data) {
+                NSLog(@"%s: sendAynchronousRequest error: %@", __FUNCTION__, connectionError);
+                return;
+            } else if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
+                if (statusCode != 200) {
+                    NSLog(@"%s: sendAsynchronousRequest status code != 200: response = %@", __FUNCTION__, response);
+                    return;
+                }
+            }
+            
+            NSError *parseError = nil;
+            NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&parseError];
+            if (!dictionary) {
+                NSLog(@"%s: JSONObjectWithData error: %@; data = %@", __FUNCTION__, parseError, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                return;
+            }
+     //       NSLog(@"dictionary is %@", dictionary);
+       //     NSLog(@"this should be the access token%@",dictionary[@"access_token"]);
+      //      NSLog(@"and this should be the refresh token %@", dictionary[@"refresh_token"]);
+            self.accessToken =dictionary[@"access_token"];
+            self.refreshToken =dictionary[@"refresh_token"];//we probably don't need to use the refresh token b/c we store the data on the app right away
+            dispatch_semaphore_signal(sema);
+        }];
+            
+while (dispatch_semaphore_wait(sema, DISPATCH_TIME_NOW)) { [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10]]; }        //dispatch_release(sema);
+//looping until async request finished
+        //COULD CAUSE POTENTIAL DEADLOCK IF CAN'T LOAD THE DATA FOR SOME REASON SO WE MIGHT NEED TO CHANGE THIS
+        
+           if (self.accessToken!=nil)
+               [self loadScheduleInfo];
+        return NO;
+       }
+
+    else if (
+             ![request.URL isEqual:[NSURL URLWithString:@"https://hub.hw.com/login/oauth2/deny"]]&&
+             ![request.URL isEqual:[NSURL URLWithString:@"https://ihwoauth.hwtechcouncil.com/?error=access_denied"]]
+             ){//makes sure you can't press cancel
+    
       [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(showNetworkIcon) withObject:nil waitUntilDone:NO];    [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(showNetworkIcon) withObject:nil waitUntilDone:NO];
+    
     return YES;
+    }
+    else
+        return NO;
+
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
+- (void)webViewDidFinishLoad:(UIWebView *)webView1 {
     
     [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(hideNetworkIcon) withObject:nil waitUntilDone:NO];
-    // NSURL* URL2 = [NSURL URLWithString:@"https://canvas.instructure.com/api/v1/courses/10000001661076/sections?access_token=1~i6dRCWGZSIX7PeE1qNjDtfWY8pRNukTKtztnszsmSAKxShcpfYKUt0kkcdWuvAdZ"];
-    //   NSURL *url = webView.request.mainDocumentURL;
-    //NSLog(@"URL did finish load: %@", url.description);
-    //    if ([url isEqual:[NSURL URLWithString:@"https://<canvas-install-url>/login/oauth2/auth?client_id=XXX&response_type=code&redirect_uri=https://example.com/oauth_complete&state=YY"]]) {
-    //If the login page just loaded, show the UIWebView and prompt the user to log in.
-    self.webView.hidden = NO;
+        //If the login page just loaded, show the UIWebView and prompt the user to log in.
+    NSLog(@"this was hit");
+    self.myNewWebView.hidden = NO;
     self.loginPromptLabel.hidden = NO;
+    
     if (!alreadyLoaded) {
         //This is the first time the "My Schedule" page loaded, so we haven't injected the JavaScript to find the schedule URL yet.
         alreadyLoaded = YES;
         self.loadingText.text = @"Please wait, finding schedule...";
-        //This string of JavaScript simulates clicking the "View" button on the "My Schedule" page.
-        //That triggers a reload of the page, but once the page is reloaded, it contains the schedule URL.
-        [self.webView stringByEvaluatingJavaScriptFromString:@"__doPostBack(\"dnn$ctr8420$InteractiveSchedule$lnkStudentScheduleHTML\", \"\");"];
-        
     }
     
-    //now we're actually doing the saving stufff
-    
-    
 }
+ 
+
 -(void)saveStuff{
     NSString *lastCode = _theData.courseCode[0];
     NSString *lastName = _theData.courseName[0];
     NSArray *lastPeriodList = [(NSString*)[_theData.courseSection objectAtIndex:0] componentsSeparatedByString:@"."];
     NSLog(@"last Period list,%@",lastPeriodList);
     BOOL shouldShowWarning = NO;
-    //NSLog(@"Last PERIODLISTCOUNT%lusomecampus thing%d",(unsigned long)lastPeriodList.count,[IHWCurriculum currentCurriculum].campus);
+    
    if ((int)lastPeriodList.count != [IHWCurriculum currentCurriculum].campus) {
         //The course period list doesn't have the same number of days as the campus the user chose earlier.
         [[[UIAlertView alloc] initWithTitle:@"Wrong Campus!" message:@"You chose the wrong campus during the setup. Please start again." delegate:self cancelButtonTitle:@"Back" otherButtonTitles:nil] show];
@@ -302,8 +338,7 @@
     //    NSArray* testArray = [NSArray arrayWithObjects:@"3",@"x",@"3",@"3",@"3", nil];
         
         IHWCourse *c = parseCourse(lastCode, lastName, lastPeriodList);
-        //NSLog(@"%@%@%@%@",@"hello",lastCode,lastName,lastPeriodList);
-        
+      
         if (c != nil) {
             //Course is valid -- add it
             if (![[IHWCurriculum currentCurriculum] addCourse:c]) NSLog(@"WARNING: Course Conflict!");//problem here!!!!!3/1
@@ -454,8 +489,8 @@
 }
 
 - (void)dealloc {
-    self.webView.delegate = nil;
-    //[super dealloc];
+   self.myNewWebView.delegate = nil;
+  //  [super dealloc];
 }
 
 @end
