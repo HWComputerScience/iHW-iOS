@@ -55,8 +55,6 @@
     
     [[IHWCurriculum currentCurriculum] removeAllCourses];//should start with no courses in case of redownloading
     
-
-    NSLog(@"hi from dispatch async");
     self.myNewWebView.delegate=self;
     NSString *url=@"https://hub.hw.com/login/oauth2/auth?client_id=10000000000502&response_type=code&redirect_uri=https://ihwoauth.hwtechcouncil.com";
     NSURL *nsurl=[NSURL URLWithString:url];
@@ -92,9 +90,11 @@
 -(void) loadScheduleInfo{
     _theData = [[IHWJSONInfo alloc] init];
  //   NSLog(@"loadScheduleInfo was invoked");
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"https://hub.hw.com/api/v1/courses?access_token=%@",self.accessToken]];
-    NSURLRequest* urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30];
-    
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"https://hub.hw.com/api/v1/courses/?per_page=500"]];//add header to show complete thing************************
+   
+     NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30];
+    [urlRequest setValue:[NSString stringWithFormat:@"Bearer %@", self.accessToken] forHTTPHeaderField:@"Authorization"];//header w/ key so we can add ?per_page =500
+
     NSData* urlData;
     NSURLResponse* response;
     NSError* error;
@@ -105,7 +105,7 @@
     NSArray* courseObject = [NSJSONSerialization JSONObjectWithData:urlData options:0 error:&error];
   //  NSLog(@"access token is %@", self.accessToken);
     //   NSLog(@"it's working until this point %@", courseObject);
-    
+    NSLog(@"the following is the course object: %@",courseObject);
     for (int x = 0; x< courseObject.count; x++)
     {
         NSDictionary* dict = courseObject[x];
@@ -113,13 +113,15 @@
      //   NSLog(@"<<<<<<<<%@",b);
         
         NSString* d = dict[@"name"];
+        
         //  NSLog(@">>>>%@",d);
         //NSLog(@"number to check %lu", (unsigned long)courseObject.count);
         
-        if ([d characterAtIndex:1] == '5'){
+        if ([d characterAtIndex:1] == '5'){//check whether it's the current year                ===> CHANGE FOR NEXT YEAR
             //    NSString* a = [NSString stringWithFormat: @"%@\n%@",b,d];
             [_theData.courseID addObject:b];
             [_theData.courseName addObject:d];
+            NSLog(@"ADDING OBJECT");
         }
     }
     
@@ -269,7 +271,7 @@
                 return;
             }
      //       NSLog(@"dictionary is %@", dictionary);
-       //     NSLog(@"this should be the access token%@",dictionary[@"access_token"]);
+            NSLog(@"this should be the access token%@",dictionary[@"access_token"]);
       //      NSLog(@"and this should be the refresh token %@", dictionary[@"refresh_token"]);
             self.accessToken =dictionary[@"access_token"];
             self.refreshToken =dictionary[@"refresh_token"];//we probably don't need to use the refresh token b/c we store the data on the app right away
