@@ -40,6 +40,16 @@
     return [IHWFileManager loadFileFromPathInsideDocuments:filename];
 }
 
++ (BOOL)saveCalendarJSON:(NSData *)json forYear:(int)year campus:(NSString *)campusChar {
+    NSString *filename = [NSString stringWithFormat:@"calendar%d%@.hws", year, campusChar];
+    return [IHWFileManager saveFile:json toPathInsideDocuments:filename];
+}
+
++ (NSData *)loadCalendarJSONForYear:(int)year campus:(NSString *)campusChar {
+    NSString *filename = [NSString stringWithFormat:@"calendar%d%@.hws", year, campusChar];
+    return [IHWFileManager loadFileFromPathInsideDocuments:filename];
+}
+
 + (BOOL)saveFile:(NSData *)data toPathInsideDocuments:(NSString *)pathInsideDocuments {
     //Get path to documents
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

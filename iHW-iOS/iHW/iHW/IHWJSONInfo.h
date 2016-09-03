@@ -17,5 +17,6 @@
 //to be added once section page is called with courseSectionID
 @property (strong, nonatomic) NSMutableArray *courseSection; //e.g. 2X222
 @property (strong, nonatomic) NSMutableArray *courseCode; //e.g. 2525-0E1
+@property (strong, nonatomic) NSMutableArray *contextCode; //e.g. 2525-0E1
 -(id)init;
 @end

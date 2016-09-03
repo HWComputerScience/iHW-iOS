@@ -19,6 +19,7 @@
 #import "AFNetworking.h"
 #import "CJSONDeserializer.h"
 #import "IHWJSONInfo.h"
+#import "IHWCalendarEvent.h"
 @interface IHWDownloadScheduleViewController()
 @property(strong) NSDictionary *iHW;
 @property(strong) NSArray *iHW2;
@@ -120,6 +121,8 @@
         if ([d characterAtIndex:1] == '5'){//check whether it's the current year                ===> CHANGE FOR NEXT YEAR
             //    NSString* a = [NSString stringWithFormat: @"%@\n%@",b,d];
             [_theData.courseID addObject:b];
+            NSString *contextCode = [NSString stringWithFormat:@"course_%@",b];
+            [_theData.contextCode addObject:contextCode];
             [_theData.courseName addObject:d];
             NSLog(@"ADDING OBJECT");
         }
@@ -218,6 +221,9 @@
      });*/
     
     [self saveStuff];
+    NSMutableArray *array = [NSMutableArray arrayWithObjects:@"course_1661010", nil];
+    //[IHWCalendarEvent downloadCalendarEvents:_theData.contextCode];
+    [IHWCalendarEvent downloadCalendarEvents: array];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -321,6 +327,7 @@ while (dispatch_semaphore_wait(sema, DISPATCH_TIME_NOW)) { [[NSRunLoop currentRu
 -(void)saveStuff{
     NSString *lastCode = _theData.courseCode[0];
     NSString *lastName = _theData.courseName[0];
+    NSString *lastCourseID = _theData.courseID[0];
     NSArray *lastPeriodList = [(NSString*)[_theData.courseSection objectAtIndex:0] componentsSeparatedByString:@"."];
     NSLog(@"last Period list,%@",lastPeriodList);
     BOOL shouldShowWarning = NO;
@@ -336,10 +343,11 @@ while (dispatch_semaphore_wait(sema, DISPATCH_TIME_NOW)) { [[NSRunLoop currentRu
         
         lastCode = _theData.courseCode[ccount];
         lastName = _theData.courseName[ccount];
+        lastCourseID = _theData.courseID[ccount];
         lastPeriodList = [(NSString*)[_theData.courseSection objectAtIndex:ccount] componentsSeparatedByString:@"."];
     //    NSArray* testArray = [NSArray arrayWithObjects:@"3",@"x",@"3",@"3",@"3", nil];
         
-        IHWCourse *c = parseCourse(lastCode, lastName, lastPeriodList);
+        IHWCourse *c = parseCourse(lastCode, lastName, lastPeriodList, lastCourseID);
       
         if (c != nil) {
             //Course is valid -- add it
@@ -427,6 +435,9 @@ while (dispatch_semaphore_wait(sema, DISPATCH_TIME_NOW)) { [[NSRunLoop currentRu
     [self.resultData appendData:data];
 }
 
+//DEPRECIATED - No longer needed after hub integration
+//-Jonathan Damico Sept 2 2016
+/*
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     [(IHWAppDelegate *)[UIApplication sharedApplication].delegate performSelectorOnMainThread:@selector(hideNetworkIcon) withObject:nil waitUntilDone:NO];
     
@@ -460,6 +471,7 @@ while (dispatch_semaphore_wait(sema, DISPATCH_TIME_NOW)) { [[NSRunLoop currentRu
     lastCode = nil;
     lastName = nil;
     lastPeriodList = nil;
+    courseID = nil;
     n++;
     
     //Save the courses
@@ -483,7 +495,7 @@ while (dispatch_semaphore_wait(sema, DISPATCH_TIME_NOW)) { [[NSRunLoop currentRu
         }
     }
 }
-
+*/
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

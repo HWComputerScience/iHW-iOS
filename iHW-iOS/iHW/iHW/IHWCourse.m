@@ -11,7 +11,7 @@
 
 @implementation IHWCourse
 
-- (id)initWithName:(NSString *)n period:(int)p term:(int)t meetings:(NSArray *)m
+- (id)initWithName:(NSString *)n period:(int)p term:(int)t meetings:(NSArray *)m courseID:(NSString *)ID
 {
     self = [super init];
     if (self) {
@@ -19,6 +19,7 @@
         self.period = p;
         self.term = t;
         self.meetings = [NSArray arrayWithArray:m];
+        self.courseID = ID;
     }
     return self;
 }
@@ -31,6 +32,7 @@
         self.period = [[dictionary objectForKey:@"period"] intValue];
         self.term = [[dictionary objectForKey:@"term"] intValue];
         self.meetings = [dictionary objectForKey:@"meetings"];
+        self.meetings = [dictionary objectForKey:@"courseID"];
     }
     return self;
 }
@@ -41,6 +43,7 @@
     [dict setObject:[NSNumber numberWithInt:self.period] forKey:@"period"];
     [dict setObject:[NSNumber numberWithInt:self.term] forKey:@"term"];
     [dict setObject:self.meetings forKey:@"meetings"];
+    [dict setObject:self.courseID forKey:@"courseID"];
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 

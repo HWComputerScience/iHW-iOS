@@ -31,6 +31,7 @@
             self.navigationItem.title = self.course.name;
             self.period = self.course.period;
             self.term = self.course.term;
+            self.courseID = self.course.courseID;
         } else {
             self.navigationItem.title = @"Add Course";
         }
@@ -159,7 +160,7 @@
         else [meetings addObject:[NSNumber numberWithInt:MEETING_SINGLE_PERIOD]];
     }
     //Create the course
-    IHWCourse *course = [[IHWCourse alloc] initWithName:self.nameField.text period:self.period term:self.term meetings:meetings];
+    IHWCourse *course = [[IHWCourse alloc] initWithName:self.nameField.text period:self.period term:self.term meetings:meetings courseID:self.courseID];
     
     //The course has some problem
     if ([self.nameField.text isEqualToString:@""] || course.totalMeetings == 0) {

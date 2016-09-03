@@ -92,7 +92,7 @@ NSString *getOrdinal(int num) {
     return [NSString stringWithFormat:@"%d%@", num, suffix];
 }
 
-IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents) {
+IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents, NSString *ID) {
     //find term
     int term = TERM_FULL_YEAR;
     if (code.length >= 6) term = [[code substringWithRange:NSMakeRange(5, 1)] intValue];
@@ -169,6 +169,6 @@ IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents
     }
     NSLog(@"this is from parseCourse%@, %d", name, coursePeriod);
     
-    return [[IHWCourse alloc] initWithName:name period:coursePeriod term:term meetings:meetings];
+    return [[IHWCourse alloc] initWithName:name period:coursePeriod term:term meetings:meetings courseID:ID];
 }
 

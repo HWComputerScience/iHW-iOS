@@ -16,7 +16,7 @@
 #import "IHWNotificationOptionsViewController.h"
 #import "IHWAppDelegate.h"
 #import <PDTSimpleCalendar/PDTSimpleCalendar.h>
-
+#import "IHWCalendarEvent.h"
 @implementation IHWScheduleViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -31,6 +31,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSMutableArray *array = [NSMutableArray arrayWithObjects:@"course_1661010", @"course_1169902", nil];
+    //[IHWCalendarEvent downloadCalendarEvents:_theData.contextCode];
+    [IHWCalendarEvent downloadCalendarEvents: array];
     
     //Set up bar buttons
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Courses" style:UIBarButtonItemStyleBordered target:self action:@selector(showCourses)];

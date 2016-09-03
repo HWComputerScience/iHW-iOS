@@ -12,10 +12,11 @@
 
 @property (strong, nonatomic) NSArray *meetings;
 @property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) NSString *courseID;
 @property int period;
 @property int term;
 
-- (id)initWithName:(NSString *)n period:(int)p term:(int)t meetings:(NSArray *)m;
+- (id)initWithName:(NSString *)n period:(int)p term:(int)t meetings:(NSArray *)m courseID:(NSString *)ID;
 - (id)initWithJSONDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)saveCourse;
 

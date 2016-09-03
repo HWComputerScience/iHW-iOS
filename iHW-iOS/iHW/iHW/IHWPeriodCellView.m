@@ -13,6 +13,10 @@
 #import "IHWAppDelegate.h"
 #import "IHWScheduleViewController.h"
 #import "IHWDate.h"
+#import "IHWFileManager.h"
+#import "IHWCurriculum.h"
+#import "CJSONDeserializer.h"
+#import "IHWCalendarEvent.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation IHWPeriodCellView
@@ -66,6 +70,22 @@
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-3-[start(==19)][period(>=24)][end(==19)]-2-|" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-4-[start(==period,==end,==76)]" options:NSLayoutFormatAlignAllLeft metrics:nil views:views]];
         
+        //Add Calendar Events from Hub to noteView
+        NSData *calendarJSON = [IHWFileManager loadCalendarJSONForYear:[IHWCurriculum currentYear] campus:getCampusChar([IHWCurriculum currentCampus])];
+        NSError *error;
+        NSDictionary *calendarJSONDict = [[CJSONDeserializer deserializer] deserializeAsDictionary:calendarJSON error:&error];
+        
+        if (error != nil) {
+            NSLog(@"Error parsing JSON.");
+        } else {
+            NSArray *coursesJSON = [calendarJSONDict objectForKey:@"events"];
+            for (IHWCalendarEvent *event in coursesJSON) {
+                if(event.date == @"") {
+                    IHWNote *note = [[IHWNote alloc] initWithText:event.title isToDo:NO isChecked:NO isImportant:YES];
+                    [self addNoteView:note animated:NO willAddMore:YES];
+                }
+            }
+        }
         //Add notes to noteView
         for (IHWNote *note in self.period.notes) {
             [self addNoteView:note animated:NO willAddMore:YES];

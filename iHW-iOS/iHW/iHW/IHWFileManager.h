@@ -19,4 +19,7 @@
 + (BOOL)saveWeekJSON:(NSData *)json forWeekNumber:(int)weekNumber year:(int)year campus:(NSString *)campusChar;
 + (NSData *)loadWeekJSONForWeekNumber:(int)weekNumber year:(int)year campus:(NSString *)campusChar;
 
++ (BOOL)saveCalendarJSON:(NSData *)json forYear:(int)year campus:(NSString *)campusChar;
++ (NSData *)loadCalendarJSONForYear:(int)year campus:(NSString *)campusChar;
+
 @end

@@ -27,6 +27,7 @@
 
 @property (nonatomic) int period;
 @property (nonatomic) int term;
+@property (nonatomic) NSString *courseID;
 
 @property (weak, nonatomic) IHWCourse *course;
 

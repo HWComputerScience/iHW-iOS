@@ -15,9 +15,10 @@
     if (self) {
         self.courseName = [[NSMutableArray alloc] init];
         self.courseID = [[NSMutableArray alloc] init];
-       self.courseCode = [[NSMutableArray alloc] init];
+        self.courseCode = [[NSMutableArray alloc] init];
         self.courseSection = [[NSMutableArray alloc] init];
         self.courseSectionID =[[NSMutableArray alloc] init];
+        self.contextCode =[[NSMutableArray alloc] init];
     }
     return self;
 }

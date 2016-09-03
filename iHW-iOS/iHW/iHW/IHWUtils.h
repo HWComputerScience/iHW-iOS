@@ -40,4 +40,4 @@ NSString *stringForTerm(int term);
 NSString *getOrdinal(int num);
 
 //Parse a course code, name, and period components into an IHWCourse object.
-IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents);
+IHWCourse *parseCourse(NSString *code, NSString *name, NSArray *periodComponents, NSString *ID);
