@@ -117,8 +117,10 @@
         
         //  NSLog(@">>>>%@",d);
         //NSLog(@"number to check %lu", (unsigned long)courseObject.count);
-        
-        if ([d characterAtIndex:1] == '5'){//check whether it's the current year                ===> CHANGE FOR NEXT YEAR
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy"];
+        char yearString = [[formatter stringFromDate:[NSDate date]] characterAtIndex:3];
+        if ([d characterAtIndex:1] == yearString){//check whether it's the current year
             //    NSString* a = [NSString stringWithFormat: @"%@\n%@",b,d];
             [_theData.courseID addObject:b];
             NSString *contextCode = [NSString stringWithFormat:@"course_%@",b];
