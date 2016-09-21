@@ -32,6 +32,7 @@ typedef NSDate IHWDate;
 - (NSString *)dayOfWeek:(BOOL)shortVersion;
 - (BOOL)isEqualToDate:(NSDate *)otherDate;
 - (NSDate *)NSDateWithTime:(IHWTime *)time;
+- (NSString *)getCanvasDateString;
 
 + (NSComparator)comparator;
 

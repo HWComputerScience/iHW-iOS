@@ -131,4 +131,19 @@ static NSCalendar *cal;
     cal.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
 }
 
+- (NSString *) getCanvasDateString {
+    NSString *month = nil;
+    NSString *day = nil;
+    if(self.month<10)
+        month = [NSString stringWithFormat:@"0%d", self.month];
+    else
+        month = [NSString stringWithFormat:@"%d",  self.month];
+    if(self.day<10)
+        day = [NSString stringWithFormat:@"0%d", self.day];
+    else
+        day = [NSString stringWithFormat:@"%d",  self.day];
+    return [NSString stringWithFormat:@"%d-%@-%@", self.year, month, day];
+}
+
+
 @end

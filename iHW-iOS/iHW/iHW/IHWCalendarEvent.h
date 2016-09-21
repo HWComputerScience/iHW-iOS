@@ -16,6 +16,10 @@
 @property (strong, nonatomic) NSString *contextCode; // e.g. 12495583
 //to be added once section page is called with courseSectionID
 @property (strong, nonatomic) NSString *date; //YYYY-MM-DD
+
 -(id)init;
++(id)initWithJSONDictionary: (NSDictionary *)dict;
+-(NSDictionary *)saveCalendarEvent;
 +(void) downloadCalendarEvents:(NSMutableArray *) contextCodes;
++(NSString *)getCanvasAccessToken;
 @end

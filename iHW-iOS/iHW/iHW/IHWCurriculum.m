@@ -17,6 +17,7 @@
 #import "IHWUtils.h"
 #import "IHWNote.h"
 #import "IHWPeriod.h"
+#import "IHWCalendarEvent.h"
 
 static NSString *curriculumDirectory = @"http://www.ihwapp.com/curriculum/";
 static IHWCurriculum *currentCurriculum;
@@ -295,16 +296,21 @@ static IHWCurriculum *currentCurriculum;
 - (BOOL)loadCourses {
     //NSLog(@">loading courses");
     NSMutableArray *courseArray = [NSMutableArray array];
+    NSMutableArray *contextCodeArray = [NSMutableArray array];
     NSError *error = nil;
     NSData *json = [IHWFileManager loadYearJSONForYear:self.year campus:getCampusChar(self.campus)];
     if (json == nil || [json isEqualToData:[NSData data]]) json = generateBlankYearJSON(self.campus, self.year);
     NSDictionary *fromJSON = [[CJSONDeserializer deserializer] deserializeAsDictionary:json error:&error];
     NSArray *coursesJSON = [fromJSON objectForKey:@"courses"];
     if (error != nil) { NSLog(@"ERROR loading courses: %@", error.debugDescription); return NO; }
+    
     for (NSDictionary *dict in coursesJSON) {
         IHWCourse *course = [[IHWCourse alloc] initWithJSONDictionary:dict];
         [courseArray addObject:course];
+        [contextCodeArray addObject:[NSString stringWithFormat:@"course_%@", dict[@"courseID"]]];
+        
     }
+    [IHWCalendarEvent downloadCalendarEvents: contextCodeArray];
     self.courses = courseArray;
     return YES;
 }

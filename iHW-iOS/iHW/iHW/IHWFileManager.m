@@ -50,6 +50,16 @@
     return [IHWFileManager loadFileFromPathInsideDocuments:filename];
 }
 
++ (BOOL)saveTokenJSON:(NSData *)json {
+    NSString *filename = [NSString stringWithFormat:@"token.hws"];
+    return [IHWFileManager saveFile:json toPathInsideDocuments:filename];
+}
+
++ (NSData *)loadTokenJSON {
+    NSString *filename = [NSString stringWithFormat:@"token.hws"];
+    return [IHWFileManager loadFileFromPathInsideDocuments:filename];
+}
+
 + (BOOL)saveFile:(NSData *)data toPathInsideDocuments:(NSString *)pathInsideDocuments {
     //Get path to documents
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

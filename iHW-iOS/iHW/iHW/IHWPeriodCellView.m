@@ -79,9 +79,10 @@
             NSLog(@"Error parsing JSON.");
         } else {
             NSArray *coursesJSON = [calendarJSONDict objectForKey:@"events"];
-            for (IHWCalendarEvent *event in coursesJSON) {
-                if(event.date == @"") {
-                    IHWNote *note = [[IHWNote alloc] initWithText:event.title isToDo:NO isChecked:NO isImportant:YES];
+            for (NSDictionary *event in coursesJSON) {
+                NSLog(@"%@", self.period.courseID);
+                if([self.period.date.getCanvasDateString isEqualToString:event[@"date"]] && [[NSString stringWithFormat:@"%@",self.period.courseID] isEqualToString:[NSString stringWithFormat:@"%@",event[@"courseID"]]]) {
+                    IHWNote *note = [[IHWNote alloc] initWithText:event[@"title"] isToDo:NO isChecked:NO isImportant:YES];
                     [self addNoteView:note animated:NO willAddMore:YES];
                 }
             }

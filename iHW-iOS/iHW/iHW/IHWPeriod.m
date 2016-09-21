@@ -14,6 +14,11 @@
 
 - (id)initWithName:(NSString *)name date:(IHWDate *)date start:(IHWTime *)start end:(IHWTime *)end number:(int)periodNum index:(int)periodIndex isFreePeriod:(BOOL)isFreePeriod
 {
+    return [self initWithName:name courseID:@"" date:date start:start end:end number:periodNum index:periodIndex isFreePeriod:isFreePeriod];
+}
+
+- (id)initWithName:(NSString *)name courseID:(NSString *)courseID date:(IHWDate *)date start:(IHWTime *)start end:(IHWTime *)end number:(int)periodNum index:(int)periodIndex isFreePeriod:(BOOL)isFreePeriod
+{
     self = [super init];
     if (self) {
         self.name = name;
@@ -23,6 +28,7 @@
         self.isFreePeriod = isFreePeriod;
         self.periodNum = periodNum;
         self.index = periodIndex;
+        self.courseID = courseID;
         [self loadNotesFromCurriculum];
     }
     return self;
@@ -39,6 +45,7 @@
         self.isFreePeriod = [[dictionary objectForKey:@"isFreePeriod"] boolValue];
         self.periodNum = [[dictionary objectForKey:@"periodNum"] intValue];
         self.index = periodIndex;
+        self.courseID = [dictionary objectForKey:@"courseID"];
         [self loadNotesFromCurriculum];
     }
     return self;
@@ -61,6 +68,7 @@
     [dict setObject:self.startTime.description forKey:@"startTime"];
     [dict setObject:self.endTime.description forKey:@"endTime"];
     [dict setObject:[NSNumber numberWithInt:self.periodNum] forKey:@"periodNum"];
+    [dict setObject:self.courseID forKey:@"courseID"];
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 

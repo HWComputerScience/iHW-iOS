@@ -10,6 +10,7 @@
 #import "IHWFileManager.h"
 #import "IHWUtils.h"
 #import "IHWCurriculum.h"
+#import "CJSONDeserializer.h"
 
 @implementation IHWCalendarEvent
 -(id)init
@@ -24,16 +25,34 @@
     return self;
 }
 
+- (id)initWithJSONDictionary: (NSDictionary *)dict {
+    self = [super init];
+    if (self) {
+        self.title = dict[@"title"];
+        self.courseID = dict[@"courseID"];
+        self.contextCode = dict[@"contextCode"];
+        self.date = dict[@"date"];
+    }
+    return self;
+}
+
+- (NSDictionary *)saveCalendarEvent {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:self.title forKey:@"title"];
+    [dict setObject:self.courseID forKey:@"courseID"];
+    [dict setObject:self.contextCode forKey:@"contextCode"];
+    [dict setObject:self.date forKey:@"date"];
+    return [NSDictionary dictionaryWithDictionary:dict];
+}
 +(void) downloadCalendarEvents:(NSMutableArray *) contextCodes {
     NSMutableArray *calendar = [[NSMutableArray alloc] init];
-    NSDictionary *test = [[NSDictionary alloc] init];
     NSString *contextCode = nil;
     NSString *eventType = nil;
     NSArray *eventTypes = [NSArray arrayWithObjects: @"event", @"assignment", nil];
+    NSString *accessToken = [self getCanvasAccessToken];
     for(eventType in eventTypes) {
         for(contextCode in contextCodes) {
-            NSLog(@"Started ASDFASDFASDF");
-            NSString *urlString = [NSString stringWithFormat:@"https://hub.hw.com/api/v1/calendar_events?per_page=500&all_events=true&context_codes[]=%@&access_token=1~lFvoisjiIm7lybWcTneNIRiqpZUp4M5oQ39gwIm92sWbzwZrGUwSJyWV9GFDQpGC&type=%@", contextCode, eventType];
+            NSString *urlString = [NSString stringWithFormat:@"https://hub.hw.com/api/v1/calendar_events?per_page=500&all_events=true&context_codes[]=%@&access_token=%@&type=%@", contextCode, accessToken,eventType];
             NSDictionary *headers = @{ @"cache-control": @"no-cache",
                                        @"postman-token": @"15389f09-d1b4-7f18-6601-3d651b762198" };
             
@@ -44,6 +63,7 @@
             [request setAllHTTPHeaderFields:headers];
             
             NSURLSession *session = [NSURLSession sharedSession];
+            dispatch_semaphore_t sema = dispatch_semaphore_create(0);
             NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
                                                         completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
                                                             if (error) {
@@ -68,21 +88,62 @@
                                                                             eventObj.courseID = assignment[@"course_id"];
                                                                         else
                                                                             eventObj.courseID = [event[@"context_code"] substringFromIndex:7];
-                                                                        [calendar addObject:eventObj];
+                                                                        [calendar addObject:[eventObj saveCalendarEvent]];
                                                                     }
                                                                 }
                                                             }
+                                                            dispatch_semaphore_signal(sema);
                                                         }];
             [dataTask resume];
+            dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
         }
     }
-    NSMutableDictionary *eventsDict = [NSMutableDictionary dictionary];
-    [eventsDict setObject:calendar forKey:@"events"];
-    //Serialize the year to JSON data
+    NSDictionary *eventsDict = @{ @"events":calendar };
     NSError *error = nil;
     NSData *eventsJSON = [[CJSONSerializer serializer] serializeDictionary:eventsDict error:&error];
     if (error != nil) { NSLog(@"ERROR serializing courses: %@", error.debugDescription); return; }
     [IHWFileManager saveCalendarJSON:eventsJSON forYear:[IHWCurriculum currentYear] campus:getCampusChar([IHWCurriculum currentCampus])];
+}
+
++(NSString *)getCanvasAccessToken {
+    __block NSString *accessToken = nil;
+    NSDictionary *headers = @{ @"cache-control": @"no-cache",
+                               @"postman-token": @"1bb438ad-aff5-a8dd-2d5e-60d9ffb99222" };
+    
+    NSData *refreshTokenData = [IHWFileManager loadTokenJSON];
+    NSError *error = nil;
+    NSDictionary *fromJSON = [[CJSONDeserializer deserializer] deserializeAsDictionary:refreshTokenData error:&error];
+    if(error == nil) {
+        NSString *refreshToken = fromJSON[@"refresh_token"];
+    NSString *urlString = [NSString stringWithFormat:@"https://ihwoauth.hwtechcouncil.com/?refresh_token=%@", refreshToken];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]
+                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                       timeoutInterval:10.0];
+    [request setHTTPMethod:@"GET"];
+    [request setAllHTTPHeaderFields:headers];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
+                                                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                    if (error) {
+                                                        NSLog(@"%@", error);
+                                                    } else {
+                                                        NSError *error = nil;
+                                                        NSDictionary *dataDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                                                        if (error != nil) {
+                                                            NSLog(@"Error parsing refresh token JSON.");
+                                                        } else {
+                                                            accessToken = dataDict[@"access_token"];
+                                                        }
+                                                    }
+                                                    dispatch_semaphore_signal(sema);
+                                                }];
+        [dataTask resume];
+        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    }
+    return(accessToken);
+    
 }
 
 @end

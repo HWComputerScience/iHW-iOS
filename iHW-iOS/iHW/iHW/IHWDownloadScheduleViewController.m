@@ -20,6 +20,7 @@
 #import "CJSONDeserializer.h"
 #import "IHWJSONInfo.h"
 #import "IHWCalendarEvent.h"
+#import "IHWFileManager.h"
 @interface IHWDownloadScheduleViewController()
 @property(strong) NSDictionary *iHW;
 @property(strong) NSArray *iHW2;
@@ -223,9 +224,6 @@
      });*/
     
     [self saveStuff];
-    NSMutableArray *array = [NSMutableArray arrayWithObjects:@"course_1661010", nil];
-    //[IHWCalendarEvent downloadCalendarEvents:_theData.contextCode];
-    [IHWCalendarEvent downloadCalendarEvents: array];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -278,9 +276,15 @@
                 NSLog(@"%s: JSONObjectWithData error: %@; data = %@", __FUNCTION__, parseError, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                 return;
             }
-     //       NSLog(@"dictionary is %@", dictionary);
+            //NSLog(@"dictionary is %@", dictionary);
             NSLog(@"this should be the access token%@",dictionary[@"access_token"]);
-      //      NSLog(@"and this should be the refresh token %@", dictionary[@"refresh_token"]);
+            //NSLog(@"and this should be the refresh token %@", dictionary[@"refresh_token"]);
+            NSDictionary *tokenDict = @{@"refresh_token" : dictionary[@"refresh_token"]};
+            //Serialize the year to JSON data
+            NSError *error = nil;
+            NSData *tokenJSON = [[CJSONSerializer serializer] serializeDictionary:tokenDict error:&error];
+            if (error != nil) { NSLog(@"ERROR serializing refresh token: %@", error.debugDescription); }
+            [IHWFileManager saveTokenJSON:tokenJSON];
             self.accessToken =dictionary[@"access_token"];
             self.refreshToken =dictionary[@"refresh_token"];//we probably don't need to use the refresh token b/c we store the data on the app right away
             dispatch_semaphore_signal(sema);

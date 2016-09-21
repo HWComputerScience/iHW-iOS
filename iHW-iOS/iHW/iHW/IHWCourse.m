@@ -32,7 +32,7 @@
         self.period = [[dictionary objectForKey:@"period"] intValue];
         self.term = [[dictionary objectForKey:@"term"] intValue];
         self.meetings = [dictionary objectForKey:@"meetings"];
-        self.meetings = [dictionary objectForKey:@"courseID"];
+        self.courseID = [NSString stringWithFormat:@"%@",[dictionary objectForKey:@"courseID"]];
     }
     return self;
 }

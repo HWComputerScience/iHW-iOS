@@ -116,7 +116,7 @@
     if ([courseList objectAtIndex:num] != [NSNull null]) {
         //If course exists, create and add it
         IHWCourse *course = [courseList objectAtIndex:num];
-        IHWPeriod *period = [[IHWPeriod alloc] initWithName:course.name date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index isFreePeriod:NO];
+        IHWPeriod *period = [[IHWPeriod alloc] initWithName:course.name courseID:course.courseID date:self.date start:startTime end:[startTime timeByAddingHours:0 andMinutes:duration] number:num index:index isFreePeriod:NO];
         [self.periods addObject:period];
     } else {
         //Else add an "x" period
